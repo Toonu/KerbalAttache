@@ -1,13 +1,12 @@
 const fs = require('fs');
 const {google} = require('googleapis');
-const keys = require("./client_secret.json");
 const fn = require("./fn");
 const gm = require("./game");
 var client;
 const cfg = require("./config.json")
 
 exports.init = function () {
-    client = new google.auth.JWT(keys.client_email, null, keys.private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
+    client = new google.auth.JWT(process.env.client_email, null, process.env.private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
 };
 exports.ss = function (args, message, bool, tab) {
     return new Promise((resolve, reject) => {

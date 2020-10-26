@@ -1,6 +1,5 @@
 const fs = require('fs');
 const {google} = require('googleapis');
-const keys = require("./client_secret.json");
 const fn = require("./fn");
 const gm = require("./game");
 var client;

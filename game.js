@@ -6,8 +6,8 @@ const cfg = require("./config.json")
 
 
 async function findHorizontal(target, height, message) {
-    return new Promise((resolve, reject) => {
-        var e = 64;
+    return new Promise(function (resolve, reject) {
+        var e = 64; //char A dec num
         fn.ss(["getA", `A${height}`, `BA${height}`], message, true, "Maintenance")
         .then(array => {
             for (const element of array[0]) {
@@ -18,7 +18,7 @@ async function findHorizontal(target, height, message) {
                     resolve(e);
                 }
             }
-            reject("Error");
+            reject("Not found in horizontal range.");
         })
     })
 };
@@ -38,16 +38,16 @@ async function findVertical(target, col, message) {
                 }
             }
         })
-        reject("Error");
+        reject("Not found in vertical range.");
     });
 }
 
 exports.findUnitPrice = async function(unit, message) {
     return new Promise(async function(resolve, reject) {
-        var ax = await findVertical("Data", "A", message);
+        var ax = await findVertical("Data", "A", message).catch("Error Vertical");
         message.channel.send(ax);
-        var ay = await findHorizontal(unit, "4", message);
+        var ay = await findHorizontal(unit, "4", message).catch("Error Horizontal");
         message.channel.send(ay);
-        fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance");
+        resolve(fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance"));
     })
 }

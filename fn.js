@@ -12,7 +12,7 @@ const {} = process.env;
 exports.init = function () {
     client = new google.auth.JWT(client_email, null, private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
 };
-exports.ss = async function (args, message, bool, tab) {
+exports.ss = async function (args, message, tab) {
     return new Promise(async function (resolve, reject) {
         client.authorize(async function(err,tokens) {
             try {
@@ -23,24 +23,19 @@ exports.ss = async function (args, message, bool, tab) {
                     if (!checkCoordinate(args[1])) throw "Wrong first coordinate input";
                     args[1] = args[1].toUpperCase();
     
+                    if (tab == undefined) {
+                        var tab = "Maintenance";
+                    }
+
                     if (args[0].startsWith("getA")) {
-                        if (bool) {
-                            message.channel.send("Operation Get Range.");
-                        }
                         if (!checkCoordinate(args[2])) throw "Wrong second coordinate input.";
-                        var result = await getAInternal(args[1], args[2].toUpperCase(), args[3], args[4], message, gs, "Result: ", bool, tab);
+                        var result = await getAInternal(args[1], args[2].toUpperCase(), args[3], args[4], message, gs, "Result: ", tab);
                         resolve(result);     
                     } else if (args[0].startsWith("set")) {
-                        if (bool) {
-                            message.channel.send("Operation Set Cell.");
-                        }
-                        var result =  setInternal(args[1], args[2], message, gs, "Operation succeeded.", bool, tab);
+                        var result =  setInternal(args[1], args[2], message, gs, "Operation succeeded.", tab);
                         resolve(result);
                     } else if (args[0].toLowerCase().startsWith("get")) {
-                        if (bool) {
-                            message.channel.send("Operation Get Cell.");
-                        }
-                        result = await getInternal(args[1], message, gs, "Result: ", bool, tab);
+                        result = await getInternal(args[1], message, gs, "Result: ", tab);
                         //message.channel.send("Is: " + result);
                         resolve(result);
                     }
@@ -48,7 +43,7 @@ exports.ss = async function (args, message, bool, tab) {
             } catch(err) {
                 reject("SS error: " + err);
             }
-        }))
+        })
     })
 };
 function checkCoordinate(x,message) {
@@ -58,7 +53,7 @@ function checkCoordinate(x,message) {
     }
     return false;
 }
-async function getInternal(x,message,gs,end,bool,tab) { 
+async function getInternal(x,message,gs,end,tab) { 
     const getData = {
     spreadsheetId: cfg.sheet,
     range:  `${tab}!${x}`
@@ -66,16 +61,13 @@ async function getInternal(x,message,gs,end,bool,tab) {
     let data = await gs.spreadsheets.values.get(getData);
     let dataArray = data.data.values;
 
-    if (bool && dataArray != undefined) {
-        message.channel.send(`${end + dataArray[0][0]}`)
+    if (dataArray != undefined) {
         return dataArray[0][0];
-    } else if(bool) {
-        message.channel.send("Cell empty");
     }
-    
-    return dataArray;
+    message.channel.send("Cell empty");
+    return false;
 }
-async function getAInternal(x, y, c, r, message, gs, end,bool,tab) {
+async function getAInternal(x, y, c, r, message, gs, end,tab) {
     try {
         if (parseInt(c) < 0 || parseInt(r) < 0 || c == undefined || r == undefined) {
             c = 0, r = 0;
@@ -110,10 +102,6 @@ async function getAInternal(x, y, c, r, message, gs, end,bool,tab) {
         message.channel.send(err);
         return false;
     }
-    
-    if (bool) {
-        message.channel.send(`Getting ${x}:${y}`);
-    }
         
     const getData = {
     spreadsheetId: cfg.sheet,
@@ -122,13 +110,10 @@ async function getAInternal(x, y, c, r, message, gs, end,bool,tab) {
 
     let data = await gs.spreadsheets.values.get(getData);
     let dataArray = data.data.values;
-    if (bool) {
-        message.channel.send(`${end + dataArray}`)
-    }
     return dataArray;
     
 };
-async function setInternal(x, data, message, gs, end,bool,tab) {
+async function setInternal(x, data, message, gs, end,tab) {
     if (data == undefined) {
         message.channel.send("Data empty. Operation failed.");
         return false;
@@ -140,11 +125,7 @@ async function setInternal(x, data, message, gs, end,bool,tab) {
             valueInputOption: "RAW",
             resource: {values: [[data]]}
         };
-        await gs.spreadsheets.values.update(pushData);
-        if (bool) {
-            message.channel.send(end);
-        }
-        
+        await gs.spreadsheets.values.update(pushData);       
         return true;
     } catch(error) {
         message.channel.send(`Operation failed: ${error.message}`);

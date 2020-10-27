@@ -9,14 +9,14 @@ module.exports = {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         if (fn.perm(message, 1)) {
-            if (args[5] == undefined) {
-                var tab = "Maintenance";
+            var result = await fn.ss(args, message);
+            if (result == true) {
+                message.channel.send("Operation was successful.");
+            } else if (result == false) {
+                message.channel.send("Operation failed.");
             } else {
-                var tab = args[5];
-            }
-            var result = await fn.ss(args, message, true, tab)
-            message.channel.send("Is" + result)
-            return;
+                message.channel.send("Result: " + result);
             }
         }
     }
+}

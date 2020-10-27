@@ -43,12 +43,11 @@ async function findVertical(target, col, message) {
 }
 
 exports.findUnitPrice = async function(unit, message) {
-    return new Promise(function(resolve, reject) => {
-        var ay;
-        ax = await findVertical("Data", "A", message);
-        message.channel.send(ax + x);
-        ay = await findHorizontal(unit, "4", message);
-        message.channel.send(ay + y);
-        fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance")
+    return new Promise(async function(resolve, reject) {
+        var ax = await findVertical("Data", "A", message);
+        message.channel.send(ax);
+        var ay = await findHorizontal(unit, "4", message);
+        message.channel.send(ay);
+        fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance");
     })
 }

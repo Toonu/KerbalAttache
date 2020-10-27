@@ -4,15 +4,19 @@ const fn = require("./fn");
 const gm = require("./game");
 var client;
 const cfg = require("./config.json")
+const {CLIENT_TOKEN, type, project_id, private_key_id, private_key, client_email} = process.env;
+const {} = process.env;
+
+
 
 exports.init = function () {
-    client = new google.auth.JWT(process.env.client_email, null, process.env.private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
+    client = new google.auth.JWT(client_email, null, private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
 };
-exports.ss = function (args, message, bool, tab) {
-    return new Promise((resolve, reject) => {
-        return client.authorize(function(err,tokens) {
+exports.ss = async function (args, message, bool, tab) {
+    return new Promise(async function (resolve, reject) {
+        client.authorize(async function(err,tokens) {
             try {
-                if (err) throw "Autorization failed.";
+                if (err) throw "Autorization failed." + err;
                 else {
                     const gs = google.sheets({version: "v4", auth: client});
     
@@ -24,23 +28,27 @@ exports.ss = function (args, message, bool, tab) {
                             message.channel.send("Operation Get Range.");
                         }
                         if (!checkCoordinate(args[2])) throw "Wrong second coordinate input.";
-                        resolve(getAInternal(args[1], args[2].toUpperCase(), args[3], args[4], message, gs, "Result: ", bool, tab));            
+                        var result = await getAInternal(args[1], args[2].toUpperCase(), args[3], args[4], message, gs, "Result: ", bool, tab);
+                        resolve(result);     
                     } else if (args[0].startsWith("set")) {
                         if (bool) {
                             message.channel.send("Operation Set Cell.");
                         }
-                        resolve(setInternal(args[1], args[2], message, gs, "Operation succeeded.", bool, tab));
-                    } else if (args[0].startsWith("get")) {
+                        var result =  setInternal(args[1], args[2], message, gs, "Operation succeeded.", bool, tab);
+                        resolve(result);
+                    } else if (args[0].toLowerCase().startsWith("get")) {
                         if (bool) {
                             message.channel.send("Operation Get Cell.");
                         }
-                        resolve(getInternal(args[1], message, gs, "Result: ", bool, tab));
+                        result = await getInternal(args[1], message, gs, "Result: ", bool, tab);
+                        //message.channel.send("Is: " + result);
+                        resolve(result);
                     }
                 }
             } catch(err) {
-                reject(message.channel.send(err));
+                reject("SS error: " + err);
             }
-        });
+        }))
     })
 };
 function checkCoordinate(x,message) {
@@ -60,6 +68,7 @@ async function getInternal(x,message,gs,end,bool,tab) {
 
     if (bool && dataArray != undefined) {
         message.channel.send(`${end + dataArray[0][0]}`)
+        return dataArray[0][0];
     } else if(bool) {
         message.channel.send("Cell empty");
     }
@@ -116,8 +125,6 @@ async function getAInternal(x, y, c, r, message, gs, end,bool,tab) {
     if (bool) {
         message.channel.send(`${end + dataArray}`)
     }
-    
-
     return dataArray;
     
 };
@@ -141,6 +148,7 @@ async function setInternal(x, data, message, gs, end,bool,tab) {
         return true;
     } catch(error) {
         message.channel.send(`Operation failed: ${error.message}`);
+        return false;
     }
 };
 exports.createUser = function(message, nationIn, colorIn, passwordIn) {           

@@ -5,7 +5,7 @@ module.exports = {
     usage: '<arg> <x> <y> <cols> <rows> <sh>',
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) {   
+    execute: async function execute(message, args) {   
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         if (fn.perm(message, 1)) {
@@ -14,7 +14,9 @@ module.exports = {
             } else {
                 var tab = args[5];
             }
-            fn.ss(args, message, true, tab);
+            var result = await fn.ss(args, message, true, tab)
+            message.channel.send("Is" + result)
+            return;
+            }
         }
-    },
-};
+    }

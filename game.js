@@ -48,6 +48,7 @@ exports.findUnitPrice = async function(unit, message) {
         message.channel.send(ax);
         var ay = await findHorizontal(unit, "4", message).catch("Error Horizontal");
         message.channel.send(ay);
-        resolve(fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance"));
+        var result = await fn.ss(["get", `${ax}${ay}`], message, true, "Maintenance");
+        resolve(result);
     })
 }

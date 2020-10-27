@@ -43,7 +43,7 @@ async function findVertical(target, col, message) {
 }
 
 exports.findUnitPrice = async function(unit, message) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) => {
         var ay;
         ax = await findVertical("Data", "A", message);
         message.channel.send(ax + x);

@@ -1,21 +1,21 @@
 const fs = require('fs');
 const {google} = require('googleapis');
-const fn = require("./fn");
-const gm = require("./game");
-const cfg = require("./config.json")
+const fn = require('./fn');
+const gm = require('./game');
+const cfg = require('./config.json');
 
 //Function finds first element target in column.
 async function findVertical(target, col, message, bool) {
     return new Promise(async function (resolve, reject) {  
-        var array = await fn.ss(["getA", `${col}1`, `${col}100`], message, bool, "Maintenance").catch(err => reject(err));
-        var height = 0
+        var array = await fn.ss(['getA', `${col}1`, `${col}100`], message, bool, 'Maintenance').catch(err => reject(err));
+        var height = 0;
         for (const element of array) {
             height += 1;
             if (element[0] == target) {
                 resolve(height);
             }
         }
-        reject("Not found in vertical range.");
+        reject('Not found in vertical range.');
     })
 }
 
@@ -23,22 +23,29 @@ async function findVertical(target, col, message, bool) {
 async function findHorizontal(target, row, message, bool) {
     return new Promise(async function (resolve, reject) {
         var e = 64; //char A dec num
-        var array = await fn.ss(["getA", `A${row}`, `BA${row}`], message, bool, "Maintenance").catch(err => reject(err));
+        var array = await fn.ss(['getA', `A${row}`, `BA${row}`], message, bool, 'Maintenance').catch(err => reject(err));
         for (const element of array[0]) {
             e += 1;
             if (element == target) {
                 resolve(e);
             }
         }
-        reject("Not found in horizontal range.");
+        reject('Not found in horizontal range.');
     })
 }
 
-exports.findUnitPrice = async function(unit, message) {
-    return new Promise(async function(resolve, reject) {
-        var prices = await findVertical("Data", "A", message).catch(err => message.channel.send("Error Vertical - " + err));
-        var column = await findHorizontal(unit, "4", message).catch(err => message.channel.send("Error Horizontal - " + err));
-        var result = await fn.ss(["get", `${String.fromCharCode(column)}${prices}`], message).catch(err => reject(err));
-        resolve(result);
-    })
+exports.findUnitPrice = function(unit, message) {
+    return new Promise(function(resolve, reject) {
+        findVertical('Data', 'A', message)
+            .then(prices => {
+                findHorizontal(unit, '4', message)
+                    .then(column => {
+                        fn.ss(['get', `${String.fromCharCode(column)}${prices}`], message)
+                            .then(resolve)
+                            .catch(err => reject(err));
+                    })
+                    .catch(err => message.channel.send('Error Horizontal - ' + err));
+            })
+            .catch(err => message.channel.send('Error Vertical - ' + err));
+    });
 }

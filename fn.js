@@ -11,8 +11,8 @@ const {} = process.env;
 exports.init = function () {
     client = new google.auth.JWT(client_email, null, private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
 };
-exports.ss = async function (args, message, tab) {
-    return new Promise(async function (resolve, reject) {
+exports.ss = function (args, message, tab) {
+    return new Promise(function (resolve, reject) {
         client.authorize(async function(err,tokens) {
             try {
                 if (err) throw "Autorization failed." + err;
@@ -44,22 +44,29 @@ exports.ss = async function (args, message, tab) {
     })
 };
 
-async function getInternal(x,message,gs,tab) { 
-    const getData = {
-    spreadsheetId: cfg.sheet,
-    range:  `${tab}!${x}`
-    };
-    let data = await gs.spreadsheets.values.get(getData);
-    let dataArray = data.data.values;
+function getInternal(x,message,gs,tab) { 
+    return new Promise(function (resolve, reject) {
+        const getData = {
+        spreadsheetId: cfg.sheet,
+        range:  `${tab}!${x}`
+        };
+        gs.spreadsheets.values.get(getData)
+            .then(data => {
+                let dataArray = data.data.values;
 
-    if (dataArray != undefined) {
-        return dataArray[0][0];
-    }
-    message.channel.send("Cell empty");
-    return false;
+                if (dataArray != undefined) {
+                    resolve(dataArray[0][0]);
+                    return;
+                }
+                message.channel.send("Cell empty");
+                reject(false);
+            })
+            .then(resolve);
+    });
 }
-async function getAInternal(x, y, c, r, message, gs, tab) {
-    try {
+function getAInternal(x, y, c, r, message, gs, tab) {
+    return new Promise(function (resolve, reject) {
+        try {
         if (parseInt(c) < 0 || parseInt(r) < 0 || c == undefined || r == undefined) {
             c = 0, r = 0;
         };
@@ -79,57 +86,61 @@ async function getAInternal(x, y, c, r, message, gs, tab) {
         if (intermediate > 90) {
             newY = "A" + newY;
             intermediate -= 25;
+            }
+            newY = newY.substring(0, newY.length - 1) + String.fromCharCode(intermediate);
+            if (r > 0) {
+                newYNum = parseInt(newYNum) + r; 
+            }
+            y = newY + newYNum;
+
+        } catch (err) {
+            message.channel.send(err);
+            reject(false);
         }
+            
+        const getData = {
+        spreadsheetId: cfg.sheet,
+        range: `${tab}!${x}:${y}`
+        };
 
-        newY = newY.substring(0, newY.length - 1) + String.fromCharCode(intermediate);
-
-        if (r > 0) {
-            newYNum = parseInt(newYNum) + r; 
-        }
-        
-        y = newY + newYNum;
-
-    } catch (err) {
-        message.channel.send(err);
-        return false;
-    }
-        
-    const getData = {
-    spreadsheetId: cfg.sheet,
-    range: `${tab}!${x}:${y}`
+        gs.spreadsheets.values.get(getData)
+            .then(data => {
+                resolve(data.data.values);
+            })
+            .catch(reject);
+    });
+};
+function setInternal(x, data, message, gs,tab) {
+    return new Promise(function (resolve, reject) {
+        if (data == undefined) {
+                message.channel.send("Data empty. Operation failed.");
+                return false;
+            } 
+            try {
+                const pushData = {
+                    spreadsheetId: cfg.sheet,
+                    range: `${tab}!${x}`,
+                    valueInputOption: "RAW",
+                    resource: {values: [[data]]}
+                };
+                gs.spreadsheets.values.update(pushData)
+                    .then(resolve(true))
+                    .catch(reject);
+            } catch(error) {
+                message.channel.send(`Operation failed: ${error.message}`);
+                reject(false);
+            }
+        });
     };
 
-    let data = await gs.spreadsheets.values.get(getData);
-    let dataArray = data.data.values;
-    return dataArray;
-    
-};
-async function setInternal(x, data, message, gs,tab) {
-    if (data == undefined) {
-        message.channel.send("Data empty. Operation failed.");
-        return false;
-    } 
-    try {
-        const pushData = {
-            spreadsheetId: cfg.sheet,
-            range: `${tab}!${x}`,
-            valueInputOption: "RAW",
-            resource: {values: [[data]]}
-        };
-        await gs.spreadsheets.values.update(pushData);       
-        return true;
-    } catch(error) {
-        message.channel.send(`Operation failed: ${error.message}`);
-        return false;
-    }
-};
+
 function checkCoordinate(x,message) {
     let coord = new RegExp(/[A-Z]+[0-9]+/g);
     if (coord.test(x)) {
         return true;
     }
     return false;
-};
+}
 
 exports.createUser = function(message, nationIn, colorIn, passwordIn) {           
     const id = message.mentions.users.map(user => {

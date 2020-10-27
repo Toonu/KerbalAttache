@@ -28,7 +28,7 @@ module.exports = {
         })
         //.catch(message.channel.send("Operation failed.")); 
         
-        result = await gm.findUnitPrice("AFV", message);
+        result = await gm.findUnitPrice("AFV", message).catch(message.channel.send("Error"));
         message.channel.send(result);
         return;
         //.catch(message.channel.send("Operation failed.X")); 

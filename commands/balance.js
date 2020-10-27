@@ -5,7 +5,7 @@ module.exports = {
     usage: '',
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) {  
+    execute: async function execute(message, args) {  
         
         const cfg = require("./../config.json")
         const fn = require("./../fn");
@@ -28,12 +28,9 @@ module.exports = {
         })
         //.catch(message.channel.send("Operation failed.")); 
         
-        
-        gm.findUnitPrice("AFV", message)
-        .then(result => {
-            message.channel.send(result);
-            return;
-        })
+        result = await gm.findUnitPrice("AFV", message);
+        message.channel.send(result);
+        return;
         //.catch(message.channel.send("Operation failed.X")); 
     },
 };

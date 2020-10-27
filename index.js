@@ -5,6 +5,7 @@ const fs = require('fs');
 const fn = require("./fn");
 const { Console } = require('console');
 const {google} = require('googleapis');
+const keep_alive = require('./keep_alive.js')
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();

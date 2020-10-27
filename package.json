@@ -2,10 +2,10 @@
   "name": "KerbalAttache",
   "version": "1.0.0",
   "description": "Kerbal Management Bot",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js|node index.js"
+    "start": "node index.js|node keep_alive.js"
   },
   "keywords": [],
   "engines": {

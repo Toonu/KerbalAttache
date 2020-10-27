@@ -8,7 +8,6 @@ const {CLIENT_TOKEN, type, project_id, private_key_id, private_key, client_email
 const {} = process.env;
 
 
-
 exports.init = function () {
     client = new google.auth.JWT(client_email, null, private_key, ["https://www.googleapis.com/auth/spreadsheets"]);
 };
@@ -28,32 +27,24 @@ exports.ss = async function (args, message, tab) {
                     }
 
                     if (args[0].startsWith("getA")) {
+                        args[2] = args[2].toUpperCase();
                         if (!checkCoordinate(args[2])) throw "Wrong second coordinate input.";
-                        var result = await getAInternal(args[1], args[2].toUpperCase(), args[3], args[4], message, gs, "Result: ", tab);
-                        resolve(result);     
+
+                        resolve(await getAInternal(args[1], args[2], args[3], args[4], message, gs, tab));
                     } else if (args[0].startsWith("set")) {
-                        var result =  setInternal(args[1], args[2], message, gs, "Operation succeeded.", tab);
-                        resolve(result);
+                        resolve(setInternal(args[1], args[2], message, gs, tab));
                     } else if (args[0].toLowerCase().startsWith("get")) {
-                        result = await getInternal(args[1], message, gs, "Result: ", tab);
-                        //message.channel.send("Is: " + result);
-                        resolve(result);
+                        resolve(await getInternal(args[1], message, gs, tab));
                     }
                 }
             } catch(err) {
-                reject("SS error: " + err);
+                reject(err);
             }
         })
     })
 };
-function checkCoordinate(x,message) {
-    let coord = new RegExp(/[A-Z]+[0-9]+/g);
-    if (coord.test(x)) {
-        return true;
-    }
-    return false;
-}
-async function getInternal(x,message,gs,end,tab) { 
+
+async function getInternal(x,message,gs,tab) { 
     const getData = {
     spreadsheetId: cfg.sheet,
     range:  `${tab}!${x}`
@@ -67,7 +58,7 @@ async function getInternal(x,message,gs,end,tab) {
     message.channel.send("Cell empty");
     return false;
 }
-async function getAInternal(x, y, c, r, message, gs, end,tab) {
+async function getAInternal(x, y, c, r, message, gs, tab) {
     try {
         if (parseInt(c) < 0 || parseInt(r) < 0 || c == undefined || r == undefined) {
             c = 0, r = 0;
@@ -113,7 +104,7 @@ async function getAInternal(x, y, c, r, message, gs, end,tab) {
     return dataArray;
     
 };
-async function setInternal(x, data, message, gs, end,tab) {
+async function setInternal(x, data, message, gs,tab) {
     if (data == undefined) {
         message.channel.send("Data empty. Operation failed.");
         return false;
@@ -132,6 +123,14 @@ async function setInternal(x, data, message, gs, end,tab) {
         return false;
     }
 };
+function checkCoordinate(x,message) {
+    let coord = new RegExp(/[A-Z]+[0-9]+/g);
+    if (coord.test(x)) {
+        return true;
+    }
+    return false;
+};
+
 exports.createUser = function(message, nationIn, colorIn, passwordIn) {           
     const id = message.mentions.users.map(user => {
         return user.id;
@@ -156,7 +155,7 @@ exports.createUser = function(message, nationIn, colorIn, passwordIn) {
         return true;
     }
     return false;
-}
+};
 exports.modifyUser = function(message, user, type, data) {
     switch(type) {
         case "0":
@@ -174,14 +173,14 @@ exports.modifyUser = function(message, user, type, data) {
 
     fn.exportFile("config.json", cfg);
     return true;
-}
+};
 exports.delUser = function(user) {
     delete cfg.users[user];
     fn.exportFile("config.json", cfg);
-}
+};
 exports.exportFile = function(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));
-}
+};
 exports.perm = function(message, type) {
     switch(type) {
         case 0:
@@ -202,4 +201,4 @@ exports.perm = function(message, type) {
             message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
             return false;
     }
-}
+};

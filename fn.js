@@ -30,16 +30,13 @@ exports.ss = function (args, message, tab) {
                         args[2] = args[2].toUpperCase();
                         if (!checkCoordinate(args[2])) throw "Wrong second coordinate input.";
 
-                        getAInternal(args[1], args[2], args[3], args[4], message, gs, tab)
-                        .then(resolve)
+                        resolve(getAInternal(args[1], args[2], args[3], args[4], message, gs, tab))
                         .catch(err => reject(err));
                     } else if (args[0].startsWith("set")) {
-                        setInternal(args[1], args[2], message, gs, tab)
-                        .then(resolve)
+                        resolve(setInternal(args[1], args[2], message, gs, tab))
                         .catch(err => reject(err));
                     } else if (args[0].toLowerCase().startsWith("get")) {
-                        getInternal(args[1], message, gs, tab)
-                        .then(resolve)
+                        resolve(getInternal(args[1], message, gs, tab))
                         .catch(err => reject(err));
                     }
                 }
@@ -64,7 +61,7 @@ function getInternal(x,message,gs,tab) {
                     resolve(dataArray[0][0]);
                     return;
                 }
-                reject("Cell empty");
+                resolve(false);
             })
             .catch(reject);
     });

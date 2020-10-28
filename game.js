@@ -10,9 +10,10 @@ exports.findVertical = function findVertical(target, col, message) {
         fn.ss(['getA', `${col}1`, `${col}100`], message)
             .then(array => {
                 var height = 0;
+                var rege = new RegExp("^"+target+".*", "g");
                 for (const element of array) {
                     height += 1;
-                    if (element[0] == target) {
+                    if (rege.test(element[0])) {
                         resolve(height);
                 }
             }
@@ -42,9 +43,9 @@ exports.findHorizontal = function findHorizontal(target, row, message) {
 
 exports.findUnitPrice = function(unit, message) {
     return new Promise(function(resolve, reject) {
-        findVertical('Data', 'A', message)
+        gm.findVertical('Data', 'A', message)
             .then(prices => {
-                findHorizontal(unit, '4', message)
+                gm.findHorizontal(unit, '4', message)
                     .then(column => {
                         fn.ss(['get', `${String.fromCharCode(column)}${prices}`], message)
                             .then(resolve)
@@ -56,5 +57,6 @@ exports.findUnitPrice = function(unit, message) {
     });
 }
 exports.report = function(message, data) {
-    message.client.channels.cache.get(cfg.main_channel).send(data);
+    //message.client.channels.cache.get(cfg.main_channel).send(data);
+    message.client.channels.cache.get('768476039496073227').send(data);
 }

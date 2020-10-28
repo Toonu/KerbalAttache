@@ -19,9 +19,5 @@ module.exports = {
                 message.channel.send(`Nation: ${element[0].split(" ")[0]}\nAccount: ${element[1]}\nBalance: ${element[2]}`);
             }
         });
-        /*
-        result = await gm.findUnitPrice("AFV", message).catch(message.channel.send("Error in main."));
-        message.channel.send(result);
-        return;*/
     },
 };

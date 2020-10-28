@@ -5,9 +5,9 @@ const gm = require('./game');
 const cfg = require('./config.json');
 
 //Function finds first element target in column.
-function findVertical(target, col, message, bool) {
+exports.findVertical = function findVertical(target, col, message) {
     return new Promise(function (resolve, reject) {  
-        fn.ss(['getA', `${col}1`, `${col}100`], message, bool, 'Maintenance')
+        fn.ss(['getA', `${col}1`, `${col}100`], message)
             .then(array => {
                 var height = 0;
                 for (const element of array) {
@@ -23,10 +23,10 @@ function findVertical(target, col, message, bool) {
 }
 
 //Function finds first row containing the target in row.
-function findHorizontal(target, row, message, bool) {
+exports.findHorizontal = function findHorizontal(target, row, message) {
     return new Promise(function (resolve, reject) {
         var e = 64; //char A dec num
-        fn.ss(['getA', `A${row}`, `BA${row}`], message, bool, 'Maintenance')
+        fn.ss(['getA', `A${row}`, `BA${row}`], message)
             .then(array => {
             for (const element of array[0]) {
                 e += 1;
@@ -54,4 +54,7 @@ exports.findUnitPrice = function(unit, message) {
             })
             .catch(err => message.channel.send('Error Vertical - ' + err));
     });
+}
+exports.report = function(message, data) {
+    message.client.channels.cache.get(cfg.main_channel).send(data);
 }

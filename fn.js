@@ -13,7 +13,7 @@ exports.init = function () {
 };
 exports.ss = function (args, message, tab) {
     return new Promise(function (resolve, reject) {
-        client.authorize(async function(err,tokens) {
+        client.authorize(function(err,tokens) {
             try {
                 if (err) throw "Autorization failed." + err;
                 else {
@@ -30,11 +30,17 @@ exports.ss = function (args, message, tab) {
                         args[2] = args[2].toUpperCase();
                         if (!checkCoordinate(args[2])) throw "Wrong second coordinate input.";
 
-                        resolve(await getAInternal(args[1], args[2], args[3], args[4], message, gs, tab));
+                        getAInternal(args[1], args[2], args[3], args[4], message, gs, tab)
+                        .then(resolve)
+                        .catch(err => reject(err));
                     } else if (args[0].startsWith("set")) {
-                        resolve(setInternal(args[1], args[2], message, gs, tab));
+                        setInternal(args[1], args[2], message, gs, tab)
+                        .then(resolve)
+                        .catch(err => reject(err));
                     } else if (args[0].toLowerCase().startsWith("get")) {
-                        resolve(await getInternal(args[1], message, gs, tab));
+                        getInternal(args[1], message, gs, tab)
+                        .then(resolve)
+                        .catch(err => reject(err));
                     }
                 }
             } catch(err) {
@@ -58,10 +64,9 @@ function getInternal(x,message,gs,tab) {
                     resolve(dataArray[0][0]);
                     return;
                 }
-                message.channel.send("Cell empty");
-                reject(false);
+                reject("Cell empty");
             })
-            .then(resolve);
+            .catch(reject);
     });
 }
 function getAInternal(x, y, c, r, message, gs, tab) {
@@ -197,13 +202,14 @@ exports.perm = function(message, type) {
         case 0:
             return true;
         case 1:
-            if (message.member.roles.cache.has(cfg.developers) || message.member.roles.cache.has(cfg.administrators)) {
+            if (cfg.administrators.some(r=> message.member.roles.cache.has(r)) || cfg.developers.some(r=> message.member.roles.cache.has(r))) {
+
                 return true;
             }
             message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
             return false;
         case 2:
-            if (message.member.roles.cache.has(cfg.administrators)) {
+            if (cfg.administrators.some(r=> message.member.roles.cache.has(r))) {
                 return true;
             }
             message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")

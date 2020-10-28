@@ -10,9 +10,7 @@ module.exports = {
         if (args[1] =! undefined) {
             message.client.channels.cache.get('686606880461684794').send('Spam.');
         }
-
-		var i;
-		for (i = 0; i < parseInt(args[0] - 1); i++) {
+		for (var i = 0; i < parseInt(args[0] - 1); i++) {
 			message.channel.send('Pong.');
 		}
 		message.channel.send('Done!');

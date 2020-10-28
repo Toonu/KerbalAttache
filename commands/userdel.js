@@ -7,13 +7,13 @@ module.exports = {
     guildOnly: true,
     execute(message, args) {
         const cfg = require("./../config.json")
-        const fn = require("./../fn");
+        const js = require('./../json');
 
-        if (!fn.perm(message, 2)) {
+        if (!js.perm(message, 2)) {
             const id = message.mentions.users.map(user => {
                 return user.id;		
             });
-            fn.delUser(id)
+            js.delUser(id)
             message.channel.send("User deleted.")
         }
     }

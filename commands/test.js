@@ -9,11 +9,8 @@ module.exports = {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const gm = require("./../game");
+        const js = require('./../json');
 
-        gm.findUnitPrice(args[0].toUpperCase(), message)
-        .then(result => {
-            message.channel.send(result);
-        })
-        .catch(err => message.channel.send("Error in: " + err));
+        message.reply('There is nothing in here.')
     },
 };

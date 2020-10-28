@@ -7,6 +7,7 @@ module.exports = {
     guildOnly: true,
     execute: function execute(message, args) { 
         const cfg = require('./../config.json')
+        const js = require('./../json');
         const fn = require('./../fn');
         const gm = require('./../game');
 
@@ -15,9 +16,16 @@ module.exports = {
         };
 
         //Easter egg, part one, carrts can be obtained from userinfo.
-        if (message.mentions.users.first().id === '693908421396922480') {
+        if (message.mentions.users.first().id === '693908421396922480' && cfg.users[message.author.id].egg == 'carrot') {
+            message.channel.send('Owned');
+            return;
+        } else if (message.mentions.users.first().id === '693908421396922480') {
             message.reply("You need carrots first.");
             return;
+        } if (args[1].startsWith('carrot')) {
+            js.modifyUser(message, message.author.id, 0, "carrot");
+            message.reply('Carrot found.')
+            return;  
         }
 
         //Checking input arguments.
@@ -34,8 +42,9 @@ module.exports = {
 
         gm.findUnitPrice(args[1].toUpperCase(), message)
         .then(result => {
-            console.log(result);
-            message.channel.send(`Do you want to buy ${args[0]} ${args[1]} for ${(parseInt(result) * args[0]).toLocaleString()}€ [y]/[n]`)
+            //console.log(result);
+            let cost = (parseInt(result) * args[0]);
+            message.channel.send(`Do you want to buy ${args[0]} ${args[1]} for ${cost.toLocaleString()}€ [y]/[n]`)
             .then(function (message) {
                 message.react("✅");
                 message.react("❌");
@@ -57,11 +66,18 @@ module.exports = {
                                     } else {
                                         fn.ss(['set', `${String.fromCharCode(col)+searchRow}`, parseInt(res) + args[0]], message);
                                     }
-                                    gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${(parseInt(result) * args[0]).toLocaleString()}€`);
+                                    gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString()}€`);
                                 })
                                 .catch(err => message.channel.send(err));
                             })
+                            .then(res => {
+                                fn.ss(['get', `B${searchRow}`], message)
+                                .then(money => {
+                                    fn.ss(['set', `B${searchRow}`, (parseInt(money.replace(/[,|$]/g, '')) - cost)], message);
+                                })
+                            })
                             .catch(err => message.channel.send(err));
+
                         })
                         .catch(err => {
                             message.channel.send(err);

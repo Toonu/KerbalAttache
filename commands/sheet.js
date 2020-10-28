@@ -8,7 +8,8 @@ module.exports = {
     execute: function execute(message, args) {   
         const cfg = require("./../config.json")
         const fn = require("./../fn");
-        if (fn.perm(message, 1)) {
+        const js = require('./../json');
+        if (js.perm(message, 1)) {
             fn.ss(args, message)
             .then(result => {
                 if (result == true) {

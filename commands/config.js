@@ -1,14 +1,15 @@
 module.exports = {
-    name: 'useredit',
-    description: 'Method for editing users!',
-    args: false,
-    usage: '<user> <data/del> <type>\nTypes:\n0 - Nation (admin)\n1 - color (admin)\n2 - pwd (admin)\n3 -notes (user)',
+    name: 'config',
+    description: 'Method for configuring the bot!',
+    args: true,
+    usage: '<configuration> <newValue>',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {
         const cfg = require("./../config.json")
         const js = require('./../json');
-        if (js.perm(message, 2) || args[2] == '3') {
+        const fs = require('fs');
+        if (js.perm(message, 2)) {
             const id = message.mentions.users.map(user => {
                 return user.id;		
             });

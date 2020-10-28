@@ -7,14 +7,14 @@ module.exports = {
     guildOnly: true,
     execute(message, args) {
         const cfg = require("./../config.json")
-        const fn = require("./../fn");
+        const js = require('./../json');
 
-        if (fn.perm(message, 2)) {
+        if (js.perm(message, 2)) {
             const id = message.mentions.users.map(user => {
                 return user.id;		
             });
     
-            if (fn.createUser(message, args[1], args[2], args[3])) {
+            if (js.createUser(message, args[1], args[2], args[3])) {
                 message.channel.send("User created.")
                 return;
             }

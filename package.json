@@ -15,6 +15,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "discord.js": "^12.4.1",
-    "googleapis": "^61.0.0"
+    "googleapis": "^61.0.0",
+    "json": "^10.0.0"
   }
 }

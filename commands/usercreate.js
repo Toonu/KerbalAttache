@@ -1,18 +1,15 @@
 module.exports = {
     name: 'usercreate',
     description: 'Method for creating user!',
-    args: false,
+    args: true,
     usage: '<user> <nation> <color> <pwd>',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {
-        const cfg = require("./../config.json")
         const js = require('./../json');
 
         if (js.perm(message, 2)) {
-            const id = message.mentions.users.map(user => {
-                return user.id;		
-            });
+            const id = message.mentions.users.first();
     
             if (js.createUser(message, args[1], args[2], args[3])) {
                 message.channel.send("User created.")

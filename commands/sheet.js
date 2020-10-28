@@ -1,7 +1,7 @@
 module.exports = {
     name: 'sheet',
     description: 'Method for getting data from spreadsheet!',
-    args: false,
+    args: true,
     usage: '<arg> <x> <y> <cols> <rows> <sh>',
     cooldown: 5,
     guildOnly: true,

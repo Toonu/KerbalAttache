@@ -10,23 +10,29 @@ module.exports = {
         const js = require('./../json');
         const fn = require('./../fn');
         const gm = require('./../game');
+        const Discord = require('discord.js');
 
         const filter = (reaction, user) => {
 	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
 
-        //Easter egg, part one, carrts can be obtained from userinfo.
-        if (message.mentions.users.first().id === '693908421396922480' && cfg.users[message.author.id].egg == 'carrot') {
-            message.channel.send('Owned');
-            return;
-        } else if (message.mentions.users.first().id === '693908421396922480') {
-            message.reply("You need carrots first.");
-            return;
-        } if (args[1].startsWith('carrot')) {
-            js.modifyUser(message, message.author.id, 0, "carrot");
-            message.reply('Carrot found.')
-            return;  
+        try {
+            //Easter egg, part one, carrts can be obtained from userinfo.
+            if (message.mentions.users.first().id === '693908421396922480' && cfg.users[message.author.id].egg == 'carrot') {
+                message.channel.send('Owned');
+                return;
+            } else if (message.mentions.users.first().id === '693908421396922480') {
+                message.reply("You need carrots first.");
+                return;
+            } 
+        } catch(err) {
+            if (args[1].startsWith('carrot')) {
+                js.modifyUser(message, message.author.id, 0, "carrot");
+                message.reply('Carrot found.')
+                return;  
+            }
         }
+        
 
         //Checking input arguments.
         try {
@@ -44,7 +50,21 @@ module.exports = {
         .then(result => {
             //console.log(result);
             let cost = (parseInt(result) * args[0]);
-            message.channel.send(`Do you want to buy ${args[0]} ${args[1]} for ${cost.toLocaleString()}€ [y]/[n]`)
+            const embed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`Office of Aquisitions`)
+            .setURL('https://discord.js.org/') //URL clickable from the title
+            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .addFields(
+                { name: 'Amount:', value: args[0], inline: true},
+                { name: 'Asset', value: args[1], inline: true},
+                { name: 'Cost:', value: cost.toLocaleString() + cfg.money},
+                { name: 'Do you accept the agreement the terms of the supplier?', value: '✅/❌'},
+                { name: '\u200B', value: '\u200B'},
+            )
+            .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+
+            message.channel.send(embed)
             .then(function (message) {
                 message.react("✅");
                 message.react("❌");
@@ -66,7 +86,7 @@ module.exports = {
                                     } else {
                                         fn.ss(['set', `${String.fromCharCode(col)+searchRow}`, parseInt(res) + args[0]], message);
                                     }
-                                    gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString()}€`);
+                                    gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString() + cfg.money}`);
                                 })
                                 .catch(err => message.channel.send(err));
                             })

@@ -1,7 +1,7 @@
 module.exports = {
     name: 'useredit',
     description: 'Method for editing users!',
-    args: false,
+    args: true,
     usage: '<user> <data/del> <type>\nTypes:\n0 - Nation (admin)\n1 - color (admin)\n2 - pwd (admin)\n3 -notes (user)',
     cooldown: 5,
     guildOnly: true,
@@ -9,25 +9,22 @@ module.exports = {
         const cfg = require("./../config.json")
         const js = require('./../json');
         if (js.perm(message, 2) || args[2] == '3') {
-            const id = message.mentions.users.map(user => {
-                return user.id;		
-            });
-    
-            if (args[2] == undefined) {
-                message.channel.send("Modification failed. You have to include type of property. See ?help useredit for more info.")
-            }
+            const id = message.mentions.users.first();
     
             if (js.createUser(message)) {
-                message.channel.send("New User created.");
-            } else if (args[1] == "del") {
-                message.channel.send("User property deleted.");
-                var res = js.modifyUser(message, id, args[2], "undefined");
-            } else {
-                message.channel.send("User property modified.");
-                var res = js.modifyUser(message, id, args[2], args[1]);
+                message.channel.send("New User created. Please retry the command to edit his atributes.");
+                return;
+            } else if (args[2] == undefined) {
+                message.channel.send("Modification failed. You have to include type of property. See ?help useredit for more info.");
+                return;
             }
-            if (!res) {
-                message.channel.send("Modification failed. Ignore previous message.")
+    
+            if (args[1] == "del" && js.modifyUser(message, id, args[2], "undefined")) {
+                message.channel.send("User property deleted.");
+            } else if (js.modifyUser(message, id, args[2], args[1])) {
+                    message.channel.send("User property modified.");
+            } else {
+                message.channel.send("Modification failed. Ignore previous message.");
             }
         }        
     }

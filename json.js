@@ -1,7 +1,8 @@
 const fs = require('fs');
 const cfg = require('./config.json');
+const js = require('./json');
 
-exports.createUser = function createUser(message, nationIn, colorIn, passwordIn) {    
+exports.createUser = function createUser(message, nationIn, colorIn, passwordIn) {
     const id = message.mentions.users.map(user => {
         return user.id;
     });
@@ -50,12 +51,12 @@ exports.modifyUser = function modifyUser(message, user, type, data) {
             return false;
     }
 
-    exportFile("config.json", cfg);
+    js.exportFile("config.json", cfg);
     return true;
 };
 exports.delUser = function delUser(user) {
     delete cfg.users[user];
-    exportFile("config.json", cfg);
+    js.exportFile("config.json", cfg);
 };
 exports.exportFile = function exportFile(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));

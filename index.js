@@ -31,7 +31,7 @@ client.on('message', message => {
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	if (commandName.startsWith(`reset`) && message.author.id == 319919565079576576) {
+	if (commandName.startsWith(`reset`) && js.perm(message, 2)) {
 		resetBot(message.channel);
 		return;
 	}

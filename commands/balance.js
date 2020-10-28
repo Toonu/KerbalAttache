@@ -5,19 +5,49 @@ module.exports = {
     usage: '',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
-        const cfg = require("./../config.json")
-        const js = require("./../json");
-        const gm = require("./../game");
+    execute: function execute(message, args) { 
+        const cfg = require('./../config.json')
+        const js = require('./../json');
+        const fn = require('./../fn')
+        const gm = require('./../game');
+        const Discord = require('discord.js');
 
-        var array = await fn.ss(["getA", "A5", "C15"], message, false, "Maintenance");
-        //console.log(array);
-        array.forEach(element => {
-            if (args[0] != undefined && js.perm(message, 2) && element[0].startsWith(cfg.users[message.mentions.users.first().id].nation)) {
-                message.channel.send(`Balance of <@${message.mentions.users.first().id}> is: ${element[1]}`);
-            } else if (element[0].startsWith(cfg.users[message.author.id].nation)) {
-                message.channel.send(`Nation: ${element[0].split(" ")[0]}\nAccount: ${element[1]}\nBalance: ${element[2]}`);
-            }
+        fn.ss(['getA', 'A5', 'C15'], message, false, 'Maintenance')
+        .then(array => {
+            array.forEach(element => {
+                var filter = cfg.users[message.author.id].nation;
+                if (args[0] != undefined && js.perm(message, 2)) {
+                    filter = cfg.users[message.mentions.users.first().id].nation;
+                }
+                if (element[0].startsWith(filter)) {
+                    let user = message.mentions.users.first();
+                    if (user == undefined) {
+                        user = message.author;
+                    }
+                    
+                    const embed = new Discord.MessageEmbed()
+                    .setColor('#0099ff')
+                    .setTitle(`National Bank of ${cfg.users[user.id].nation}`)
+                    .setURL('https://discord.js.org/') //URL clickable from the title
+                    .setThumbnail('https://imgur.com/IvUHO31.png')
+                    .addFields(
+                        { name: 'Nation:', value: cfg.users[user.id].nation},
+                        { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
+                        { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
+                    )
+                    .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+
+                    message.channel.send(embed);
+
+                    throw "";
+                }
+            })
+            .catch(err => console.log(err));
         });
-    },
-};
+    }
+}
+
+
+
+
+            

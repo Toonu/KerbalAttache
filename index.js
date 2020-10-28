@@ -78,7 +78,7 @@ client.on('message', message => {
 	
 	try {
 		if (debug) {
-			console.log(' Server: ' + message.content);
+			console.log('Server '+ message.guild.name + ": " + message.content);
 		}
 		command.execute(message, args);
 	} catch (error) {

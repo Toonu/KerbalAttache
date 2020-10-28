@@ -11,7 +11,7 @@ module.exports = {
         const gm = require("./../game");
 
         var array = await fn.ss(["getA", "A5", "C15"], message, false, "Maintenance");
-        console.log(array);
+        //console.log(array);
         array.forEach(element => {
             if (args[0] != undefined && fn.perm(message, 2) && element[0].startsWith(cfg.users[message.mentions.users.first().id].nation)) {
                 message.channel.send(`Balance of <@${message.mentions.users.first().id}> is: ${element[1]}`);

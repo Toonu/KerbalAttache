@@ -12,10 +12,10 @@ module.exports = {
             fn.ss(args, message)
             .then(result => {
                 if (result == true) {
-                    message.channel.send("Operation was successful.");
-                } else if (result == false) {
-                    message.channel.send("Operation failed.");
-                }
+                    message.channel.send("Operation successful.");
+                } else {
+                    message.channel.send("Result: " + result);
+                }                
             })
             .catch(err => message.channel.send("Result: " + err));
         }

@@ -5,7 +5,7 @@ module.exports = {
     usage: '<amount> <asset>',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
+    execute: function execute(message, args) { 
         const cfg = require('./../config.json')
         const fn = require('./../fn');
         const gm = require('./../game');
@@ -14,6 +14,15 @@ module.exports = {
 	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
 
+        //Checking input arguments.
+        try {
+            args[0] = parseInt(args[0]);
+            if (args[1] == undefined) throw "Missing second argument."
+        } catch(err) {
+            message.channel.send(`Wrong number input. See ${cfg.prefix}help buy for more information. ` + err);
+            return;
+        }
+        
         var origin = message;
 
         gm.findUnitPrice(args[1].toUpperCase(), message)
@@ -28,7 +37,7 @@ module.exports = {
                             if (react.emoji.name == '✅') {
                                 message.delete();
                                 message.channel.send('Purchasing assets. ✅');
-                                gm.findVertical(cfg.users[origin.author.id].nation, 'A', origin)
+                                /*gm.findVertical(cfg.users[origin.author.id].nation, 'A', origin)
                                 .then(row => {
                                     gm.findHorizontal(args[1].toUpperCase(), row ,origin)
                                         .then(column => {
@@ -44,7 +53,7 @@ module.exports = {
                                         })
                                         .catch(err => reject(err));
                                 })
-                                .catch(err => reject('Operation error' + err));
+                                .catch(err => reject('Operation error' + err));*/
                             } else {
                                 message.delete();
                                 message.channel.send('Operation was canceled. ❌');

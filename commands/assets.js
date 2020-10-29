@@ -19,8 +19,19 @@ module.exports = {
             filter = cfg.users[message.mentions.users.first().id].nation;
             user = message.mentions.users.first();
         }
+
+        const emojiFilter = (reaction, user) => {
+	        return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️') && user.id === message.author.id;
+        };
         
         var embed = new Discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`National Roster of ${cfg.users[user.id].nation}`)
+        .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+
+        var embedW = new Discord.MessageEmbed()
         .setColor('#065535')
         .setTitle(`National Roster of ${cfg.users[user.id].nation}`)
         .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
@@ -30,10 +41,29 @@ module.exports = {
         const t = new RegExp(/^[0-9]+/g);
         var unitNames;
         var nationRow;
+        var type = true;
+        var unitsEmbed;
+        var weaponsArray = [];
 
+        //Weapons setup
+        gm.findVertical(filter, 'A', message, 'Stockpiles')
+            .then(nation => {
+                fn.ss(['getA', 'A4', `W${nation}`], message, 'Stockpiles')
+                .then(weapArr => { 
+                    for(var i = 1; i < weapArr[0].length; i++) {
+                        if (weapArr[weapArr.length-1][i] != '.') {
+                            embedW.addField(weapArr[0][i], weapArr[weapArr.length-1][i], true);
+                        }
+                    }
+                })
+                .catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));  
+
+        //Units setup
         gm.findHorizontal('Technology', 1, message)
             .then(endCol => {
-                endCol = fn.toCoord(endCol);
+                endCol = fn.toCoord(endCol - 1);
                 fn.ss(['getA', 'E4', `${endCol}4`], message)
                     .then(un => {
                         unitNames = un;
@@ -47,14 +77,31 @@ module.exports = {
                                                 embed.addField(unitNames[0][i - 4], array[0][i], true);
                                             }
                                         }
-                                        message.channel.send(embed);
+                                        unitsEmbed = embed.fields;
+                                        message.channel.send(embed)
+                                            .then(function (message) {
+                                                message.react('⬅️');
+                                                message.react('➡️');
+                                                message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                                                    .then(collected => {
+                                                        react = collected.first();
+                                                        if (type && (react.emoji.name == '➡️' || react.emoji.name == '⬅️' )) {
+                                                            message.edit(embedW)
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        message.delete();
+                                                        console.error(err);
+                                                    })
+                                            })
+                                            .catch(err => console.error(err));
                                     })
-                                    .catch(err => console.log(err));
+                                    .catch(err => console.error(err));
                             })
-                            .catch(err => console.log(err));
+                            .catch(err => console.error(err));
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => console.error(err));
             })
-            .catch(err => console.log(err));
+            .catch(err => console.error(err));               
     }
 }

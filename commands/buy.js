@@ -2,7 +2,7 @@ module.exports = {
     name: 'buy',
     description: 'Method for buying new assets!',
     args: true,
-    usage: '<amount> <asset>',
+    usage: '<amount> <asset>\nBuildings: AIRPORT, FOB, PORT, RADAR\nSurface assets: MBT, AFV, IFV, APC, SAM, SPAAG, SF\Aerospace assets: L, M, H, LA, VL, VTOL, SAT, OV\nNaval assets: K, F, DD, CC, BC, BB, CL, CV',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) { 
@@ -46,9 +46,67 @@ module.exports = {
         var origin = message;
         var searchRow;
 
-        gm.findUnitPrice(args[1].toUpperCase(), message)
+        gm.findUnitPrice(args[1].toUpperCase(), message, cfg.users[message.author.id].nation)
         .then(result => {
             //console.log(result);
+
+            let vehicle;
+            switch(args[1]) {
+                case "L":
+                    vehicle = 'Light Multirole Airframe';
+                    break;
+                case "M":
+                    vehicle = 'Medium Multirole Airframe';
+                    break;
+                case "H":
+                    vehicle = 'Heavy Multirole Airframe';
+                    break;
+                case "LA":
+                    vehicle = 'Large Airframe';
+                    break;
+                case "VL":
+                    vehicle = 'Very Large Airframe';
+                    break;
+                case "VTOL":
+                    vehicle = 'Helicopter / VTOL Airframe';
+                    break;
+                case "K":
+                    vehicle = 'Corvette';
+                    break;
+                case "FF":
+                    vehicle = 'Frigate';
+                    break;
+                case "DD":
+                    vehicle = 'Destroyer';
+                    break;
+                case 'CC':
+                    vehicle = 'Cruiser';
+                    break;
+                case 'BC':
+                    vehicle = 'Battlecruiser';
+                    break;
+                case 'BB':
+                    vehicle = 'Battleship';
+                    break;
+                case 'CV':
+                    vehicle = 'Fleet Carrier';
+                    break;
+                case 'CL':
+                    vehicle = 'Light Carrier';
+                    break;
+                case 'SAT':
+                    vehicle = 'Satellite';
+                    break;
+                case 'OV':
+                    vehicle = 'Orbital Vehicle';
+                    break;
+                case 'SF':
+                    vehicle = 'Special Operation Forces';
+                    break;
+                default:
+                    vehicle = args[1];
+            }
+
             let cost = (parseInt(result) * args[0]);
             const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
@@ -57,9 +115,9 @@ module.exports = {
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
                 { name: 'Amount:', value: args[0], inline: true},
-                { name: 'Asset', value: args[1], inline: true},
+                { name: 'Asset', value: vehicle, inline: true},
                 { name: 'Cost:', value: cost.toLocaleString() + cfg.money},
-                { name: 'Do you accept the agreement the terms of the supplier?', value: '✅/❌'},
+                { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
             .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
@@ -76,6 +134,7 @@ module.exports = {
                         //Accepted, deleting embed and writing response.
                         message.delete();
                         message.channel.send('Purchasing assets. ✅');
+                        //Finding national row
                         gm.findVertical(cfg.users[origin.author.id].nation, 'A', origin)
                         .then(row => {
                             searchRow = row;
@@ -96,7 +155,6 @@ module.exports = {
                                     } else {
                                         gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString() + cfg.money}`);
                                     }
-                                    
                                 })
                                 .catch(err => message.channel.send(err));
                             })
@@ -117,9 +175,14 @@ module.exports = {
                         message.channel.send('Operation was canceled. ❌');
                     }
                 })
-                .catch(err => console.error(`Operation was canceled after one minute. Err: ` + err));
+                .catch(err => {
+                    message.delete();
+                    message.channel.send('Operation was canceled due to not responding. ❌');
+                });
             })
-            .catch(err => console.error('Error, please retry the acquisiton.' + err));
+            .catch(err => {
+                console.error('Error, please retry the acquisiton.' + err);
+            });
         })
         .catch(err => console.error(err));
     }

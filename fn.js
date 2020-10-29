@@ -20,7 +20,7 @@ exports.ss = function (args, message, tab) {
                     args[1] = args[1].toUpperCase();
     
                     if (tab == undefined) {
-                        var tab = 'Maintenance';
+                        tab = 'Maintenance';
                     }
 
                     if (args[0].startsWith('getA')) {
@@ -152,7 +152,7 @@ function checkCoordinate(x,message) {
 exports.toCoord = function (num) {
     num = parseInt(num);
     if (num > 90) {
-        return num = 'A'+String.fromCharCode(num - 27);
+        return num = 'A'+String.fromCharCode(num - 26);
     } else {
         return num += String.fromCharCode(num);
     }

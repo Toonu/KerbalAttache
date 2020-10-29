@@ -14,7 +14,7 @@ module.exports = {
 
         gm.findVertical('Data', 'A', message)
         .then(row => {
-            fn.ss(['getA', 'A5', `C${row - 1}`], message)
+            fn.ss(['getA', 'A5', `AZ${row - 1}`], message)
             .then(array => {
                 array.forEach(element => {
                     var filter = cfg.users[message.author.id].nation;
@@ -36,6 +36,8 @@ module.exports = {
                             { name: 'Nation:', value: cfg.users[user.id].nation},
                             { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
                             { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
+                            { name: 'Research budget:', value: parseInt(element[37].replace(/[,|$]/g, '')).toLocaleString() + cfg.money, inline: true},
+                            { name: 'Research points:', value: `${parseInt(element[36])}RP`, inline: true},
                         )
                         .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
 

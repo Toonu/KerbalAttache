@@ -1,5 +1,4 @@
 /*
-Research budget setting command
 Sells/Buys market trade command
 Weapon Buys
 Tiles command

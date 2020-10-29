@@ -75,7 +75,7 @@ client.on('message', message => {
         if (message.channel.type === 'dm') {
             console.log('DM from '+ message.author.name + ": " + message.content);
         } else {
-			console.log('Server '+ message.guild.name + ": " + message.content);
+			console.log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);
 	} catch (error) {

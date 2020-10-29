@@ -68,25 +68,35 @@ module.exports = {
             .then(function (message) {
                 message.react("✅");
                 message.react("❌");
+                //Reacting to the embed.
                 message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                 .then(collected => {
                     react = collected.first();
                     if (react.emoji.name == '✅') {
+                        //Accepted, deleting embed and writing response.
                         message.delete();
                         message.channel.send('Purchasing assets. ✅');
                         gm.findVertical(cfg.users[origin.author.id].nation, 'A', origin)
                         .then(row => {
                             searchRow = row;
+                            //Finding unit name column.
                             gm.findHorizontal(args[1].toUpperCase(), 4, origin)
                             .then(col => {
+                                //Getting amount of current units + adding new.
                                 fn.ss(['get', `${String.fromCharCode(col)+searchRow}`], message)
                                 .then(res => {
+                                    //Setting new num of units and commenting.
                                     if (!res) {
                                         fn.ss(['set', `${String.fromCharCode(col)+searchRow}`, args[0]], message);
                                     } else {
                                         fn.ss(['set', `${String.fromCharCode(col)+searchRow}`, parseInt(res) + args[0]], message);
                                     }
-                                    gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString() + cfg.money}`);
+                                    if (cost < 0) {
+                                        gm.report(origin, `${cfg.users[origin.author.id].nation} has sold ${Math.abs(args[0])} ${args[1]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
+                                    } else {
+                                        gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${args[1]} for ${cost.toLocaleString() + cfg.money}`);
+                                    }
+                                    
                                 })
                                 .catch(err => message.channel.send(err));
                             })

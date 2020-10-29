@@ -1,6 +1,6 @@
 module.exports = {
     name: 'sheet',
-    description: 'Method for getting data from spreadsheet!\nBy typing only the command, you can get link to your private sheet.',
+    description: 'Method for getting data from spreadsheet!\nBy typing only the command, you can get link to your private sheet. Do NOT use in public channels.',
     args: false,
     usage: '<arg> <x> <y> <cols> <rows> <sh>',
     cooldown: 5,

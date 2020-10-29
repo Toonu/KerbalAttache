@@ -104,6 +104,14 @@ function getAInternal(x, y, c, r, message, gs, tab) {
 
         gs.spreadsheets.values.get(getData)
             .then(data => {
+                for(r of data.data.values) {
+                    var i = 0;
+                    for(i; i < r.length; i++) {
+                        if (r[i] == '') {
+                            r.splice(i, 1, '.');
+                        }
+                    }
+                }
                 resolve(data.data.values);
             })
             .catch(reject);
@@ -141,3 +149,11 @@ function checkCoordinate(x,message) {
     return false;
 }
 
+exports.toCoord = function (num) {
+    num = parseInt(num);
+    if (num > 90) {
+        return num = 'A'+String.fromCharCode(num - 27);
+    } else {
+        return num += String.fromCharCode(num);
+    }
+}

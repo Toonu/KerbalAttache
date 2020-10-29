@@ -1,4 +1,4 @@
-const { prefix, debug, guild, main_channel } = require('./config.json');
+const cfg = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
@@ -25,16 +25,11 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.startsWith(cfg.prefix) || message.author.bot) return;
   
 	//Prepares the arguments and command
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
-
-	if (commandName.startsWith(`reset`) && js.perm(message, 2)) {
-		resetBot(message.channel);
-		return;
-	}
 
 	//If comand doesnt exist.
 	if (!client.commands.has(commandName)) return;
@@ -50,7 +45,7 @@ client.on('message', message => {
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
 		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
 		}
 		return message.channel.send(reply);
 	}
@@ -77,23 +72,17 @@ client.on('message', message => {
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	
 	try {
-		if (debug) {
+        if (message.channel.type === 'dm') {
+            console.log('DM from '+ message.author.name + ": " + message.content);
+        } else {
 			console.log('Server '+ message.guild.name + ": " + message.content);
 		}
 		command.execute(message, args);
 	} catch (error) {
 		console.error(error);
-		message.reply('there was an error trying to execute that command!');
+		message.reply('There was an error trying to execute that command!');
 	}
 });
 
 const {CLIENT_TOKEN} = process.env;
 client.login(CLIENT_TOKEN);
-
-// Turn bot off (destroy), then turn it back on
-function resetBot(channel) {
-    // send channel a message that you're resetting bot [optional]
-    channel.send('Resetting...')
-    .then(msg => client.destroy())
-    .then(() => client.login(CLIENT_TOKEN));
-}

@@ -57,6 +57,5 @@ exports.findUnitPrice = function(unit, message) {
     });
 }
 exports.report = function(message, data) {
-    //message.client.channels.cache.get(cfg.main_channel).send(data);
-    message.client.channels.cache.get('768476039496073227').send(data);
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(data);
 }

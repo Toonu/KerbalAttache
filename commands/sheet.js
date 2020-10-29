@@ -1,7 +1,7 @@
 module.exports = {
     name: 'sheet',
-    description: 'Method for getting data from spreadsheet!',
-    args: true,
+    description: 'Method for getting data from spreadsheet!\nBy typing only the command, you can get link to your private sheet.',
+    args: false,
     usage: '<arg> <x> <y> <cols> <rows> <sh>',
     cooldown: 5,
     guildOnly: true,
@@ -9,7 +9,9 @@ module.exports = {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const js = require('./../json');
-        if (js.perm(message, 1)) {
+        if (args[0] == undefined) {
+            message.reply(`https://docs.google.com/spreadsheets/d/${cfg.users[message.author.id].sheet}/edit#gid=0`);
+        } else if (js.perm(message, 1)) {
             fn.ss(args, message)
             .then(result => {
                 if (result == true) {

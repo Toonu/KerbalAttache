@@ -2,34 +2,70 @@ module.exports = {
     name: 'config',
     description: 'Method for configuring the bot!',
     args: true,
-    usage: '<configuration> <newValue>',
+    usage: '<configuration> <newValue>\nmoney, sheet, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {
-        const cfg = require("./../config.json")
+        const cfg = require('./../config.json')
         const js = require('./../json');
         const fs = require('fs');
+
+
         if (js.perm(message, 2)) {
-            const id = message.mentions.users.map(user => {
-                return user.id;		
-            });
-    
-            if (args[2] == undefined) {
-                message.channel.send("Modification failed. You have to include type of property. See ?help useredit for more info.")
+            if (!['money', 'sheet', 'sname'].includes(args[0])) {
+                try {
+                    console.log('Here')
+                    if(!Number.isInteger(parseInt(args[1]))) throw 'Not a proper ID/Number.';
+                } catch(err) {
+                    message.channel.send(err);
+                    return;
+                }
             }
-    
-            if (js.createUser(message)) {
-                message.channel.send("New User created.");
-            } else if (args[1] == "del") {
-                message.channel.send("User property deleted.");
-                var res = js.modifyUser(message, id, args[2], "undefined");
-            } else {
-                message.channel.send("User property modified.");
-                var res = js.modifyUser(message, id, args[2], args[1]);
+            
+            switch(args[0]) {
+                case 'money':
+                    cfg.money = args[1];
+                    break;
+                case 'sheet':
+                    cfg.sheet = args[1];
+                    break;
+                case 'sname':
+                    cfg.servers[message.guild.id].name = args[1];
+                    break;
+                case 'smainid':
+                    cfg.servers[message.guild.id].main_channel = args[1];
+                    break;
+                case 'sadminadd':
+                    cfg.servers[message.guild.id].administrators.push(args[1]);
+                    break;
+                case 'sdevadd':
+                    cfg.servers[message.guild.id].developers.push(args[1]);
+                    break;
+                case 'sadmindel':
+                    let adm = cfg.servers[message.guild.id].administrators;
+                    for (i = 0; i < adm.length; i++) {
+                        if (adm[i] == args[1]) {
+                            adm.splice(i);
+                            break;
+                        }
+                    }
+                    break;
+                case 'sdevdel':
+                    let dev = cfg.servers[message.guild.id].developers;
+                    for (i = 0; i < dev.length; i++) {
+                        if (dev[i] == args[1]) {
+                            dev.splice(i);
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    message.reply('Wrong configuration argument.')
+                    return;
             }
-            if (!res) {
-                message.channel.send("Modification failed. Ignore previous message.")
-            }
+
+            js.exportFile('config.json', cfg);
+            message.channel.send('Operation finished.')
         }        
     }
 };

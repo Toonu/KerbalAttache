@@ -2,7 +2,7 @@ module.exports = {
     name: 'useredit',
     description: 'Method for editing users!',
     args: true,
-    usage: '<user> <data/del> <type>\nTypes:\n0 - Nation (admin)\n1 - color (admin)\n2 - pwd (admin)\n3 -notes (user)',
+    usage: '<user> <data/del> <type>\nTypes:\n0: Nation (admin), 1: color (admin), 2: pwd (admin), 3: notes (user)',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {

@@ -2,7 +2,7 @@ const fs = require('fs');
 const cfg = require('./config.json');
 const js = require('./json');
 
-exports.createUser = function createUser(message, nationIn, colorIn, passwordIn) {
+exports.createUser = function createUser(message, nationIn, colorIn, passwordIn, sheet) {
     const id = message.mentions.users.map(user => {
         return user.id;
     });
@@ -16,12 +16,16 @@ exports.createUser = function createUser(message, nationIn, colorIn, passwordIn)
     if (passwordIn == undefined) {
         passwordIn = "undefined";
     }
+    if (sheet == undefined) {
+        sheet = '11111114';
+    }
 
     if (cfg.users[id] == undefined) {
         cfg.users[id] = {
             nation: nationIn, 
             color: colorIn, 
             password: passwordIn,
+            sheet: sheet,
             notes: " ",
             egg: " "
         }
@@ -44,6 +48,9 @@ exports.modifyUser = function modifyUser(message, user, type, data) {
         case "3":
             cfg.users[user].notes = data;
             break;
+        case "4":
+            cfg.users[user].sheet = data;
+            break;
         case 0:
             cfg.users[user].egg = data;
             break;
@@ -62,18 +69,20 @@ exports.exportFile = function exportFile(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));
 };
 exports.perm = function perm(message, type) {
+    let adm = cfg.servers[message.guild.id].administrators;
+    let dev = cfg.servers[message.guild.id].developers;
     switch(type) {
         case 0:
             return true;
         case 1:
-            if (cfg.administrators.some(r=> message.member.roles.cache.has(r)) || cfg.developers.some(r=> message.member.roles.cache.has(r))) {
+            if (adm.some(r=> message.member.roles.cache.has(r)) || dev.some(r=> message.member.roles.cache.has(r))) {
 
                 return true;
             }
             message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
             return false;
         case 2:
-            if (cfg.administrators.some(r=> message.member.roles.cache.has(r))) {
+            if (adm.some(r=> message.member.roles.cache.has(r))) {
                 return true;
             }
             message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")

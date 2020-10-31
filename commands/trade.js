@@ -32,6 +32,9 @@ module.exports = {
         .then(data => {
             if (data[0] == false) {
                 data[0] = 0;
+            } else if (data[0] * 4 * amount > money) {
+                message.channel.send('The price of this trade is lower than production cost of the vehicles!');
+                return;
             }
             fn.ss(['get', `${fn.toCoord(data[1])+(data[2])}`], message)
                 .then(amountOfUnit => {
@@ -46,13 +49,11 @@ module.exports = {
                         .then(result => {
                             gm.findUnitPrice(type, message, nation)
                                 .then(trade => {
-                                    console.log(trade);
                                     if (trade[0] == false) {
                                         trade[0] = 0;
                                     } else {
                                         trade[0] = parseInt(trade[0].replace(/[,|$]/g, ''));
                                     }
-                                    console.log(trade);
                                     fn.ss(['set', `${fn.toCoord(trade[1])+(trade[2])}`, trade[0] + money], message)
                                         .then(fin => {
                                             gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s with <@${message.mentions.users.first().id}> for ${money+cfg.money}!`);

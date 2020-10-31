@@ -5,6 +5,14 @@ const js = require('./json');
 exports.createUser = function createUser(message, nationIn, colorIn, passwordIn, sheet, map) {
     const id = message.mentions.users.first();
 
+    let guild = client.guilds.get(message.guild),
+    USER_ID = '123123123';
+
+    if (!guild.member(message.mentions.users.first())) {
+        return false;
+    }
+
+
     if (nationIn == undefined) {
         nationIn = "undefined";
     }
@@ -81,16 +89,16 @@ exports.perm = function perm(message, type) {
 
                 return true;
             }
-            message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
+            message.reply("you do not have permission to do that. The Directorate for Distribution of information apologies.")
             return false;
         case 2:
             if (adm.some(r=> message.member.roles.cache.has(r))) {
                 return true;
             }
-            message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
+            message.reply("you do not have permission to do that. The Directorate for Distribution of information apologies.")
             return false;
         default:
-            message.reply("You do not have permissions to do that. The Directorate for Distribution of information apologies.")
+            message.reply("you do not have permission to do that. The Directorate for Distribution of information apologies.")
             return false;
     }
 };

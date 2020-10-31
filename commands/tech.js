@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: '<operation> <> <A:@user>',
+    usage: 'WIP DO NOT USE YET <operation> <> <A:@user>\nPossible operations:\nbudget - sets a new research budget\nunlock\nlist\n',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -11,6 +11,8 @@ module.exports = {
         const gm = require("./../game");
         const js = require("./../json")
 
+        message.reply('There is nothing to see. Move along.');
+        /*
         let nation = cfg.users[message.author.id].nation;
         if (args[2] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
@@ -28,6 +30,6 @@ module.exports = {
             })
             .catch(err => console.error(err));  
         })
-        .catch(err => console.error(err));  
+        .catch(err => console.error(err));  */
     },   
 };

@@ -1,8 +1,8 @@
 module.exports = {
-    name: 'budget',
-    description: 'Command for setting your research budget! Do NOT use in public channels.',
+    name: 'tech',
+    description: 'Command for managing your research!',
     args: true,
-    usage: '<money> <A:user>',
+    usage: '<operation> <> <user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -12,7 +12,7 @@ module.exports = {
         const js = require("./../json")
 
         let nation = cfg.users[message.author.id].nation;
-        if (args[1] != undefined && js.perm(message, 2)) {
+        if (args[2] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
 
@@ -29,5 +29,5 @@ module.exports = {
             .catch(err => console.error(err));  
         })
         .catch(err => console.error(err));  
-    },
+    },   
 };

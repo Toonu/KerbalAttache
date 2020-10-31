@@ -1,11 +1,14 @@
 module.exports = {
 	name: 'spam',
-	description: 'Command for sending X spammy messages!',
+	description: 'Command for sendign messages.',
 	args: true,
-	usage: '<amountOfSpam>',
+	usage: '<amount>',
 	cooldown: 5,
 	guildOnly: true,
 	execute(message, args) {
+        if (js.perm(message, 1)) {
+            return;
+        }
 		message.delete()
 		for (var i = 0; i < parseInt(args[0] - 1); i++) {
 			message.channel.send('Pong.');

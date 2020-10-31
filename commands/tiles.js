@@ -1,6 +1,6 @@
 module.exports = {
     name: 'tiles',
-    description: 'Method for increasing tile amount!',
+    description: 'Command for managing tile amount!',
     args: true,
     usage: '<user> <addition>',
     cooldown: 5,

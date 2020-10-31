@@ -4,7 +4,6 @@ const {google} = require('googleapis');
 var client;
 const {CLIENT_TOKEN, type, project_id, private_key_id, private_key, client_email} = process.env;
 
-
 exports.init = function () {
     client = new google.auth.JWT(client_email, null, private_key, ['https://www.googleapis.com/auth/spreadsheets']);
 };

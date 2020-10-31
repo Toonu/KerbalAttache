@@ -1,8 +1,8 @@
 module.exports = {
     name: 'test',
-    description: 'Method for testing latest projects!',
+    description: 'Command for testing latest projects!',
     args: false,
-    usage: '',
+    usage: '<args>',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 

@@ -1,8 +1,14 @@
 module.exports = {
 	name: 'reload',
-	description: 'Reloads a command',
+	description: 'Reloads a command admin command.',
 	args: true,
 	execute(message, args) {
+        const js = require(./../json);
+
+        if (js.perm(message, 2)) {
+            return;
+        }
+
 		const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)
 			|| message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

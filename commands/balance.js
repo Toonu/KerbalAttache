@@ -1,8 +1,8 @@
 module.exports = {
     name: 'balance',
-    description: 'Method for getting your current money balance (amount of money on account)!',
+    description: 'Command for getting your current state statistics! Do NOT use in public channels.',
     args: false,
-    usage: '',
+    usage: '<A:user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) { 

@@ -1,0 +1,5 @@
+New tech tree tab in the sheet linked into new reserch command which will also merge the research budget command and link to tech tree incremental system by adding 0.1pt per node.
+
+Supergoal:      Turn command.
+Hypergoal:      Map integration via xml editing.
+Ultimategoal:   KSP mod for development price directly ingame.

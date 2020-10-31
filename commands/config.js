@@ -1,8 +1,8 @@
 module.exports = {
     name: 'config',
-    description: 'Method for configuring the bot!',
+    description: 'Commands for configuring the bot! Do NOT use in public channels.',
     args: true,
-    usage: '<configuration> <newValue>\nmoney, sheet, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel',
+    usage: '<A:configuration> <A:newValue>\nmoney, sheet, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {

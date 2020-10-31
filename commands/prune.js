@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'prune',
-	usage: '<amountToDelete> <deleteOldMessages true/false>',
+	usage: '<A:amountToDelete> <A:deleteOldMessages [true|false]>',
 	description: 'Prune messages from channel.',
 	guildOnly: true,
 	args: true,

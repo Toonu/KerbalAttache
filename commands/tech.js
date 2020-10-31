@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: '<operation> <> <user>',
+    usage: '<operation> <> <A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {

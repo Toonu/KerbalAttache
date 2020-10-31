@@ -2,7 +2,7 @@ module.exports = {
     name: 'balance',
     description: 'Command for getting your current state statistics! Do NOT use in public channels.',
     args: false,
-    usage: '<A:user>',
+    usage: '<A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) { 

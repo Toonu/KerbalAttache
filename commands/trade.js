@@ -1,8 +1,8 @@
 module.exports = {
     name: 'trade',
-    description: 'Method for trading assets!',
+    description: 'Command for trading assets!',
     args: true,
-    usage: '<type> <amountToAdd>\n0: sells / 1: buys',
+    usage: '<type> <amount> <A:@user>\n0: sells / 1: buys',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 

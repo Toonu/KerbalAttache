@@ -2,7 +2,7 @@ module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount!',
     args: true,
-    usage: '<user> <addition>',
+    usage: '<amount> <A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 
@@ -11,7 +11,7 @@ module.exports = {
         const gm = require("./../game");
         const js = require("./../json")
 
-        if (args[2] == undefined && !js.perm(message, 2)) {
+        if (args[1] != undefined && !js.perm(message, 2)) {
             return;
         }
 

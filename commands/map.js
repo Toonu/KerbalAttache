@@ -2,7 +2,7 @@ module.exports = {
     name: 'map',
     description: 'Command for getting link to you map. Do NOT use in public channels.',
     args: false,
-    usage: '<A:user>',
+    usage: '<A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {   

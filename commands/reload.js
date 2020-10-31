@@ -1,11 +1,11 @@
 module.exports = {
 	name: 'reload',
-	description: 'Reloads a command admin command.',
+	description: 'Reloads a command.',
 	args: true,
 	execute(message, args) {
-        const js = require(./../json);
+        const js = require('./../json');
 
-        if (js.perm(message, 2)) {
+        if (!js.perm(message, 2)) {
             return;
         }
 

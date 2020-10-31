@@ -2,7 +2,7 @@ module.exports = {
     name: 'budget',
     description: 'Command for setting your research budget! Do NOT use in public channels.',
     args: true,
-    usage: '<money> <A:user>',
+    usage: '<money> <A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {

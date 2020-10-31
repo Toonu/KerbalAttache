@@ -2,11 +2,11 @@ module.exports = {
 	name: 'spam',
 	description: 'Command for sendign messages.',
 	args: true,
-	usage: '<amount>',
+	usage: '<D:amount>',
 	cooldown: 5,
 	guildOnly: true,
 	execute(message, args) {
-        if (js.perm(message, 1)) {
+        if (!js.perm(message, 1)) {
             return;
         }
 		message.delete()

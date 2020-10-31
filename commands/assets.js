@@ -2,7 +2,7 @@ module.exports = {
     name: 'assets',
     description: 'Command for getting your current assets! Do NOT use in public channels.',
     args: false,
-    usage: '<A:user>',
+    usage: '<A:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 

@@ -11,39 +11,28 @@ module.exports = {
         const gm = require("./../game");
         const js = require("./../json")
 
-        let col;
-        let row;
-        
-        if (js.perm(message, 2)) {
-            nation = cfg.users[message.mentions.users.first().id].nation;
-        } else if (args[0] != undefined) {
+        if (args[2] == undefined && !js.perm(message, 2)) {
             return;
         }
 
-        gm.findHorizontal('Tiles', 1, message)
-            .then(res => {
-                col = res;
-                gm.findVertical(nation, 'A', message)
-                    .then(r => {
-                        row = parseInt(r);
-                        fn.ss(['getA', `${fn.toCoord(col)}1`, `${fn.toCoord(col)+row}`, 1, 0], message)
-                            .then(array => {
-                                fn.ss(['get', `${fn.toCoord(col)+(row)}`,], message)
-                                .then(result => {
-                                    if (result == false) {
-                                        result = 0;
-                                    } else {
-                                        result = parseInt(result);
-                                    }
-                                    fn.ss(['set', `${fn.toCoord(col)+(row)}`, parseInt(args[1]) + result], message);
-                                })
-                                .catch(err => console.log(err));
-                                message.channel.send("Tiles set!")
-                            })
-                            .catch(err => console.log(err));
-                    })
-                    .catch(err => console.log(err));
+        gm.findUnitPrice('Tiles', message, cfg.users[message.mentions.users.first().id].nation)
+        .then(data => {
+            if (data[0] == false) {
+                data[0] = 0;
+            } else {
+                data[0] = parseInt(data[0]);
+            }
+
+            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, parseInt(args[1]) + data[0]], message)
+            .then(result => {
+                if (result) {
+                    message.channel.send('Tiles set!');
+                } else {
+                    message.channel.send('Operation failed!');
+                }
             })
-            .catch(err => console.log(err));
+            
+        })
+        .catch(err => console.error(err));    
     },
 };

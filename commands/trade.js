@@ -14,24 +14,30 @@ module.exports = {
         let nation = cfg.users[message.author.id].nation;
         if (args[2] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
-        } else if (args[0] != undefined) {
-            return;
         }
 
-        gm.findUnitPrice('Trade', message, nation)
+        let type = 'Sells';
+        if (args[0] == '1') {
+            type = 'Buys'
+        }
+
+        gm.findUnitPrice(type, message, nation)
         .then(data => {
-            fn.ss(['get', `${fn.toCoord(data[1] + args[0]) + data[2]}`, 1, 0], message)
-                .then(result => {
-                    if (result == false) {
-                        result = 0;
-                    } else {
-                        result = parseInt(result.replace(/[,|$]/g, ''));
-                    }
-                    fn.ss(['set', `${fn.toCoord(data[1] + args[0])+(data[2])}`, parseInt(args[1]) + result], message);
-                    message.channel.send("Trade set!");
-                })
-                .catch(err => console.error(err));
+            if (data[0] == false) {
+                data[0] = 0;
+            } else {
+                data[0] = parseInt(data[0].replace(/[,|$]/g, ''));
+            }
+            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, parseInt(args[1]) + data[0]], message)
+            .then(result => {
+                if (result) {
+                    message.channel.send('Trade set!');
+                } else {
+                    message.channel.send('Operation failed!');
+                }
+            })
+            
         })
-        .catch(err => console.error(err));        
+        .catch(err => console.error(err));    
     },
 };

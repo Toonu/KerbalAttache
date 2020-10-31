@@ -46,34 +46,58 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
 Finds unit maintenance price with reflection to the nation technological level.
 Returns the int maintenance price, column of the price and row of the nation.
 */
-exports.findUnitPrice = async function(unit, message, nation, tab) {
-    return new Promise(function(resolve, reject) {
+exports.findUnitPrice = function(unit, message, nation, tab) {
+    return new Promise(async function(resolve, reject) {
         let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error(err));
         let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error(err));
         let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error(err));
-        let price = await parseInt(fn.ss(['get', `${fn.toCoord(priceCol)}${priceRow}`], message, tab).catch(err => console.error(err)));
 
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
-            resolve([price, priceCol, nationRow]);
-        } else {
-            let techCol = await fn.toCoord(gm.findHorizontal('Technology', 1, message)).catch(err => console.error(err));
-            fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
-            .then(techLevel => {
-                switch(units[unit][1]) {
-                    case 'surface':
-                        resolve([price * (techLevel[0][0]/4+0.975), priceCol, nationRow]);
-                    case 'aerial':
-                        resolve([price * (techLevel[0][1]/4+0.975), priceCol, nationRow]);
-                    case 'naval':
-                        resolve([price * (techLevel[0][2]/4+0.975), priceCol, nationRow]);
-                    case 'orbital':
-                        resolve([price * (techLevel[0][3]/4+0.975), priceCol, nationRow]);
-                    default:
-                        resolve([price, priceCol, nationRow]);
-                }
-            })
-            .catch(reject());
+        if(priceRow == undefined || nationRow == undefined || priceCol == undefined) {
+            reject('Wrong name');
         }
+
+        //console.log("p" + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
+
+        let price;
+        fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
+        .then(amount => {
+            price = parseInt(amount);
+            //console.log(price);
+            if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
+                resolve([price, priceCol, nationRow]);
+            } else if (['other'].includes(units[unit][1])) {
+                fn.ss(['get', `${fn.toCoord(priceCol)+nationRow}`], message, tab)
+                .then(amount => {
+                    resolve([amount, priceCol, nationRow]);
+                }).catch(err => console.error(err));
+            } else {
+                let techCol;
+                gm.findHorizontal('Surface', 1, message)
+                .then(col => {
+                    techCol = fn.toCoord(col);
+                    //console.log(techCol);
+                    fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
+                    .then(techLevel => {
+                        //console.log(techLevel);
+                        switch(units[unit][1]) {
+                            case 'surface':
+                                resolve([(price * (techLevel[0][0]/4+0.975)), priceCol, nationRow]);
+                            case 'aerial':
+                                resolve([(price * (techLevel[0][1]/4+0.975)), priceCol, nationRow]);
+                            case 'naval':
+                                resolve([(price * (techLevel[0][2]/4+0.975)), priceCol, nationRow]);
+                            case 'orbital':
+                                resolve([(price * (techLevel[0][3]/4+0.975)), priceCol, nationRow]);
+                            default:
+                                resolve([price, priceCol, nationRow]);
+                        }
+                    })
+                    .catch(reject());
+                })
+                .catch(err => console.error(err));
+            }
+        })
+        .catch(err => console.error(err));
     });
 }
 exports.report = function(message, data) {

@@ -63,7 +63,7 @@ module.exports = {
             .catch(err => console.error(err));  
 
         //Units setup
-        gm.findHorizontal('Technology', 1, message)
+        gm.findHorizontal('Surface', 1, message)
             .then(endCol => {
                 endCol = fn.toCoord(endCol - 1);
                 fn.ss(['getA', 'E4', `${endCol}4`], message)
@@ -90,6 +90,9 @@ module.exports = {
                                                         react = collected.first();
                                                         if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
                                                             message.edit(embedW)
+                                                            if(react.emoji.name == '❌') {
+                                                            message.delete();
+                                                            }
                                                         } else if(react.emoji.name == '❌') {
                                                             message.delete();
                                                         }

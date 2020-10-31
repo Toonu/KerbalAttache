@@ -48,8 +48,6 @@ module.exports = {
 
         if (!['SRAAM', 'MRAAM', 'LRAAM', 'AGM', 'ASHM', 'ATGM', 'SRSAM', 'MRSAM', 'LRSAM', 'SEAD', 'CRUISER', 'BALLISTIC', 'ABM', 'ASM', 'UNGUI', 'GUI', 'EW', 'RECON', 'FUEL', 'GUNPOD'].includes(args[1])) {
 
-        
-
         gm.findUnitPrice(args[1].toUpperCase(), message, cfg.users[message.author.id].nation)
         .then(result => {
             //console.log(result);

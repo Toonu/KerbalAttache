@@ -45,5 +45,9 @@
     "AIRPORT": ["Airfield", "buildings"], 
     "FOB": ["Forward Operating Base", "buildings"], 
     "PORT": ["Naval port", "buildings"], 
-    "RADAR": ["Radar site", "buildings"]
+    "RADAR": ["Radar site", "buildings"],
+    "Buys": ["Trade", "other"],
+    "Sells": ["Trade", "other"],
+    "ResBudget": ["Research", "other"],
+    "Tiles": ["Tiles", "other"]
 }

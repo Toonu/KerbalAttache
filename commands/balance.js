@@ -40,6 +40,7 @@ module.exports = {
                             { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
                             { name: 'Research budget:', value: parseInt(element[37].replace(/[,|$]/g, '')).toLocaleString() + cfg.money, inline: true},
                             { name: 'Research points:', value: `${parseInt(element[36])}RP`, inline: true},
+                            { name: 'Tiles:', value: parseInt(element[38])},
                         )
                         .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
 

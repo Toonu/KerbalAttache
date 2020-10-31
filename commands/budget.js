@@ -5,30 +5,29 @@ module.exports = {
     usage: '<money>',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
+    execute: async function execute(message, args) {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const gm = require("./../game");
         const js = require("./../json")
+
         let nation = cfg.users[message.author.id].nation;
-        let col;
-        let row;
-        
-        if (args[1] != undefined && js.perm(message, 2)) {
+        if (args[2] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
 
-        gm.findHorizontal('Research', 1, message)
-            .then(res => {
-                col = res + 1;
-                gm.findVertical(nation, 'A', message)
-                    .then(r => {
-                        row = parseInt(r);
-                        fn.ss(['set', `${fn.toCoord(col)+row}`, parseInt(args[0])], message);
-                        message.channel.send("Budget set!")
-                    })
-                    .catch(err => console.log(err));
+        gm.findUnitPrice('ResBudget', message, nation)
+        .then(data => {
+            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, parseInt(args[0])], message)
+            .then(result => {
+                if (result) {
+                    message.channel.send('Research budget set!');
+                } else {
+                    message.channel.send('Operation failed!');
+                }
             })
-            .catch(err => console.log(err));
+            .catch(err => console.error(err));  
+        })
+        .catch(err => console.error(err));  
     },
 };

@@ -154,6 +154,6 @@ exports.toCoord = function (num) {
     if (num > 90) {
         return num = 'A'+String.fromCharCode(num - 26);
     } else {
-        return num += String.fromCharCode(num);
+        return String.fromCharCode(num);
     }
 }

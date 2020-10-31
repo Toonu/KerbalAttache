@@ -10,12 +10,9 @@ module.exports = {
 		if (isNaN(amount)) {
 			return message.reply('that doesn\'t seem to be a valid number.');
 		}
-		try {
-			if (args[1] === "true") {
-				var bool = true;
-			}
-		} catch {
-			var bool = false;
+		let bool = false;
+		if (args[1] === "true") {
+			var bool = true;
 		}
 
 		while (amount > 0) {
@@ -30,7 +27,8 @@ module.exports = {
 };
 
 function PruneChat(message, amount, bool) {
-	message.channel.bulkDelete(amount, bool).catch(err => {
+	message.channel.bulkDelete(amount, bool)
+	.catch(err => {
 		console.error(err);
 		message.channel.send('there was an error trying to prune messages in this channel!');
 	});

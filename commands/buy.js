@@ -8,7 +8,6 @@ module.exports = {
     execute: async function execute(message, args) { 
         const cfg = require('./../config.json');
         const units = require('./../units.json');
-        const js = require('./../json');
         const fn = require('./../fn');
         const gm = require('./../game');
         const Discord = require('discord.js');
@@ -16,24 +15,6 @@ module.exports = {
         const filter = (reaction, user) => {
 	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
-
-        /*
-        try {
-            //Easter egg, part one, carrts can be obtained from userinfo.
-            if (message.mentions.users.first().id === '693908421396922480' && cfg.users[message.author.id].egg == 'carrot') {
-                message.channel.send('Owned');
-                return;
-            } else if (message.mentions.users.first().id === '693908421396922480') {
-                message.reply("You need carrots first.");
-                return;
-            } 
-        } catch(err) {
-            if (args[1].startsWith('carrot')) {
-                js.modifyUser(message, message.author.id, 0, "carrot");
-                message.reply('Carrot found.')
-                return;  
-            }
-        }*/
         
         //Checking input arguments.
         try {

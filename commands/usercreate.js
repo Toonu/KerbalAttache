@@ -8,7 +8,7 @@ module.exports = {
     execute(message, args) {
         const js = require('./../json');
 
-        if (js.perm(message, 1) && js.cre3ateUser(message, args[1], args[2], args[3], args[4], args[5])) {
+        if (js.perm(message, 1) && js.createUser(message, args[1], args[2], args[3], args[4], args[5])) {
             message.channel.send("User created.")
             return;
         }

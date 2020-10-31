@@ -13,10 +13,9 @@ module.exports = {
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0])) {
                 try {
-                    console.log('Here')
                     if(!Number.isInteger(parseInt(args[1]))) throw 'Not a proper ID/Number.';
                 } catch(err) {
-                    message.channel.send(err);
+                    console.error(err);
                     return;
                 }
             }

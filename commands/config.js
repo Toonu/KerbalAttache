@@ -10,7 +10,6 @@ module.exports = {
         const js = require('./../json');
         const fs = require('fs');
 
-
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0])) {
                 try {

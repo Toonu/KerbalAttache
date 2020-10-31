@@ -2,7 +2,7 @@ module.exports = {
     name: 'buy',
     description: 'Method for buying new assets!',
     args: true,
-    usage: '<amount> <asset>\nBuildings: AIRPORT, FOB, PORT, RADAR\nSurface assets: MBT, AFV, IFV, APC, SAM, SPAAG, SF\Aerospace assets: L, M, H, LA, VL, VTOL, SAT, OV\nNaval assets: K, F, DD, CC, BC, BB, CL, CV',
+    usage: '<amount> <asset>\n**Assets:**\n*Buildings:* AIRPORT, FOB, PORT, RADAR\n*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF\n*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV\n*Naval assets:* K, F, DD, CC, BC, BB, CL, CV\n**Weapons:**\n*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD\n*Surface:* CRUISER, BALLISTIC, ABM, ASM\n*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) { 
@@ -33,7 +33,6 @@ module.exports = {
             }
         }
         
-
         //Checking input arguments.
         try {
             args[0] = parseInt(args[0]);
@@ -45,6 +44,10 @@ module.exports = {
         
         var origin = message;
         var searchRow;
+
+        if (!['SRAAM', 'MRAAM', 'LRAAM', 'AGM', 'ASHM', 'ATGM', 'SRSAM', 'MRSAM', 'LRSAM', 'SEAD', 'CRUISER', 'BALLISTIC', 'ABM', 'ASM', 'UNGUI', 'GUI', 'EW', 'RECON', 'FUEL', 'GUNPOD'].includes(args[1])) {
+
+        
 
         gm.findUnitPrice(args[1].toUpperCase(), message, cfg.users[message.author.id].nation)
         .then(result => {
@@ -107,7 +110,7 @@ module.exports = {
                     vehicle = args[1];
             }
 
-            let cost = (parseInt(result) * args[0]);
+            let cost = (parseInt(result) * args[0] * 4);
             const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`Office of Aquisitions`)
@@ -167,9 +170,7 @@ module.exports = {
                             .catch(err => message.channel.send(err));
 
                         })
-                        .catch(err => {
-                            message.channel.send(err);
-                        });
+                        .catch(err => message.channel.send(err));
                     } else {
                         message.delete();
                         message.channel.send('Operation was canceled. ❌');
@@ -185,5 +186,32 @@ module.exports = {
             });
         })
         .catch(err => console.error(err));
+
+        } else {
+            //Weapon buying part
+
+            let roww;
+            gm.findVertical(cfg.users[origin.author.id].nation, 'A', message, 'Stockpiles')
+                .then(row => {
+                    roww = row;
+                    gm.findHorizontal(args[1], 4, message, 'Stockpiles')
+                        .then(col => {
+                            fn.ss(['get', `${fn.toCoord(col)+parseInt(nat)}`], message, 'Stockpiles')
+                                .then(result => {
+                                    console.log(result);
+                                    if (result == false) {
+                                        result = 0;
+                                    } else {
+                                        result = parseInt(result);
+                                    }
+                                    fn.ss(['set', `${fn.toCoord(col)+nat}`, result + args[0]], message, 'Stockpiles')
+                                    message.channel.send("Weapon bought.")
+                                })
+                                .catch(err => message.channel.send(err));
+                        })
+                        .catch(err => message.channel.send(err));
+                })
+                .catch(err => message.channel.send(err));
+        }
     }
 };

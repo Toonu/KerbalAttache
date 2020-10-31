@@ -24,12 +24,8 @@ module.exports = {
                 gm.findVertical(nation, 'A', message)
                     .then(r => {
                         row = parseInt(r);
-                        fn.ss(['getA', `${fn.toCoord(col)}1`, `${fn.toCoord(col)+row}`, 1, 0], message)
-                            .then(array => {
-                                fn.ss(['set', `${fn.toCoord(col)+row}`, parseInt(args[0])], message);
-                                message.channel.send("Budget set!")
-                            })
-                            .catch(err => console.log(err));
+                        fn.ss(['set', `${fn.toCoord(col)+row}`, parseInt(args[0])], message);
+                        message.channel.send("Budget set!")
                     })
                     .catch(err => console.log(err));
             })

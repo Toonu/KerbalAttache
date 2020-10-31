@@ -18,10 +18,12 @@ module.exports = {
         if (args[0] != undefined && js.perm(message, 2)) {
             filter = cfg.users[message.mentions.users.first().id].nation;
             user = message.mentions.users.first();
+        } else if (args[0] != undefined) {
+            return;
         }
 
         const emojiFilter = (reaction, user) => {
-	        return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️') && user.id === message.author.id;
+	        return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
         
         var embed = new Discord.MessageEmbed()
@@ -82,11 +84,14 @@ module.exports = {
                                             .then(function (message) {
                                                 message.react('⬅️');
                                                 message.react('➡️');
+                                                message.react('❌');
                                                 message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
                                                     .then(collected => {
                                                         react = collected.first();
-                                                        if (type && (react.emoji.name == '➡️' || react.emoji.name == '⬅️' )) {
+                                                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
                                                             message.edit(embedW)
+                                                        } else if(react.emoji.name == '❌') {
+                                                            message.delete();
                                                         }
                                                     })
                                                     .catch(err => {

@@ -20,6 +20,8 @@ module.exports = {
                     var filter = cfg.users[message.author.id].nation;
                     if (args[0] != undefined && js.perm(message, 2)) {
                         filter = cfg.users[message.mentions.users.first().id].nation;
+                    }  else if (args[0] != undefined) {
+                        return;
                     }
                     if (element[0].startsWith(filter)) {
                         let user = message.mentions.users.first();

@@ -1,8 +1,8 @@
 module.exports = {
-    name: 'trade',
-    description: 'Method for trading assets!',
+    name: 'tiles',
+    description: 'Method for increasing tile amount!',
     args: true,
-    usage: '<type> <amountToAdd>\n0: sells / 1: buys',
+    usage: '<user> <addition>',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 
@@ -10,18 +10,17 @@ module.exports = {
         const fn = require("./../fn");
         const gm = require("./../game");
         const js = require("./../json")
-        let nation = cfg.users[message.author.id].nation;
+
         let col;
         let row;
         
-        if (args[2] != undefined && js.perm(message, 2)) {
+        if (js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
-        }  else if (args[0] != undefined) {
+        } else if (args[0] != undefined) {
             return;
         }
 
-        let offset = parseInt(args[0]);
-        gm.findHorizontal('Trade', 1, message)
+        gm.findHorizontal('Tiles', 1, message)
             .then(res => {
                 col = res;
                 gm.findVertical(nation, 'A', message)
@@ -29,17 +28,17 @@ module.exports = {
                         row = parseInt(r);
                         fn.ss(['getA', `${fn.toCoord(col)}1`, `${fn.toCoord(col)+row}`, 1, 0], message)
                             .then(array => {
-                                fn.ss(['get', `${fn.toCoord(col+ offset)+(row)}`,], message)
+                                fn.ss(['get', `${fn.toCoord(col)+(row)}`,], message)
                                 .then(result => {
                                     if (result == false) {
                                         result = 0;
                                     } else {
-                                        result = parseInt(result.replace(/[,|$]/g, ''));
+                                        result = parseInt(result);
                                     }
-                                    fn.ss(['set', `${fn.toCoord(col+ offset)+(row)}`, parseInt(args[1]) + result], message);
+                                    fn.ss(['set', `${fn.toCoord(col)+(row)}`, parseInt(args[1]) + result], message);
                                 })
                                 .catch(err => console.log(err));
-                                message.channel.send("Trade set!")
+                                message.channel.send("Tiles set!")
                             })
                             .catch(err => console.log(err));
                     })

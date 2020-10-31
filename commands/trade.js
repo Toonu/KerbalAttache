@@ -10,41 +10,28 @@ module.exports = {
         const fn = require("./../fn");
         const gm = require("./../game");
         const js = require("./../json")
+
         let nation = cfg.users[message.author.id].nation;
-        let col;
-        let row;
-        
         if (args[2] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
-        }  else if (args[0] != undefined) {
+        } else if (args[0] != undefined) {
             return;
         }
 
-        let offset = parseInt(args[0]);
-        gm.findHorizontal('Trade', 1, message)
-            .then(res => {
-                col = res;
-                gm.findVertical(nation, 'A', message)
-                    .then(r => {
-                        row = parseInt(r);
-                        fn.ss(['getA', `${fn.toCoord(col)}1`, `${fn.toCoord(col)+row}`, 1, 0], message)
-                            .then(array => {
-                                fn.ss(['get', `${fn.toCoord(col+ offset)+(row)}`,], message)
-                                .then(result => {
-                                    if (result == false) {
-                                        result = 0;
-                                    } else {
-                                        result = parseInt(result.replace(/[,|$]/g, ''));
-                                    }
-                                    fn.ss(['set', `${fn.toCoord(col+ offset)+(row)}`, parseInt(args[1]) + result], message);
-                                })
-                                .catch(err => console.log(err));
-                                message.channel.send("Trade set!")
-                            })
-                            .catch(err => console.log(err));
-                    })
-                    .catch(err => console.log(err));
-            })
-            .catch(err => console.log(err));
+        gm.findUnitPrice('Trade', message, nation)
+        .then(data => {
+            fn.ss(['get', `${fn.toCoord(data[1] + args[0]) + data[2]}`, 1, 0], message)
+                .then(result => {
+                    if (result == false) {
+                        result = 0;
+                    } else {
+                        result = parseInt(result.replace(/[,|$]/g, ''));
+                    }
+                    fn.ss(['set', `${fn.toCoord(data[1] + args[0])+(data[2])}`, parseInt(args[1]) + result], message);
+                    message.channel.send("Trade set!");
+                })
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));        
     },
 };

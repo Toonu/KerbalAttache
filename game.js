@@ -3,6 +3,7 @@ const {google} = require('googleapis');
 const fn = require('./fn');
 const gm = require('./game');
 const cfg = require('./config.json');
+const units = require('./units.json');
 
 //Function finds first element target in column.
 exports.findVertical = function findVertical(target, col, message, tab) {
@@ -23,7 +24,7 @@ exports.findVertical = function findVertical(target, col, message, tab) {
     });
 }
 
-//Function finds first row containing the target in row.
+//Function finds first row containing the target in row. Returns char number.
 exports.findHorizontal = function findHorizontal(target, row, message, tab) {
     return new Promise(function (resolve, reject) {
         var e = 64; //char A dec num
@@ -41,54 +42,38 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
     });
 }
 
-exports.findUnitPrice = function(unit, message, nation) {
+/*
+Finds unit maintenance price with reflection to the nation technological level.
+Returns the int maintenance price, column of the price and row of the nation.
+*/
+exports.findUnitPrice = async function(unit, message, nation, tab) {
     return new Promise(function(resolve, reject) {
-        let nationRow;
-        let finPrice;
-        let priceRow;
+        let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error(err));
+        let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error(err));
+        let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error(err));
+        let price = await parseInt(fn.ss(['get', `${fn.toCoord(priceCol)}${priceRow}`], message, tab).catch(err => console.error(err)));
 
-        gm.findVertical('Data', 'A', message)
-            .then(prices => {
-                priceRow = prices
-                gm.findHorizontal(unit, '4', message)
-                .then(column => {
-                    fn.ss(['get', `${String.fromCharCode(column)}${priceRow}`], message)
-                    .then(price => {
-                        finPrice = price;
-                        gm.findVertical(nation, 'A', message)
-                        .then(row => {
-                            nationRow = row;
-                            gm.findHorizontal('Technology', '1', message)
-                            .then(col => {
-                                let techCol = fn.toCoord(col);
-                                fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
-                                .then(result => {
-                                    if (['MBT', 'AFV', 'IFV', 'APC', 'SAM', 'SPAA'].includes(unit)) {
-                                        resolve(finPrice * ( result[0][0]/4+0.975));
-                                    } else if (['L', 'M', 'H', 'L', 'VL', 'VTOL'].includes(unit)) {
-                                        resolve(finPrice * ( result[0][1]/4+0.975));
-                                    } else if (['K', 'FF', 'DD', 'CC', 'BC', 'BB', 'CV', 'CL'].includes(unit)) {
-                                        resolve(finPrice * ( result[0][2]/4+0.975));
-                                    } else if (['SAT', 'OV'].includes(unit)) {
-                                        resolve(finPrice * ( result[0][3]/4+0.975));
-                                    } else {
-                                        resolve(finPrice);
-                                    }						
-                                })
-                                .catch(err => reject(err));
-                            })
-                            .catch(err => {
-                                message.channel.send("Wrong unit type.")
-                                reject(err);
-                            });
-                        })
-                        .catch(err => reject(err));
-                    })
-                    .catch(err => reject(err));
-                })
-                .catch(err => reject(err));
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
+            resolve([price, priceCol, nationRow]);
+        } else {
+            let techCol = await fn.toCoord(gm.findHorizontal('Technology', 1, message)).catch(err => console.error(err));
+            fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
+            .then(techLevel => {
+                switch(units[unit][1]) {
+                    case 'surface':
+                        resolve([price * (techLevel[0][0]/4+0.975), priceCol, nationRow]);
+                    case 'aerial':
+                        resolve([price * (techLevel[0][1]/4+0.975), priceCol, nationRow]);
+                    case 'naval':
+                        resolve([price * (techLevel[0][2]/4+0.975), priceCol, nationRow]);
+                    case 'orbital':
+                        resolve([price * (techLevel[0][3]/4+0.975), priceCol, nationRow]);
+                    default:
+                        resolve([price, priceCol, nationRow]);
+                }
             })
-            .catch(err => reject(err));
+            .catch(reject());
+        }
     });
 }
 exports.report = function(message, data) {

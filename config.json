@@ -132,6 +132,15 @@
             "map": "www.x.com",
             "notes": " ",
             "egg": " "
+        },
+        "undefined": {
+            "nation": "Russia",
+            "color": "Red",
+            "password": "111",
+            "sheet": "blah",
+            "map": "blah",
+            "notes": " ",
+            "egg": " "
         }
     }
 }

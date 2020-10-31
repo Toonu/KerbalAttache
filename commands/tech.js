@@ -6,24 +6,22 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
-        const cfg = require("./../config.json")
+        const cfg = require("./../config.json");
         const fn = require("./../fn");
         const gm = require("./../game");
-        const js = require("./../json")
-
-        message.reply('There is nothing to see. Move along.');
+        const js = require("./../json");
         
         let nation = cfg.users[message.author.id].nation;
-        if (args[2] != undefined && js.perm(message, 2)) {
+        if (args[3] != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
 
         switch(args[0]) {
             case 'budget':
                 if(args[1] == 'set') {
-                    budget(args, message, false);
+                    budget(args[2], nation, message, false);
                 } else if (args[1] == 'add') {
-                    budget(args, message, true);
+                    budget(args[2], nation, message, true);
                 } else {
                     message.channel.send('Operation type provided does not exist!');
                     return;
@@ -37,37 +35,39 @@ module.exports = {
 };
 
 
-function budget(args, message, add) {
+function budget(amount, nation, message, add) {
+    const fn = require("./../fn");
+    const gm = require("./../game");
+
     try {
-        args[0] = parseInt(args[0]);
-        if (isNaN(args[0])) throw 'Argument is not a number. Canceling operation.'
+        amount = parseInt(amount);
+        if (isNaN(amount)) throw 'Argument is not a number. Canceling operation.'
 
-        let nation = cfg.users[message.author.id].nation;
-        if (args[1] != undefined && js.perm(message, 2)) {
-            nation = cfg.users[message.mentions.users.first().id].nation;
-        }
         add = add ? 1 : 0;
-        console.log(add);
-
         gm.findUnitPrice('ResBudget', message, nation)
-        .then(data => {
-            if (data[0] == false) {
-                data[0] = 0;
-            } else {
-                data[0] = parseInt(data[0].replace(/[,|$]/g, ''));
-            }
-
-            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, parseInt(args[0]) * add], message)
-            .then(result => {
-                if (result) {
-                    message.channel.send('Research budget set!');
+            .then(data => {
+                if (data[0] == false) {
+                    data[0] = 0;
                 } else {
-                    message.channel.send('Operation failed!');
+                    data[0] = parseInt(data[0].replace(/[,|$]/g, ''));
                 }
+                
+                let budget = data[0]*add + amount;
+                if (budget < 0) throw 'Budget cannot be set lower than 0!';
+
+                fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, budget], message)
+                    .then(result => {
+                        if (result && add) {
+                            message.channel.send(`Research budget modified by ${budget+cfg.money}!`);
+                        } else if (result) {
+                            message.channel.send(`Research budget set to ${budget+cfg.money}!`);
+                        } else {
+                            message.channel.send('Operation failed!');
+                        }
+                    })
+                    .catch(err => {throw err});  
             })
-            .catch(err => console.error(err));  
-        })
-        .catch(err => console.error(err));  
+            .catch(err => message.channel.send(err));  
     } catch(err) {
         message.channel.send(err);
     }

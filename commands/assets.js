@@ -5,7 +5,7 @@ module.exports = {
     usage: '',
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) { 
+    execute: async function execute(message, args) { 
         const cfg = require('./../config.json')
         const js = require('./../json');
         const fn = require('./../fn')
@@ -41,14 +41,12 @@ module.exports = {
         .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
         const t = new RegExp(/^[0-9]+/g);
-        var unitNames;
-        var nationRow;
         var type = true;
         var unitsEmbed;
         var weaponsArray = [];
 
         //Weapons setup
-        gm.findVertical(filter, 'A', message, 'Stockpiles')
+        nation = await gm.findVertical(filter, 'A', message, 'Stockpiles')
             .then(nation => {
                 fn.ss(['getA', 'A4', `W${nation}`], message, 'Stockpiles')
                 .then(weapArr => { 
@@ -63,53 +61,43 @@ module.exports = {
             .catch(err => console.error(err));  
 
         //Units setup
-        gm.findHorizontal('Surface', 1, message)
-            .then(endCol => {
-                endCol = fn.toCoord(endCol - 1);
-                fn.ss(['getA', 'E4', `${endCol}4`], message)
-                    .then(un => {
-                        unitNames = un;
-                        gm.findVertical(filter, 'A', message)
-                            .then(row => {
-                                nationRow = row;
-                                fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message)
-                                    .then(array => {
-                                        for(var i = 4; i < array[0].length; i++) {
-                                            if (array[0][i] != '.') {
-                                                embed.addField(unitNames[0][i - 4], array[0][i], true);
-                                            }
-                                        }
-                                        unitsEmbed = embed.fields;
-                                        message.channel.send(embed)
-                                            .then(function (message) {
-                                                message.react('⬅️');
-                                                message.react('➡️');
-                                                message.react('❌');
-                                                message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
-                                                    .then(collected => {
-                                                        react = collected.first();
-                                                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
-                                                            message.edit(embedW)
-                                                            if(react.emoji.name == '❌') {
-                                                            message.delete();
-                                                            }
-                                                        } else if(react.emoji.name == '❌') {
-                                                            message.delete();
-                                                        }
-                                                    })
-                                                    .catch(err => {
-                                                        message.delete();
-                                                        console.error(err);
-                                                    })
-                                            })
-                                            .catch(err => console.error(err));
-                                    })
-                                    .catch(err => console.error(err));
-                            })
-                            .catch(err => console.error(err));
+        endCol = await gm.findHorizontal('Surface', 1, message)
+        endCol = fn.toCoord(endCol - 1);
+        let unitNames = await fn.ss(['getA', 'E4', `${endCol}4`], message)
+        let nationRow = await gm.findVertical(filter, 'A', message)
+        array = await fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message)
+        for(var i = 4; i < array[0].length; i++) {
+            if (array[0][i] != '.') {
+                embed.addField(unitNames[0][i - 4], array[0][i], true);
+            }
+        }
+        unitsEmbed = embed.fields;
+        message.channel.send(embed)
+            .then(function (message) {
+                message.react('⬅️');
+                message.react('➡️');
+                message.react('❌');
+                message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                    .then(collected => {
+                        react = collected.first();
+                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
+                            message.edit(embedW)
+                            message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                            .then(collected => {
+                                react = collected.first();
+                                if (react.emoji.name == '❌') {
+                                    message.delete();
+                                }
+                            });
+                        } else if(react.emoji.name == '❌') {
+                            message.delete();
+                        }
                     })
-                    .catch(err => console.error(err));
+                    .catch(err => {
+                        message.delete();
+                        message.channel.send('Operation timed out. ❌');
+                    })
             })
-            .catch(err => console.error(err));               
-    }
+            .catch(err => console.error(err));
+    }    
 }

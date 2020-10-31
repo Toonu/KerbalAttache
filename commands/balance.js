@@ -12,6 +12,10 @@ module.exports = {
         const gm = require('./../game');
         const Discord = require('discord.js');
 
+        const emojiFilter = (reaction, user) => {
+	        return (reaction.emoji.name === '❌') && user.id === message.author.id;
+        };
+
         gm.findVertical('Data', 'A', message)
         .then(row => {
             fn.ss(['getA', 'A5', `AZ${row - 1}`], message)
@@ -44,8 +48,18 @@ module.exports = {
                         )
                         .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
 
-                        message.channel.send(embed);
-
+                        message.channel.send(embed)
+                        .then(message => {
+                            message.react('❌');
+                            message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                                .then(collected => {
+                                    react = collected.first();
+                                    if (react.emoji.name == '❌') {
+                                        message.delete();
+                                    }
+                                });
+                        });
+                        
                         throw "";
                     }
                 })

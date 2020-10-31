@@ -51,13 +51,13 @@ exports.findUnitPrice = function(unit, message, nation, tab) {
         let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error(err));
         let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error(err));
         let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error(err));
-
+        
+        //console.log("p" + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
         if(priceRow == undefined || nationRow == undefined || priceCol == undefined) {
             reject('Wrong name');
         }
 
-        //console.log("p" + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
-
+        
         let price;
         fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
         .then(amount => {
@@ -92,7 +92,7 @@ exports.findUnitPrice = function(unit, message, nation, tab) {
                                 resolve([price, priceCol, nationRow]);
                         }
                     })
-                    .catch(reject());
+                    .catch(err => console.error(err));
                 })
                 .catch(err => console.error(err));
             }

@@ -27,7 +27,7 @@ exports.ss = function (args, message, tab) {
                         args[2] = args[2].toUpperCase();
                         if (!checkCoordinate(args[2])) throw 'Wrong second coordinate input.';
 
-                        resolve(getAInternal(args[1], args[2], args[3], args[4], message, gs, tab))
+                        resolve(getAInternal(args[1], args[2], args[3], args[4], message, gs, tab));
                         .catch(err => reject(err));
                     } else if (args[0].startsWith('set')) {
                         resolve(setInternal(args[1], args[2], message, gs, tab))

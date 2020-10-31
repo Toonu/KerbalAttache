@@ -100,7 +100,7 @@ module.exports = {
                             fn.ss(['get', `B${data[2]}`], message)
                             .then(balance => {
                                 fn.ss(['set', `B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost], message);
-                            }).catch(err => console.log(err))
+                            }).catch(err => console.log(err));
 
                             if (cost < 0) {
                                 gm.report(origin, `${cfg.users[origin.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
@@ -108,7 +108,7 @@ module.exports = {
                                 gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
                             }
                         })
-                        .catch(err => console.error(err))
+                        .catch(err => console.error(err));
                     } else {
                         message.delete();
                         message.channel.send('Operation was canceled. ❌');

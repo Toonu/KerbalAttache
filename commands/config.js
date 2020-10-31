@@ -13,7 +13,7 @@ module.exports = {
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0])) {
                 try {
-                    if(!Number.isInteger(parseInt(args[1]))) throw 'Not a proper ID/Number.';
+                    if(isNaN(parseInt(args[1]))) throw 'Not a proper ID/Number.';
                 } catch(err) {
                     console.error(err);
                     return;

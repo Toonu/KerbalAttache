@@ -19,6 +19,7 @@ module.exports = {
         //Checking input arguments.
         try {
             args[0] = parseInt(args[0]);
+            if (isNaN(args[0])) throw 'Argument is not a number.'
             if (args[1] == undefined) throw 'Missing second argument.'
             if(!units.hasOwnProperty(args[1].toUpperCase())) throw 'Asset not found.'
             args[1] = args[1].toUpperCase();

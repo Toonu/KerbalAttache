@@ -1,6 +1,6 @@
 module.exports = {
     name: 'trade',
-    description: 'Command for trading assets!',
+    description: 'Command for setting trade value of assets you have traded!',
     args: true,
     usage: '<type> <amount> <A:@user>\n0: sells / 1: buys',
     cooldown: 5,
@@ -10,6 +10,14 @@ module.exports = {
         const fn = require("./../fn");
         const gm = require("./../game");
         const js = require("./../json")
+        try {
+            args[0] = parseInt(args[0]);
+            args[1] = parseInt(args[1]);
+            if (isNaN(args[0]) || isNaN(args[1])) throw 'Argument is not a number. Canceling operation.'
+        } catch(err) {
+            message.channel.send(err);
+            return;
+        }
 
         let nation = cfg.users[message.author.id].nation;
         if (args[2] != undefined && js.perm(message, 2)) {

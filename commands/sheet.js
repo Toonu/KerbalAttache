@@ -9,6 +9,15 @@ module.exports = {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const js = require('./../json');
+        try {
+            args[3] = parseInt(args[3]);
+            args[4] = parseInt(args[4]);
+            if (isNaN([args[3]]) || isNaN([args[4]])) throw 'Argument is not a number. Canceling operation.'
+        } catch(err) {
+            message.channel.send(err);
+            return;
+        }
+
         if (args[0] == undefined) {
             message.reply(`https://docs.google.com/spreadsheets/d/${cfg.users[message.author.id].sheet}/edit#gid=0`);
         } else if (args[0].startsWith('@') && js.perm(message, 1)) {

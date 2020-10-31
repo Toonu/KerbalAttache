@@ -1,6 +1,6 @@
 module.exports = {
     name: 'tiles',
-    description: 'Command for managing tile amount!',
+    description: 'Command for managing tile amount by adding/substracting it!',
     args: true,
     usage: '<amount> <A:@user>',
     cooldown: 5,
@@ -11,7 +11,12 @@ module.exports = {
         const gm = require("./../game");
         const js = require("./../json")
 
-        if (args[1] != undefined && !js.perm(message, 2)) {
+        try {
+            args[0] = parseInt(args[0]);
+            if (!js.perm(message, 2) && args[1] != undefined) throw ''
+            if (isNaN(args[0])) throw 'Argument is not a number. Canceling operation.'
+        } catch(err) {
+            message.channel.send(err);
             return;
         }
 

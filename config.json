@@ -1,0 +1,128 @@
+{
+    "prefix": "?",
+    "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
+    "money": "€",
+    "servers": {
+        "768471917874905108": {
+            "name": "Ruse",
+            "main_channel": "768476039496073227",
+            "administrators": [
+                "768474211333177444"
+            ],
+            "developers": [
+                "768474267351646238"
+            ]
+        },
+        "470258156682084373": {
+            "name": "NoU",
+            "main_channel": "770921356111773698",
+            "administrators": [
+                "716608480810631178"
+            ],
+            "developers": [
+                "767064998207291430"
+            ]
+        }
+    },
+    "users": {
+        "default": {
+            "nation": "undefined",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "693908421396922480": {
+            "nation": "Bunnyland",
+            "color": "Bunny",
+            "password": "22",
+            "sheet": "11111114",
+            "map": "https://www.w3schools.com/js/js_errors.asp",
+            "notes": "Likes carrots, do you want one? Try to find or aquire it.",
+            "egg": " "
+        },
+        "591521990972669980": {
+            "nation": "Korovia",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "472210194814730250": {
+            "nation": "Laveska",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "301471023298248705": {
+            "nation": "Orion",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "388547669028503553": {
+            "nation": "DIM",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "257922404511121408": {
+            "nation": "Rusland",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "211547891276185601": {
+            "nation": "EoL",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "227222314645717002": {
+            "nation": "Jyuren",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        },
+        "319919565079576576": {
+            "nation": "Iconia",
+            "color": "Blue",
+            "password": "4444",
+            "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
+            "map": "https://www.w3schools.com/js/js_errors.asp",
+            "notes": " ",
+            "egg": " "
+        },
+        "768845435455930428": {
+            "nation": "bot",
+            "color": "undefined",
+            "password": "undefined",
+            "sheet": "11111114",
+            "map": " ",
+            "notes": " ",
+            "egg": " "
+        }
+    }
+}

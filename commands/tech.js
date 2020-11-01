@@ -72,3 +72,36 @@ function budget(amount, nation, message, add) {
         message.channel.send(err);
     }
 }
+
+function research(node, nation, message) {
+    const cfg = require("./../config.json");
+    const fn = require("./../fn");
+    const gm = require("./../game");
+    const js = require("./../json");
+    let rp;
+    gm.findUnitPrice(node, message, nation, 'TechTree') 
+        .then(data => {
+            gm.findHorizontal('RP', 4, message)
+                .then(rpCol => {
+                    fn.ss(['get', `${rpCol+data[2]}`], message)
+                        .then(rp => {
+                            if (data[0] > rp) {
+                                message.channel.send('Not enough Research Points!');
+                                return false;
+                            }
+                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, 1], message)
+                                .then(result => {
+                                    if (result) {
+                                        message.channel.send('Node unlocked!');
+                                        return true;
+                                    }
+                                    message.channel.send('Operation failed!');
+                                })
+                                .catch(err => console.error(err));
+                        })
+                        .catch(err => console.error(err));
+                })
+                .catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
+}

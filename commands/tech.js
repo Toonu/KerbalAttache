@@ -2,14 +2,14 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: '<operation> <operation type> <operation data> <A:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas:***\ngunTank, gunAircraft, ciws, engines, awacs, radarsAir, radarsGround, radarsSearch, radarsTargeting, ecmEquipment, missilesATGM, missilesSRSAM, missilesMRAAM, missilesLRSAM, missilesSRAAM, missilesMRAAM, missilesLRAAM, missilesAGM, missilesASHM, missilesARM, missilesCruiser, missilesBallistics, engineeringSurface, engineeringNaval, engineeringAerial, compArmor, reactiveArmor, drones, sattelites, guidanceSystems',
+    usage: '<operation> <operation type> <operation data> <A:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas can be obtained via ?tech list command!!!***',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
-        const cfg = require("./../config.json");
-        const fn = require("./../fn");
-        const gm = require("./../game");
-        const js = require("./../json");
+        const cfg = require('./../config.json');
+        const fn = require('./../fn');
+        const gm = require('./../game');
+        const js = require('./../json');
         
         let nation = cfg.users[message.author.id].nation;
         if (args[3] != undefined && js.perm(message, 2)) {
@@ -30,8 +30,8 @@ module.exports = {
                 return;
                 research(args[1], nation, message);
             case 'list':
-                return;
                 list(args[1], message);
+                return;
             case 'change':
                 //configruation of nodes for moderators in case something needs to be changed, will work with json files.    
                 return;
@@ -39,9 +39,9 @@ module.exports = {
     },   
 };
 function budget(amount, nation, message, add) {
-    const fn = require("./../fn");
-    const gm = require("./../game");
-    const cfg = require("./../config.json");
+    const fn = require('./../fn');
+    const gm = require('./../game');
+    const cfg = require('./../config.json');
 
     try {
         amount = parseInt(amount);
@@ -77,24 +77,45 @@ function budget(amount, nation, message, add) {
     }
 }
 function list(category, message) {
-    const cfg = require("./../config.json");
-    const fn = require("./../fn");
-    const gm = require("./../game");
-    const js = require("./../json");
-    const t = require("./../tt.json");
+    const cfg = require('./../config.json');
+    const fn = require('./../fn');
+    const gm = require('./../game');
+    const js = require('./../json');
+    const t = require('./../tt.json');
+
+    let newMessage = '';
+
+    if(category == undefined) {
+        Object.keys(t.categories).forEach(item => {
+            newMessage += `${item}\n`;
+        })
+        
+        message.channel.send("All technology node categories are bellow: \n" + newMessage + '\n\n***Note:*** You do not have to write full category name but merely it part is sufficient.');
+        return;
+    }
+
+    let nodes = [];
 
     for (const [key, value] of Object.entries(t)) {
-        if(value[2] == undefined || value[2] == category) {
-            console.log(`${key}: ${value}`);
-        }
+        try {
+            if(value[2].includes(category)) {
+                nodes.push(key);
+            }
+        } catch(err) {}
     }
+    
+    nodes.forEach(item => {
+        newMessage += `${item}: ${t[item][0]}\n`;
+    });
+    message.channel.send(`***Nodes in specified category ${t.categories[category]}:***\n\n${newMessage}`)
+    .catch(err => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
 }
 
 function research(node, nation, message) {
-    const cfg = require("./../config.json");
-    const fn = require("./../fn");
-    const gm = require("./../game");
-    const js = require("./../json");
+    const cfg = require('./../config.json');
+    const fn = require('./../fn');
+    const gm = require('./../game');
+    const js = require('./../json');
     let rp;
 
     return;

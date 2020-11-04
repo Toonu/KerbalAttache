@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'userinfo',
 	description: 'Shows user information.',
-	args: true,
+	args: false,
 	usage: '<@user>',
 	cooldown: 5,
 	execute: function execute(message, args) {
@@ -9,10 +9,13 @@ module.exports = {
 		const js = require("./../json");
         const Discord = require('discord.js');
 
-        let user = message.mentions.users.first();
+        var user = message.author;
+        if(message.mentions.users.first() != undefined) {
+            user = message.mentions.users.first();
+        }
 
         if(cfg.users[user.id] == undefined) {
-            js.createUser(message);
+            js.createUser(user.id);
             execute(message, args);
             return;
         } else {

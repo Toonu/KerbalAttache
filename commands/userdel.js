@@ -9,8 +9,14 @@ module.exports = {
         const js = require('./../json');
         const cfg = require('./../config.json');
 
+        var user = message.mentions.users.first();
+        if(user == undefined) {
+            message.channel.send('No user specified, please retry. ');
+            return;
+        }
+
         if (js.perm(message, 2)) {
-            delete cfg.users[message.mentions.users.first().id];
+            delete cfg.users[user.id];
             js.exportFile("config.json", cfg);
             message.channel.send("User deleted.")
         }

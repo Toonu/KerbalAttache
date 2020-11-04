@@ -8,12 +8,15 @@ module.exports = {
     execute(message, args) {
         const js = require('./../json');
 
-        if (js.perm(message, 1)) {
-            let bool = js.createUser(message, args[1], args[2], args[3], args[4], args[5])
-            if(bool) {
-                message.channel.send("User created.");
-                return;
-            }
+        var user = message.mentions.users.first();
+        if(user == undefined) {
+            message.channel.send('No user specified, please retry. ');
+            return;
+        }
+
+        if (js.perm(message, 1) && js.createUser(user.id, args[1], args[2], args[3], args[4], args[5])) {
+            message.channel.send("User created.");
+            return;
         }
         message.channel.send("User creation failed.");
     }

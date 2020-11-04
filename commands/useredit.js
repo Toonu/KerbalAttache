@@ -2,36 +2,69 @@ module.exports = {
     name: 'useredit',
     description: 'Command for editing users! Your notes are always editable',
     args: true,
-    usage: '<A:@user> <A:data/del> <A:type>\nTypes:\n0: Nation (admin), 1: color (admin), 2: pwd (admin), 3: notes (user)',
+    usage: '<operation> <data/del> <A:@user>\Operations:\n0: Nation (admin), 1: color (admin), 2: pwd (admin), 3: notes (user)',
     cooldown: 5,
     guildOnly: true,
-    execute(message, args) {
+    execute: function execute(message, args) {
         const js = require('./../json');
-        if (js.perm(message, 2) || (args[2] == '3' && message.mentions.users.first() == message.author)) {
-            const id = message.mentions.users.first();
+        const cfg = require('./../config.json')
+
+        if (js.perm(message, 2) || (args[0] == '3' && message.mentions.users.first() == message.author)) {
+            let user = message.author;
+
             try {
-                args[2] = parseInt(args[2]);
-                if (isNaN(args[2])) throw 'Argument type is not a number! Canceling operation'
+                args[0] = parseInt(args[0]);
+                if (isNaN(args[0])) throw 'Argument type is not a number! Canceling operation'
+                if (args[2] != undefined) {
+                    user = message.mentions.users.first();
+                }
             } catch(err) {
-                message.channel.send(err);
+                console.error(err);
                 return;
             }
-    
-            if (js.createUser(message)) {
-                message.channel.send("New User created. Please retry the command to edit his atributes.");
+
+            if(cfg.users[user.id] == undefined) {
+                js.createUser(user.id);
+                execute(message, args);
                 return;
-            } else if (args[2] == undefined) {
-                message.channel.send("Modification failed. You have to include type of property. See ?help useredit for more info.");
-                return;
-            }
-    
-            if (args[1] == "del" && js.modifyUser(message, id, args[2], "undefined")) {
-                message.channel.send("User property deleted.");
-            } else if (js.modifyUser(message, id, args[2], args[1])) {
-                message.channel.send("User property modified.");
+            } else if (args[1] == 'del' && modifyUser(user.id, args[0], 'undefined')) {
+                message.channel.send('User property deleted.');
+            } else if (modifyUser(user.id, args[0], args[1])) {
+                message.channel.send('User property modified.');
             } else {
-                message.channel.send("Modification failed.");
+                message.channel.send('Modification failed.');
             }
         }        
     }
 };
+
+function modifyUser(id, type, data) {
+    const js = require('./../json');
+    const cfg = require('./../config.json');
+
+    switch(type) {
+        case 0:
+            cfg.users[id].nation = data;
+            break;
+        case 1:
+            cfg.users[id].color = data;
+            break;
+        case 2:
+            cfg.users[id].password = data;
+            break;
+        case 3:
+            cfg.users[id].notes = data;
+            break;
+        case 4:
+            cfg.users[id].sheet = data;
+            break;
+        case 5:
+            cfg.users[id].egg = data;
+            break;
+        default:
+            return false;
+    }
+
+    js.exportFile("config.json", cfg);
+    return true;
+}

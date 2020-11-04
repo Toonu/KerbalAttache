@@ -100,7 +100,7 @@
         },
         "319919565079576576": {
             "nation": "Iconia",
-            "color": "Blue",
+            "color": "Iconian",
             "password": "4444",
             "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
             "map": "https://www.w3schools.com/js/js_errors.asp",
@@ -108,12 +108,12 @@
             "egg": " "
         },
         "591521990972669980": {
-            "nation": "Korovia",
-            "color": "Bright Green",
+            "nation": "undefined",
+            "color": "undefined",
             "password": "undefined",
-            "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
-            "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
-            "notes": " ",
+            "sheet": "11111114",
+            "map": "www.x.com",
+            "notes": "Ko",
             "egg": " "
         }
     }

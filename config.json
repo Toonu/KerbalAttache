@@ -44,15 +44,6 @@
             "notes": "Likes carrots, do you want one? Try to find or aquire it.",
             "egg": " "
         },
-        "591521990972669980": {
-            "nation": "Korovia",
-            "color": "Bright Green",
-            "password": "undefined",
-            "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
-            "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
-            "notes": " ",
-            "egg": " "
-        },
         "472210194814730250": {
             "nation": "Laveska",
             "color": "Light Blue",
@@ -113,33 +104,15 @@
             "password": "4444",
             "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
             "map": "https://www.w3schools.com/js/js_errors.asp",
-            "notes": " ",
+            "notes": "His Imperial Majesty the Emperor of the Iconian Empire and its sovereign territories.",
             "egg": " "
         },
-        "768845435455930428": {
-            "nation": "bot",
-            "color": "undefined",
+        "591521990972669980": {
+            "nation": "Korovia",
+            "color": "Bright Green",
             "password": "undefined",
-            "sheet": "11111114",
-            "map": " ",
-            "notes": " ",
-            "egg": " "
-        },
-        "<@227222314645717002>": {
-            "nation": "undefined",
-            "color": "undefined",
-            "password": "undefined",
-            "sheet": "11111114",
-            "map": "www.x.com",
-            "notes": " ",
-            "egg": " "
-        },
-        "undefined": {
-            "nation": "Russia",
-            "color": "Red",
-            "password": "111",
-            "sheet": "blah",
-            "map": "blah",
+            "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
+            "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
             "notes": " ",
             "egg": " "
         }

@@ -27,9 +27,11 @@ module.exports = {
                     return;
                 }
             case 'research':
+                return;
                 research(args[1], nation, message);
             case 'list':
-                list(args[1], message);;
+                return;
+                list(args[1], message);
             case 'change':
                 //configruation of nodes for moderators in case something needs to be changed, will work with json files.    
                 return;
@@ -39,6 +41,7 @@ module.exports = {
 function budget(amount, nation, message, add) {
     const fn = require("./../fn");
     const gm = require("./../game");
+    const cfg = require("./../config.json");
 
     try {
         amount = parseInt(amount);
@@ -59,7 +62,7 @@ function budget(amount, nation, message, add) {
                 fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, budget], message)
                     .then(result => {
                         if (result && add) {
-                            message.channel.send(`Research budget modified by ${budget+cfg.money}!`);
+                            message.channel.send(`Research budget modified to ${budget+cfg.money}!`);
                         } else if (result) {
                             message.channel.send(`Research budget set to ${budget+cfg.money}!`);
                         } else {
@@ -78,9 +81,9 @@ function list(category, message) {
     const fn = require("./../fn");
     const gm = require("./../game");
     const js = require("./../json");
-    const t = require(",/../tech.json");
+    const t = require("./../tt.json");
 
-    for (const [key, value] of t) {
+    for (const [key, value] of Object.entries(t)) {
         if(value[2] == undefined || value[2] == category) {
             console.log(`${key}: ${value}`);
         }

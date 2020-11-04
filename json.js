@@ -3,33 +3,30 @@ const cfg = require('./config.json');
 const js = require('./json');
 
 exports.createUser = function createUser(message, nationIn, colorIn, passwordIn, sheet, map) {
-    const id = message.mentions.users.first();
-
-    let guild = client.guilds.get(message.guild),
-    USER_ID = '123123123';
-
-    if (!guild.member(message.mentions.users.first())) {
-        return false;
-    }
-
-
-    if (nationIn == undefined) {
-        nationIn = "undefined";
-    }
-    if (colorIn == undefined) {
-        colorIn = "undefined";
-    }
-    if (passwordIn == undefined) {
-        passwordIn = "undefined";
-    }
-    if (sheet == undefined) {
-        sheet = '11111114';
-    }
-    if (map == undefined) {
-        map = 'www.x.com';
+    try {
+        var id = message.mentions.users.first().id;
+    } catch(err) {
+        console.log(err);
+        return -1;
     }
 
     if (cfg.users[id] == undefined) {
+        if (nationIn == undefined) {
+            nationIn = "undefined";
+        }
+        if (colorIn == undefined) {
+            colorIn = "undefined";
+        }
+        if (passwordIn == undefined) {
+            passwordIn = "undefined";
+        }
+        if (sheet == undefined) {
+            sheet = '11111114';
+        }
+        if (map == undefined) {
+            map = 'www.x.com';
+        }
+
         cfg.users[id] = {
             nation: nationIn, 
             color: colorIn, 
@@ -40,9 +37,8 @@ exports.createUser = function createUser(message, nationIn, colorIn, passwordIn,
             egg: " "
         }
         js.exportFile("config.json", cfg);
-        return true;
     }
-    return false;
+    return 0;
 };
 exports.modifyUser = function modifyUser(message, user, type, data) {
     switch(type) {
@@ -70,10 +66,6 @@ exports.modifyUser = function modifyUser(message, user, type, data) {
 
     js.exportFile("config.json", cfg);
     return true;
-};
-exports.delUser = function delUser(user) {
-    delete cfg.users[user];
-    js.exportFile("config.json", cfg);
 };
 exports.exportFile = function exportFile(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));

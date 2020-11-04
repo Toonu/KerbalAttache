@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: 'WIP DO NOT USE YET <operation> <operation type> <operation data> <A:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List areas:***\nXXX',
+    usage: '<operation> <operation type> <operation data> <A:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas:***\ngunTank, gunAircraft, ciws, engines, awacs, radarsAir, radarsGround, radarsSearch, radarsTargeting, ecmEquipment, missilesATGM, missilesSRSAM, missilesMRAAM, missilesLRSAM, missilesSRAAM, missilesMRAAM, missilesLRAAM, missilesAGM, missilesASHM, missilesARM, missilesCruiser, missilesBallistics, engineeringSurface, engineeringNaval, engineeringAerial, compArmor, reactiveArmor, drones, sattelites, guidanceSystems',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -27,14 +27,15 @@ module.exports = {
                     return;
                 }
             case 'research':
-                return;
+                research(args[1], nation, message);
             case 'list':
+                list(args[1], message);;
+            case 'change':
+                //configruation of nodes for moderators in case something needs to be changed, will work with json files.    
                 return;
         }
     },   
 };
-
-
 function budget(amount, nation, message, add) {
     const fn = require("./../fn");
     const gm = require("./../game");
@@ -72,6 +73,19 @@ function budget(amount, nation, message, add) {
         message.channel.send(err);
     }
 }
+function list(category, message) {
+    const cfg = require("./../config.json");
+    const fn = require("./../fn");
+    const gm = require("./../game");
+    const js = require("./../json");
+    const t = require(",/../tech.json");
+
+    for (const [key, value] of t) {
+        if(value[2] == undefined || value[2] == category) {
+            console.log(`${key}: ${value}`);
+        }
+    }
+}
 
 function research(node, nation, message) {
     const cfg = require("./../config.json");
@@ -79,6 +93,10 @@ function research(node, nation, message) {
     const gm = require("./../game");
     const js = require("./../json");
     let rp;
+
+    return;
+    //to disable the function until finished
+
     gm.findUnitPrice(node, message, nation, 'TechTree') 
         .then(data => {
             gm.findHorizontal('RP', 4, message)

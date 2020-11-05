@@ -27,8 +27,8 @@ module.exports = {
                     return;
                 }
             case 'research':
+                research(args[1].toLowerCase(), nation, message);
                 return;
-                research(args[1], nation, message);
             case 'list':
                 list(args[1], message);
                 return;
@@ -113,40 +113,47 @@ function list(category, message) {
     message.channel.send(`***Nodes in specified category ${t.categories[category]}:***\n\n${newMessage}`)
     .catch(err => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
 }
-
 function research(node, nation, message) {
     const cfg = require('./../config.json');
     const fn = require('./../fn');
     const gm = require('./../game');
     const js = require('./../json');
-    let rp;
+    const t = require('./../tt.json');
+    let rpCol;
+    let nationRP;
+    let data;
 
-    return;
-    //to disable the function until finished
-
-    gm.findUnitPrice(node, message, nation, 'TechTree') 
+    gm.findUnitPrice(node, message, nation, true, 'TechTree') 
         .then(data => {
+            if (parseInt(data[3]) == 1) {
+                message.channel.send('Node already unlocked!');
+                return false;
+            }          
             gm.findHorizontal('RP', 4, message)
                 .then(rpCol => {
-                    fn.ss(['get', `${rpCol+data[2]}`], message)
+                    fn.ss(['get', `${fn.toCoord(rpCol)+data[2]}`], message)
                         .then(rp => {
+                            nationRP = rp
                             if (data[0] > rp) {
                                 message.channel.send('Not enough Research Points!');
                                 return false;
                             }
-                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, 1], message)
+                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, 1], message, 'TechTree')
                                 .then(result => {
                                     if (result) {
                                         message.channel.send('Node unlocked!');
+                                        fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
+                                        gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${t[node][0]} for ${data[0]}RP`);
                                         return true;
                                     }
                                     message.channel.send('Operation failed!');
+                                    return false;
                                 })
                                 .catch(err => console.error(err));
                         })
                         .catch(err => console.error(err));
                 })
-                .catch(err => console.error(err));
+                .catch(err => message.channel.send(err));
         })
         .catch(err => console.error(err));
 }

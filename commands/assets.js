@@ -37,7 +37,6 @@ module.exports = {
         .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
         const t = new RegExp(/^[0-9]+/g);
-        var type = true;
 
         //Weapons setup
         await gm.findVertical(nation, 'A', message, 'Stockpiles')
@@ -65,8 +64,6 @@ module.exports = {
                 embed.addField(unitNames[0][i - 4], array[0][i], true);
             }
         }
-        let unitsEmbed = embed.fields;
-
 
         //Embed switching mechanism
         let currentEmbed = embed;

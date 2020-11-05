@@ -46,8 +46,6 @@
     "FOB": ["Forward Operating Base", "surface"], 
     "PORT": ["Naval port", "naval"], 
     "RADAR": ["Radar site", "buildings"],
-    "buy": ["Trade", "other"],
-    "sell": ["Trade", "other"],
     "ResBudget": ["Research", "other"],
     "Tiles": ["Tiles", "other"]
 }

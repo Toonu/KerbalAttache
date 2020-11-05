@@ -46,11 +46,15 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
 Finds unit maintenance price with reflection to the nation technological level.
 Returns the int maintenance price, column of the price and row of the nation.
 */
-exports.findUnitPrice = function(unit, message, nation, tab) {
+exports.findUnitPrice = function(unit, message, nation, tech, tab) {
     return new Promise(async function(resolve, reject) {
         let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error(err));
         let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error(err));
         let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error(err));
+        let rp;
+        if (tech) {
+            rp = await fn.ss(['get', `${fn.toCoord(priceCol) + nationRow}`], message, tab)
+        }
         
         //console.log("p" + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
         if(priceRow == undefined || nationRow == undefined || priceCol == undefined) {
@@ -62,9 +66,9 @@ exports.findUnitPrice = function(unit, message, nation, tab) {
         fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
         .then(amount => {
             price = parseInt(amount);
-            //console.log(price);
-            if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
-                resolve([price, priceCol, nationRow]);
+            //console.log(units);
+            if (tech || ['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
+                resolve([price, priceCol, nationRow, rp]);
             } else if (['other'].includes(units[unit][1])) {
                 fn.ss(['get', `${fn.toCoord(priceCol)+nationRow}`], message, tab)
                 .then(amount => {

@@ -9,9 +9,28 @@ module.exports = {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const js = require('./../json');
+        const Discord = require('discord.js');
         try {
-            if (args[0] == undefined) {
-                message.reply(`https://docs.google.com/spreadsheets/d/${cfg.users[message.author.id].sheet}/edit#gid=0`);
+            if (args[0] == undefined || args[0].startsWith('<@')) {
+                let link = cfg.users[message.author.id].sheet;
+                try {
+                    if (args[0].startsWith('<@') && js.perm(message, 1)) {
+                        link = cfg.users[message.mentions.users.first().id].sheet;
+                    }
+                } catch(err) {}
+
+                const embed = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Your sheet link.')
+                .setURL(`https://docs.google.com/spreadsheets/d/${link}/edit#gid=0`)
+                .setThumbnail('https://imgur.com/IvUHO31.png')
+                .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+                message.channel.send(embed)
+                .then(msg => {
+                    msg.delete({ timeout: 10000 });
+                    message.delete({ timeout: 10000 });
+                })
+                .catch(err => console.log(msg));
                 return;
             }
             args[3] = parseInt(args[3]);
@@ -23,9 +42,7 @@ module.exports = {
         }
 
         
-        if (args[0].startsWith('@') && js.perm(message, 1)) {
-            message.channel.send(`https://docs.google.com/spreadsheets/d/${cfg.users[message.mentions.users.first()].sheet}/edit#gid=0`);
-        } else if (js.perm(message, 1)) {
+        if (js.perm(message, 1)) {
             fn.ss(args, message)
                 .then(result => {
                     if (result) {

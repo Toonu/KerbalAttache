@@ -6,15 +6,33 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {   
-        const cfg = require("./../config.json")
+        const cfg = require("./../config.json");
         const js = require('./../json');
+        const Discord = require('discord.js');
         try {
+            let map;
             if (args[0] != undefined && js.perm(message, 2)) {
-                message.channel.send(cfg.users[message.mentions.users.first().id].map);
+                map = cfg.users[message.mentions.users.first().id].map;
             } else {
-                message.channel.send(cfg.users[message.author.id].map);
+                map = cfg.users[message.author.id].map;
             }
+            
+            const embed = new Discord.MessageEmbed()
+                .setColor('#0099ff')
+                .setTitle('Your map link.')
+                .setURL(map)
+                .setThumbnail('https://imgur.com/IvUHO31.png')
+                .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+
+            message.channel.send(embed)
+            .then(msg => {
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
+            })
+            .catch(err => console.log(msg));
+
         } catch(err) {
+            console.log(err);
             message.channel.send("No map assigned.")
         }
     }

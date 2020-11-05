@@ -103,3 +103,4 @@ exports.findUnitPrice = function(unit, message, nation, tab) {
 exports.report = function(message, data) {
     message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(data);
 }
+   

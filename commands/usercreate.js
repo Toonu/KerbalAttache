@@ -2,7 +2,8 @@ module.exports = {
     name: 'usercreate',
     description: 'Command for creating user!',
     args: true,
-    usage: '<A:@user> <A:nation> <A:color> <A:pwd> <A:sheet> <A:map>',
+    usage: '<M:@user> <M:nation> <M:color> <M:pwd> <M:sheet> <M:map>',
+    perms: 'Moderator',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {

@@ -2,7 +2,8 @@ module.exports = {
     name: 'userdel',
     description: 'Command for deleting user from database!',
     args: true,
-    usage: '<A:@user>',
+    usage: '<M:@user>',
+    perms: 'Moderator',
     cooldown: 5,
     guildOnly: true,
     execute(message, args) {

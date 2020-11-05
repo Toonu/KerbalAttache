@@ -36,7 +36,7 @@
     "MRSAM": ["Medium-Range Surface-to-Air Missile", "wpAerial"],
     "LRSAM": ["Long-Range Surface-to-Air Missile", "wpAerial"], 
     "SEAD": ["Anti-radiation Missile", "wpAerial"], 
-    "UNGUIBMB": ["Unguided bomb", "wpAerial"], 
+    "BMB": ["Unguided bomb", "wpAerial"], 
     "GUIBMB": ["Guided bomb", "wpAerial"], 
     "FUEL": ["Fuel pod", "systems"], 
     "GUNPOD": ["Gunpod", "systems"],

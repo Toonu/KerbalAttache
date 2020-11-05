@@ -12,6 +12,7 @@ module.exports = {
         try {
             if (args[0] == undefined) {
                 message.reply(`https://docs.google.com/spreadsheets/d/${cfg.users[message.author.id].sheet}/edit#gid=0`);
+                return;
             }
             args[3] = parseInt(args[3]);
             args[4] = parseInt(args[4]);

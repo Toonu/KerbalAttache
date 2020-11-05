@@ -3,3 +3,5 @@ Trading add how much of what was traded to automatically add it to the sheet.
 Supergoal:      Turn command.
 Hypergoal:      Map integration via xml editing.
 Ultimategoal:   KSP mod for development price directly ingame.
+
+Fix embeds closing for assets via new functions displaying embeds with specific reactions etc

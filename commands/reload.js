@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'reload',
 	description: 'Reloads a command.',
+    perms: 'Moderator',
 	args: true,
 	execute(message, args) {
         const js = require('./../json');

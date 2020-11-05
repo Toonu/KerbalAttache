@@ -2,7 +2,7 @@ module.exports = {
     name: 'assets',
     description: 'Command for getting your current assets! Do NOT use in public channels.',
     args: false,
-    usage: '<A:@user>',
+    usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 
@@ -88,6 +88,9 @@ module.exports = {
                                 if (react.emoji.name == '❌') {
                                     message.delete();
                                 }
+                            })
+                            .catch(err => {
+                                message.delete();
                             });
                         } else if(react.emoji.name == '❌') {
                             message.delete();

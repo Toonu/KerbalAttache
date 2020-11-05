@@ -2,7 +2,7 @@ module.exports = {
     name: 'balance',
     description: 'Command for getting your current state statistics! Do NOT use in public channels.',
     args: false,
-    usage: '<A:@user>',
+    usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) { 
@@ -51,12 +51,15 @@ module.exports = {
                         message.channel.send(embed)
                         .then(message => {
                             message.react('❌');
-                            message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                            message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time']})
                                 .then(collected => {
                                     react = collected.first();
                                     if (react.emoji.name == '❌') {
                                         message.delete();
                                     }
+                                })
+                                .catch(err => {
+                                message.delete();
                                 });
                         });
                         

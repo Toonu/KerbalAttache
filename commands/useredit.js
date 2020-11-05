@@ -2,7 +2,7 @@ module.exports = {
     name: 'useredit',
     description: 'Command for editing users! Your notes are always editable',
     args: true,
-    usage: '<operation> <data/del> <A:@user>\Operations:\n0: Nation (admin), 1: color (admin), 2: pwd (admin), 3: notes (user)',
+    usage: '<operation> <data/del> <A:@user>\Operations:\n0: Nation (M), 1: color (M), 2: pwd (M), 3: notes (U), permissions to edit the value are in ()',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {

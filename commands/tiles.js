@@ -1,8 +1,9 @@
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount by adding/substracting it!',
-    args: true,
-    usage: '<amount> <A:@user>',
+    args: false,
+    usage: '<amount> <M:@user>',
+    perms: 'Moderator',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 
@@ -12,8 +13,12 @@ module.exports = {
         const js = require("./../json")
 
         try {
+            if (args[0] == undefined) {
+                message.channel.send('You can get information about amount of your tiles in ?balance.');
+                return;
+            }
             args[0] = parseInt(args[0]);
-            if (!js.perm(message, 2) && args[1] != undefined) throw ''
+            if (!js.perm(message, 2) && args[1] != undefined) {return;}
             if (isNaN(args[0])) throw 'Argument is not a number. Canceling operation.'
         } catch(err) {
             message.channel.send(err);

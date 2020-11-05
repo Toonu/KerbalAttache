@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: '<operation> <operation type> <operation data> <A:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas can be obtained via ?tech list command!!!***',
+    usage: '<operation> <operation type> <operation data> <M:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas can be obtained via ?tech list command!!!***',
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -33,7 +33,7 @@ module.exports = {
                 list(args[1], message);
                 return;
             case 'change':
-                //configruation of nodes for moderators in case something needs to be changed, will work with json files.    
+                //configruation of nodes for moderators in case something needs to be changed, will work with json tt file.    
                 return;
         }
     },   
@@ -85,12 +85,15 @@ function list(category, message) {
 
     let newMessage = '';
 
+    //Lists the main categories, then returns and you have to repeat the command.
     if(category == undefined) {
         Object.keys(t.categories).forEach(item => {
             newMessage += `${item}\n`;
         })
         
-        message.channel.send("All technology node categories are bellow: \n" + newMessage + '\n\n***Note:*** You do not have to write full category name but merely it part is sufficient.');
+        message.channel.send("All technology node categories are bellow: \n" + newMessage + '\n\n***Note:*** You do not have to write full category name but merely it part is sufficient.')
+        .then(msg => msg.delete({ timeout: 30000 }))
+        .catch(err => console.log(msg));
         return;
     }
 
@@ -98,7 +101,7 @@ function list(category, message) {
 
     for (const [key, value] of Object.entries(t)) {
         try {
-            if(value[2].includes(category)) {
+            if(value[2].toLowerCase().includes(category.toLowerCase())) {
                 nodes.push(key);
             }
         } catch(err) {}

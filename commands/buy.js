@@ -1,8 +1,8 @@
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets and systems! Do NOT use in public channels.',
-    args: true,
-    usage: '<amount> <asset>\nAssets do not need to be written in capital letters.\n**Assets:**\n*Buildings:* AIRPORT, FOB, PORT, RADAR\n*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF\n*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV\n*Naval assets:* K, F, DD, CC, BC, BB, CL, CV\n**Weapons:**\n*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD\n*Surface:* CRUISE, BALLISTIC, ABM, ASM\n*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD',
+    args: false,
+    usage: '<amount> <asset>\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via ?buy command.',
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) { 
@@ -15,6 +15,21 @@ module.exports = {
         const filter = (reaction, user) => {
 	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
+
+        let newMessage = '';
+
+         //Lists the main categories, then returns and you have to repeat the command.
+        if(args[0] == undefined) {
+            Object.keys(units).forEach(item => {
+                newMessage += `${item}: ${units[item][0]}\n`;
+            })
+            
+            message.channel.send("All weapons are bellow: \n" + newMessage)
+            .then(msg => msg.delete({ timeout: 30000 }))
+            .catch(err => console.log(msg));
+            return;
+        }
+
         
         //Checking input arguments.
         try {

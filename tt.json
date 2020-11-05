@@ -237,14 +237,14 @@
 "10drone": ["Advanced Combat Drone","tech", "drones", ["00drone"]],
 "20drone": ["Future Autonomous Combat Drone","tech", "drones", ["10drone"]],
 
-"60sat": ["Early Reconnaisance Sattelites","tech", "sattelites", ["earlycomputing"]],
-"70sat": ["Adv. Reconnaisance Sattelites","tech", "sattelites", ["60sat"]],
-"80sat": ["GPS Reconnaisance Sattelites","tech", "sattelites", ["60sat"]],
-"90sat": ["Improved GPS Reconnaisance Sattelites","tech", "sattelites", ["80sat"]],
-"10sat": ["Block III Reconnaisance Sattelites","tech", "sattelites", ["70sat"]],
+"60sat": ["Early Reconnaisance Satellites","tech", "satellites", ["earlycomputing"]],
+"70sat": ["Adv. Reconnaisance Satellites","tech", "satellites", ["60sat"]],
+"80sat": ["GPS Reconnaisance Satellites","tech", "satellites", ["60sat"]],
+"90sat": ["Improved GPS Reconnaisance Satellites","tech", "satellites", ["80sat"]],
+"10sat": ["Block III Reconnaisance Satellites","tech", "satellites", ["70sat"]],
 
 "categories": {
-        "sattelites": "Sattelites",
+        "satellites": "Satellites",
         "drones": "Drones",
         "reactiveArmor": "Reactive and explosive armour",
         "compArmor": "Composite armour",

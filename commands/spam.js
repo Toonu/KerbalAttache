@@ -3,6 +3,7 @@ module.exports = {
 	description: 'Command for sending messages.',
 	args: true,
 	usage: '<D:amount>',
+    perms: 'Developer',
 	cooldown: 5,
 	guildOnly: true,
 	execute(message, args) {

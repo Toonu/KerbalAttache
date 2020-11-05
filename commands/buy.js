@@ -11,6 +11,7 @@ module.exports = {
         const fn = require('./../fn');
         const gm = require('./../game');
         const Discord = require('discord.js');
+        const js = require('./../json');
 
         const filter = (reaction, user) => {
 	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
@@ -59,6 +60,8 @@ module.exports = {
             if (tab != undefined) {
                 cost /= 4;
             }
+
+
             const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`Office of Aquisitions`)

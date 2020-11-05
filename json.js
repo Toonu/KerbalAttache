@@ -1,10 +1,7 @@
 const fs = require('fs');
 const cfg = require('./config.json');
 const js = require('./json');
-const units = require('./../units.json');
-const fn = require('./../fn');
-const gm = require('./../game');
-const Discord = require('discord.js');
+const fn = require('./fn');
 
 exports.createUser = function createUser(id, nationIn, colorIn, passwordIn, sheet, map) {
     if (nationIn == undefined) {
@@ -61,9 +58,3 @@ exports.perm = function perm(message, type) {
             return false;
     }
 };
-
-exports.emb = function emb(message) {
-    return new Promise(function (resolve, reject) {
-        resolve();
-    })
-}

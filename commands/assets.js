@@ -37,12 +37,12 @@ module.exports = {
         .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
         const t = new RegExp(/^[0-9]+/g);
-        var weaponsArray = [];
+        var type = true;
 
         //Weapons setup
-        nation = await gm.findVertical(nation, 'A', message, 'Stockpiles')
-            .then(nation => {
-                fn.ss(['getA', 'A4', `W${nation}`], message, 'Stockpiles')
+        await gm.findVertical(nation, 'A', message, 'Stockpiles')
+            .then(nationRow => {
+                fn.ss(['getA', 'A4', `W${nationRow}`], message, 'Stockpiles')
                 .then(weapArr => { 
                     for(var i = 1; i < weapArr[0].length; i++) {
                         if (weapArr[weapArr.length-1][i] != '.') {
@@ -58,7 +58,7 @@ module.exports = {
         endCol = await gm.findHorizontal('Surface', 1, message)
         endCol = fn.toCoord(endCol - 1);
         let unitNames = await fn.ss(['getA', 'E4', `${endCol}4`], message)
-        let nationRow = await gm.findVertical(nation, 'A', message)
+        nationRow = await gm.findVertical(nation, 'A', message)
         array = await fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message)
         for(var i = 4; i < array[0].length; i++) {
             if (array[0][i] != '.') {

@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
+    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**unlocks <node>** - show information about specific node and its unlocks.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -28,6 +28,10 @@ module.exports = {
                 }
                 break;
             case 'research':
+                if(parseInt(args[1].substring(0,2)) >= cfg.era) {
+                    message.channel.send('The technology is too futuristic!');
+                    return;
+                }
                 research(args[1].toLowerCase(), nation, message);
                 break;
             case 'list':
@@ -40,6 +44,9 @@ module.exports = {
                 } else {
                     message.channel.send('Operation failed.');
                 }
+                break;
+            case 'unlocks':
+                unlocks(args[1].toLowerCase(), nation, message);
                 break;
         }
     },   
@@ -185,13 +192,28 @@ async function research(node, nation, message) {
                                 .then(result => {
                                     if (result) {
                                         if (del == 1) {
-                                            message.channel.send('Node unlocked!');
+                                            message.channel.send('Node unlocked! ✅');
                                             fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
                                             gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
                                         } else {
                                             message.channel.send('Node removed!');
                                             gm.report(message, `${cfg.users[message.author.id].nation} has removed ${tt[node][0]} from ${nation}`);
+
                                         }
+
+                                        //Tech increments change
+                                        gm.findHorizontal('Technology', 4, message)
+                                        .then(increments => {
+                                            fn.ss(['getA', `${fn.toCoord(increments)}5`, `${fn.toCoord(increments+5)+(data[1]-2)}`], message)
+                                            .then(incrementArray => {
+                                                //console.log(incrementArray);
+                                                if (del == 1) {
+                                                    fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1)], message);
+                                                } else {
+                                                    fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1)], message);
+                                                }
+                                            }).catch(err => console.error(err));
+                                        }).catch(err => console.error(err));
                                         
                                         return true;
                                     }
@@ -239,4 +261,56 @@ function change(data) {
     }
     js.exportFile("tt.json", tt);
     return [true, newData];
+}
+
+function unlocks(node, nation, message) {
+    const fn = require('./../fn');
+    const gm = require('./../game');
+    const Discord = require('discord.js');
+    const tt = require('./../tt.json');
+
+    gm.findHorizontal(node, 4, message, 'TechTree')
+        .then(col => {
+            //console.log('nodePos ' + col);
+            gm.findVertical('Data', 'A', message, 'TechTree')
+                .then(row => {
+                    //console.log(row);
+                    fn.ss(['getA', `${fn.toCoord(col)+row}`, `${fn.toCoord(col)+row}`, 0, 1], message, 'TechTree')
+                        .then(rp => {
+                            const embed = new Discord.MessageEmbed()
+                            .setColor('#e6e600')
+                            .setTitle(`Node ${tt[node][0]}`)
+                            .setURL('https://discord.js.org/') //URL clickable from the title
+                            .setThumbnail('https://imgur.com/IvUHO31.png')
+                            .addFields(
+                                { name: 'Unlocks:', value: rp[1]},
+                                { name: 'Cost:', value: `${rp[0]}RP`, inline: true},
+                                { name: 'Buy?', value: `✅`, inline: true},
+                            )
+                            .setFooter('Made by the Attaché to the United Nations.\nThis message will be auto-destructed in 60 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+
+                            const filter = (reaction, user) => {
+                                return (reaction.emoji.name === '✅' && user.id === message.author.id);
+                            };
+
+                            message.channel.send(embed)
+                            .then(msg => {
+                                msg.react("✅");
+                                msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                                .then(collected => {
+                                    react = collected.first();
+                                    if (react.emoji.name == '✅') {
+                                        research(node, nation, message);
+                                        msg.delete();
+                                        message.delete();
+                                    }
+                                })
+                                .catch(r => {
+                                    msg.delete();
+                                    message.delete();
+                                })
+                            }).catch(err => console.error(err));
+                        }).catch(err => console.error(err));
+                }).catch(err => console.error(err));
+        }).catch(err => console.error(err));
 }

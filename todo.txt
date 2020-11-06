@@ -3,7 +3,4 @@ Ultimategoal:   KSP mod for development price directly ingame.
 Hypergoal:      Map integration via xml editing.
 Supergoal:      Turn command.
 
-Tech research should change RP coeficient by 0.1 when unlocking a node.
 Turn comamnd.
-Tech command should check for era in main config file too.
-Tech command should write what each node unlocks per category or so.

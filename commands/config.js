@@ -58,6 +58,13 @@ module.exports = {
                         }
                     }
                     break;
+                case 'era':
+                    if (isNaN(parseInt(args[1]))) {
+                        message.reply('Not a number.')
+                        return;
+                    }
+                    cfg.era = parseInt(args[1]);
+                    break;
                 default:
                     message.reply('Wrong configuration argument.')
                     return;

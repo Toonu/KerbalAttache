@@ -7,9 +7,11 @@ const units = require('./units.json');
 
 //Function finds first element target in column.
 exports.findVertical = function findVertical(target, col, message, tab) {
-    return new Promise(function (resolve, reject) {  
+    return new Promise(function (resolve, reject) {
+        //console.log('Col: ' + col + 'tab: ' + tab);
         fn.ss(['getA', `${col}1`, `${col}100`], message, tab)
             .then(array => {
+                //console.log(array);
                 var height = 0;
                 var rege = new RegExp("^"+target+".*", "g");
                 for (const element of array) {
@@ -36,12 +38,13 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
         //console.log(col);
         fn.ss(['getA', `A${row}`, `${col + row}`], message, tab)
             .then(array => {
-            for (const element of array[0]) {
-                e += 1;
-                if (element == target) {
-                    resolve(e);
+                //console.log(array);
+                for (const element of array[0]) {
+                    e += 1;
+                    if (element == target) {
+                        resolve(e);
+                    }
                 }
-            }
             reject('Not found in horizontal range.');
             })
             .catch(err => reject('Error in horizontal: ' + err));
@@ -52,11 +55,12 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
 Finds unit maintenance price with reflection to the nation technological level.
 Returns the int maintenance price, column of the price and row of the nation.
 */
-exports.findUnitPrice = function(unit, message, nation, tech, tab) {
+exports.findUnitPrice = function(unit, message, nation, tab, tech) {
     return new Promise(async function(resolve, reject) {
-        let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error(err));
-        let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error(err));
-        let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error(err));
+        //console.log(tab);
+        let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error('PriceRowErr: ' + err));
+        let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error('NationRowErr: ' + err));
+        let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error('PriceColErr: ' + err));
         let rp;
         if (tech) {
             rp = await fn.ss(['get', `${fn.toCoord(priceCol) + nationRow}`], message, tab)

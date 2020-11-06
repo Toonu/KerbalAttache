@@ -52,7 +52,7 @@ module.exports = {
         }
         
         var origin = message;
-        let tab;
+        var tab;
 
         if (!['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
             tab = undefined;
@@ -60,7 +60,7 @@ module.exports = {
             tab = 'Stockpiles';
         }
 
-        //console.log(tab);
+        console.log(tab);
         gm.findUnitPrice(args[1], message, cfg.users[message.author.id].nation, tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;
@@ -68,6 +68,7 @@ module.exports = {
                 cost /= 4;
             }
 
+            console.log(data);
 
             const embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
@@ -119,6 +120,7 @@ module.exports = {
                     } else {
                         message.delete();
                         message.channel.send('Operation was canceled. ❌');
+                        message.delete({timeout: 10000});
                     }
                 }).catch(err => {
                     message.delete();

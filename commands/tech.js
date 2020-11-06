@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**unlocks <node>** - show information about specific node and its unlocks.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
+    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**unlocks <node | all>** - show information about specific node and its unlocks.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -159,9 +159,9 @@ async function research(node, nation, message) {
     //Checking prerequisites
     try {
         for await (const r of tt[node][3]) {
-        await gm.findUnitPrice(r, message, nation, true, 'TechTree')
+        await gm.findUnitPrice(r, message, nation, 'TechTree', true)
             .then(unlocked => {
-                console.log(r);
+                //console.log(r);
                 if(unlocked[3] == '0') throw 'You do not have the prerequisites to unlock the node!';
             })
         } 
@@ -171,7 +171,7 @@ async function research(node, nation, message) {
     }
     
     //Checking node
-    gm.findUnitPrice(node, message, nation, true, 'TechTree') 
+    gm.findUnitPrice(node, message, nation, 'TechTree', true) 
         .then(data => {
             if (del && parseInt(data[3]) == 1) {
                 message.channel.send('Node already unlocked!');
@@ -262,55 +262,99 @@ function change(data) {
     js.exportFile("tt.json", tt);
     return [true, newData];
 }
-
 function unlocks(node, nation, message) {
     const fn = require('./../fn');
     const gm = require('./../game');
     const Discord = require('discord.js');
     const tt = require('./../tt.json');
 
-    gm.findHorizontal(node, 4, message, 'TechTree')
-        .then(col => {
-            //console.log('nodePos ' + col);
-            gm.findVertical('Data', 'A', message, 'TechTree')
-                .then(row => {
-                    //console.log(row);
-                    fn.ss(['getA', `${fn.toCoord(col)+row}`, `${fn.toCoord(col)+row}`, 0, 1], message, 'TechTree')
-                        .then(rp => {
-                            const embed = new Discord.MessageEmbed()
-                            .setColor('#e6e600')
-                            .setTitle(`Node ${tt[node][0]}`)
-                            .setURL('https://discord.js.org/') //URL clickable from the title
-                            .setThumbnail('https://imgur.com/IvUHO31.png')
-                            .addFields(
-                                { name: 'Unlocks:', value: rp[1]},
-                                { name: 'Cost:', value: `${rp[0]}RP`, inline: true},
-                                { name: 'Buy?', value: `✅`, inline: true},
-                            )
-                            .setFooter('Made by the Attaché to the United Nations.\nThis message will be auto-destructed in 60 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+    if(node != 'all') {
+        gm.findHorizontal(node, 4, message, 'TechTree')
+            .then(col => {
+                //console.log('nodePos ' + col);
+                gm.findVertical('Data', 'A', message, 'TechTree')
+                    .then(row => {
+                        //console.log(row);
+                        fn.ss(['getA', `${fn.toCoord(col)+row}`, `${fn.toCoord(col)+row}`, 0, 1], message, 'TechTree')
+                            .then(rp => {
+                                const embed = new Discord.MessageEmbed()
+                                .setColor('#e6e600')
+                                .setTitle(`Node ${tt[node][0]}`)
+                                .setURL('https://discord.js.org/') //URL clickable from the title
+                                .setThumbnail('https://imgur.com/IvUHO31.png')
+                                .addFields(
+                                    { name: 'Unlocks:', value: rp[1]},
+                                    { name: 'Cost:', value: `${rp[0]}RP`, inline: true},
+                                    { name: 'Buy?', value: `✅`, inline: true},
+                                )
+                                .setFooter('Made by the Attaché to the United Nations.\nThis message will be auto-destructed in 60 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
 
-                            const filter = (reaction, user) => {
-                                return (reaction.emoji.name === '✅' && user.id === message.author.id);
-                            };
+                                const filter = (reaction, user) => {
+                                    return (reaction.emoji.name === '✅' && user.id === message.author.id);
+                                };
 
-                            message.channel.send(embed)
-                            .then(msg => {
-                                msg.react("✅");
-                                msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-                                .then(collected => {
-                                    react = collected.first();
-                                    if (react.emoji.name == '✅') {
-                                        research(node, nation, message);
+                                message.channel.send(embed)
+                                .then(msg => {
+                                    msg.react("✅");
+                                    msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+                                    .then(collected => {
+                                        react = collected.first();
+                                        if (react.emoji.name == '✅') {
+                                            research(node, nation, message);
+                                            msg.delete();
+                                            message.delete();
+                                        }
+                                    })
+                                    .catch(r => {
                                         msg.delete();
                                         message.delete();
-                                    }
-                                })
-                                .catch(r => {
-                                    msg.delete();
-                                    message.delete();
-                                })
+                                    })
+                                }).catch(err => console.error(err));
                             }).catch(err => console.error(err));
-                        }).catch(err => console.error(err));
-                }).catch(err => console.error(err));
-        }).catch(err => console.error(err));
+                    }).catch(err => console.error(err));
+            }).catch(err => console.error(err))
+    } else {
+        let nodes;
+        let names;
+        let data;
+        var unlocks = [];
+
+        gm.findVertical(nation, 'A', message)
+        .then(nationRow => {
+            fn.ss(['getA', `A${nationRow}`, `HO${nationRow}`], message, 'TechTree')
+            .then(nodes => {
+                gm.findVertical('Data', 'A', message, 'TechTree')
+                .then(dataRow => {
+                    fn.ss(['getA', `A${dataRow}`, `HO${dataRow}`, 1, 2], message, 'TechTree')
+                    .then(data => {
+                        fn.ss(['getA', 'A4', 'HO4'], message, 'TechTree')
+                        .then(names => {
+                            for(var i = 1; i < nodes[0].length; i++) {
+                                if (nodes[0][i] == '1') {
+                                    unlocks.push([names[0][i], data[1][i]])
+                                }
+                            }
+
+                            let newMessage = '';
+
+                            //Edits the node list to print with padding.
+                            let l = 0;
+                            unlocks.forEach(item => {
+                                if (tt[item[0]][0].length > l) {
+                                    l = tt[item[0]][0].length;
+                                }
+                            });
+                            
+                            //Constructs the message.
+                            unlocks.forEach(item => {
+                                newMessage += `[${tt[item[0]][0].padStart(l)}] ${item[1]}\n`;
+                            });
+
+                            message.channel.send(`Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``);
+                        })
+                    })
+                })
+            })
+        })
+    }
 }

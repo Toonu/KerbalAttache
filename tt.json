@@ -695,7 +695,7 @@
         "Early Short-Range SAM",
         "tech",
         "missilesSRSAM",
-        [],
+        ["guidanceir"],
         1
     ],
     "60shortsam": [
@@ -765,7 +765,7 @@
         "Early Medium-Range SAM",
         "tech",
         "missilesMRSAM",
-        [],
+        ["guidanceradar"],
         1
     ],
     "60medsam": [

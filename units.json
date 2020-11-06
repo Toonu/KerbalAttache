@@ -47,5 +47,6 @@
     "PORT": ["Naval port", "naval"], 
     "RADAR": ["Radar site", "buildings"],
     "ResBudget": ["Research", "other"],
+    "Coeficient": ["Research", "other"],
     "Tiles": ["Tiles", "other"]
 }

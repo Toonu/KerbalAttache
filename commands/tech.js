@@ -2,7 +2,7 @@ module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
     args: true,
-    usage: '<operation> <operation type> <operation data> <M:@user>\nPossible operations:\n**budget <set | add>** - sets or adds money to the research budget (use negative number to decrease).\n**research <node>** - researches specified tech tree node.\n**list <area>** - lists tech tree nodes of specified area.\n***List of areas can be obtained via ?tech list command!!!***',
+    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
@@ -10,9 +10,10 @@ module.exports = {
         const fn = require('./../fn');
         const gm = require('./../game');
         const js = require('./../json');
-        
+
         let nation = cfg.users[message.author.id].nation;
-        if (args[3] != undefined && js.perm(message, 2)) {
+
+        if (message.mentions.users.first() != undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
 
@@ -24,17 +25,22 @@ module.exports = {
                     budget(args[2], nation, message, true);
                 } else {
                     message.channel.send('Operation type provided does not exist!');
-                    return;
                 }
+                break;
             case 'research':
                 research(args[1].toLowerCase(), nation, message);
-                return;
+                break;
             case 'list':
                 list(args[1], message);
-                return;
+                break;
             case 'change':
-                //configruation of nodes for moderators in case something needs to be changed, will work with json tt file.    
-                return;
+                let ch = change(args)
+                if (ch[0]) {
+                    gm.report(message, `${message.author.username} has changed the ${args[1]} ${args[2]} to ${ch[1]}!`)
+                } else {
+                    message.channel.send('Operation failed.');
+                }
+                break;
         }
     },   
 };
@@ -81,13 +87,13 @@ function list(category, message) {
     const fn = require('./../fn');
     const gm = require('./../game');
     const js = require('./../json');
-    const t = require('./../tt.json');
+    const tt = require('./../tt.json');
 
     let newMessage = '';
 
     //Lists the main categories, then returns and you have to repeat the command.
     if(category == undefined) {
-        Object.keys(t.categories).forEach(item => {
+        Object.keys(tt.categories).forEach(item => {
             newMessage += `${item}\n`;
         })
         
@@ -97,9 +103,9 @@ function list(category, message) {
         return;
     }
 
+    //Makes the node list to print.
     let nodes = [];
-
-    for (const [key, value] of Object.entries(t)) {
+    for (const [key, value] of Object.entries(tt)) {
         try {
             if(value[2].toLowerCase().includes(category.toLowerCase())) {
                 nodes.push(key);
@@ -107,43 +113,86 @@ function list(category, message) {
         } catch(err) {}
     }
     
+    //If category is not exact, assign user input as category name.
+    let ctg = tt.categories[category];
+    if (ctg == undefined) {
+        ctg = category;
+    }
+
+    //Edits the node list to print with padding.
+    let l = 0;
     nodes.forEach(item => {
-        newMessage += `${item}: ${t[item][0]}\n`;
+        if (item.length > l) {
+            l = item.length;
+        }
     });
-    message.channel.send(`***Nodes in specified category ${t.categories[category]}:***\n\n${newMessage}`)
+
+    //Constructs the message.
+    nodes.forEach(item => {
+        newMessage += `[${item.padStart(l)}] ${tt[item][0]}\n`;
+    });
+    message.channel.send(`***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\``)
     .catch(err => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
 }
-function research(node, nation, message) {
+async function research(node, nation, message) {
     const cfg = require('./../config.json');
     const fn = require('./../fn');
     const gm = require('./../game');
     const js = require('./../json');
-    const t = require('./../tt.json');
+    const tt = require('./../tt.json');
     let rpCol;
     let nationRP;
     let data;
+    let del = 1;
+    if (node.startsWith('-') && js.perm(message, 2)) {
+        del = 0;
+        node = node.substring(1, node.length);
+    }
 
+    //Checking prerequisites
+    try {
+        for await (const r of tt[node][3]) {
+        await gm.findUnitPrice(r, message, nation, true, 'TechTree')
+            .then(unlocked => {
+                console.log(r);
+                if(unlocked[3] == '0') throw 'You do not have the prerequisites to unlock the node!';
+            })
+        } 
+    } catch(err) {
+        message.channel.send(err);
+        return;
+    }
+    
+    //Checking node
     gm.findUnitPrice(node, message, nation, true, 'TechTree') 
         .then(data => {
-            if (parseInt(data[3]) == 1) {
+            if (del && parseInt(data[3]) == 1) {
                 message.channel.send('Node already unlocked!');
                 return false;
-            }          
+            }
+            //Checking rp amount
             gm.findHorizontal('RP', 4, message)
                 .then(rpCol => {
                     fn.ss(['get', `${fn.toCoord(rpCol)+data[2]}`], message)
                         .then(rp => {
                             nationRP = rp
-                            if (data[0] > rp) {
+                            if (data[0] > rp && del != 0) {
                                 message.channel.send('Not enough Research Points!');
                                 return false;
                             }
-                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, 1], message, 'TechTree')
+                            //Setting node and then RP
+                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, del], message, 'TechTree')
                                 .then(result => {
                                     if (result) {
-                                        message.channel.send('Node unlocked!');
-                                        fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
-                                        gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${t[node][0]} for ${data[0]}RP`);
+                                        if (del == 1) {
+                                            message.channel.send('Node unlocked!');
+                                            fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
+                                            gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
+                                        } else {
+                                            message.channel.send('Node removed!');
+                                            gm.report(message, `${cfg.users[message.author.id].nation} has removed ${tt[node][0]} from ${nation}`);
+                                        }
+                                        
                                         return true;
                                     }
                                     message.channel.send('Operation failed!');
@@ -156,4 +205,38 @@ function research(node, nation, message) {
                 .catch(err => message.channel.send(err));
         })
         .catch(err => console.error(err));
+}
+function change(data) {
+    const js = require('./../json');
+    const tt = require('./../tt.json');
+
+    if (tt[data[1]] == undefined) {
+        return [false];
+    }
+    let newData = '';
+    data.forEach(r => {
+        if(r != data[0] && r != data[1] && r != data[2]) {
+            newData += r + ' ';
+        }
+    })
+    switch(data[2]) {
+        case 'name':
+            tt[data[1]][0] = newData.trim();
+            break;
+        case 'category':
+            tt[data[1]][2] = data[3];
+            break;
+        case 'reqadd':
+            tt[data[1]][3].push(data[3]);
+            break;
+        case 'reqdel':
+            for(var i = 0; i < tt[data[1]][3].length; i++) {
+                if (tt[data[1]][3][i] == data[3]) {
+                    tt[data[1]][3].splice(i, 1);
+                }
+            }
+            break;
+    }
+    js.exportFile("tt.json", tt);
+    return [true, newData];
 }

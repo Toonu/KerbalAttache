@@ -3,4 +3,5 @@ Ultimategoal:   KSP mod for development price directly ingame.
 Hypergoal:      Map integration via xml editing.
 Supergoal:      Turn command.
 
-New tech tree tab in the sheet linked into new reserch command which will also merge the research budget command and link to tech tree incremental system by adding 0.1pt per node.
+Tech research should change RP coeficient by 0.1 when unlocking a node.
+Turn comamnd.

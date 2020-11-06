@@ -150,9 +150,30 @@ function checkCoordinate(x,message) {
 
 exports.toCoord = function (num) {
     num = parseInt(num);
-    if (num > 90) {
-        return num = 'A'+String.fromCharCode(num - 26);
+    let result;
+
+    if (num > 298) {
+        result = 'I'+String.fromCharCode(num - 234);
+    } else if (num > 272) {
+        result = 'H'+String.fromCharCode(num - 208);
+    } else if (num > 246) {
+        result = 'G'+String.fromCharCode(num - 182);
+    } else if (num > 220) {
+        result = 'F'+String.fromCharCode(num - 156);
+    } else if (num > 194) {
+        result = 'E'+String.fromCharCode(num - 130);
+    } else if (num > 168) {
+        result = 'D'+String.fromCharCode(num - 104);
+    } else if (num > 142) {
+        result = 'C'+String.fromCharCode(num - 78);
+    } else if (num > 116) {
+        result = 'B'+String.fromCharCode(num - 52);
+    } else if (num > 90) {
+        result = 'A'+String.fromCharCode(num - 26);
     } else {
-        return String.fromCharCode(num);
+        result = String.fromCharCode(num);
     }
+
+    //console.log('ColumnBy ' + result);
+    return result;
 }

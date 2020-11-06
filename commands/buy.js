@@ -21,11 +21,18 @@ module.exports = {
 
          //Lists the main categories, then returns and you have to repeat the command.
         if(args[0] == undefined) {
+
+            let l = 0;
             Object.keys(units).forEach(item => {
-                newMessage += `${item}: ${units[item][0]}\n`;
+                if (item.length > l) {
+                    l = item.length;
+                }
+            });
+            Object.keys(units).forEach(item => {
+                newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
             })
             
-            message.channel.send("All weapons are bellow: \n" + newMessage)
+            message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
             .then(msg => msg.delete({ timeout: 30000 }))
             .catch(err => console.log(msg));
             return;

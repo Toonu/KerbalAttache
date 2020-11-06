@@ -75,7 +75,6 @@ module.exports = {
                 currentEmbed = embed;
             }
             switchEmbeds[1].delete();
-            console.log(embed.id);
             switchEmbeds = await embUnits(currentEmbed, message);
         }
     }    
@@ -107,7 +106,6 @@ function embUnits(embed, message) {
                     .catch(err => {
                         msg.delete();
                         message.delete();
-                        message.channel.send('Operation timed out. ❌');
                     })
             })
             .catch(err => {

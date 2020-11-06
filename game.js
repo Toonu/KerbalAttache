@@ -28,7 +28,13 @@ exports.findVertical = function findVertical(target, col, message, tab) {
 exports.findHorizontal = function findHorizontal(target, row, message, tab) {
     return new Promise(function (resolve, reject) {
         var e = 64; //char A dec num
-        fn.ss(['getA', `A${row}`, `BA${row}`], message, tab)
+
+        var col = 'BA';
+        if(tab == 'TechTree') {
+            col = 'HO'
+        }
+        //console.log(col);
+        fn.ss(['getA', `A${row}`, `${col + row}`], message, tab)
             .then(array => {
             for (const element of array[0]) {
                 e += 1;
@@ -56,7 +62,7 @@ exports.findUnitPrice = function(unit, message, nation, tech, tab) {
             rp = await fn.ss(['get', `${fn.toCoord(priceCol) + nationRow}`], message, tab)
         }
         
-        //console.log("p" + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
+        //console.log('Priceitems' + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
         if(priceRow == undefined || nationRow == undefined || priceCol == undefined) {
             reject('Wrong name');
         }
@@ -66,7 +72,6 @@ exports.findUnitPrice = function(unit, message, nation, tech, tab) {
         fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
         .then(amount => {
             price = parseInt(amount);
-            //console.log(units);
             if (tech || ['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
                 resolve([price, priceCol, nationRow, rp]);
             } else if (['other'].includes(units[unit][1])) {

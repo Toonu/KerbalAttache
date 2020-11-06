@@ -49,16 +49,18 @@ module.exports = {
                         .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
 
                         message.channel.send(embed)
-                        .then(message => {
-                            message.react('❌');
-                            message.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time']})
+                        .then(msg => {
+                            msg.react('❌');
+                            msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time']})
                                 .then(collected => {
                                     react = collected.first();
                                     if (react.emoji.name == '❌') {
+                                        msg.delete();
                                         message.delete();
                                     }
                                 })
                                 .catch(err => {
+                                msg.delete();
                                 message.delete();
                                 });
                         });

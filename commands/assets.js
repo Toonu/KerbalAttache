@@ -1,97 +1,90 @@
-export const name = 'assets';
-export const description = 'Command for getting your current assets! Do NOT use in public channels.';
-export const args = false;
-export const usage = '<M:@user>';
-export const cooldown = 5;
-export const guildOnly = true;
+module.exports = {
+    name: 'assets',
+    description: 'Command for getting your current assets! Do NOT use in public channels.',
+    args: false,
+    usage: '<M:@user>',
+    cooldown: 5,
+    guildOnly: true,
+    execute: async function execute(message, args) { 
+        const cfg = require('./../config.json')
+        const js = require('./../json');
+        const fn = require('./../fn')
+        const gm = require('./../game');
+        const Discord = require('discord.js');
 
-/**
- * Function aquires nation assets and embed prints them into the channel.
- * @param {Message} message     Message to retrieve channel to interact with.
- * @param {Array} args          Arguments array of [User]. User's assets are printed.
- */
-export async function execute(message, args) {
-    const cfg = require('./../config.json');
-    const js = require('./../json');
-    const fn = require('./../fn');
-    const gm = require('./../game');
-    const Discord = require('discord.js');
 
-    let nation = cfg.users[message.author.id].nation;
-    let user = message.author;
-    if (args[0] != undefined && js.perm(message, 2)) {
-        nation = cfg.users[message.mentions.users.first().id].nation;
-        user = message.mentions.users.first();
-    } else if (args[0] != undefined) {
-        return;
-    }
-
-    var embed = new Discord.MessageEmbed()
+        let nation = cfg.users[message.author.id].nation;
+        let user  = message.author;
+        if (args[0] != undefined && js.perm(message, 2)) {
+            nation = cfg.users[message.mentions.users.first().id].nation;
+            user = message.mentions.users.first();
+        } else if (args[0] != undefined) {
+            return;
+        }
+        
+        var embed = new Discord.MessageEmbed()
         .setColor('#065535')
         .setTitle(`National Roster of ${nation}`)
         .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
         .setThumbnail('https://imgur.com/IvUHO31.png')
         .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
-    var embedW = new Discord.MessageEmbed()
+        var embedW = new Discord.MessageEmbed()
         .setColor('#065535')
         .setTitle(`National Roster of ${nation}`)
         .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
         .setThumbnail('https://imgur.com/IvUHO31.png')
         .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
-    const t = new RegExp(/^[0-9]+/g);
+        const t = new RegExp(/^[0-9]+/g);
 
-    //Weapons setup
-    await gm.findVertical(nation, 'A', message, 'Stockpiles')
-        .then(nationRow => {
-            fn.ss(['getA', 'A4', `W${nationRow}`], message, 'Stockpiles')
-                .then(weapArr => {
-                    for (var i = 1; i < weapArr[0].length; i++) {
-                        if (weapArr[weapArr.length - 1][i] != '.') {
-                            embedW.addField(weapArr[0][i], weapArr[weapArr.length - 1][i], true);
+        //Weapons setup
+        await gm.findVertical(nation, 'A', message, 'Stockpiles')
+            .then(nationRow => {
+                fn.ss(['getA', 'A4', `W${nationRow}`], message, 'Stockpiles')
+                .then(weapArr => { 
+                    for(var i = 1; i < weapArr[0].length; i++) {
+                        if (weapArr[weapArr.length-1][i] != '.') {
+                            embedW.addField(weapArr[0][i], weapArr[weapArr.length-1][i], true);
                         }
                     }
                 })
                 .catch(err => console.error(err));
-        })
-        .catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));  
 
-    //Units setup
-    endCol = await gm.findHorizontal('Surface', 1, message);
-    endCol = fn.toCoord(endCol - 1);
-    let unitNames = await fn.ss(['getA', 'E4', `${endCol}4`], message);
-    nationRow = await gm.findVertical(nation, 'A', message);
-    array = await fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message);
-    for (var i = 4; i < array[0].length; i++) {
-        if (array[0][i] != '.') {
-            embed.addField(unitNames[0][i - 4], array[0][i], true);
+        //Units setup
+        endCol = await gm.findHorizontal('Surface', 1, message)
+        endCol = fn.toCoord(endCol - 1);
+        let unitNames = await fn.ss(['getA', 'E4', `${endCol}4`], message)
+        nationRow = await gm.findVertical(nation, 'A', message)
+        array = await fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message)
+        for(var i = 4; i < array[0].length; i++) {
+            if (array[0][i] != '.') {
+                embed.addField(unitNames[0][i - 4], array[0][i], true);
+            }
         }
-    }
 
-    //Embed switching mechanism
-    let currentEmbed = embed;
-    let switchEmbeds = await embUnits(currentEmbed, message);
-    while (switchEmbeds[0]) {
-        if (switchEmbeds[0] && currentEmbed == embed) {
-            currentEmbed = embedW;
-        } else {
-            currentEmbed = embed;
+        //Embed switching mechanism
+        let currentEmbed = embed;
+        let switchEmbeds = await embUnits(currentEmbed, message);
+        while(switchEmbeds[0]) {
+            if (switchEmbeds[0] && currentEmbed == embed) {
+                currentEmbed = embedW;
+            } else {
+                currentEmbed = embed;
+            }
+            switchEmbeds[1].delete();
+            switchEmbeds = await embUnits(currentEmbed, message);
         }
-        switchEmbeds[1].delete();
-        switchEmbeds = await embUnits(currentEmbed, message);
-    }
+    }    
 }
 
-/**
- * Function prints embed and manages its reactions.
- * @param {MessageEmbed} embed      Embed to print.
- * @param {Message} message         Original message to interact with.
- */
+
 function embUnits(embed, message) {
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         const emojiFilter = (reaction, user) => {
-            return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️' || reaction.emoji.name === '❌') && user.id === message.author.id;
+	        return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️' || reaction.emoji.name === '❌') && user.id === message.author.id;
         };
 
         message.channel.send(embed)
@@ -102,23 +95,23 @@ function embUnits(embed, message) {
                 msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
                     .then(collected => {
                         react = collected.first();
-                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️') {
-                            resolve([true, msg]);
+                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
+                            resolve([true,msg]);
                         } else if (react.emoji.name == '❌') {
                             msg.delete();
                             message.delete();
-                            resolve([false, msg]);
+                            resolve([false,msg]);
                         }
                     })
                     .catch(err => {
                         msg.delete();
                         message.delete();
-                    });
+                    })
             })
             .catch(err => {
                 msg.delete();
                 message.delete();
                 resolve([false]);
-            });
-        })
+            })
+    })
 }

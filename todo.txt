@@ -4,3 +4,12 @@ Hypergoal:      Map integration via xml editing.
 Supergoal:      Turn command.
 
 Turn comamnd.
+Refractor of everything for better performance.
+Change getunitprice to return the amount always, not only when tech and then remove the same function from commands using the function and then retrieving the amount separately.
+
+Error handling Refractor and subsequent removal of message sending from uneccessary places to their calling methods from catch or then.
+
+
+Nation specifying function if there is tagged user or not.
+
+Turn command should report to the moderators who launched the command, when and other such information.

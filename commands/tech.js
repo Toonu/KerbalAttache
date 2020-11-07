@@ -1,56 +1,67 @@
-module.exports = {
-    name: 'tech',
-    description: 'Command for managing your research!',
-    args: true,
-    usage: "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**unlocks <node | all>** - show information about specific node and its unlocks or everything you have unlocked.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!",
-    cooldown: 5,
-    guildOnly: true,
-    execute: function execute(message, args) {
-        const cfg = require('./../config.json');
-        const fn = require('./../fn');
-        const gm = require('./../game');
-        const js = require('./../json');
+export const name = 'tech';
+export const description = 'Command for managing your research!';
+export const args = true;
+export const usage = "<operation> <operation type> <operation data> <M:@user>\n\nPossible operations:\n**budget <set | add> <M:@user>** - sets or adds money to the research budget (use neg. number to decrease).\n**research <node | -node>** - researches specified tech tree node. Use '-' inf front of node to revert research.\n**list <area>** - lists tech tree nodes of specified area.\n**unlocks <node | all>** - show information about specific node and its unlocks or everything you have unlocked.\n**change <node> <type> <data>** - researches specified tech tree node.\nList of ***areas*** can be obtained via ***?tech list*** command!!!";
+export const cooldown = 5;
+export const guildOnly = true;
 
-        let nation = cfg.users[message.author.id].nation;
+/**
+ * Function for manipulating research of a nation.
+ * @param {Message} message   Message to retrieve channel to interact with.
+ * @param {Array} args      Arguments array of [String, String, String, User].
+ */
+export function execute(message, args) {
+    const cfg = require('./../config.json');
+    const gm = require('./../game');
+    const js = require('./../json');
 
-        if (message.mentions.users.first() != undefined && js.perm(message, 2)) {
-            nation = cfg.users[message.mentions.users.first().id].nation;
-        }
+    let nation = cfg.users[message.author.id].nation;
 
-        switch(args[0]) {
-            case 'budget':
-                if(args[1] == 'set') {
-                    budget(args[2], nation, message, false);
-                } else if (args[1] == 'add') {
-                    budget(args[2], nation, message, true);
-                } else {
-                    message.channel.send('Operation type provided does not exist!');
-                }
-                break;
-            case 'research':
-                if(parseInt(args[1].substring(0,2)) >= cfg.era) {
-                    message.channel.send('The technology is too futuristic!');
-                    return;
-                }
-                research(args[1].toLowerCase(), nation, message);
-                break;
-            case 'list':
-                list(args[1], message);
-                break;
-            case 'change':
-                let ch = change(args)
-                if (ch[0]) {
-                    gm.report(message, `${message.author.username} has changed the ${args[1]} ${args[2]} to ${ch[1]}!`)
-                } else {
-                    message.channel.send('Operation failed.');
-                }
-                break;
-            case 'unlocks':
-                unlocks(args[1].toLowerCase(), nation, message);
-                break;
-        }
-    },   
-};
+    if (message.mentions.users.first() != undefined && js.perm(message, 2)) {
+        nation = cfg.users[message.mentions.users.first().id].nation;
+    }
+
+    switch (args[0]) {
+        case 'budget':
+            if (args[1] == 'set') {
+                budget(args[2], nation, message, false);
+            } else if (args[1] == 'add') {
+                budget(args[2], nation, message, true);
+            } else {
+                message.channel.send('Operation type provided does not exist!');
+            }
+            break;
+        case 'research':
+            if (parseInt(args[1].substring(0, 2)) >= cfg.era) {
+                message.channel.send('The technology is too futuristic!');
+                return;
+            }
+            research(args[1].toLowerCase(), nation, message);
+            break;
+        case 'list':
+            list(args[1], message);
+            break;
+        case 'change':
+            let ch = change(args);
+            if (ch[0]) {
+                gm.report(message, `${message.author.username} has changed the ${args[1]} ${args[2]} to ${ch[1]}!`);
+            } else {
+                message.channel.send('Operation failed.');
+            }
+            break;
+        case 'unlocks':
+            unlocks(args[1].toLowerCase(), nation, message);
+            break;
+    }
+}
+
+/**
+ * Function changes nation budget.
+ * @param {Number} amount    Requested change.
+ * @param {String} nation    Changing nation.
+ * @param {Message} message  Message to retrieve channel to interact with.
+ * @param {String} add       If add or set the budget.
+ */
 function budget(amount, nation, message, add) {
     const fn = require('./../fn');
     const gm = require('./../game');
@@ -89,11 +100,13 @@ function budget(amount, nation, message, add) {
         message.channel.send(err);
     }
 }
+
+/**
+ * Function lists technology nodes in specified category.
+ * @param {String} category Category name string to print out.
+ * @param {Message} message Message to retrieve channel to interact with.
+ */
 function list(category, message) {
-    const cfg = require('./../config.json');
-    const fn = require('./../fn');
-    const gm = require('./../game');
-    const js = require('./../json');
     const tt = require('./../tt.json');
 
     let newMessage = '';
@@ -106,7 +119,7 @@ function list(category, message) {
         
         message.channel.send("All technology node categories are bellow: \n" + newMessage + '\n\n***Note:*** You do not have to write full category name but merely it part is sufficient.')
         .then(msg => msg.delete({ timeout: 30000 }))
-        .catch(err => console.log(msg));
+        .catch(() => console.log(msg));
         return;
     }
 
@@ -139,17 +152,22 @@ function list(category, message) {
         newMessage += `[${item.padStart(l)}] ${tt[item][0]}\n`;
     });
     message.channel.send(`***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\``)
-    .catch(err => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
+    .catch(() => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
 }
+
+/**
+ * Function researches one technology node. 
+ * @param {String} node         Technology node name.
+ * @param {String} nation       Nation name researching the node.
+ * @param {Message} message     Message to retrieve channel to interact with.
+ */
 async function research(node, nation, message) {
     const cfg = require('./../config.json');
     const fn = require('./../fn');
     const gm = require('./../game');
     const js = require('./../json');
     const tt = require('./../tt.json');
-    let rpCol;
     let nationRP;
-    let data;
     let del = 1;
     if (node.startsWith('-') && js.perm(message, 2)) {
         del = 0;
@@ -228,6 +246,11 @@ async function research(node, nation, message) {
         })
         .catch(err => console.error(err));
 }
+
+/**
+ * Function changes node configuration.
+ * @param {Array} data Array with arguments of new data. [operation, nodeName, changedName, dataChanged]
+ */
 function change(data) {
     const js = require('./../json');
     const tt = require('./../tt.json');
@@ -262,6 +285,13 @@ function change(data) {
     js.exportFile("tt.json", tt);
     return [true, newData];
 }
+
+/**
+ * Function lists node specifications or all unlocked nodes of nation.
+ * @param {String} node         Technology node to print.
+ * @param {String} nation       Node's owner nation. 
+ * @param {Message} message     Message to retrieve channel to interact with.
+ */
 function unlocks(node, nation, message) {
     const fn = require('./../fn');
     const gm = require('./../game');
@@ -305,7 +335,7 @@ function unlocks(node, nation, message) {
                                             message.delete();
                                         }
                                     })
-                                    .catch(r => {
+                                    .catch(() => {
                                         msg.delete();
                                         message.delete();
                                     })
@@ -314,9 +344,6 @@ function unlocks(node, nation, message) {
                     }).catch(err => console.error(err));
             }).catch(err => console.error(err))
     } else {
-        let nodes;
-        let names;
-        let data;
         var unlocks = [];
 
         gm.findVertical(nation, 'A', message)

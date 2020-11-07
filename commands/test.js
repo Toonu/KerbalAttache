@@ -1,17 +1,15 @@
-module.exports = {
-    name: 'test',
-    description: 'Command for testing latest projects!',
-    args: false,
-    usage: '<args>',
-    cooldown: 5,
-    guildOnly: true,
-    execute: async function execute(message, args) { 
-        const cfg = require('./../config.json')
-        const js = require('./../json');
-        const fn = require('./../fn')
-        const gm = require('./../game');
-        const Discord = require('discord.js');
+export const name = 'test';
+export const description = 'Command for testing latest projects!';
+export const args = false;
+export const usage = '<args>';
+export const cooldown = 5;
+export const guildOnly = true;
 
-        message.reply('There is nothing to see. Move along.');
-    }    
-};
+/**
+ * Function for testing purposes.
+ * @param {Message} message   Message to retrieve channel to interact with.
+ * @param {Array} args      Arguments.
+ */
+export async function execute(message, args) {
+    message.reply('There is nothing to see. Move along.');
+}

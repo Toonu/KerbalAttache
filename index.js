@@ -1,16 +1,13 @@
-const cfg = require('./config.json');
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const fs = require('fs');
-const fn = require("./fn");
-const { Console } = require('console');
-const {google} = require('googleapis');
-const keep_alive = require('./keep_alive.js')
+import { prefix } from './config.json';
+import { Client, Collection } from 'discord.js';
+const client = new Client();
+import { readdirSync } from 'fs';
+import { init } from "./fn";
 
 //Adds commands from the command folder collection.
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const cooldowns = new Discord.Collection();
+client.commands = new Collection();
+const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
+const cooldowns = new Collection();
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	
@@ -21,44 +18,41 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	console.log('Deployed and ready!');
 	client.user.setActivity("over players.", { type: "WATCHING" })
-	fn.init();
+	init();
 });
 
+//Awaits event
 client.on('message', message => {
-	if (!message.content.startsWith(cfg.prefix) || message.author.bot) return;
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
   
-	//Prepares the arguments and command
-	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
+	//Prepares the arguments
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	//If comand doesnt exist.
+	//If comand doesnt exist, else assigns command.
 	if (!client.commands.has(commandName)) return;
-	//Else
 	const command = client.commands.get(commandName);
-
 	//Checking for DMs
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return message.reply('I can\'t execute that command inside DMs!');
 	}
-
 	//Checking for arguments
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
 		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
+			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 		}
 		return message.channel.send(reply);
 	}
-
 	//Checking for cooldown
 	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+		cooldowns.set(command.name, new Collection());
 	}
 	
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
-
+	//Manages cooldown
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
@@ -71,6 +65,7 @@ client.on('message', message => {
 	timestamps.set(message.author.id, now);
 	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	
+	//Executes command with arguments.
 	try {
         if (message.channel.type === 'dm') {
             console.log('DM from '+ message.author.name + ": " + message.content);
@@ -83,6 +78,6 @@ client.on('message', message => {
 		message.reply('There was an error trying to execute that command!');
 	}
 });
-
+//Logs in and starts the bot.
 const {CLIENT_TOKEN} = process.env;
 client.login(CLIENT_TOKEN);

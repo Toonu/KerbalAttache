@@ -7,7 +7,7 @@ module.exports = {
 	cooldown: 5,
 	guildOnly: true,
 	execute(message, args) {
-        const js = require('./../json');
+        const js = require('../jsonManagement');
 
         try {
             args[0] = parseInt(args[0]);
@@ -21,7 +21,7 @@ module.exports = {
 
         if (js.perm(message, 1)) {
             message.delete()
-			for (var i = 0; i < parseInt(args[0] - 1); i++) {
+			for (let i = 0; i < parseInt(args[0]) - 1; i++) {
 				message.channel.send('Pong.');
 			}
 			message.channel.send('Done!');

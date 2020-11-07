@@ -4,7 +4,7 @@ module.exports = {
     perms: 'Moderator',
 	args: true,
 	execute(message, args) {
-        const js = require('./../json');
+        const js = require('../jsonManagement');
 
         if (!js.perm(message, 2)) {
             return;

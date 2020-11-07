@@ -2,69 +2,48 @@ module.exports = {
     name: 'useredit',
     description: 'Command for editing users! Your notes are always editable',
     args: true,
-    usage: '<operation> <data/del> <A:@user>\Operations:\n0: Nation (M), 1: color (M), 2: pwd (M), 3: notes (U), permissions to edit the value are in ()',
+    usage: `[operation] [attribute | del] [M:@user]\nOperations:\nnotes, (Moderators only: nation, color, sheet, map)`,
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) {
-        const js = require('./../json');
-        const cfg = require('./../config.json')
+    /**
+     * Method edits user parameters in main config file with new data.
+     * @param message   Message author taken as printed user.
+     * @param args      Operation String, New data String, User tag.
+     * @returns {*}     Error message.
+     */
+    execute: function useredit(message, args) {
+        const js = require('../jsonManagement');
+        const cfg = require('./../config.json');
+        let perm = js.perm(message, 2, false);
+        let user = js.ping(message).id;
+        let data = args[1];
 
-        if (js.perm(message, 2) || (args[0] == '3' && message.mentions.users.first() == message.author)) {
-            let user = message.author;
+        if (cfg.users[user] === undefined) {
+            js.createUser(user);
+            useredit(message, args);
+        }
+        if (args[1] === 'del') {
+            data = undefined;
+        }
 
-            try {
-                args[0] = parseInt(args[0]);
-                if (isNaN(args[0])) throw 'Argument type is not a number! Canceling operation'
-                if (args[2] != undefined) {
-                    user = message.mentions.users.first();
-                }
-            } catch(err) {
-                console.error(err);
-                return;
-            }
+        if (args[0] === 'notes') {
+            cfg.users[user].notes = data;
+        } else if (args[0] === 'nation' && perm) {
+            cfg.users[user].nation = data;
+        } else if (args[0] === 'color' && perm) {
+            cfg.users[user].color = data;
+        } else if (args[0] === 'sheet' && perm) {
+            cfg.users[user].sheet = data;
+        } else if (args[0] === 'map' && perm) {
+                cfg.users[user].map = data;
+        } else {
+            message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 12000}));
+            message.delete({timeout: 12000});
+            return;
+        }
 
-            if(cfg.users[user.id] == undefined) {
-                js.createUser(user.id);
-                execute(message, args);
-                return;
-            } else if (args[1] == 'del' && modifyUser(user.id, args[0], 'undefined')) {
-                message.channel.send('User property deleted.');
-            } else if (modifyUser(user.id, args[0], args[1])) {
-                message.channel.send('User property modified.');
-            } else {
-                message.channel.send('Modification failed.');
-            }
-        }        
+        js.exportFile("config.json", cfg);
+        message.channel.send('User property modified.').then(msg => msg.delete({timeout: 12000}));
+        message.delete({timeout: 12000});
     }
 };
-
-function modifyUser(id, type, data) {
-    const js = require('./../json');
-    const cfg = require('./../config.json');
-
-    switch(type) {
-        case 0:
-            cfg.users[id].nation = data;
-            break;
-        case 1:
-            cfg.users[id].color = data;
-            break;
-        case 2:
-            cfg.users[id].cf = data;
-            break;
-        case 3:
-            cfg.users[id].notes = data;
-            break;
-        case 4:
-            cfg.users[id].sheet = data;
-            break;
-        case 5:
-            cfg.users[id].egg = data;
-            break;
-        default:
-            return false;
-    }
-
-    js.exportFile("config.json", cfg);
-    return true;
-}

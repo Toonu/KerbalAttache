@@ -5,40 +5,36 @@ module.exports = {
     usage: '<sell | buy> <numberOfAssets> <assetType> <money> <@customer>\n\n**Assets:**\n*Buildings:* AIRPORT, FOB, PORT, RADAR\n*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF\n*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV\n*Naval assets:* K, F, DD, CC, BC, BB, CL, CV\n**Weapons:**\n*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD\n*Surface:* CRUISE, BALLISTIC, ABM, ASM\n*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
+    execute: async function execute(message, args) {
         const cfg = require("./../config.json")
         const fn = require("./../fn");
         const gm = require("./../game");
-        const js = require("./../json")
         const units = require('./../units.json');
+        const nation = cfg.users[message.author.id].nation;
+        const money = parseInt(args[3]);
+        const unit = args[2].toUpperCase();
+        const amount = parseInt(args[1]);
+        let type;
 
-        try {
-            var type = args[0].toLowerCase();
-            var amount = parseInt(args[1]);
-            var unit = args[2].toUpperCase();
-            var money = parseInt(args[3]);
-            var nation = cfg.users[message.author.id].nation;      
-            var company = false;      
+        type = args[0].toLowerCase();
 
-            if(!units.hasOwnProperty(unit)) throw 'AssetType not found. Please retry.';
-            if (isNaN(amount) || isNaN(money)) throw 'Argument money or number of assets is not a number. Canceling operation.';
-            if (!type.startsWith('sell') && !type.startsWith('buy')) {
-                throw 'First argument is not sell or buy.'
-            } else if (type.startsWith('buy')) {
-                type = false;
-            } else {
-                type = true;
-            }
-            if (nation == undefined) throw 'Nation does not exist in our database. Contact moderator or retry.';
-            if (cfg.users[message.mentions.users.first().id].nation == undefined) throw "No such user's nation exists.";
-        } catch(err) {
-            message.channel.send(err);
-            return;
+        if(!units.hasOwnProperty(unit)) {
+            return message.channel.send('AssetType not found. Please retry.');
+        } else if (isNaN(amount) || isNaN(money)) {
+            return message.channel.send('Argument money or number of assets is not a number. Canceling operation.');
+        } else if (!type.startsWith('sell') && !type.startsWith('buy')) {
+            return message.channel.send('First argument is not sell or buy.');
+        } else if (nation === undefined) {
+            return message.channel.send('Nation does not exist in our database. Contact moderator or retry.');
+        } else if (cfg.users[message.mentions.users.first().id].nation === undefined) {
+            return message.channel.send(`No such user's nation exists.`);
         }
+
+        type = !type.startsWith('buy');
 
         gm.findUnitPrice(unit, message, nation)
         .then(data => {
-            if (data[0] == false) {
+            if (data[0] === false) {
                 data[0] = 0;
             } else if (data[0] * 4 * amount > money) {
                 message.channel.send('The price of this trade is lower than production cost of the vehicles!');
@@ -48,9 +44,9 @@ module.exports = {
             .then(customer => {
                 let col = fn.toCoord(data[1]);
                     transfer(data[2], col, amount, money, message, type)
-                    .then(x => {
+                    .then(() => {
                         transfer(customer, col, amount, money, message, !type)
-                        .then(x => {
+                        .then(() => {
                             let msg = ` ${amount} ${unit}s for ${money.toLocaleString()+cfg.money} finished!`;
                             gm.report(message, `<@${message.author.id}> has traded with <@${message.mentions.users.first().id}>` + msg);
                             message.channel.send(`Transaction with ${message.mentions.users.first().username}` + msg);
@@ -58,12 +54,10 @@ module.exports = {
                         })
                         .catch(err => {
                             message.channel.send(err);
-                            return;
                         })
                     })
                     .catch(err => {
                         message.channel.send(err);
-                        return;
                     })
             })
             .catch(err => console.error(err));
@@ -79,7 +73,7 @@ function transfer(nationRow, unitCol, amount, money, message, type, tab) {
         fn.ss(['get', `${unitCol + nationRow}`], message)
             .then(unitsAmount => {
                 if (type) {
-                    unitsAmount = parseInt(unitsAmount) - amount;
+                    unitsAmount = amount - parseInt(unitsAmount);
                 } else {
                     unitsAmount = parseInt(unitsAmount) + amount;
                 }
@@ -95,9 +89,11 @@ function transfer(nationRow, unitCol, amount, money, message, type, tab) {
                             balance = parseInt(balance.replace(/[,|$]/g, '')) - money;
                         }
                         fn.ss(['set', `${unitCol + nationRow}`, unitsAmount], message)
-                            .then(result => {
-                                fn.ss(['set', `B${nationRow}`, balance], message)
-                                resolve();
+                            .then(() => {
+                                fn.ss(['set', `B${nationRow}`, balance], message).then(() => {
+                                    resolve();
+                                })
+
                             })
                             .catch(err => reject(err));
                     })

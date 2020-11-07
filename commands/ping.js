@@ -2,7 +2,8 @@ module.exports = {
 	name: 'ping',
 	description: 'Ping!',
 	guildOnly: true,
-	execute(message, args) {
-		message.channel.send('Pong.');
+	execute(message) {
+		message.channel.send('Pong.').then(msg => msg.delete({timeout: 12000}));
+		message.delete({timeout: 12000});
 	},
 };

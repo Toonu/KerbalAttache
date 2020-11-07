@@ -3,14 +3,13 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
 const fn = require("./fn");
-const { Console } = require('console');
-const {google} = require('googleapis');
 const keep_alive = require('./keep_alive.js')
+const js = require("./jsonManagement");
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const cooldowns = new Discord.Collection();
+const coolDowns = new Discord.Collection();
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	
@@ -31,7 +30,7 @@ client.on('message', message => {
 	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	//If comand doesnt exist.
+	//If command doesnt exist.
 	if (!client.commands.has(commandName)) return;
 	//Else
 	const command = client.commands.get(commandName);
@@ -50,30 +49,31 @@ client.on('message', message => {
 		return message.channel.send(reply);
 	}
 
-	//Checking for cooldown
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+	//Checking for cool down
+	if (!coolDowns.has(command.name)) {
+		coolDowns.set(command.name, new Discord.Collection());
 	}
 	
 	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
+	const timestamps = coolDowns.get(command.name);
+	const coolDownAmount = (command.cooldown || 3) * 1000;
 
 	if (timestamps.has(message.author.id)) {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+		const expirationTime = timestamps.get(message.author.id) + coolDownAmount;
 
-		if (now < expirationTime && message.author.id != 319919565079576576) {
+		if (now < expirationTime && message.author.id !== 319919565079576576) {
 			const timeLeft = (expirationTime - now) / 1000;
 			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
 		}
 	}
-
-	timestamps.set(message.author.id, now);
-	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+	if (!js.perm(message, 1)) {
+		timestamps.set(message.author.id, now);
+	}
+	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
 	
 	try {
         if (message.channel.type === 'dm') {
-            console.log('DM from '+ message.author.name + ": " + message.content);
+            console.log('DM from '+ message.author.username + ": " + message.content);
         } else {
 			console.log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
@@ -84,5 +84,6 @@ client.on('message', message => {
 	}
 });
 
-const {CLIENT_TOKEN} = process.env;
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN);

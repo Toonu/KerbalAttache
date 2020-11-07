@@ -7,21 +7,21 @@ module.exports = {
     guildOnly: true,
     execute: function execute(message, args) {
         const cfg = require('./../config.json');
-        const fn = require('./../fn');
+        require('./../fn');
         const gm = require('./../game');
-        const js = require('./../json');
+        const js = require('../jsonManagement');
 
         let nation = cfg.users[message.author.id].nation;
 
-        if (message.mentions.users.first() != undefined && js.perm(message, 2)) {
+        if (message.mentions.users.first() !== undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
 
         switch(args[0]) {
             case 'budget':
-                if(args[1] == 'set') {
+                if(args[1] === 'set') {
                     budget(args[2], nation, message, false);
-                } else if (args[1] == 'add') {
+                } else if (args[1] === 'add') {
                     budget(args[2], nation, message, true);
                 } else {
                     message.channel.send('Operation type provided does not exist!');
@@ -56,57 +56,51 @@ function budget(amount, nation, message, add) {
     const gm = require('./../game');
     const cfg = require('./../config.json');
 
-    try {
-        amount = parseInt(amount);
-        if (isNaN(amount)) throw 'Argument is not a number. Canceling operation.'
-
-        add = add ? 1 : 0;
-        gm.findUnitPrice('ResBudget', message, nation)
-            .then(data => {
-                if (data[0] == false) {
-                    data[0] = 0;
-                } else {
-                    data[0] = parseInt(data[0].replace(/[,|$]/g, ''));
-                }
-                
-                let budget = data[0]*add + amount;
-                if (budget < 0) throw 'Budget cannot be set lower than 0!';
-
-                fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, budget], message)
-                    .then(result => {
-                        if (result && add) {
-                            message.channel.send(`Research budget modified to ${budget+cfg.money}!`);
-                        } else if (result) {
-                            message.channel.send(`Research budget set to ${budget+cfg.money}!`);
-                        } else {
-                            message.channel.send('Operation failed!');
-                        }
-                    })
-                    .catch(err => {throw err});  
-            })
-            .catch(err => message.channel.send(err));  
-    } catch(err) {
-        message.channel.send(err);
+    amount = parseInt(amount);
+    if (!isNaN(amount)) {
+        return message.channel.send('Argument is not a number. Canceling operation.');
     }
+
+    add = add ? 1 : 0;
+    gm.findUnitPrice('ResBudget', message, nation)
+        .then(data => {
+            if (data[0] === false) {
+                data[0] = 0;
+            } else {
+                data[0] = parseInt(data[0].replace(/[,|$]/g, ''));
+            }
+
+            let budget = data[0]*add + amount;
+            if (budget < 0) throw 'Budget cannot be set lower than 0!';
+
+            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, budget], message)
+                .then(result => {
+                    if (result && add) {
+                        message.channel.send(`Research budget modified to ${budget+cfg.money}!`);
+                    } else if (result) {
+                        message.channel.send(`Research budget set to ${budget+cfg.money}!`);
+                    } else {
+                        message.channel.send('Operation failed!');
+                    }
+                })
+                .catch(err => {throw err});
+        })
+        .catch(err => message.channel.send(err));
 }
 function list(category, message) {
-    const cfg = require('./../config.json');
-    const fn = require('./../fn');
-    const gm = require('./../game');
-    const js = require('./../json');
     const tt = require('./../tt.json');
 
     let newMessage = '';
 
     //Lists the main categories, then returns and you have to repeat the command.
-    if(category == undefined) {
+    if(category === undefined) {
         Object.keys(tt.categories).forEach(item => {
             newMessage += `${item}\n`;
         })
         
         message.channel.send("All technology node categories are bellow: \n" + newMessage + '\n\n***Note:*** You do not have to write full category name but merely it part is sufficient.')
         .then(msg => msg.delete({ timeout: 30000 }))
-        .catch(err => console.log(msg));
+        .catch(err => console.log(err));
         return;
     }
 
@@ -122,7 +116,7 @@ function list(category, message) {
     
     //If category is not exact, assign user input as category name.
     let ctg = tt.categories[category];
-    if (ctg == undefined) {
+    if (ctg === undefined) {
         ctg = category;
     }
 
@@ -139,17 +133,15 @@ function list(category, message) {
         newMessage += `[${item.padStart(l)}] ${tt[item][0]}\n`;
     });
     message.channel.send(`***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\``)
-    .catch(err => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
+    .catch(() => message.channel.send('Message over 2000 letters long. Cannot send. Please choose smaller category.'));
 }
 async function research(node, nation, message) {
     const cfg = require('./../config.json');
     const fn = require('./../fn');
     const gm = require('./../game');
-    const js = require('./../json');
+    const js = require('../jsonManagement');
     const tt = require('./../tt.json');
-    let rpCol;
     let nationRP;
-    let data;
     let del = 1;
     if (node.startsWith('-') && js.perm(message, 2)) {
         del = 0;
@@ -162,7 +154,7 @@ async function research(node, nation, message) {
         await gm.findUnitPrice(r, message, nation, 'TechTree', true)
             .then(unlocked => {
                 //console.log(r);
-                if(unlocked[3] == '0') throw 'You do not have the prerequisites to unlock the node!';
+                if(unlocked[3] === '0') throw 'You do not have the prerequisites to unlock the node!';
             })
         } 
     } catch(err) {
@@ -173,7 +165,7 @@ async function research(node, nation, message) {
     //Checking node
     gm.findUnitPrice(node, message, nation, 'TechTree', true) 
         .then(data => {
-            if (del && parseInt(data[3]) == 1) {
+            if (del && parseInt(data[3]) === 1) {
                 message.channel.send('Node already unlocked!');
                 return false;
             }
@@ -183,7 +175,7 @@ async function research(node, nation, message) {
                     fn.ss(['get', `${fn.toCoord(rpCol)+data[2]}`], message)
                         .then(rp => {
                             nationRP = rp
-                            if (data[0] > rp && del != 0) {
+                            if (data[0] > rp && del !== 0) {
                                 message.channel.send('Not enough Research Points!');
                                 return false;
                             }
@@ -191,7 +183,7 @@ async function research(node, nation, message) {
                             fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, del], message, 'TechTree')
                                 .then(result => {
                                     if (result) {
-                                        if (del == 1) {
+                                        if (del === 1) {
                                             message.channel.send('Node unlocked! ✅');
                                             fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
                                             gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
@@ -207,7 +199,7 @@ async function research(node, nation, message) {
                                             fn.ss(['getA', `${fn.toCoord(increments)}5`, `${fn.toCoord(increments+5)+(data[1]-2)}`], message)
                                             .then(incrementArray => {
                                                 //console.log(incrementArray);
-                                                if (del == 1) {
+                                                if (del === 1) {
                                                     fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1)], message);
                                                 } else {
                                                     fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1)], message);
@@ -229,15 +221,15 @@ async function research(node, nation, message) {
         .catch(err => console.error(err));
 }
 function change(data) {
-    const js = require('./../json');
+    const js = require('../jsonManagement');
     const tt = require('./../tt.json');
 
-    if (tt[data[1]] == undefined) {
+    if (tt[data[1]] === undefined) {
         return [false];
     }
     let newData = '';
     data.forEach(r => {
-        if(r != data[0] && r != data[1] && r != data[2]) {
+        if(r !== data[0] && r !== data[1] && r !== data[2]) {
             newData += r + ' ';
         }
     })
@@ -252,8 +244,8 @@ function change(data) {
             tt[data[1]][3].push(data[3]);
             break;
         case 'reqdel':
-            for(var i = 0; i < tt[data[1]][3].length; i++) {
-                if (tt[data[1]][3][i] == data[3]) {
+            for(let i = 0; i < tt[data[1]][3].length; i++) {
+                if (tt[data[1]][3][i] === data[3]) {
                     tt[data[1]][3].splice(i, 1);
                 }
             }
@@ -265,10 +257,10 @@ function change(data) {
 function unlocks(node, nation, message) {
     const fn = require('./../fn');
     const gm = require('./../game');
-    const Discord = require('discord.js');
+    const discord = require('discord.js');
     const tt = require('./../tt.json');
 
-    if(node != 'all') {
+    if(node !== 'all') {
         gm.findHorizontal(node, 4, message, 'TechTree')
             .then(col => {
                 //console.log('nodePos ' + col);
@@ -277,7 +269,7 @@ function unlocks(node, nation, message) {
                         //console.log(row);
                         fn.ss(['getA', `${fn.toCoord(col)+row}`, `${fn.toCoord(col)+row}`, 0, 1], message, 'TechTree')
                             .then(rp => {
-                                const embed = new Discord.MessageEmbed()
+                                const embed = new discord.MessageEmbed()
                                 .setColor('#e6e600')
                                 .setTitle(`Node ${tt[node][0]}`)
                                 .setURL('https://discord.js.org/') //URL clickable from the title
@@ -298,14 +290,14 @@ function unlocks(node, nation, message) {
                                     msg.react("✅");
                                     msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                                     .then(collected => {
-                                        react = collected.first();
-                                        if (react.emoji.name == '✅') {
+                                        let react = collected.first();
+                                        if (react.emoji.name === '✅') {
                                             research(node, nation, message);
                                             msg.delete();
                                             message.delete();
                                         }
                                     })
-                                    .catch(r => {
+                                    .catch(() => {
                                         msg.delete();
                                         message.delete();
                                     })
@@ -314,10 +306,7 @@ function unlocks(node, nation, message) {
                     }).catch(err => console.error(err));
             }).catch(err => console.error(err))
     } else {
-        let nodes;
-        let names;
-        let data;
-        var unlocks = [];
+        const unlocks = [];
 
         gm.findVertical(nation, 'A', message)
         .then(nationRow => {
@@ -329,8 +318,8 @@ function unlocks(node, nation, message) {
                     .then(data => {
                         fn.ss(['getA', 'A4', 'HO4'], message, 'TechTree')
                         .then(names => {
-                            for(var i = 1; i < nodes[0].length; i++) {
-                                if (nodes[0][i] == '1') {
+                            for(let i = 1; i < nodes[0].length; i++) {
+                                if (nodes[0][i] === '1') {
                                     unlocks.push([names[0][i], data[1][i]])
                                 }
                             }

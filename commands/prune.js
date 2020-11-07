@@ -1,20 +1,17 @@
 module.exports = {
 	name: 'prune',
-	usage: '<M:amountToDelete> <M:deleteOldMessages [true | false]>',
+	usage: '[M:amountToDelete] [M:deleteOldMessages [true]]',
 	description: 'Prune messages from channel.',
 	guildOnly: true,
 	args: true,
     perms: 'Moderator',
 	cooldown: 5,
 	execute(message, args) {
-        try {
-            var amount = parseInt(args[0]);
-            if (isNaN(amount)) {
-                return message.reply('that doesn\'t seem to be a valid number. Canceling operation.');
-            }
-        } catch(err) {
-            message.channel.send(err);
-            return;
+        const amount = parseInt(args[0]);
+        if (isNaN(amount)) {
+            message.channel.send('that doesn\'t seem to be a valid number. Canceling operation.').then(msg => msg.delete({timeout: 12000}));
+			message.delete({timeout: 12000});
+			return;
         }
 		
 		let bool = false;
@@ -22,6 +19,15 @@ module.exports = {
 			bool = true;
 		}
         message.channel.bulkDelete(amount, bool)
-        console.log(`Deleted ${amount}`);
+			.then(() => {
+				console.log(`Deleted ${amount}`);
+			})
+			.catch(err => {
+				console.log(err.message);
+        		message.channel.send(err.message).then(msg => {
+        		msg.delete({timeout: 12000});
+			})
+		})
+		message.delete({timeout: 12000});
 	}
 };

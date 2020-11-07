@@ -8,40 +8,37 @@ module.exports = {
     execute: function execute(message, args) {   
         const cfg = require("./../config.json")
         const fn = require("./../fn");
-        const js = require('./../json');
-        const Discord = require('discord.js');
-        try {
-            if (args[0] == undefined || args[0].startsWith('<@')) {
-                let link = cfg.users[message.author.id].sheet;
-                try {
-                    if (args[0].startsWith('<@') && js.perm(message, 1)) {
-                        link = cfg.users[message.mentions.users.first().id].sheet;
-                    }
-                } catch(err) {}
+        const js = require('../jsonManagement');
+        const discord = require('discord.js');
 
-                const embed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle('Your sheet link.')
-                .setURL(`https://docs.google.com/spreadsheets/d/${link}/edit#gid=0`)
-                .setThumbnail('https://imgur.com/IvUHO31.png')
-                .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
-                message.channel.send(embed)
-                .then(msg => {
-                    msg.delete({ timeout: 10000 });
-                    message.delete({ timeout: 10000 });
-                })
-                .catch(err => console.log(msg));
-                return;
-            }
-            args[3] = parseInt(args[3]);
-            args[4] = parseInt(args[4]);
-            if (args[1] == 'getA') {
-                if (isNaN([args[3]]) || isNaN([args[4]])) throw 'Argument is not a number. Canceling operation.'
-            }
-            
-        } catch(err) {
-            message.channel.send(err);
+        if (args[0] === undefined || args[0].startsWith('<@')) {
+            let link = cfg.users[message.author.id].sheet;
+            try {
+                if (args[0].startsWith('<@') && js.perm(message, 1)) {
+                    link = cfg.users[message.mentions.users.first().id].sheet;
+                }
+            } catch(err) {}
+
+            const embed = new discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('Your sheet link.')
+            .setURL(`https://docs.google.com/spreadsheets/d/${link}/edit#gid=0`)
+            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+            message.channel.send(embed)
+            .then(msg => {
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
+            })
+            .catch(err => console.log(err));
             return;
+        }
+        args[3] = parseInt(args[3]);
+        args[4] = parseInt(args[4]);
+        if (args[1] === 'getA') {
+            if (isNaN([args[3]]) || isNaN([args[4]])) {
+                return message.channel.send('Argument is not a number. Canceling operation.');
+            }
         }
 
         

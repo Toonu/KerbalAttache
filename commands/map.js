@@ -7,17 +7,17 @@ module.exports = {
     guildOnly: true,
     execute: function execute(message, args) {   
         const cfg = require("./../config.json");
-        const js = require('./../json');
-        const Discord = require('discord.js');
+        const js = require('../jsonManagement');
+        const discord = require('discord.js');
         try {
             let map;
-            if (args[0] != undefined && js.perm(message, 2)) {
+            if (args[0] !== undefined && js.perm(message, 2)) {
                 map = cfg.users[message.mentions.users.first().id].map;
             } else {
                 map = cfg.users[message.author.id].map;
             }
             
-            const embed = new Discord.MessageEmbed()
+            const embed = new discord.MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle('Your map link.')
                 .setURL(map)
@@ -29,7 +29,7 @@ module.exports = {
                 msg.delete({ timeout: 10000 });
                 message.delete({ timeout: 10000 });
             })
-            .catch(err => console.log(msg));
+            .catch(err => console.log(err));
 
         } catch(err) {
             console.log(err);

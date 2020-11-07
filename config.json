@@ -26,23 +26,13 @@
         }
     },
     "users": {
-        "default": {
-            "nation": "undefined",
-            "color": "undefined",
-            "cf": 1,
-            "sheet": "11111114",
-            "map": " ",
-            "notes": "Sample text.",
-            "egg": " "
-        },
         "693908421396922480": {
             "nation": "Bunnyland",
             "color": "undefined",
             "cf": 1,
             "sheet": "11111114",
             "map": "www.x.com",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "472210194814730250": {
             "nation": "Laveska",
@@ -50,8 +40,7 @@
             "cf": 1,
             "sheet": "19qpR5maq7Zcly368synyk_E5hivJNB6bV8Eh1oIT74I",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "301471023298248705": {
             "nation": "Orion",
@@ -59,8 +48,7 @@
             "cf": 1,
             "sheet": "135y44pp_3bvZH93MVH_fVsgtpnJH6muV1NmdNLEwRiw",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
-            "notes": "Stage 4 Chronic Metagamer.",
-            "egg": " "
+            "notes": "Stage 4 Chronic Metagamer."
         },
         "388547669028503553": {
             "nation": "DIM",
@@ -68,8 +56,7 @@
             "cf": 1,
             "sheet": "1UHXGJF2P9gsRNGvx_HK0tBRTJiL_iYxHImVzGI322w0",
             "map": "https://app.diagrams.net/#G1mIndL4fmxCgEs3kfsMB2PR5kvHhDhWVN",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "257922404511121408": {
             "nation": "Rusland",
@@ -77,8 +64,7 @@
             "cf": 1,
             "sheet": "1WOAn_jBSX2eheY9P0ov6Od-J6R7-hwEIfSIj0ZIbt2U",
             "map": "https://app.diagrams.net/#G1mpbMlbwjEgNup5sAyMVwMvYl3NECVckm",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "211547891276185601": {
             "nation": "EoL",
@@ -86,8 +72,7 @@
             "cf": 1,
             "sheet": "17uQDO0vjICnoxZ7dFiQhKnkZHWdH2y1zTw-HFESUADI",
             "map": "https://app.diagrams.net/#G1mIndL4fmxCgEs3kfsMB2PR5kvHhDhWVN",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "227222314645717002": {
             "nation": "Jyuren",
@@ -95,17 +80,15 @@
             "cf": 1,
             "sheet": "1IrN3l2fLKJ6-gcoJ5FCZJ3CEsPLo4bOOIEu6oHQGv1k",
             "map": "https://app.diagrams.net/#G1i3yc6KuBuD8h3tfkcu2RZw65sAU85_cs",
-            "notes": "Furry gang but well armed, well trained and very lethal. Hopefully.",
-            "egg": " "
+            "notes": "Furry gang but well armed, well trained and very lethal. Hopefully."
         },
         "319919565079576576": {
             "nation": "Iconia",
             "color": "Iconian",
-            "cf": 2.000000000000001,
+            "cf": 1,
             "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
             "map": "https://www.w3schools.com/js/js_errors.asp",
-            "notes": "His Imperial Majesty the Emperor of the Iconian Empire and its sovereign territories.",
-            "egg": " "
+            "notes": "His Imperial Majesty the Emperor of the Iconian Empire and its sovereign territories."
         },
         "591521990972669980": {
             "nation": "Korovia",
@@ -113,8 +96,7 @@
             "cf": 1,
             "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         },
         "300424948193820674": {
             "nation": "Mazuai",
@@ -122,8 +104,7 @@
             "cf": 1,
             "sheet": "11111114",
             "map": "www.x.com",
-            "notes": " ",
-            "egg": " "
+            "notes": " "
         }
     }
 }

@@ -6,22 +6,19 @@ module.exports = {
     perms: 'Moderator',
     cooldown: 5,
     guildOnly: true,
-    execute(message, args) {
+    execute: function (message, args) {
         const cfg = require('./../config.json')
-        const js = require('./../json');
-        const fs = require('fs');
-
+        const js = require('../jsonManagement');
+        require('fs');
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0])) {
-                try {
-                    if(isNaN(parseInt(args[1]))) throw 'Not a proper ID/Number.';
-                } catch(err) {
-                    console.error(err);
+                if (isNaN(parseInt(args[1]))) {
+                    message.channel.send('Not a proper ID/Number.');
                     return;
                 }
             }
-            
-            switch(args[0]) {
+
+            switch (args[0]) {
                 case 'money':
                     cfg.money = args[1];
                     break;
@@ -42,8 +39,8 @@ module.exports = {
                     break;
                 case 'sadmindel':
                     let adm = cfg.servers[message.guild.id].administrators;
-                    for (i = 0; i < adm.length; i++) {
-                        if (adm[i] == args[1]) {
+                    for (let i = 0; i < adm.length; i++) {
+                        if (adm[i] === args[1]) {
                             adm.splice(i);
                             break;
                         }
@@ -51,8 +48,8 @@ module.exports = {
                     break;
                 case 'sdevdel':
                     let dev = cfg.servers[message.guild.id].developers;
-                    for (i = 0; i < dev.length; i++) {
-                        if (dev[i] == args[1]) {
+                    for (let i = 0; i < dev.length; i++) {
+                        if (dev[i] === args[1]) {
                             dev.splice(i);
                             break;
                         }
@@ -72,6 +69,6 @@ module.exports = {
 
             js.exportFile('config.json', cfg);
             message.channel.send('Operation finished.')
-        }        
+        }
     }
 };

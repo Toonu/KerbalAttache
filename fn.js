@@ -22,19 +22,26 @@ exports.ss = function (args, message, tab) {
                         tab = 'Maintenance';
                     }
 
+                    
+
                     if (args[0].startsWith('getA')) {
                         args[2] = args[2].toUpperCase();
                         if (!checkCoordinate(args[2])) throw 'Wrong second coordinate input.';
-
+                        console.log("A");
                         resolve(getAInternal(args[1], args[2], args[3], args[4], message, gs, tab))
                         .catch(err => reject(err));
+                    } else if (args[0].startsWith('setA')) {
+                        console.log("B");
+                        resolve(setAInternal(args[1], args[2], message, gs, tab))
+                        .catch(err => reject(err));
                     } else if (args[0].startsWith('set')) {
+                        console.log("C");
                         resolve(setInternal(args[1], args[2], message, gs, tab))
                         .catch(err => reject(err));
                     } else if (args[0].toLowerCase().startsWith('get')) {
                         resolve(getInternal(args[1], message, gs, tab))
                         .catch(err => reject(err));
-                    }
+                    } 
                 }
             } catch(err) {
                 reject(err);
@@ -116,7 +123,7 @@ function getAInternal(x, y, c, r, message, gs, tab) {
             .catch(reject);
     });
 };
-function setInternal(x, data, message, gs,tab) {
+function setInternal(x, data, message, gs, tab) {
     return new Promise(function (resolve, reject) {
         if (data == undefined) {
                 message.channel.send('Data empty. Operation failed.');
@@ -137,7 +144,40 @@ function setInternal(x, data, message, gs,tab) {
                 reject(false);
             }
         });
-    };
+};
+
+function setAInternal(x, dataIn, message, gs, tab) {
+    return new Promise(function (resolve, reject) {
+        if (dataIn == undefined) {
+                message.channel.send('Data empty. Operation failed.');
+                return false;
+            } 
+            try {
+
+                const pushData = {
+                    spreadsheetId: cfg.sheet,
+                    resource: {
+                        valueInputOption: 'RAW',
+                        data: {
+                            "range": `${tab}!${x}`,
+                            "majorDimension": "ROWS",
+                            "values": dataIn,
+                        }                       
+                    },
+                };
+                console.log(pushData);
+                gs.spreadsheets.values.batchUpdate(pushData)
+                    .then(resolve(true))
+                    .catch(err => {
+                        console.log(err);
+                        reject();
+                    });
+            } catch(error) {
+                message.channel.send(`Operation failed: ${error.message}`);
+                reject(false);
+            }
+        });
+};
 
 
 function checkCoordinate(x,message) {

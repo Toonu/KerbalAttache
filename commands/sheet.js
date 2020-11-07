@@ -35,7 +35,10 @@ module.exports = {
             }
             args[3] = parseInt(args[3]);
             args[4] = parseInt(args[4]);
-            if (isNaN([args[3]]) || isNaN([args[4]])) throw 'Argument is not a number. Canceling operation.'
+            if (args[1] == 'getA') {
+                if (isNaN([args[3]]) || isNaN([args[4]])) throw 'Argument is not a number. Canceling operation.'
+            }
+            
         } catch(err) {
             message.channel.send(err);
             return;

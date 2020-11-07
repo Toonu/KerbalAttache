@@ -3,16 +3,14 @@ const cfg = require('./config.json');
 const js = require('./json');
 const fn = require('./fn');
 
-exports.createUser = function createUser(id, nationIn, colorIn, passwordIn, sheet, map) {
+exports.createUser = function createUser(id, nationIn, colorIn, sheet, map) {
     if (nationIn == undefined) {
         nationIn = "undefined";
     }
     if (colorIn == undefined) {
         colorIn = "undefined";
     }
-    if (passwordIn == undefined) {
-        passwordIn = "undefined";
-    }
+    cfIn = 1;
     if (sheet == undefined) {
         sheet = '11111114';
     }
@@ -23,7 +21,7 @@ exports.createUser = function createUser(id, nationIn, colorIn, passwordIn, shee
     cfg.users[id] = {
         nation: nationIn, 
         color: colorIn, 
-        password: passwordIn,
+        cf: cfIn,
         sheet: sheet,
         map: map,
         notes: " ",

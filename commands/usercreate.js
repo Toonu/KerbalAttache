@@ -2,7 +2,7 @@ module.exports = {
     name: 'usercreate',
     description: 'Command for creating user!',
     args: true,
-    usage: '<M:@user> <M:nation> <M:color> <M:pwd> <M:sheet> <M:map>',
+    usage: '<M:@user> <M:nation> <M:color> <M:sheet> <M:map>',
     perms: 'Moderator',
     cooldown: 5,
     guildOnly: true,
@@ -15,7 +15,7 @@ module.exports = {
             return;
         }
 
-        if (js.perm(message, 1) && js.createUser(user.id, args[1], args[2], args[3], args[4], args[5])) {
+        if (js.perm(message, 1) && js.createUser(user.id, args[1], args[2], args[3], args[4])) {
             message.channel.send("User created.");
             return;
         }

@@ -50,7 +50,7 @@ function modifyUser(id, type, data) {
             cfg.users[id].color = data;
             break;
         case 2:
-            cfg.users[id].password = data;
+            cfg.users[id].cf = data;
             break;
         case 3:
             cfg.users[id].notes = data;

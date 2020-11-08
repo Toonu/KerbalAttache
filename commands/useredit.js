@@ -1,4 +1,5 @@
-const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = require("../jsonManagement"), {report} = require("../game");
+const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = require("../jsonManagement"),
+    {report} = require("../game");
 module.exports = {
     name: 'useredit',
     description: 'Command for editing users! Your notes are always editable',
@@ -13,27 +14,28 @@ module.exports = {
      * @returns {*}     Error message.
      */
     execute: function useredit(message, args) {
-        let perm = perm(message, 2, false);
+        let permission = perm(message, 2, false);
         let user = ping(message).id;
         let data = args[1];
 
         if (cfg.users[user] === undefined) {
             report(message, `${createUser(user, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
             useredit(message, args);
+            message.delete({timeout: 9000});
         }
         if (args[1] === 'del') {
-            data = undefined;
+            data = ' ';
         }
 
         if (args[0] === 'notes') {
             cfg.users[user].notes = data;
-        } else if (args[0] === 'nation' && perm) {
+        } else if (args[0] === 'nation' && permission) {
             cfg.users[user].nation = data;
-        } else if (args[0] === 'color' && perm) {
+        } else if (args[0] === 'color' && permission) {
             cfg.users[user].color = data;
-        } else if (args[0] === 'sheet' && perm) {
+        } else if (args[0] === 'sheet' && permission) {
             cfg.users[user].sheet = data;
-        } else if (args[0] === 'map' && perm) {
+        } else if (args[0] === 'map' && permission) {
                 cfg.users[user].map = data;
         } else {
             message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 9000}));
@@ -43,6 +45,5 @@ module.exports = {
 
         exportFile("config.json", cfg);
         message.channel.send('User property modified.').then(msg => msg.delete({timeout: 9000}));
-        message.delete({timeout: 9000});
     }
 };

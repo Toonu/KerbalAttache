@@ -13,9 +13,12 @@ module.exports = {
             message.delete({timeout: 9000});
             return;
         }
-        if (!perm(message, 1, true)) {
-            report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
-            message.channel.send("User created.").then(msg => msg.delete({timeout: 9000}));
+        if (perm(message, 1, true)) {
+            let result = createUser(user.id, args[1], args[2], args[3], args[4]);
+            if (result.startsWith('Nation')) {
+                report(message, `${result} by ${message.author.username}`);
+                message.channel.send('User created.').then(msg => msg.delete({timeout: 9000}));
+            }
             message.delete({timeout: 9000});
         }
     }

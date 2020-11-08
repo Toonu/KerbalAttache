@@ -86,9 +86,9 @@
             "nation": "Iconia",
             "color": "Iconian",
             "cf": 1,
-            "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
-            "map": "https://www.w3schools.com/js/js_errors.asp",
-            "notes": "His Imperial Majesty the Emperor of the Iconian Empire and its sovereign territories."
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
         },
         "591521990972669980": {
             "nation": "Korovia",
@@ -103,15 +103,15 @@
             "color": "undefined",
             "cf": 1,
             "sheet": "11111114",
-            "map": "www.x.com",
+            "map": "http://x.com/",
             "notes": " "
         },
         "768845435455930428": {
-            "nation": "undefined",
+            "nation": "Bot",
             "color": "undefined",
             "cf": 1,
             "sheet": "11111114",
-            "map": "www.x.com",
+            "map": "http://x.com/",
             "notes": " "
         }
     }

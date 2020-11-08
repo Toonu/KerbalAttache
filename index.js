@@ -2,7 +2,7 @@ const cfg = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
-const fn = require("./fn");
+const fn = require("./sheet");
 const keep_alive = require('./keep_alive.js')
 const js = require("./jsonManagement");
 
@@ -94,3 +94,16 @@ client.on('message', message => {
 //const {CLIENT_TOKEN} = process.env;
 const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN);
+
+
+/**
+ * TODO Ultimate goal:   KSP mod for development price directly in game.
+ * TODO Hyper goal:      Map integration via xml editing.
+ * TODO Super goal:      Turn command.
+ * Turn command.
+ * Trade embed and confirmation of the customer/recipient nation in DMs or something like that.
+ * Trade command missing trading weapons?
+ * Add split to the listing messages if they exceed the 2000k limit. Possible with discord.js send options.
+ *
+ * Tech
+ **/

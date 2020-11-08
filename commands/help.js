@@ -33,7 +33,9 @@ module.exports = {
 		const command = commands.get(name);
 
 		if (!command) {
-			return message.reply('that\'s not a valid command!');
+			message.reply('that\'s not a valid command!').then(msg => msg.delete({timeout: 9000}));
+			message.delete();
+			return;
 		}
 
 		data.push(`**Name:** ${command.name}`);
@@ -43,6 +45,9 @@ module.exports = {
 
 		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
-		message.channel.send(data, {split: true});
+		message.channel.send(data).then(msg => {
+			msg.delete({timeout: 5000});
+		})
+		message.delete();
 	},
 };

@@ -1,10 +1,9 @@
-const cfg = require("./../config.json"), {ss} = require("../fn"), {perm, ping} = require("../jsonManagement"),
-    discord = require('discord.js');
+const cfg = require("./../config.json"), {ping} = require("../jsonManagement"), discord = require('discord.js');
 module.exports = {
     name: 'sheet',
-    description: 'Command for getting data from spreadsheet! Alternatively sends link to your own personal sheet which would be deprecated after removal of the private sheets.\nDo NOT use in public channels.',
+    description: 'Command for getting link to your spreadsheet! Do NOT use in public channels.',
     args: false,
-    usage: '[D:operation] [x] [y] [cols] [rows] [tab]',
+    usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
     execute: function sheet(message, args) {
@@ -23,26 +22,6 @@ module.exports = {
                 msg.delete({ timeout: 15000 });
                 message.delete();
             })
-            return;
         }
-
-        if (!perm(message, 1, true)) {
-            message.delete();
-            return;
-        }
-
-        ss(args, message).then(result => {
-            if (result !== false) {
-                message.channel.send(`Operation successful: ${result}`).then(msg => {
-                    msg.delete({timeout: 9000});
-                });
-            } else {
-                message.channel.send('Operation failed').then(msg => {
-                    msg.delete({timeout: 9000});
-                });
-            }
-            message.delete();
-        })
-        .catch(err => message.channel.send("Error: " + err));
     }
 }

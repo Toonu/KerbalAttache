@@ -1,5 +1,5 @@
-const {ping} = require("../jsonManagement"), {findVertical} = require("../game"), {ss} = require("../fn"),
-    cfg = require('./../config.json'), discord = require('discord.js');
+const {ping} = require("../jsonManagement"), {findVertical} = require("../game"), cfg = require('./../config.json'),
+    discord = require('discord.js'), {getArray} = require("../sheet");
 module.exports = {
     name: 'balance',
     description: 'Command for getting your current state statistics! Do NOT use in public channels.',
@@ -14,8 +14,8 @@ module.exports = {
 
         let nation = cfg.users[ping(message).id].nation;
 
-        findVertical('Data', 'A', message).then(dataRow => {
-            ss(['getA', 'A4', `AZ${dataRow - 1}`], message).then(array => {
+        findVertical('Data', 'A').then(dataRow => {
+            getArray('A4', `AZ${dataRow - 1}`).then(array => {
                 //Backup values by default.
                 let rpCol = 36;
                 let tilesCol = 39;

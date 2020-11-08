@@ -1,4 +1,6 @@
-const cfg = require('./../config.json'), gm = require('./../game'), js = require('../jsonManagement');
+const cfg = require('./../config.json'), gm = require('./../game'), js = require('../jsonManagement'),
+    {get, set, getArray} = require("../sheet");
+const {findHorizontal} = require("../game");
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
@@ -47,7 +49,7 @@ module.exports = {
     },   
 };
 function budget(amount, nation, message, add) {
-    const fn = require('./../fn');
+    const fn = require('../sheet');
     const gm = require('./../game');
     const cfg = require('./../config.json');
 
@@ -57,7 +59,7 @@ function budget(amount, nation, message, add) {
     }
 
     add = add ? 1 : 0;
-    gm.findUnitPrice('ResBudget', message, nation)
+    gm.findData('ResBudget', nation)
         .then(data => {
             if (data[0] === false) {
                 data[0] = 0;
@@ -68,7 +70,7 @@ function budget(amount, nation, message, add) {
             let budget = data[0]*add + amount;
             if (budget < 0) throw 'Budget cannot be set lower than 0!';
 
-            fn.ss(['set', `${fn.toCoordinate(data[1])+(data[2])}`, budget], message)
+            set(`${data[1]+data[2]}`, budget)
                 .then(result => {
                     if (result && add) {
                         message.channel.send(`Research budget modified to ${budget+cfg.money}!`);
@@ -132,7 +134,7 @@ function list(category, message) {
 }
 async function research(node, nation, message) {
     const cfg = require('./../config.json');
-    const fn = require('./../fn');
+    const fn = require('../sheet');
     const gm = require('./../game');
     const js = require('../jsonManagement');
     const tt = require('./../tt.json');
@@ -146,7 +148,7 @@ async function research(node, nation, message) {
     //Checking prerequisites
     try {
         for await (const r of tt[node][3]) {
-        await gm.findUnitPrice(r, message, nation, 'TechTree', true)
+        await gm.findData(r, nation, true, 'TechTree')
             .then(unlocked => {
                 //console.log(r);
                 if(unlocked[3] === '0') throw 'You do not have the prerequisites to unlock the node!';
@@ -158,16 +160,16 @@ async function research(node, nation, message) {
     }
     
     //Checking node
-    gm.findUnitPrice(node, message, nation, 'TechTree', true) 
+    gm.findData(node, nation, true, 'TechTree')
         .then(data => {
             if (del && parseInt(data[3]) === 1) {
                 message.channel.send('Node already unlocked!');
                 return false;
             }
             //Checking rp amount
-            gm.findHorizontal('RP', 4, message)
+            gm.findHorizontal('RP', 4)
                 .then(rpCol => {
-                    fn.ss(['get', `${fn.toCoordinate(rpCol)+data[2]}`], message)
+                    get(`${fn.toCoordinate(rpCol)+data[2]}`)
                         .then(rp => {
                             nationRP = rp
                             if (data[0] > rp && del !== 0) {
@@ -175,12 +177,12 @@ async function research(node, nation, message) {
                                 return false;
                             }
                             //Setting node and then RP
-                            fn.ss(['set', `${fn.toCoordinate(data[1])+data[2]}`, del], message, 'TechTree')
+                            set( `${data[1]+data[2]}`, del, 'TechTree')
                                 .then(result => {
                                     if (result) {
                                         if (del === 1) {
                                             message.channel.send('Node unlocked! ✅');
-                                            fn.ss(['set', `${fn.toCoordinate(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
+                                            set(`${fn.toCoordinate(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0])
                                             gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
                                         } else {
                                             message.channel.send('Node removed!');
@@ -189,15 +191,15 @@ async function research(node, nation, message) {
                                         }
 
                                         //Tech increments change
-                                        gm.findHorizontal('Technology', 4, message)
+                                        findHorizontal('Technology', 4)
                                         .then(increments => {
-                                            fn.ss(['getA', `${fn.toCoordinate(increments)}5`, `${fn.toCoordinate(increments+5)+(data[1]-2)}`], message)
+                                            getArray(`${increments}5`, `${(increments+5)+(data[1]-2)}`)
                                             .then(incrementArray => {
                                                 //console.log(incrementArray);
                                                 if (del === 1) {
-                                                    fn.ss(['set', `${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1)], message);
+                                                    set(`${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1));
                                                 } else {
-                                                    fn.ss(['set', `${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1)], message);
+                                                    set(`${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1));
                                                 }
                                             }).catch(err => console.error(err));
                                         }).catch(err => console.error(err));
@@ -250,19 +252,18 @@ function change(data) {
     return [true, newData];
 }
 function unlocks(node, nation, message) {
-    const fn = require('./../fn');
+    const fn = require('../sheet');
     const gm = require('./../game');
     const discord = require('discord.js');
     const tt = require('./../tt.json');
 
     if(node !== 'all') {
-        gm.findHorizontal(node, 4, message, 'TechTree')
+        gm.findHorizontal(node, 4, 'TechTree')
             .then(col => {
-                //console.log('nodePos ' + col);
-                gm.findVertical('Data', 'A', message, 'TechTree')
+                gm.findVertical('Data', 'A', 'TechTree')
                     .then(row => {
                         //console.log(row);
-                        fn.ss(['getA', `${fn.toCoordinate(col)+row}`, `${fn.toCoordinate(col)+row}`, 0, 1], message, 'TechTree')
+                        getArray(`${col+row}`, `${col+row}`, 0, 1, 'TechTree')
                             .then(rp => {
                                 let values = '';
                                 rp[1] = rp[1][0].split(',');
@@ -283,9 +284,9 @@ function unlocks(node, nation, message) {
                                 )
                                 .setFooter('Made by the Attaché to the United Nations.\nThis message will be auto-destructed in 60 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
 
-                                const filter = (reaction, user) => {
+                                function filter(reaction, user) {
                                     return (reaction.emoji.name === '✅' && user.id === message.author.id);
-                                };
+                                }
 
                                 message.channel.send(embed)
                                 .then(msg => {
@@ -310,15 +311,15 @@ function unlocks(node, nation, message) {
     } else {
         const unlocks = [];
 
-        gm.findVertical(nation, 'A', message)
+        gm.findVertical(nation, 'A')
         .then(nationRow => {
-            fn.ss(['getA', `A${nationRow}`, `HO${nationRow}`], message, 'TechTree')
+            getArray(`A${nationRow}`, `HO${nationRow}`, 0, 0, 'TechTree')
             .then(nodes => {
-                gm.findVertical('Data', 'A', message, 'TechTree')
+                gm.findVertical('Data', 'A', 'TechTree')
                 .then(dataRow => {
-                    fn.ss(['getA', `A${dataRow}`, `HO${dataRow}`, 1, 2], message, 'TechTree')
+                    getArray(`A${dataRow}`, `HO${dataRow}`, 1, 2, 'TechTree')
                     .then(data => {
-                        fn.ss(['getA', 'A4', 'HO4'], message, 'TechTree')
+                        getArray('A4', 'HO4', 0, 0, 'TechTree')
                         .then(names => {
                             for(let i = 1; i < nodes[0].length; i++) {
                                 if (nodes[0][i] === '1') {

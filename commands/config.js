@@ -13,7 +13,7 @@ module.exports = {
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0]) && isNaN(parseInt(args[1]))) {
                 message.channel.send('Not a proper ID/Number.').then(msg => msg.delete({timeout: 9000}));
-                message.delete({timeout: 9000});
+                message.delete({timeout: 50});
                 return;
             }
 

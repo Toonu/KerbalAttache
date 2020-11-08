@@ -13,7 +13,7 @@ module.exports = {
             message.delete({timeout: 12000});
             return;
         }
-        if (!perm(message, 2, true)) {
+        if (perm(message, 2, true)) {
             delete cfg.users[user.id];
             exportFile("config.json", cfg);
             message.channel.send("User deleted.").then(msg => msg.delete({timeout: 9000}));

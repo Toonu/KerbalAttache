@@ -1,5 +1,5 @@
-const cfg = require('./../config.json'), js = require('../jsonManagement'), fn = require('./../fn'),
-    gm = require('./../game');
+const cfg = require('./../config.json'), js = require('../jsonManagement'),
+    {setArray, getArray} = require("../sheet"), {findVertical, findHorizontal} = require("../game");
 module.exports = {
     name: 'turn',
     description: 'Command to finish turn and calculate the chart data!',
@@ -8,21 +8,18 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message) {
-        if(!js.perm(message, 2)) {
-            return;
-        }
+        if(!js.perm(message, 2, true)) return;
 
         let newResearch = [];
         let coefficient = [];
 
-        gm.findHorizontal('RP', 4, message)
+        findHorizontal('RP', 4)
         .then(techCol => {
-            techCol = fn.toCoordinate(techCol);
-            gm.findVertical('Data', 'A', message)
+            findVertical('Data', 'A')
             .then(endRow => {
-                fn.ss(['getA', `A5`, `C${endRow - 1}`], message)
+                getArray(`A5`, `C${endRow - 1}`)
                 .then(balanceArray => {
-                    fn.ss(['getA', `${techCol}5`, `${techCol + (endRow - 1)}`, 2, 0], message)
+                    getArray(`${techCol}5`, `${techCol + (endRow - 1)}`, 2, 0)
                     .then(researchArray => {
                         balanceArray.forEach(r => {
                             r[1] = parseInt(r[1].replace(/[,|$]/g, ''));
@@ -44,6 +41,7 @@ module.exports = {
                             r.push(false);
                             i++;
 
+                            let nation;
                             for(nation of coefficient) {
                                 if(nation[0] === r[3]) {
                                     newResearch.push([r[0] + ((nation[1] * r[1])/20000), r[1], r[1]])
@@ -62,8 +60,8 @@ module.exports = {
                             r.splice(0, 1);
                         })
 
-                        fn.ss(['setA', 'B5', balanceArray], message);
-                        fn.ss(['setA', techCol+5, newResearch], message);
+                        setArray( 'B5', balanceArray);
+                        setArray(techCol+5, newResearch);
 
                         //console.log(coefficients);
                         //console.log(newResearch);

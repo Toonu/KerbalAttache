@@ -1,4 +1,4 @@
-const {findVertical} = require("../game"), {ss} = require("../fn"), {ping} = require("../jsonManagement");
+const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
 module.exports = {
     name: 'assets',
     description: 'Command for getting your current assets! Do NOT use in public channels.',
@@ -6,7 +6,7 @@ module.exports = {
     usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
+    execute: async function assets(message, args) {
         const cfg = require('./../config.json')
         const discord = require('discord.js');
 
@@ -28,30 +28,29 @@ module.exports = {
             .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
 
-        //Units setup
-        await findVertical(nation, 'A', message).then(nationRow => {
-            ss(['getA', 'A4', `BA${nationRow}`], message).then(array => {
-                for (let i = 4; i < array[array.length - 1].length; i++) {
-                    if (array[0][i] === 'Technology') {
-                        break;
-                    } else if (array[array.length - 1][i] !== '.') {
-                        embed.addField(array[0][i], array[array.length - 1][i], true);
-                    }
-                }
-            }).catch(err => console.error(err));
-        }).catch(err => console.error(err));
         //Weapons setup
-        await findVertical(nation, 'A', message, 'Stockpiles').then(nationRow => {
-            ss(['getA', 'A4', `AZ${nationRow}`], message, 'Stockpiles').then(array => {
-                for (let i = 1; i < array[0].length; i++) {
-                    if (array[0][i] === 'E') {
-                        break;
-                    } else if (array[array.length - 1][i] !== '.') {
-                        embedW.addField(array[0][i], array[array.length - 1][i], true);
-                    }
-                }
-            }).catch(err => console.error(err));
-        }).catch(err => console.error(err));
+        let nationRow = await findVertical(nation, 'A', 'Stockpiles')
+            .catch(err => console.error(err));
+
+        let weaponArray = await getArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
+            .catch(err => console.error(err));
+        let unitArray = await getArray('A4', `BA${nationRow}`)
+            .catch(err => console.error(err));
+
+        for (let i = 1; i < weaponArray[0].length; i++) {
+            if (weaponArray[0][i] === 'E') {
+                break;
+            } else if (weaponArray[weaponArray.length - 1][i] !== '.') {
+                embedW.addField(weaponArray[0][i], weaponArray[weaponArray.length - 1][i], true);
+            }
+        }
+        for (let i = 4; i < unitArray[unitArray.length - 1].length; i++) {
+            if (unitArray[0][i] === 'Technology') {
+                break;
+            } else if (unitArray[unitArray.length - 1][i] !== '.') {
+                embed.addField(unitArray[0][i], unitArray[unitArray.length - 1][i], true);
+            }
+        }
 
         message.delete();
         //Embed switching mechanism

@@ -1,5 +1,5 @@
-const cfg = require('./../config.json'), units = require('./../units.json'),
-    discord = require('discord.js'), {report, findUnitPrice} = require("../game"), {ss, toCoordinate} = require("../fn");
+const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
+    {report, findData} = require("../game"), {get, set} = require("../sheet");
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets and systems! Do NOT use in public channels.',
@@ -7,63 +7,52 @@ module.exports = {
     usage: '[amount] [asset]\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via **?buy command**.',
     cooldown: 5,
     guildOnly: true,
-    execute: async function buy(message, args) {
+    execute: async function buy(message, args, tab = undefined) {
         function filter(reaction, user) {
             return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
-
-         //With no arguments, lists the categories.
+         //No arguments lists the categories.
         if(args[0] === undefined) {
             let newMessage = ``, l = 0;
             Object.keys(units).forEach(item => {
+                 // noinspection ReuseOfLocalVariableJS
                 if (item.length > l) l = item.length;
+            });
+
+            Object.keys(units).forEach(item => {
                 newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
             });
-            
+
             message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
             .then(msg => msg.delete({ timeout: 30000 }))
-            .catch(err => console.log(err));
-            return;
+            return message.delete({timeout: 50});
+
         }
 
         //Checking input arguments.
-        try {
-            args[0] = parseInt(args[0]);
-            if (isNaN(args[0])) {
-                message.channel.send('Argument is not a number.');
-                return;
-            } else if (args[1] === undefined) {
-                message.channel.send('Missing second argument.');
-                return;
-            }
-            if(!units.hasOwnProperty(args[1].toUpperCase())) {
-                message.channel.send('Asset not found.');
-                return;
-            }
-            args[1] = args[1].toUpperCase();
-        } catch(err) {
-            message.channel.send(`Wrong input. See ${cfg.prefix}help buy for more information. ` + err);
-            return;
+        args[0] = parseInt(args[0]);
+        if (isNaN(args[0])) {
+            message.channel.send('Argument is not a number.').then(msg => msg.delete({timeout: 9000}));
+            return message.delete({timeout: 9000});
+        } else if (args[1] === undefined) {
+            message.channel.send('Missing second argument.').then(msg => msg.delete({timeout: 9000}));
+            return message.delete({timeout: 9000});
+        }
+        args[1] = args[1].toUpperCase();
+        if(!units.hasOwnProperty(args[1])) {
+            message.channel.send('Asset not found.').then(msg => msg.delete({timeout: 9000}));
+            return message.delete({timeout: 9000});
         }
 
-        const origin = message;
-        let tab;
-
-        if (!['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
-            tab = undefined;
-        } else {
+        //Assigning sheet tab.
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
             tab = 'Stockpiles';
         }
 
-        console.log(tab);
-        findUnitPrice(args[1], message, cfg.users[message.author.id].nation, tab)
+        findData(args[1], cfg.users[message.author.id].nation, tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;
-            if (tab !== undefined) {
-                cost /= 4;
-            }
-
-            console.log(data);
+            if (tab !== undefined) cost /= 4;
 
             const embed = new discord.MessageEmbed()
             .setColor('#0099ff')
@@ -78,46 +67,44 @@ module.exports = {
                 { name: '\u200B', value: '\u200B'},
             )
             .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
-
             message.channel.send(embed)
-            .then(message => {
-                message.react("✅");
-                message.react("❌");
-                message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+            .then(msg => {
+                message.delete();
+                msg.react("✅");
+                msg.react("❌");
+                msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
                 .then(collected => {
                     let react = collected.first();
                     if (react.emoji.name === '✅') {
                         //Accepted, deleting embed and writing response.
-                        message.delete();
-                        message.channel.send('Purchasing assets. ✅');
-                        ss(['get', `${toCoordinate(data[1])+data[2]}`], message, tab)
+                        msg.delete();
+                        msg.channel.send('Purchasing assets. ✅').then(newMessage => newMessage.delete({timeout: 15000}));
+                        get(`${data[1]+data[2]}`, tab)
                         .then(amount => {
                             amount = amount === false ? 0 : parseInt(amount);
-
-                            ss(['set', `${toCoordinate(data[1])+data[2]}`, amount + args[0]], message, tab);
-
-                            ss(['get', `B${data[2]}`], message)
-                            .then(balance => {
-                                ss(['set', `B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost], message);
-                            }).catch(err => console.log(err));
-
+                            //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
+                            set(`${data[1]+data[2]}`, amount + args[0], tab);
+                            get(`B${data[2]}`)
+                                .then(balance => {
+                                    set(`B${data[2]}`, parseInt(balance[1].replace(/[,|$]/g, '')) - cost)
+                                })
+                                .catch(err => console.error(err));
                             if (cost < 0) {
-                                report(origin, `${cfg.users[origin.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
+                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
                             } else {
-                                report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
+                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
                             }
                         })
                         .catch(err => console.error(err));
                     } else {
-                        message.delete();
-                        message.channel.send('Operation was canceled. ❌');
-                        message.delete({timeout: 10000});
+                        msg.delete();
+                        msg.channel.send('Operation was canceled. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                     }
                 }).catch(() => {
-                    message.delete();
-                    message.channel.send('Operation timed out. ❌');
+                    msg.delete();
+                    msg.channel.send('Operation timed out. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                 });
             }).catch(err => console.error(err));
-        }).catch(err => console.log(err));
+        }).catch(err => console.error(err));
     }
 };

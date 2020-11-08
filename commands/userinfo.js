@@ -12,8 +12,6 @@ module.exports = {
      * @param args      Optional User tag of printed user.
      */
 	execute: function userinfo(message, args) {
-
-
         let user = ping(message);
 
         if(cfg.users[user.id] === undefined) {

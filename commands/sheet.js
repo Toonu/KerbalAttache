@@ -1,3 +1,5 @@
+const cfg = require("./../config.json"), fn = require("./../fn"), js = require('../jsonManagement'),
+    discord = require('discord.js');
 module.exports = {
     name: 'sheet',
     description: 'Command for getting data from spreadsheet! Alternatively sends link to your own personal sheet which would be deprecated after removal of the private sheets.\nDo NOT use in public channels.',
@@ -5,12 +7,7 @@ module.exports = {
     usage: '<D:operation> <x> <y> <cols> <rows> <tab>',
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) {   
-        const cfg = require("./../config.json")
-        const fn = require("./../fn");
-        const js = require('../jsonManagement');
-        const discord = require('discord.js');
-
+    execute: function execute(message, args) {
         if (args[0] === undefined || args[0].startsWith('<@')) {
             let link = cfg.users[message.author.id].sheet;
             try {

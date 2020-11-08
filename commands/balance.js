@@ -1,77 +1,69 @@
+const {ping} = require("../jsonManagement"), {findVertical} = require("../game"), {ss} = require("../fn"),
+    cfg = require('./../config.json'), discord = require('discord.js');
 module.exports = {
     name: 'balance',
     description: 'Command for getting your current state statistics! Do NOT use in public channels.',
     args: false,
-    usage: '<M:@user>',
+    usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
-    execute: function execute(message, args) { 
-        const cfg = require('./../config.json')
-        const js = require('../jsonManagement');
-        const fn = require('./../fn')
-        const gm = require('./../game');
-        const discord = require('discord.js');
+    execute: function balance(message, args) {
+        function emojiFilter(reaction, user) {
+            return (reaction.emoji.name === '❌') && user.id === message.author.id;
+        }
 
-        const emojiFilter = (reaction, user) => {
-	        return (reaction.emoji.name === '❌') && user.id === message.author.id;
-        };
+        let nation = cfg.users[ping(message).id].nation;
 
-        gm.findVertical('Data', 'A', message)
-        .then(row => {
-            fn.ss(['getA', 'A5', `AZ${row - 1}`], message)
-            .then(array => {
-                array.forEach(element => {
-                    let filter = cfg.users[message.author.id].nation;
-                    if (args[0] !== undefined && js.perm(message, 2)) {
-                        filter = cfg.users[message.mentions.users.first().id].nation;
-                    }  else if (args[0] !== undefined) {
-                        return;
+        findVertical('Data', 'A', message).then(dataRow => {
+            ss(['getA', 'A4', `AZ${dataRow - 1}`], message).then(array => {
+                //Backup values by default.
+                let rpCol = 36;
+                let tilesCol = 39;
+                for (let i = 4; i < array.length; i++) {
+                    if (array[i] === 'RP') {
+                        rpCol = i;
                     }
-                    if (element[0].startsWith(filter)) {
-                        let user = message.mentions.users.first();
-                        if (user === undefined) {
-                            user = message.author;
-                        }
-                        
+                    if (array[i] === 'Tiles') {
+                        tilesCol = i;
+                    }
+                }
+
+                array.forEach(element => {
+                    if (element[0].startsWith(nation)) {
                         const embed = new discord.MessageEmbed()
                         .setColor('#0099ff')
-                        .setTitle(`National Bank of ${cfg.users[user.id].nation}`)
+                        .setTitle(`National Bank of ${nation}`)
                         .setURL('https://discord.js.org/') //URL clickable from the title
                         .setThumbnail('https://imgur.com/IvUHO31.png')
                         .addFields(
-                            { name: 'Nation:', value: cfg.users[user.id].nation},
+                            { name: 'Nation:', value: nation},
                             { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
                             { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
-                            { name: 'Research budget:', value: parseInt(element[37].replace(/[,|$]/g, '')).toLocaleString() + cfg.money, inline: true},
-                            { name: 'Research points:', value: `${parseInt(element[36])}RP`, inline: true},
-                            { name: 'Tiles:', value: parseInt(element[38])},
+                            { name: 'Research budget:', value: parseInt(element[rpCol+1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money, inline: true},
+                            { name: 'Research points:', value: `${parseInt(element[rpCol])}RP`, inline: true},
+                            { name: 'Tiles:', value: parseInt(element[tilesCol])},
                         )
-                        .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+                        .setFooter('Made by the Attaché to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
 
                         message.channel.send(embed)
                         .then(msg => {
                             msg.react('❌');
-                            msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time']})
+                            msg.awaitReactions(emojiFilter, { max: 1, time: 32000, errors: ['time']})
                                 .then(collected => {
                                     let react = collected.first();
                                     if (react.emoji.name === '❌') {
                                         msg.delete();
-                                        message.delete();
                                     }
                                 })
                                 .catch(() => {
-                                msg.delete();
-                                message.delete();
+                                    msg.delete();
                                 });
-                        });
-                        
-                        throw "";
+                        }).catch(err => console.log(err));
                     }
                 })
-                .catch(err => console.log(err));
-            })
-            .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
+            }).catch(err => console.log(err));
+        }).catch(err => console.log(err));
+        //Cleaning original message.
+        message.delete();
     }
 }

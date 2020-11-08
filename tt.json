@@ -761,14 +761,14 @@
         ],
         1
     ],
-    "earlymedsam": [
+    "earlymrsam": [
         "Early Medium-Range SAM",
         "tech",
         "missilesMRSAM",
         ["guidanceradar"],
         1
     ],
-    "60medsam": [
+    "60mrsam": [
         "60's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -777,7 +777,7 @@
         ],
         1
     ],
-    "70medsam": [
+    "70mrsam": [
         "70's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -786,7 +786,7 @@
         ],
         1
     ],
-    "80medsam": [
+    "80mrsam": [
         "80's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -795,7 +795,7 @@
         ],
         1
     ],
-    "90medsam": [
+    "90mrsam": [
         "90's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -804,7 +804,7 @@
         ],
         1
     ],
-    "00medsam": [
+    "00mrsam": [
         "00's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -813,7 +813,7 @@
         ],
         1
     ],
-    "10medsam": [
+    "10mrsam": [
         "10's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -822,7 +822,7 @@
         ],
         1
     ],
-    "20medsam": [
+    "20mrsam": [
         "20's Medium-Range SAM",
         "tech",
         "missilesMRSAM",
@@ -951,8 +951,8 @@
         [],
         1
     ],
-    "guidanceradar": [
-        "Early Radar Guidance",
+    "earlysrsam": [
+        "Early Radar SAM",
         "tech",
         "missilesSRAAM",
         [],

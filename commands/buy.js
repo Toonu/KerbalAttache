@@ -1,3 +1,5 @@
+const cfg = require('./../config.json'), units = require('./../units.json'),
+    discord = require('discord.js'), {report} = require("../game"), {ss} = require("../fn"), {findUnitPrice} = require("../game"), {toCoordinate} = require("../fn");
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets and systems! Do NOT use in public channels.',
@@ -5,16 +7,10 @@ module.exports = {
     usage: '<amount> <asset>\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via ?buy command.',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message, args) { 
-        const cfg = require('./../config.json');
-        const units = require('./../units.json');
-        const fn = require('./../fn');
-        const gm = require('./../game');
-        const discord = require('discord.js');
-        require('../jsonManagement');
-        const filter = (reaction, user) => {
-	        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-        };
+    execute: async function buy(message, args) {
+        function filter(reaction, user) {
+            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
+        }
 
         let newMessage = '';
 
@@ -68,7 +64,7 @@ module.exports = {
         }
 
         console.log(tab);
-        gm.findUnitPrice(args[1], message, cfg.users[message.author.id].nation, tab)
+        findUnitPrice(args[1], message, cfg.users[message.author.id].nation, tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;
             if (tab !== undefined) {
@@ -102,7 +98,7 @@ module.exports = {
                         //Accepted, deleting embed and writing response.
                         message.delete();
                         message.channel.send('Purchasing assets. ✅');
-                        fn.ss(['get', `${fn.toCoord(data[1])+data[2]}`], message, tab)
+                        ss(['get', `${toCoordinate(data[1])+data[2]}`], message, tab)
                         .then(amount => {
                             if (amount === false) {
                                 amount = 0;
@@ -110,17 +106,17 @@ module.exports = {
                                 amount = parseInt(amount);
                             }
                             
-                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, amount + args[0]], message, tab);
+                            ss(['set', `${toCoordinate(data[1])+data[2]}`, amount + args[0]], message, tab);
 
-                            fn.ss(['get', `B${data[2]}`], message)
+                            ss(['get', `B${data[2]}`], message)
                             .then(balance => {
-                                fn.ss(['set', `B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost], message);
+                                ss(['set', `B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost], message);
                             }).catch(err => console.log(err));
 
                             if (cost < 0) {
-                                gm.report(origin, `${cfg.users[origin.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
+                                report(origin, `${cfg.users[origin.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
                             } else {
-                                gm.report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
+                                report(origin, `${cfg.users[origin.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
                             }
                         })
                         .catch(err => console.error(err));

@@ -1,3 +1,4 @@
+const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = require("../jsonManagement"), {report} = require("../game");
 module.exports = {
     name: 'useredit',
     description: 'Command for editing users! Your notes are always editable',
@@ -12,14 +13,12 @@ module.exports = {
      * @returns {*}     Error message.
      */
     execute: function useredit(message, args) {
-        const js = require('../jsonManagement');
-        const cfg = require('./../config.json');
-        let perm = js.perm(message, 2, false);
-        let user = js.ping(message).id;
+        let perm = perm(message, 2, false);
+        let user = ping(message).id;
         let data = args[1];
 
         if (cfg.users[user] === undefined) {
-            js.createUser(user);
+            report(message, `${createUser(user, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
             useredit(message, args);
         }
         if (args[1] === 'del') {
@@ -37,13 +36,13 @@ module.exports = {
         } else if (args[0] === 'map' && perm) {
                 cfg.users[user].map = data;
         } else {
-            message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 12000}));
-            message.delete({timeout: 12000});
+            message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 9000}));
+            message.delete({timeout: 9000});
             return;
         }
 
-        js.exportFile("config.json", cfg);
-        message.channel.send('User property modified.').then(msg => msg.delete({timeout: 12000}));
-        message.delete({timeout: 12000});
+        exportFile("config.json", cfg);
+        message.channel.send('User property modified.').then(msg => msg.delete({timeout: 9000}));
+        message.delete({timeout: 9000});
     }
 };

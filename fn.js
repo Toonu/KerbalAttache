@@ -83,8 +83,8 @@ function getAInternal(x, y, c, r, message, gs, tab) {
         let newYNum = '';
 
         for (let ch of y) {
-            let coord = new RegExp(/[^0-9]+/g);
-            if (coord.test(ch)) {
+            let regExp = new RegExp(/[^0-9]+/g);
+            if (regExp.test(ch)) {
                 newY += ch;
             } else {
                 newYNum += ch;
@@ -149,7 +149,6 @@ function setInternal(x, data, message, gs, tab) {
         }
     });
 }
-
 function setAInternal(x, dataIn, message, gs, tab) {
     return new Promise(function (resolve, reject) {
         if (dataIn === undefined) {
@@ -183,13 +182,12 @@ function setAInternal(x, dataIn, message, gs, tab) {
         });
 }
 
-
 function checkCoordinate(x) {
-    let coord = new RegExp(/[A-Z]+[0-9]+/g);
-    return coord.test(x);
+    let regExp = new RegExp(/[A-Z]+[0-9]+/g);
+    return regExp.test(x);
 }
 
-exports.toCoord = function toCoord(num) {
+exports.toCoordinate = function toCoord(num) {
     num = parseInt(num);
     let result;
 

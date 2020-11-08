@@ -1,6 +1,18 @@
 
-Ultimategoal:   KSP mod for development price directly ingame.
-Hypergoal:      Map integration via xml editing.
-Supergoal:      Turn command.
+Ultimate goal:   KSP mod for development price directly in game.
+Hyper goal:      Map integration via xml editing.
+Super goal:      Turn command.
 
-Turn comamnd.
+Turn command.
+Trade command missing trading weapons?
+Sheet get array command returns differently sized arrays. Add push to arrays of not same length as the biggest one.
+
+Buy
+Sheet
+Tech
+Trade
+Turn
+
+jsonManagement
+game
+fn

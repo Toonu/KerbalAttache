@@ -1,16 +1,15 @@
-const fn = require("../fn");
-const gm = require("../game");
+const {findUnitPrice} = require("../game");
 module.exports = {
     name: 'test',
     description: 'Command for testing latest projects!',
     args: false,
-    usage: '<args>',
+    usage: '[args]',
     cooldown: 5,
     guildOnly: true,
     execute: async function test(message) {
-
-        let x = await gm.findUnitPrice('Tiles', message, 'Iconia');
+        let x = await findUnitPrice('Tiles', message, 'Iconia');
         console.log(x);
+        message.delete();
 
         //message.reply('There is nothing to see. Move along.');
     }    

@@ -46,7 +46,10 @@ client.on('message', message => {
 		if (command.usage) {
 			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
 		}
-		return message.channel.send(reply);
+		message.channel.send(reply).then(() => {
+			message.delete({timeout: 10000});
+		});
+		return;
 	}
 
 	//Checking for cool down
@@ -63,7 +66,10 @@ client.on('message', message => {
 
 		if (now < expirationTime && message.author.id !== 319919565079576576) {
 			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
+				.then(() => {
+					message.delete({timeout: 10000});
+				});
 		}
 	}
 	if (!js.perm(message, 1)) {
@@ -80,7 +86,8 @@ client.on('message', message => {
 		command.execute(message, args);
 	} catch (error) {
 		console.error(error);
-		message.reply('There was an error trying to execute that command!');
+		message.reply('There was an error trying to execute that command!')
+			.then(() => message.delete({timeout: 10000}));
 	}
 });
 

@@ -1,7 +1,4 @@
-const fs = require('fs');
-const cfg = require('./config.json');
-const js = require('./jsonManagement');
-
+const fs = require('fs'), cfg = require('./config.json'), js = require('./jsonManagement');
 /**
  * Function creates new user of id with attributes of nation, color, sheet and map. Returns true if the user was created successfully.
  * @param id            Discord id
@@ -9,6 +6,7 @@ const js = require('./jsonManagement');
  * @param colorIn       Color String hex number
  * @param sheet         Sheet string number
  * @param map           Map String link
+ * @return String response of attributes of created user.
  */
 exports.createUser = function createUser(id, nationIn, colorIn, sheet, map) {
     if (nationIn === undefined) {
@@ -25,15 +23,15 @@ exports.createUser = function createUser(id, nationIn, colorIn, sheet, map) {
     }
 
     cfg.users[id] = {
-        nation: nationIn, 
-        color: colorIn, 
+        nation: nationIn,
+        color: colorIn,
         cf: 1,
         sheet: sheet,
         map: map,
         notes: " ",
     }
     js.exportFile("config.json", cfg);
-    console.log(`Nation ${nationIn} created with Discord id of ${id}.`)
+    return`Nation ${nationIn} created with Discord id of ${id}`
 };
 
 /**

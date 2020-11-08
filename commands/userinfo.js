@@ -1,3 +1,5 @@
+const cfg = require("./../config.json"), discord = require('discord.js'), {report} = require("../game"),
+    {createUser, ping} = require("../jsonManagement");
 module.exports = {
 	name: 'userinfo',
 	description: 'Shows user information.',
@@ -10,14 +12,12 @@ module.exports = {
      * @param args      Optional User tag of printed user.
      */
 	execute: function userinfo(message, args) {
-		const cfg = require("./../config.json");
-		const js = require("../jsonManagement");
-        const discord = require('discord.js');
 
-        let user = js.ping(message);
+
+        let user = ping(message);
 
         if(cfg.users[user.id] === undefined) {
-            js.createUser(user.id);
+            report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
             userinfo(message, args);
         } else {
             const element = new discord.MessageEmbed()
@@ -35,8 +35,8 @@ module.exports = {
             if (cfg.users[user.id].notes !== ' ') {
                 element.addField('Information:', cfg.users[user.id].notes);
             }
-            message.channel.send(element).then(msg => msg.delete({timeout: 12000}));
-            message.delete({timeout: 12000});
+            message.channel.send(element).then(msg => msg.delete({timeout: 9000}));
+            message.delete({timeout: 9000});
 
         }
 	},

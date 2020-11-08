@@ -59,7 +59,7 @@ exports.findUnitPrice = function(unit, message, nation, tab, tech) {
         let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error('PriceRowErr: ' + err));
         let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error('NationRowErr: ' + err));
         let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error('PriceColErr: ' + err));
-        let rp = await fn.ss(['get', `${fn.toCoord(priceCol) + nationRow}`], message, tab)
+        let rp = await fn.ss(['get', `${fn.toCoordinate(priceCol) + nationRow}`], message, tab)
         
         //console.log('Priceitems' + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
         if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
@@ -68,7 +68,7 @@ exports.findUnitPrice = function(unit, message, nation, tab, tech) {
 
         
         let price;
-        fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
+        fn.ss(['get', `${fn.toCoordinate(priceCol) + priceRow}`], message, tab)
         .then(amount => {
             price = parseInt(amount);
             if (tech || ['other', 'wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
@@ -77,7 +77,7 @@ exports.findUnitPrice = function(unit, message, nation, tab, tech) {
                 let techCol;
                 gm.findHorizontal('Surface', 1, message)
                 .then(col => {
-                    techCol = fn.toCoord(col);
+                    techCol = fn.toCoordinate(col);
                     //console.log(techCol);
                     fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
                     .then(techLevel => {

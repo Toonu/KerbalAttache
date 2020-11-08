@@ -1,3 +1,4 @@
+const cfg = require('./../config.json'), gm = require('./../game'), js = require('../jsonManagement');
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
@@ -6,13 +7,7 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: function execute(message, args) {
-        const cfg = require('./../config.json');
-        require('./../fn');
-        const gm = require('./../game');
-        const js = require('../jsonManagement');
-
         let nation = cfg.users[message.author.id].nation;
-
         if (message.mentions.users.first() !== undefined && js.perm(message, 2)) {
             nation = cfg.users[message.mentions.users.first().id].nation;
         }
@@ -73,7 +68,7 @@ function budget(amount, nation, message, add) {
             let budget = data[0]*add + amount;
             if (budget < 0) throw 'Budget cannot be set lower than 0!';
 
-            fn.ss(['set', `${fn.toCoord(data[1])+(data[2])}`, budget], message)
+            fn.ss(['set', `${fn.toCoordinate(data[1])+(data[2])}`, budget], message)
                 .then(result => {
                     if (result && add) {
                         message.channel.send(`Research budget modified to ${budget+cfg.money}!`);
@@ -172,7 +167,7 @@ async function research(node, nation, message) {
             //Checking rp amount
             gm.findHorizontal('RP', 4, message)
                 .then(rpCol => {
-                    fn.ss(['get', `${fn.toCoord(rpCol)+data[2]}`], message)
+                    fn.ss(['get', `${fn.toCoordinate(rpCol)+data[2]}`], message)
                         .then(rp => {
                             nationRP = rp
                             if (data[0] > rp && del !== 0) {
@@ -180,12 +175,12 @@ async function research(node, nation, message) {
                                 return false;
                             }
                             //Setting node and then RP
-                            fn.ss(['set', `${fn.toCoord(data[1])+data[2]}`, del], message, 'TechTree')
+                            fn.ss(['set', `${fn.toCoordinate(data[1])+data[2]}`, del], message, 'TechTree')
                                 .then(result => {
                                     if (result) {
                                         if (del === 1) {
                                             message.channel.send('Node unlocked! ✅');
-                                            fn.ss(['set', `${fn.toCoord(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
+                                            fn.ss(['set', `${fn.toCoordinate(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0]], message)
                                             gm.report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
                                         } else {
                                             message.channel.send('Node removed!');
@@ -196,13 +191,13 @@ async function research(node, nation, message) {
                                         //Tech increments change
                                         gm.findHorizontal('Technology', 4, message)
                                         .then(increments => {
-                                            fn.ss(['getA', `${fn.toCoord(increments)}5`, `${fn.toCoord(increments+5)+(data[1]-2)}`], message)
+                                            fn.ss(['getA', `${fn.toCoordinate(increments)}5`, `${fn.toCoordinate(increments+5)+(data[1]-2)}`], message)
                                             .then(incrementArray => {
                                                 //console.log(incrementArray);
                                                 if (del === 1) {
-                                                    fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1)], message);
+                                                    fn.ss(['set', `${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1)], message);
                                                 } else {
-                                                    fn.ss(['set', `${fn.toCoord(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1)], message);
+                                                    fn.ss(['set', `${fn.toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1)], message);
                                                 }
                                             }).catch(err => console.error(err));
                                         }).catch(err => console.error(err));
@@ -267,15 +262,22 @@ function unlocks(node, nation, message) {
                 gm.findVertical('Data', 'A', message, 'TechTree')
                     .then(row => {
                         //console.log(row);
-                        fn.ss(['getA', `${fn.toCoord(col)+row}`, `${fn.toCoord(col)+row}`, 0, 1], message, 'TechTree')
+                        fn.ss(['getA', `${fn.toCoordinate(col)+row}`, `${fn.toCoordinate(col)+row}`, 0, 1], message, 'TechTree')
                             .then(rp => {
+                                let values = '';
+                                rp[1] = rp[1][0].split(',');
+                                rp[1].forEach(r => {
+                                    values += `${r.trim()}\n`
+                                })
+
+
                                 const embed = new discord.MessageEmbed()
                                 .setColor('#e6e600')
                                 .setTitle(`Node ${tt[node][0]}`)
                                 .setURL('https://discord.js.org/') //URL clickable from the title
                                 .setThumbnail('https://imgur.com/IvUHO31.png')
                                 .addFields(
-                                    { name: 'Unlocks:', value: rp[1]},
+                                    { name: 'Unlocks:', value: `\`\`\`${values}\`\`\``},
                                     { name: 'Cost:', value: `${rp[0]}RP`, inline: true},
                                     { name: 'Buy?', value: `✅`, inline: true},
                                 )

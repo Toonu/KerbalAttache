@@ -1,3 +1,5 @@
+const cfg = require('./../config.json'), js = require('../jsonManagement'), fn = require('./../fn'),
+    gm = require('./../game');
 module.exports = {
     name: 'turn',
     description: 'Command to finish turn and calculate the chart data!',
@@ -6,11 +8,6 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message) {
-        const cfg = require('./../config.json')
-        const js = require('../jsonManagement');
-        const fn = require('./../fn')
-        const gm = require('./../game');
-
         if(!js.perm(message, 2)) {
             return;
         }
@@ -20,7 +17,7 @@ module.exports = {
 
         gm.findHorizontal('RP', 4, message)
         .then(techCol => {
-            techCol = fn.toCoord(techCol);
+            techCol = fn.toCoordinate(techCol);
             gm.findVertical('Data', 'A', message)
             .then(endRow => {
                 fn.ss(['getA', `A5`, `C${endRow - 1}`], message)

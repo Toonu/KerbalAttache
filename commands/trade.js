@@ -1,3 +1,5 @@
+const cfg = require("./../config.json"), fn = require("./../fn"), gm = require("./../game"),
+    units = require('./../units.json');
 module.exports = {
     name: 'trade',
     description: 'Command for setting trade value of assets you have traded! When you purchase or sell an asset, you should put the price you paid here.',
@@ -6,10 +8,6 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function execute(message, args) {
-        const cfg = require("./../config.json")
-        const fn = require("./../fn");
-        const gm = require("./../game");
-        const units = require('./../units.json');
         const nation = cfg.users[message.author.id].nation;
         const money = parseInt(args[3]);
         const unit = args[2].toUpperCase();
@@ -42,7 +40,7 @@ module.exports = {
             }
             gm.findVertical(cfg.users[message.mentions.users.first().id].nation, 'A', message)
             .then(customer => {
-                let col = fn.toCoord(data[1]);
+                let col = fn.toCoordinate(data[1]);
                     transfer(data[2], col, amount, money, message, type)
                     .then(() => {
                         transfer(customer, col, amount, money, message, !type)

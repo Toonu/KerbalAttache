@@ -11,6 +11,8 @@ exports.ss = function ss(args, message, tab) {
     return new Promise(function (resolve, reject) {
         client.authorize(function(err, tokens) {
             try {
+                //TODO: Add checking of all arguments, handle it here instead of in sheet, buy and other commands, then handle with rejects.
+
                 if (err) {
                     reject('Authorization failed.' + err)
                 }

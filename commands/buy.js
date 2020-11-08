@@ -1,10 +1,10 @@
 const cfg = require('./../config.json'), units = require('./../units.json'),
-    discord = require('discord.js'), {report} = require("../game"), {ss} = require("../fn"), {findUnitPrice} = require("../game"), {toCoordinate} = require("../fn");
+    discord = require('discord.js'), {report, findUnitPrice} = require("../game"), {ss, toCoordinate} = require("../fn");
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets and systems! Do NOT use in public channels.',
     args: false,
-    usage: '<amount> <asset>\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via ?buy command.',
+    usage: '[amount] [asset]\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via **?buy command**.',
     cooldown: 5,
     guildOnly: true,
     execute: async function buy(message, args) {
@@ -12,20 +12,13 @@ module.exports = {
             return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
 
-        let newMessage = '';
-
-         //Lists the main categories, then returns and you have to repeat the command.
+         //With no arguments, lists the categories.
         if(args[0] === undefined) {
-
-            let l = 0;
+            let newMessage = ``, l = 0;
             Object.keys(units).forEach(item => {
-                if (item.length > l) {
-                    l = item.length;
-                }
-            });
-            Object.keys(units).forEach(item => {
+                if (item.length > l) l = item.length;
                 newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
-            })
+            });
             
             message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
             .then(msg => msg.delete({ timeout: 30000 }))
@@ -33,7 +26,6 @@ module.exports = {
             return;
         }
 
-        
         //Checking input arguments.
         try {
             args[0] = parseInt(args[0]);
@@ -100,12 +92,8 @@ module.exports = {
                         message.channel.send('Purchasing assets. ✅');
                         ss(['get', `${toCoordinate(data[1])+data[2]}`], message, tab)
                         .then(amount => {
-                            if (amount === false) {
-                                amount = 0;
-                            } else {
-                                amount = parseInt(amount);
-                            }
-                            
+                            amount = amount === false ? 0 : parseInt(amount);
+
                             ss(['set', `${toCoordinate(data[1])+data[2]}`, amount + args[0]], message, tab);
 
                             ss(['get', `B${data[2]}`], message)

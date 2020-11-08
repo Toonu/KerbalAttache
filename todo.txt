@@ -8,11 +8,9 @@ Trade command missing trading weapons?
 Sheet get array command returns differently sized arrays. Add push to arrays of not same length as the biggest one.
 
 Buy
-Sheet
 Tech
 Trade
 Turn
 
-jsonManagement
 game
 fn

@@ -53,7 +53,7 @@ exports.findHorizontal = function findHorizontal(target, row, message, tab) {
 Finds unit maintenance price with reflection to the nation technological level.
 Returns the int maintenance price, column of the price and row of the nation.
 */
-exports.findUnitPrice = function(unit, message, nation, tab, tech) {
+exports.findUnitPrice = function findUnitPrice(unit, message, nation, tab, tech) {
     return new Promise(async function(resolve, reject) {
         //console.log(tab);
         let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error('PriceRowErr: ' + err));
@@ -107,6 +107,12 @@ exports.findUnitPrice = function(unit, message, nation, tab, tech) {
         .catch(err => console.error(err));
     });
 }
-exports.report = function(message, data) {
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(data);
+
+/**
+ * Function reports to the moderator channel the specified report String.
+ * @param message   Message object which specifies server to search main channel in.
+ * @param report    String with a message to report.
+ */
+exports.report = function report(message, report) {
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(report);
 }

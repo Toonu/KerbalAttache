@@ -17,22 +17,26 @@ module.exports = {
         let tab = undefined;
 
         if(!units.hasOwnProperty(unit)) {
-            return message.channel.send('AssetType not found. Please retry.').then(msg => msg.delete({timeout: 5000}));
+            message.channel.send('AssetType not found. Please retry.').then(msg => msg.delete({timeout: 5000}));
+            return message.delete();
         } else if (isNaN(amount) || isNaN(money)) {
-            return message.channel.send('Argument money or number of assets is not a number. Canceling operation.')
+            message.channel.send('Argument money or number of assets is not a number. Canceling operation.')
                 .then(msg => msg.delete({timeout: 5000}));
+            return message.delete();
         } else if (!type.startsWith('sell') && !type.startsWith('buy')) {
-            return message.channel.send('First argument is not sell or buy.').then(msg => msg.delete({timeout: 5000}));
+            message.channel.send('First argument is not sell or buy.').then(msg => msg.delete({timeout: 5000}));
+            return message.delete();
         } else if (nation === undefined || customer === undefined) {
-            return message.channel.send('Nation does not exist in our database. Contact moderator or retry.')
+            message.channel.send('Nation does not exist in our database. Contact moderator or retry.')
                 .then(msg => msg.delete({timeout: 5000}));
+            return message.delete();
         }
 
         type = !type.startsWith('buy');
         if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
             tab = 'Stockpiles';
         }
-
+        message.delete();
         gm.findData(unit, nation)
         .then(data => {
             if (data[0] * 4 * amount > money) {
@@ -46,8 +50,9 @@ module.exports = {
                     transfer(customerRow, data[1], amount, money, message, !type, tab)
                     .then(() => {
                         gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s for 
-                        ${money.toLocaleString()+cfg.money} with <@${message.mentions.users.first().id}>!`);
-                        message.channel.send(`Transaction with ${message.mentions.users.first().username} finished and assets delivered!`);
+                        ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`);
+                        message.channel.send(`Transaction with ${message.mentions.users.first().username} finished and assets delivered!`)
+                            .then(msg => msg.delete({timeout: 10000}));
                     })
                     .catch(err => {
                         message.channel.send(err).then(msg => msg.delete({timeout: 10000}));

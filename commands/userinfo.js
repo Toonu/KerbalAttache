@@ -19,7 +19,7 @@ module.exports = {
             userinfo(message, args);
         } else {
             const element = new discord.MessageEmbed()
-            .setColor('#0099ff')
+            .setColor('#faf6f6')
             .setTitle('User Information')
             .setURL('https://discord.js.org/') //URL clickable from the title
             .setAuthor('Attaché to the UN presents')

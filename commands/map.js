@@ -10,7 +10,7 @@ module.exports = {
         try {
             let userMap = cfg.users[ping(message).id].map;
             const embed = new discord.MessageEmbed()
-                .setColor('#0099ff')
+                .setColor('#faf6f6')
                 .setTitle('Your map link.')
                 .setURL(userMap)
                 .setThumbnail('https://imgur.com/IvUHO31.png')

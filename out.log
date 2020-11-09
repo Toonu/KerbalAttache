@@ -1,2 +1,14 @@
-Deployed and ready!
-Server Ruse (Toonu): ?trade buy 10 APC 100000 <@!591521990972669980>
+D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:161
+        throw new HTTPError(res.statusText, res.constructor.name, res.status, request.method, request.path);
+              ^
+
+Response: Service Unavailable
+    at RequestHandler.execute (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:161:15)
+    at processTicksAndRejections (node:internal/process/task_queues:93:5)
+    at async RequestHandler.push (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:39:14)
+    at async WebSocketManager.connect (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\websocket\WebSocketManager.js:138:9)
+    at async Client.login (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\Client.js:222:7) {
+  code: 503,
+  method: 'get',
+  path: '/gateway/bot'
+}

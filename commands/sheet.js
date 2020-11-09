@@ -12,7 +12,7 @@ module.exports = {
             let usrSheet = cfg.users[ping(message).id].sheet;
 
             const embed = new discord.MessageEmbed()
-            .setColor('#0099ff')
+            .setColor('#faf6f6')
             .setTitle('Your sheet link.')
             .setURL(`https://docs.google.com/spreadsheets/d/${usrSheet}/edit#gid=0`)
             .setThumbnail('https://imgur.com/IvUHO31.png')

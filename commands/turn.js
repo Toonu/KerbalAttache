@@ -7,7 +7,7 @@ module.exports = {
     usage: '<true> if revert',
     cooldown: 5,
     guildOnly: true,
-    execute: async function execute(message) {
+    execute: async function turn(message) {
         if(!js.perm(message, 2, true)) return;
 
         let newResearch = [];

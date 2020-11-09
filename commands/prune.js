@@ -26,7 +26,6 @@ module.exports = {
 				message.channel.send(err.message).then(msg => {
 					msg.delete({timeout: 9000});
 				})
-				message.delete();
 			})
 	}
 };

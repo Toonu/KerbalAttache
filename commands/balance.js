@@ -31,15 +31,15 @@ module.exports = {
                 array.forEach(element => {
                     if (element[0].startsWith(nation)) {
                         const embed = new discord.MessageEmbed()
-                        .setColor('#0099ff')
+                        .setColor('#e0b319')
                         .setTitle(`National Bank of ${nation}`)
                         .setURL('https://discord.js.org/') //URL clickable from the title
                         .setThumbnail('https://imgur.com/IvUHO31.png')
                         .addFields(
                             { name: 'Nation:', value: nation},
-                            { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
-                            { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString() + cfg.money},
-                            { name: 'Research budget:', value: parseInt(element[rpCol+1].replace(/[,|$]/g, '')).toLocaleString() + cfg.money, inline: true},
+                            { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
+                            { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
+                            { name: 'Research budget:', value: parseInt(element[rpCol+1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money }), inline: true},
                             { name: 'Research points:', value: `${parseInt(element[rpCol])}RP`, inline: true},
                             { name: 'Tiles:', value: parseInt(element[tilesCol])},
                         )

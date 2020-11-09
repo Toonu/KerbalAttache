@@ -62,7 +62,7 @@ module.exports = {
             .addFields(
                 { name: 'Amount:', value: args[0], inline: true},
                 { name: 'Asset', value: units[args[1]][0], inline: true},
-                { name: 'Cost:', value: cost.toLocaleString() + cfg.money},
+                { name: 'Cost:', value: cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
                 { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
@@ -90,9 +90,9 @@ module.exports = {
                                 })
                                 .catch(err => console.error(err));
                             if (cost < 0) {
-                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString() + cfg.money}`);
+                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`);
                             } else {
-                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString() + cfg.money}`);
+                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`);
                             }
                         })
                         .catch(err => console.error(err));

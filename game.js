@@ -51,7 +51,8 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
                 if (result === -1) {
                     reject(undefined);
                 }
-                resolve(toCoordinate(result + e + 1));
+                result = toCoordinate(result + e + 1);
+                resolve(result);
             })
             .catch((err) => reject(console.log(err)));
     }).catch(err => console.log('Error in horizontal: ' + err));
@@ -68,11 +69,23 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
  */
 exports.findData = function findData(target, nation, tech, tab) {
     return new Promise(async function(resolve, reject) {
-        let priceRow = await gm.findVertical('Data', 'A', tab).catch(err => console.error('PriceRowErr: ' + err));
-        let nationRow = await gm.findVertical(nation, 'A', tab).catch(err => console.error('NationRowErr: ' + err));
-        let priceCol = await gm.findHorizontal(target, 4).catch(err => console.error('PriceColErr: ' + err));
-        let value = await get(`${priceCol + nationRow}`, tab).catch(err => console.error('PriceColErr: ' + err));
-        value = parseInt(value);
+        let value;
+        let priceRow;
+        let nationRow;
+        let priceCol;
+        let techInfo;
+        try {
+            [priceRow, nationRow, priceCol] = await Promise.all([gm.findVertical('Data', 'A', tab), gm.findVertical(nation, 'A', tab), gm.findHorizontal(target, 4, tab)]);
+            value = await get(`${priceCol + nationRow}`, tab);
+            if (tech) {
+                techInfo = await getArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
+            }
+        } catch (e) {
+            console.error(e);
+            reject(e);
+        }
+
+        value = parseInt(value.replace(/[,|$]/g, ''));
 
         if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
             reject('Wrong name');
@@ -81,7 +94,12 @@ exports.findData = function findData(target, nation, tech, tab) {
         .then(price => {
             price = parseInt(price);
             if (tech || ['other', 'wpSurface', 'wpAerial', 'systems'].includes(units[target][1])) {
-                resolve([price, priceCol, nationRow, value]);
+                if (!tech) {
+                    resolve([price, priceCol, nationRow, value]);
+                } else {
+                    resolve([techInfo, priceCol, nationRow, value]);
+                }
+
             } else {
                 gm.findHorizontal('Surface', 1)
                 .then(incrementsCols => {
@@ -106,7 +124,9 @@ exports.findData = function findData(target, nation, tech, tab) {
                     }).catch(err => console.error(err));
                 }).catch(err => console.error(err));
             }
-        }).catch(err => console.error(err));
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 

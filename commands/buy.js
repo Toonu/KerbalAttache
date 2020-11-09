@@ -54,6 +54,7 @@ module.exports = {
             let cost = data[0] * args[0] * 4;
             if (tab !== undefined) cost /= 4;
 
+            // noinspection JSCheckFunctionSignatures
             const embed = new discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`Office of Acquisitions`)

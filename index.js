@@ -19,7 +19,7 @@ for (const file of commandFiles) {
 //Starts the bot
 client.on('ready', () => {
 	console.log('Deployed and ready!');
-	client.user.setActivity("over players.", { type: "WATCHING" })
+	client.user.setActivity("over players.", { type: "WATCHING" }).catch(err => console.log(err));
 	fn.init();
 });
 
@@ -46,8 +46,9 @@ client.on('message', message => {
 		if (command.usage) {
 			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
 		}
+		// noinspection JSUnresolvedFunction
 		message.channel.send(reply).then(() => {
-			message.delete({timeout: 10000});
+			message.delete({timeout: 10000}).catch(err => console.log(err));
 		});
 		return;
 	}
@@ -64,11 +65,11 @@ client.on('message', message => {
 	if (timestamps.has(message.author.id)) {
 		const expirationTime = timestamps.get(message.author.id) + coolDownAmount;
 
-		if (now < expirationTime && message.author.id !== 319919565079576576) {
+		if (now < expirationTime && message.author.id !== '319919565079576576') {
 			const timeLeft = (expirationTime - now) / 1000;
 			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
 				.then(() => {
-					message.delete({timeout: 10000});
+					message.delete({timeout: 10000}).catch(err => console.log(err));
 				});
 		}
 	}
@@ -93,7 +94,7 @@ client.on('message', message => {
 
 //const {CLIENT_TOKEN} = process.env;
 const {CLIENT_TOKEN} = require('./env.json');
-client.login(CLIENT_TOKEN);
+client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
 
 /**

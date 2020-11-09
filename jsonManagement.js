@@ -42,7 +42,9 @@ exports.exportFile = function exportFile(file, data) {
  * @returns {boolean}   True if has permission, else False.
  */
 exports.perm = function perm(message, level, msg) {
+    // noinspection JSUnresolvedVariable
     let adm = cfg.servers[message.guild.id].administrators;
+    // noinspection JSUnresolvedVariable
     let dev = cfg.servers[message.guild.id].developers;
 
     if (level === 2 && (adm.some(r=> message.member.roles.cache.has(r)))) {
@@ -60,7 +62,6 @@ exports.perm = function perm(message, level, msg) {
 /**
  * Function checks if user is pinged and assigns him as return, else assigns author.
  * @param message   Message to scan.
- * @returns {User}  User that is assigned.
  */
 exports.ping = function ping(message) {
     let nation = message.author;

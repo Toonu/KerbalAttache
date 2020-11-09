@@ -6,7 +6,7 @@ module.exports = {
     usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
-    execute: async function assets(message, args) {
+    execute: async function assets(message) {
         const cfg = require('./../config.json')
         const discord = require('discord.js');
 
@@ -74,8 +74,8 @@ function embUnits(embed, message) {
 
         message.channel.send(embed)
             .then(msg => {
-                msg.react('❌');
-                msg.react('➡️');
+                msg.react('❌').catch(err => console.log(err));
+                msg.react('➡️').catch(err => console.log(err));
                 msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
                     .then(collected => {
                         let react = collected.first();

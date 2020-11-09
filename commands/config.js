@@ -26,10 +26,13 @@ module.exports = {
             } else if (args[0] === 'smainid') {
                 cfg.servers[message.guild.id].main_channel = args[1];
             } else if (args[0] === 'sadminadd') {
+                // noinspection JSUnresolvedVariable
                 cfg.servers[message.guild.id].administrators.push(args[1]);
             } else if (args[0] === 'sdevadd') {
+                // noinspection JSUnresolvedVariable
                 cfg.servers[message.guild.id].developers.push(args[1]);
             } else if (args[0] === 'sadmindel') {
+                // noinspection JSUnresolvedVariable
                 let adm = cfg.servers[message.guild.id].administrators;
                 for (let i = 0; i < adm.length; i++) {
                     if (adm[i] === args[1]) {
@@ -38,6 +41,7 @@ module.exports = {
                     }
                 }
             } else if (args[0] === 'sdevdel') {
+                // noinspection JSUnresolvedVariable
                 let dev = cfg.servers[message.guild.id].developers;
                 for (let i = 0; i < dev.length; i++) {
                     if (dev[i] === args[1]) {

@@ -1,5 +1,5 @@
 const cfg = require("./../config.json"), {report, findData} = require("../game"),
-    {toCoordinate, set} = require("../sheet"), {perm, ping} = require("../jsonManagement");
+    {set} = require("../sheet"), {perm, ping} = require("../jsonManagement");
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount by adding/subtracting it!',

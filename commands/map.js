@@ -6,7 +6,7 @@ module.exports = {
     usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
-    execute: function mapLink(message, args) {
+    execute: function mapLink(message) {
         try {
             let userMap = cfg.users[ping(message).id].map;
             const embed = new discord.MessageEmbed()

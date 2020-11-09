@@ -10,6 +10,7 @@ const {private_key, client_email} = require('./env.json');
  */
 exports.init = function init() {
     client = new google.auth.JWT(client_email, null, private_key, ['https://www.googleapis.com/auth/spreadsheets']);
+    // noinspection JSValidateTypes
     gs = google.sheets({version: 'v4', auth: client});
 };
 
@@ -46,7 +47,7 @@ exports.get = function getInternal(coordinate,tab = 'Maintenance') {
 
 
 /**
- * Function gets array of values from coordX to coordY with extension of col and row Sizes in tab of sheet.
+ * Function gets array of values from cordX to cordY with extension of col and row Sizes in tab of sheet.
  * @param cordX                 String First coordinate.
  * @param cordY                 String Second coordinate.
  * @param colSize               Number Size extension in columns.

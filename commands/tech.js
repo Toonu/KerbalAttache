@@ -1,7 +1,7 @@
-const cfg = require('./../config.json'), {ping, perm} = require('../jsonManagement'), tt = require('./../tt.json'),
-    {get, set, getArray, toCoordinate} = require("../sheet"), discord = require('discord.js'),
+const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../jsonManagement'),
+    tt = require('./../tt.json'), discord = require('discord.js'),
+    {get, set, getArray, toCoordinate, fromCoordinate} = require("../sheet"),
     {findData, findHorizontal, findVertical, report} = require("../game");
-const {fromCoordinate} = require("../sheet");
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
@@ -20,7 +20,7 @@ Possible operations:
     guildOnly: true,
     execute: async function tech(message, args) {
         let del = 1;
-        let nation = cfg.users[ping(message).id].nation;
+        let nation = cfg.users[(await ping(message)).id].nation;
         let result = [];
         if (args[0] === 'budget') {
             let amount = parseInt(args[2]);
@@ -35,7 +35,7 @@ Possible operations:
         } else if (args[0] === 'list') {
             result.push(await list(args[1], nation, message));
             result[0].startsWith('Operation') ? result.push(false) : result.push(true);
-        } else if (args[0] === 'unlocks') {
+        } else if (args[0] === 'unlocked') {
             result.push(await unlocks(nation));
             result.push(false);
         } else if (args[0] === 'research') {
@@ -58,11 +58,13 @@ Possible operations:
                 }
             }
         } else if (args[0] === 'change') {
-            let ch = change(args)
-            if (ch[0]) {
-                report(message, `${message.author.username} has changed the ${args[1]} ${args[2]} to ${ch[1]}!`)
+            if (tt[args[1]] === undefined) {
+                result.push('Operation failed.');
+                result.push(false);
             } else {
-                message.channel.send('Operation failed.');
+                let ch = change(args)
+                result.push(ch);
+                result.push(true);
             }
         }
 
@@ -76,7 +78,7 @@ Possible operations:
             }
         });
         if (result[1]) {
-            report(message, `${result[0]} by <@${message.author.id}>!`, `${this.name} ${args[0]}`);
+            report(message, `${result[0]} by <@${message.author.id}> for ${nation}!`, `${this.name} ${args[0]}`);
         }
         return message.delete();
     },
@@ -136,6 +138,7 @@ function list(category, nation, message) {
                 unlocks.forEach(r => {
                     newMessage += `${r.trim()}\n`
                 })
+                // noinspection JSCheckFunctionSignatures
                 const embed = new discord.MessageEmbed()
                     .setColor('#065535')
                     .setTitle(`Node ${tt[category][0]}`)
@@ -154,8 +157,8 @@ function list(category, nation, message) {
 
                 message.channel.send(embed)
                     .then(msg => {
-                        msg.react('✅');
-                        msg.react('❌')
+                        msg.react('✅').catch(err => console.log(err));
+                        msg.react('❌').catch(err => console.log(err));
                         msg.awaitReactions(filter, { max: 1, time: 32000, errors: ['time'] })
                             .then(collected => {
                                 let react = collected.first();
@@ -226,8 +229,9 @@ function unlocks(nation) {
                 unlocks.push([names[0][i], data[1][i]])
             }
         }
-        //Edits the node list to print with padding.
+        //Edits the unlocks list to print with padding.
         let l = 0;
+
         unlocks.forEach(item => {
             if (tt[item[0]][0].length > l) {
                 l = tt[item[0]][0].length;
@@ -298,36 +302,29 @@ function research(node, nation, del = 1) {
 
 
 function change(data) {
-    const js = require('../jsonManagement');
-    const tt = require('./../tt.json');
-
-    if (tt[data[1]] === undefined) {
-        return [false];
-    }
     let newData = '';
     data.forEach(r => {
         if(r !== data[0] && r !== data[1] && r !== data[2]) {
             newData += r + ' ';
         }
     })
-    switch(data[2]) {
-        case 'name':
-            tt[data[1]][0] = newData.trim();
-            break;
-        case 'category':
-            tt[data[1]][2] = data[3];
-            break;
-        case 'reqadd':
-            tt[data[1]][3].push(data[3]);
-            break;
-        case 'reqdel':
-            for(let i = 0; i < tt[data[1]][3].length; i++) {
-                if (tt[data[1]][3][i] === data[3]) {
-                    tt[data[1]][3].splice(i, 1);
-                }
+
+    if (data[2] === 'name') {
+        tt[data[1]][0] = newData.trim();
+    } else if (data[2] === 'category') {
+        tt[data[1]][2] = data[3];
+        newData = data[3];
+    } else if (data[2] === 'reqadd') {
+        tt[data[1]][3].push(data[3]);
+        newData = data[3];
+    } else if (data[2] === 'reqdel') {
+        for (let i = 0; i < tt[data[1]][3].length; i++) {
+            if (tt[data[1]][3][i] === data[3]) {
+                tt[data[1]][3].splice(i, 1);
             }
-            break;
+        }
+        newData = undefined;
     }
-    js.exportFile("tt.json", tt);
-    return [true, newData];
+    exportFile("tt.json", tt);
+    return `${data[1]} ${data[2]} was changed to ${newData}`;
 }

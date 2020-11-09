@@ -18,6 +18,7 @@ module.exports = {
             report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`, 'user create');
             userinfo(message, args);
         } else {
+            // noinspection JSCheckFunctionSignatures
             const element = new discord.MessageEmbed()
             .setColor('#faf6f6')
             .setTitle('User Information')

@@ -7,7 +7,7 @@ module.exports = {
     usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
-    execute: function balance(message, args) {
+    execute: function balance(message) {
         function emojiFilter(reaction, user) {
             return (reaction.emoji.name === '❌') && user.id === message.author.id;
         }
@@ -30,6 +30,7 @@ module.exports = {
 
                 array.forEach(element => {
                     if (element[0].startsWith(nation)) {
+                        // noinspection JSCheckFunctionSignatures
                         const embed = new discord.MessageEmbed()
                         .setColor('#e0b319')
                         .setTitle(`National Bank of ${nation}`)
@@ -47,7 +48,7 @@ module.exports = {
 
                         message.channel.send(embed)
                         .then(msg => {
-                            msg.react('❌');
+                            msg.react('❌').catch(err => console.log(err));
                             msg.awaitReactions(emojiFilter, { max: 1, time: 32000, errors: ['time']})
                                 .then(collected => {
                                     let react = collected.first();

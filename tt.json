@@ -277,14 +277,14 @@
         1
     ],
     "earlydefradar": [
-        "Defensive spec.",
+        "Jammer Research",
         "tech",
         "radarsAir",
         [],
         1
     ],
     "earlyoffradar": [
-        "Offensive spec.",
+        "Air-to-Air Radar Research",
         "tech",
         "radarsAir",
         [],
@@ -691,24 +691,24 @@
         ],
         0
     ],
-    "earlyshortsam": [
-        "Early Short-Range SAM",
+    "earlysrsam": [
+        "Early Short-Range SAMs",
         "tech",
         "missilesSRSAM",
-        ["guidanceir"],
+        [],
         1
     ],
     "60shortsam": [
-        "60's Short-Range SAM",
+        "60's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
-            "earlyshortsam"
+            "earlysrsam"
         ],
         1
     ],
     "70shortsam": [
-        "70's Short-Range SAM",
+        "70's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -717,7 +717,7 @@
         1
     ],
     "80shortsam": [
-        "80's Short-Range SAM",
+        "80's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -726,7 +726,7 @@
         1
     ],
     "90shortsam": [
-        "90's Short-Range SAM",
+        "90's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -735,7 +735,7 @@
         1
     ],
     "00shortsam": [
-        "00's Short-Range SAM",
+        "00's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -744,7 +744,7 @@
         1
     ],
     "10shortsam": [
-        "10's Short-Range SAM",
+        "10's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -753,7 +753,7 @@
         1
     ],
     "20shortsam": [
-        "20's Short-Range SAM",
+        "20's Short-Range SAMs",
         "tech",
         "missilesSRSAM",
         [
@@ -762,142 +762,142 @@
         1
     ],
     "earlymrsam": [
-        "Early Medium-Range SAM",
+        "Early Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
-        ["guidanceradar"],
+        [],
         1
     ],
     "60mrsam": [
-        "60's Medium-Range SAM",
+        "60's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "earlymedsam"
+            "earlymrsam"
         ],
         1
     ],
     "70mrsam": [
-        "70's Medium-Range SAM",
+        "70's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "60medsam"
+            "60mrsam"
         ],
         1
     ],
     "80mrsam": [
-        "80's Medium-Range SAM",
+        "80's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "70medsam"
+            "70mrsam"
         ],
         1
     ],
     "90mrsam": [
-        "90's Medium-Range SAM",
+        "90's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "80medsam"
+            "80mrsam"
         ],
         1
     ],
     "00mrsam": [
-        "00's Medium-Range SAM",
+        "00's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "90medsam"
+            "90mrsam"
         ],
         1
     ],
     "10mrsam": [
-        "10's Medium-Range SAM",
+        "10's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "00medsam"
+            "00mrsam"
         ],
         1
     ],
     "20mrsam": [
-        "20's Medium-Range SAM",
+        "20's Medium-Range SAMs",
         "tech",
         "missilesMRSAM",
         [
-            "10medsam"
+            "10mrsam"
         ],
         1
     ],
-    "earlylongsam": [
-        "Early Long-Range SAM",
+    "earlylrsam": [
+        "Early Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [],
         1
     ],
-    "60longsam": [
-        "60's Long-Range SAM",
+    "60lrsam": [
+        "60's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "earlylongsam"
+            "earlylrsam"
         ],
         1
     ],
-    "70longsam": [
-        "70's Long-Range SAM",
+    "70lrsam": [
+        "70's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "60longsam"
+            "60lrsam"
         ],
         1
     ],
-    "80longsam": [
-        "80's Long-Range SAM",
+    "80lrsam": [
+        "80's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "70longsam"
+            "70lrsam"
         ],
         1
     ],
-    "90longsam": [
-        "90's Long-Range SAM",
+    "90lrsam": [
+        "90's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "80longsam"
+            "80lrsam"
         ],
         1
     ],
-    "00longsam": [
-        "00's Long-Range SAM",
+    "00lrsam": [
+        "00's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "90longsam"
+            "90lrsam"
         ],
         1
     ],
-    "10longsam": [
-        "10's Long-Range SAM",
+    "10lrsam": [
+        "10's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "00longsam"
+            "00lrsam"
         ],
         1
     ],
-    "20longsam": [
-        "20's Long-Range SAM",
+    "20lrsam": [
+        "20's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "10longsam"
+            "10lrsam"
         ],
         1
     ],
@@ -944,20 +944,19 @@
         ],
         0
     ],
-    "guidanceir": [
-        "Early IR Guidance",
+    "earlysraam": [
+        "IR Seeker Research",
         "tech",
         "missilesSRAAM",
         [],
         1
     ],
-    "earlysrsam": [
-        "Early Radar SAM",
+    "earlymraam": [
+        "Radar Seeker Research",
         "tech",
-        "missilesSRAAM",
+        "missilesMRAAM",
         [],
         1
-        
     ],
     "60sraam": [
         "60's SRAAMs",
@@ -1122,7 +1121,7 @@
         1
     ],
     "earlyagm": [
-        "Early Air-To-Surface Missiles",
+        "Air-to-Surface Weapons Research",
         "tech",
         "missilesAGM",
         [],
@@ -1608,7 +1607,7 @@
         1
     ],
     "50airlift": [
-        "Aerial Lift Airmobile Units",
+        "Airlift Rigging",
         "tech",
         "engineeringAerial",
         [],

@@ -101,16 +101,7 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Ultimate goal:   KSP mod for development price directly in game.
  * TODO Hyper goal:      Map integration via xml editing.
  * TODO Super goal:      Turn command.
- * Turn command.
  * Trade embed and confirmation of the customer/recipient nation in DMs or something like that.
  * Can be working with reacting on old messages, then checking if its the correct message and then doing the task?
  * Trade command missing trading weapons?
- * Add split to the listing messages if they exceed the 2000k limit. Possible with discord.js send options.
- *
- * Embed colors per command type or area
- * Fix error reporting for tech and other messages when it is not found/error like ?tech unlocks missilesARM
- *
- * Tech
- *
- *
  **/

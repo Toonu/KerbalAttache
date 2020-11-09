@@ -174,8 +174,8 @@ function list(category, nation, message) {
                                 msg.delete();
                                 resolve('Operation timed out.');
                             })
-                    }).catch(err => console.log(err));
-            }).catch(err => console.log(err));
+                    }).catch(err => resolve(err));
+            }).catch(err => resolve(err));
         } else {
             let nodes = [];
             for (const [key, value] of Object.entries(tt)) try {
@@ -196,7 +196,8 @@ function list(category, nation, message) {
 
             //Constructs the message.
             nodes.forEach(item => newMessage += `[${item.padStart(l)}] ${tt[item][0]}\n`);
-            resolve(`Operation Finished.\n***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\``);
+            resolve(`Operation Finished.\n***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\`
+            In case of seeing only ini there, the category nor technology node was found.`);
         }
     })
 }

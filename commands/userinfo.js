@@ -15,7 +15,7 @@ module.exports = {
         let user = ping(message);
 
         if(cfg.users[user.id] === undefined) {
-            report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
+            report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`, 'user create');
             userinfo(message, args);
         } else {
             const element = new discord.MessageEmbed()

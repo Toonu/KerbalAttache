@@ -1,6 +1,7 @@
 const cfg = require('./../config.json'), {ping, perm} = require('../jsonManagement'), tt = require('./../tt.json'),
     {get, set, getArray, toCoordinate} = require("../sheet"), discord = require('discord.js'),
     {findData, findHorizontal, findVertical, report} = require("../game");
+const {fromCoordinate} = require("../sheet");
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research!',
@@ -18,6 +19,7 @@ Possible operations:
     cooldown: 5,
     guildOnly: true,
     execute: async function tech(message, args) {
+        let del = 1;
         let nation = cfg.users[ping(message).id].nation;
         let result = [];
         if (args[0] === 'budget') {
@@ -36,18 +38,25 @@ Possible operations:
         } else if (args[0] === 'unlocks') {
             result.push(await unlocks(nation));
             result.push(false);
-        }
-
-
-
-
-        else if (args[0] === 'research') {
+        } else if (args[0] === 'research') {
             if (parseInt(args[1].substring(0, 2)) >= cfg.era) {
-                message.channel.send('The technology is too futuristic!').then(msg => msg.delete({timeout: 5000}));
-                return message.delete();
+                result.push('The technology is too futuristic!');
+                result.push(false);
+            } else {
+                if (args[1].startsWith('-') && perm(message, 2)) {
+                    // noinspection ReuseOfLocalVariableJS
+                    del = 0;
+                    args[1] = args[1].substring(1, args[1].length);
+                }
+                try {
+                    let res = await research(args[1].toLowerCase(), nation, del)
+                    result.push(res);
+                    result.push(true);
+                } catch(e) {
+                    result.push(e);
+                    result.push(false);
+                }
             }
-            research(args[1].toLowerCase(), nation, message);
-
         } else if (args[0] === 'change') {
             let ch = change(args)
             if (ch[0]) {
@@ -57,23 +66,20 @@ Possible operations:
             }
         }
 
-
-        if (result[0]) {
-            message.channel.send(result[0], {split: 'true'}).then(msg => {
-                if (msg.length < 5) {
-                    msg.forEach(m => {
-                        m.delete({timeout: 16000})
-                    });
-                } else {
-                    msg.delete({timeout: 16000});
-                }
-            });
-            if (result[1]) {
-                report(message, `${result} by <@${message.author.id}>!`);
+        message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
+            if (msg.length < 5) {
+                msg.forEach(m => {
+                    m.delete({timeout: 16000})
+                });
+            } else {
+                msg.delete({timeout: 16000});
             }
+        });
+        if (result[1]) {
+            report(message, `${result[0]} by <@${message.author.id}>!`, `${this.name} ${args[0]}`);
         }
         return message.delete();
-    },   
+    },
 };
 
 
@@ -92,7 +98,7 @@ function budget(amount, nation, add) {
                 let budget = data[3]*add + amount;
                 if (budget < 0) reject('Budget cannot be set lower than 0!');
                 set(`${data[1]+data[2]}`, budget).then(() => {
-                    resolve(`Research budget modified to ${budget.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`);
+                    resolve(`Research budget modified to ${budget.toLocaleString(`fr-FR`, { style: 'currency', currency: cfg.money })}`);
                 }).catch(err => {
                     reject(err);
                 });
@@ -104,13 +110,13 @@ function budget(amount, nation, add) {
 
 /**
  * Function lists all nodes in specified category.
- * @param category      String category name. If undefined, prints all categories.
- * @param nation        Modified User's nation name String
- * @param message       Message for embed filtering.
- * @return {string}     Returns String message about the success of the operation.
+ * @param category              String category name. If undefined, prints all categories.
+ * @param nation                Modified User's nation name String
+ * @param message               Message for embed filtering.
+ * @return {Promise<String>}    Returns String message about the success of the operation.
  */
 function list(category, nation, message) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         let newMessage = '';
 
         if(category === undefined) {
@@ -119,15 +125,14 @@ function list(category, nation, message) {
             })
             resolve(`Operation finished. All technology node categories are bellow:
             ***Note:*** You do not have to write full category name but merely it part is sufficient.
-            \`\`\`ini\n${newMessage}\`\`\`
-            `);
+            \`\`\`ini\n${newMessage}\`\`\``);
         }
 
         category = category.toLowerCase();
 
         if (tt[category] !== undefined) {
             findData(category, nation, true, 'TechTree').then(data => {
-                let unlocks = data[0][1].split(',');
+                let unlocks = data[0][1][0].split(',');
                 unlocks.forEach(r => {
                     newMessage += `${r.trim()}\n`
                 })
@@ -155,14 +160,14 @@ function list(category, nation, message) {
                             .then(collected => {
                                 let react = collected.first();
                                 if (react.emoji.name === '✅') {
-                                    research(category, nation, message).then(result => {
+                                    research(category, nation).then(result => {
                                         resolve(result);
                                     })
                                 }
                                 msg.delete();
                                 resolve('Operation canceled.');
                             })
-                            .catch(err => {
+                            .catch(() => {
                                 msg.delete();
                                 resolve('Operation timed out.');
                             })
@@ -194,19 +199,23 @@ function list(category, nation, message) {
 }
 
 
+/**
+ * Function lists all unlocked assets of nodes of specified nation.
+ * @param nation                    String nation's name.
+ * @return {Promise<String>}       String of all unlocked assets.
+ */
 function unlocks(nation) {
     return new Promise(async function (resolve, reject) {
         const unlocks = [];
-        let nationRow;
         let nodes;
-        let dataRow;
         let data;
         let names;
+        let newMessage = '';
         try {
-            nationRow = await findVertical(nation, 'A');
+            let nationRow = await findVertical(nation, 'A');
+            let dataRow = await findVertical('Data', 'A', 'TechTree');
             nodes = await getArray(`A${nationRow}`, `HO${nationRow}`, 0, 0, 'TechTree');
-            dataRow = await findVertical('Data', 'A', 'TechTree');
-            data = await getArray(`A${dataRow}`, `HO${dataRow}`, 1, 2, 'TechTree');
+            data = await getArray(`A${dataRow}`, `HO${dataRow}`, 0, 1, 'TechTree');
             names = await getArray('A4', 'HO4', 0, 0, 'TechTree');
         } catch (e) {
             reject(e);
@@ -217,9 +226,6 @@ function unlocks(nation) {
                 unlocks.push([names[0][i], data[1][i]])
             }
         }
-
-        let newMessage = '';
-
         //Edits the node list to print with padding.
         let l = 0;
         unlocks.forEach(item => {
@@ -227,97 +233,70 @@ function unlocks(nation) {
                 l = tt[item[0]][0].length;
             }
         });
-
         //Constructs the message.
         unlocks.forEach(item => {
             newMessage += `[${tt[item[0]][0].padStart(l)}] ${item[1]}\n`;
         });
-
         resolve(`Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``);
     })
 }
 
 
-async function research(node, nation, message) {
-    const tt = require('./../tt.json');
-    let nationRP;
-    let del = 1;
-    if (node.startsWith('-') && perm(message, 2)) {
-        del = 0;
-        node = node.substring(1, node.length);
-    }
-
-    //Checking prerequisites
-    try {
-        for await (const r of tt[node][3]) {
-        await findData(r, nation, true, 'TechTree')
-            .then(unlocked => {
-                //console.log(r);
-                if(unlocked[3] === '0') throw 'You do not have the prerequisites to unlock the node!';
-            })
-        } 
-    } catch(err) {
-        message.channel.send(err);
-        return;
-    }
-    
-    //Checking node
-    findData(node, nation, true, 'TechTree')
-        .then(data => {
-            if (del && parseInt(data[3]) === 1) {
-                message.channel.send('Node already unlocks!');
-                return false;
-            }
-            //Checking rp amount
-            findHorizontal('RP', 4)
-                .then(rpCol => {
-                    get(`${toCoordinate(rpCol)+data[2]}`)
-                        .then(rp => {
-                            nationRP = rp
-                            if (data[0] > rp && del !== 0) {
-                                message.channel.send('Not enough Research Points!');
-                                return false;
-                            }
-                            //Setting node and then RP
-                            set( `${data[1]+data[2]}`, del, 'TechTree')
-                                .then(result => {
-                                    if (result) {
-                                        if (del === 1) {
-                                            message.channel.send('Node unlocked! ✅');
-                                            set(`${toCoordinate(rpCol)+data[2]}`, parseInt(nationRP.replace(/[,]/g, '')) - data[0])
-                                            report(message, `${cfg.users[message.author.id].nation} has unlocked ${tt[node][0]} for ${data[0]}RP`);
-                                        } else {
-                                            message.channel.send('Node removed!');
-                                            report(message, `${cfg.users[message.author.id].nation} has removed ${tt[node][0]} from ${nation}`);
-
-                                        }
-
-                                        //Tech increments change
-                                        findHorizontal('Technology', 4)
-                                        .then(increments => {
-                                            getArray(`${increments}5`, `${(increments+5)+(data[1]-2)}`)
-                                            .then(incrementArray => {
-                                                //console.log(incrementArray);
-                                                if (del === 1) {
-                                                    set(`${toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) + 0.1));
-                                                } else {
-                                                    set(`${toCoordinate(increments + tt[node][4])+data[2]}`, (parseFloat(incrementArray[data[2]-5][tt[node][4]]) - 0.1));
-                                                }
-                                            }).catch(err => console.error(err));
-                                        }).catch(err => console.error(err));
-                                        return true;
-                                    }
-                                    message.channel.send('Operation failed!');
-                                    return false;
-                                })
-                                .catch(err => console.error(err));
+/**
+ * Function researches or deletes a node.
+ * @param node                  String node name.
+ * @param nation                Nation to modify.
+ * @param del                   If remove or add a node.
+ * @return {Promise<String>}    Result String.
+ */
+function research(node, nation, del = 1) {
+    return new Promise(async function (resolve, reject) {
+        try {
+            if (del === 1) {
+                for await (const r of tt[node][3]) {
+                    await findData(r, nation, true, 'TechTree')
+                        .then(unlocked => {
+                            if (unlocked[0] === 0) throw 'You do not have the prerequisites to unlock the node!';
                         })
-                        .catch(err => console.error(err));
-                })
-                .catch(err => message.channel.send(err));
-        })
-        .catch(err => console.error(err));
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            return reject(err);
+        }
+
+        //Checking node
+        let data = await findData(node, nation, true, 'TechTree').catch(e => {reject(e)});
+        if (del && parseInt(data[3]) === 1) return reject('Node already unlocked!');
+
+        //Checking rp amount
+        let rpCol = await findHorizontal('RP', 4).catch(e => {reject(e)});
+        let rp = parseInt((await get(`${rpCol + data[2]}`)).replace(/[,]/g, ''));
+        if (data[0][0] > rp && del !== 0) return reject('Not enough Research Points!');
+
+        //Setting node to 1 and then setting RP
+        let result = await set(`${data[1] + data[2]}`, del, 'TechTree').catch(e => {reject(e)});
+        if (result) {
+            if (del === 1) set(`${rpCol + data[2]}`, rp - data[0][0]).catch(e => {reject(e)});
+
+            //Tech increments change
+            let increments = await findHorizontal('Technology', 4).catch(e => {reject(e)});
+            let incrementArray = await getArray(`${increments}5`, `${increments}5`, 4, data[2] - 5).catch(e => {reject(e)});
+            let from = fromCoordinate(increments);
+            let coordinate = toCoordinate(from[0] + tt[node][4]);
+            if (del === 1) {
+                await set(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
+                resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
+            } else {
+                await set(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
+                resolve(`${tt[node][0]} was removed from ${nation}`);
+            }
+        }
+        return reject('Operation failed!');
+    });
 }
+
+
 function change(data) {
     const js = require('../jsonManagement');
     const tt = require('./../tt.json');

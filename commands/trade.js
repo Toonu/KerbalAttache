@@ -50,7 +50,7 @@ module.exports = {
                     transfer(customerRow, data[1], amount, money, message, !type, tab)
                     .then(() => {
                         gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s for 
-                        ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`);
+                        ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
                         message.channel.send(`Transaction with ${message.mentions.users.first().username} finished and assets delivered!`)
                             .then(msg => msg.delete({timeout: 10000}));
                     })

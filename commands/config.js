@@ -56,7 +56,7 @@ module.exports = {
             js.exportFile('config.json', cfg);
             message.channel.send('Operation finished.').then(msg => msg.delete({timeout: 9000}));
             message.delete({timeout: 9000});
-            report(message, `${message.author.username} changed configuration ${args[0]} to ${args[1]}`);
+            report(message, `${message.author.username} changed configuration ${args[0]} to ${args[1]}`, this.name);
         }
     }
 };

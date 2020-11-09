@@ -86,13 +86,13 @@ module.exports = {
                             set(`${data[1]+data[2]}`, amount + args[0], tab);
                             get(`B${data[2]}`)
                                 .then(balance => {
-                                    set(`B${data[2]}`, parseInt(balance[1].replace(/[,|$]/g, '')) - cost)
+                                    set(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
                                 })
                                 .catch(err => console.error(err));
                             if (cost < 0) {
-                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`);
+                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
                             } else {
-                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`);
+                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
                             }
                         })
                         .catch(err => console.error(err));

@@ -19,7 +19,7 @@ module.exports = {
         let data = args[1];
 
         if (cfg.users[user] === undefined) {
-            report(message, `${createUser(user, args[1], args[2], args[3], args[4])} by ${message.author.username}`);
+            report(message, `${createUser(user, args[1], args[2], args[3], args[4])} by ${message.author.username}`, this.name);
             useredit(message, args);
             message.delete({timeout: 9000});
         }

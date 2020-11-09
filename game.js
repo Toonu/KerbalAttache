@@ -79,13 +79,15 @@ exports.findData = function findData(target, nation, tech, tab) {
             value = await get(`${priceCol + nationRow}`, tab);
             if (tech) {
                 techInfo = await getArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
+                techInfo[0] = parseInt(techInfo[0]);
             }
+            value = parseInt(value.replace(/[,|$]/g, ''));
         } catch (e) {
             console.error(e);
             reject(e);
         }
 
-        value = parseInt(value.replace(/[,|$]/g, ''));
+
 
         if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
             reject('Wrong name');
@@ -134,9 +136,10 @@ exports.findData = function findData(target, nation, tech, tab) {
  * Function reports to the moderator channel the specified report String.
  * @param message   Message object which specifies server to search main channel in.
  * @param report    String with a message to report.
+ * @param command   String command in which report is from.
  */
-exports.report = function report(message, report) {
+exports.report = function report(message, report, command = '') {
     let today = new Date();
     let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC]: ${report}`);
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`);
 }

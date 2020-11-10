@@ -1,9 +1,11 @@
 const {report} = require("../game");
 module.exports = {
     name: 'config',
-    description: 'Commands for configuring the bot! Do NOT use in public channels.',
+    description: 'Commands for configuring the bot settings.',
     args: true,
-    usage: '[M:configuration] [M:newValue]\n\nConfigurations:\nmoney, sheet, era, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel',
+    usage: `[M:configuration] [M:newValue]
+Configurations:
+money, sheet, era, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel`,
     cooldown: 5,
     guildOnly: true,
     execute: function configBot(message, args) {

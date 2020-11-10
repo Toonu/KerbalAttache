@@ -2,7 +2,7 @@ const {ping} = require("../jsonManagement"), {findVertical} = require("../game")
     discord = require('discord.js'), {getArray} = require("../sheet");
 module.exports = {
     name: 'balance',
-    description: 'Command for getting your current state statistics! Do NOT use in public channels.',
+    description: 'Command for getting the statistics about your state! Do NOT use in public channels.',
     args: false,
     usage: '[M:@user]',
     cooldown: 5,

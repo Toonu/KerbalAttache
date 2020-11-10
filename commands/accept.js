@@ -2,9 +2,9 @@ const {report, findVertical, transfer} = require('./../game'), cfg = require('./
 const {exportFile} = require("../jsonManagement");
 module.exports = {
     name: 'accept',
-    description: 'Command for accepting trade transaction proposal.!',
+    description: 'Command for accepting trade transaction proposal!',
     args: false,
-    usage: '[args]',
+    usage: '',
     cooldown: 5,
     guildOnly: true,
 

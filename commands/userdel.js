@@ -1,7 +1,7 @@
 const cfg = require('./../config.json'), {exportFile, perm} = require("../jsonManagement");
 module.exports = {
     name: 'userdel',
-    description: 'Command for deleting user from database!',
+    description: 'Command for deleting user from database.',
     args: true,
     usage: '[M:@user]',
     cooldown: 5,

@@ -1,7 +1,7 @@
 const {ping} = require("../jsonManagement"), discord = require('discord.js'), cfg = require('../config.json');
 module.exports = {
     name: 'map',
-    description: 'Command for getting link to you map. Do NOT use in public channels.',
+    description: 'Command for getting link to you private map. Do NOT use in public channels.',
     args: false,
     usage: '[M:@user]',
     cooldown: 5,

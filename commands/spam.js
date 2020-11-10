@@ -1,7 +1,7 @@
 const {perm} = require("../jsonManagement");
 module.exports = {
 	name: 'spam',
-	description: 'Command for sending messages.',
+	description: 'Command for sending spam messages.',
 	args: true,
 	usage: '[D:amount]',
 	cooldown: 5,

@@ -1,7 +1,7 @@
 const cfg = require("./../config.json"), {ping} = require("../jsonManagement"), discord = require('discord.js');
 module.exports = {
     name: 'sheet',
-    description: 'Command for getting link to your spreadsheet! Do NOT use in public channels.',
+    description: 'Command for getting link to your private spreadsheet! Do NOT use in public channels.',
     args: false,
     usage: '[M:@user]',
     cooldown: 5,

@@ -4,11 +4,11 @@ const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../
     {findData, findHorizontal, findVertical, report} = require("../game");
 module.exports = {
     name: 'tech',
-    description: 'Command for managing your research!',
+    description: 'Command for managing your research.',
     args: true,
     usage: `[operation] [operation type] [operation data] [M:@user]
-
 Possible operations:
+
 **budget [set | add]**          - Sets or adds money to user's research budget (use neg. number to decrease).
 **research [node | -node]**     - Researches specified tech tree node. Use minus letter to revert research.
 **list**                        - Lists all available categories.

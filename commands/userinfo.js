@@ -2,7 +2,7 @@ const cfg = require("./../config.json"), discord = require('discord.js'), {repor
     {createUser, ping} = require("../jsonManagement");
 module.exports = {
 	name: 'userinfo',
-	description: 'Shows user information.',
+	description: 'Command shows user information.',
 	args: false,
 	usage: '[@user]',
 	cooldown: 5,

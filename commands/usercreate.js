@@ -1,7 +1,7 @@
 const {report} = require("../game"), {createUser, perm} = require("../jsonManagement");
 module.exports = {
     name: 'usercreate',
-    description: 'Command for creating user!',
+    description: 'Command for creating new user in the database.',
     args: true,
     usage: '[M:@user] [M:nation] [M:color] [M:sheet] [M:map]',
     cooldown: 5,

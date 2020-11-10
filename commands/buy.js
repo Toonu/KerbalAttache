@@ -2,9 +2,11 @@ const cfg = require('./../config.json'), units = require('./../units.json'), dis
     {report, findData} = require("../game"), {get, set} = require("../sheet");
 module.exports = {
     name: 'buy',
-    description: 'Command for buying new assets and systems! Do NOT use in public channels.',
+    description: 'Command for buying new assets. Do NOT use in public channels.',
     args: false,
-    usage: '[amount] [asset]\nAssets do not need to be written in capital letters.\n**Assets:** can be listed via **?buy command**.',
+    usage: `[amount] [asset]
+Assets do not need to be written in capital letters, the command is case insensitive.
+**Assets:** can be listed via **?buy** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function buy(message, args, tab = undefined) {
@@ -19,9 +21,15 @@ module.exports = {
                 if (item.length > l) l = item.length;
             });
 
-            Object.keys(units).forEach(item => {
-                newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
-            });
+            try {
+                Object.keys(units).forEach(item => {
+                    if (item === 'ResBudget') {
+                        throw '';
+                    }
+                    newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
+                });
+            } catch (e) {}
+
 
             message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
             .then(msg => msg.delete({ timeout: 30000 }))

@@ -2,9 +2,9 @@ const cfg = require('./../config.json'), js = require('../jsonManagement'),
     {setArray, getArray, set} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
 module.exports = {
     name: 'turn',
-    description: 'Command to finish turn and calculate the chart data!',
+    description: 'Command for finishing turn and updating the sheet data!',
     args: false,
-    usage: '<true> if revert',
+    usage: '',
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message) {

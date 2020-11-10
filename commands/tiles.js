@@ -2,9 +2,9 @@ const cfg = require("./../config.json"), {report, findData} = require("../game")
     {set} = require("../sheet"), {perm, ping} = require("../jsonManagement");
 module.exports = {
     name: 'tiles',
-    description: 'Command for managing tile amount by adding/subtracting it!',
+    description: 'Command for managing tile amount of nation.',
     args: false,
-    usage: '[M:amount] [M:@user]',
+    usage: '[M:amount] [M:@user] (use negative amount to remove tiles)',
     cooldown: 5,
     guildOnly: true,
     execute: async function tiles(message, args) {

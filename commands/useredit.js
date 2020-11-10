@@ -2,9 +2,12 @@ const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = 
     {report} = require("../game");
 module.exports = {
     name: 'useredit',
-    description: 'Command for editing users! Your notes are always editable',
+    description: 'Command for editing user data in the database! Your notes are always editable even without permissions.',
     args: true,
-    usage: `[operation] [attribute | del] [M:@user]\nOperations:\nnotes, (Moderators only: nation, color, sheet, map)`,
+    usage: `[operation] [data | del] [M:@user]
+Possible operations:
+
+notes, (Moderators only: nation, color, sheet, map)`,
     cooldown: 5,
     guildOnly: true,
     /**

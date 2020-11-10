@@ -1,5 +1,6 @@
 const cfg = require('./../config.json'), js = require('../jsonManagement'),
     {setArray, getArray} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
+const {set} = require("../sheet");
 module.exports = {
     name: 'turn',
     description: 'Command to finish turn and calculate the chart data!',
@@ -14,9 +15,9 @@ module.exports = {
         let coefficient = [];
 
         let techCol = await findHorizontal('RP', 4).catch(e => {console.log(e)});
-        let endRow = await findVertical('Data', 'A').catch(e => {console.log(e)});
-        let balanceArray = await getArray(`A5`, `C${endRow - 1}`).catch(e => {console.log(e)});
-        let researchArray = await getArray(`${techCol}5`, `${techCol + (endRow - 1)}`, 2, 0).catch(e => {console.log(e)});
+        let dataRow = await findVertical('Data', 'A').catch(e => {console.log(e)});
+        let balanceArray = await getArray(`A5`, `C${dataRow - 1}`).catch(e => {console.log(e)});
+        let researchArray = await getArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, 0).catch(e => {console.log(e)});
 
         balanceArray.forEach(r => {
             r[1] = parseInt(r[1].replace(/[,|$]/g, ''));
@@ -52,7 +53,10 @@ module.exports = {
             }
         })
 
+        cfg.turn += 1;
         js.exportFile('config.json', cfg);
+        let today = new Date();
+        let dateTime = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
 
         balanceArray.forEach(r => {
@@ -61,6 +65,8 @@ module.exports = {
 
         await setArray('B5', balanceArray);
         await setArray(techCol + 5, newResearch);
+        await set(`B${dataRow + 1}`, cfg.turn);
+        await set(`B${dataRow + 2}`, dateTime);
         report(message, `Turn has been finished by <@${message.author.id}>`, this.name);
     }
 };

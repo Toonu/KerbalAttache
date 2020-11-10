@@ -302,6 +302,11 @@ function research(node, nation, del = 1) {
 }
 
 
+/**
+ * Function changes node internal configuration (not on sheet tho).
+ * @param data          Args array
+ * @return {string}     Result message
+ */
 function change(data) {
     let newData = '';
     data.forEach(r => {

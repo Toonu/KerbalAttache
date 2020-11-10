@@ -79,10 +79,12 @@ client.on('message', message => {
 	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
 	
 	try {
-        if (message.channel.type === 'dm') {
-            console.log('DM from '+ message.author.username + ": " + message.content);
+		let today = new Date();
+		let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+		if (message.channel.type === 'dm') {
+            console.log(`[${dateTime} UTC] DM from ${message.author.username}: ${message.content}`);
         } else {
-			console.log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
+			console.log(`[${dateTime} UTC] Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);
 	} catch (error) {
@@ -103,5 +105,4 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Super goal:      Turn command.
  * Trade embed and confirmation of the customer/recipient nation in DMs or something like that.
  * Can be working with reacting on old messages, then checking if its the correct message and then doing the task?
- * Trade command missing trading weapons?
  **/

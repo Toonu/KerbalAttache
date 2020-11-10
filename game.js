@@ -75,19 +75,23 @@ exports.findData = function findData(target, nation, tech, tab) {
         let priceCol;
         let techInfo;
         try {
-            [priceRow, nationRow, priceCol] = await Promise.all([gm.findVertical('Data', 'A', tab), gm.findVertical(nation, 'A', tab), gm.findHorizontal(target, 4, tab)]);
-            value = await get(`${priceCol + nationRow}`, tab);
+            priceRow = await gm.findVertical('Data', 'A', tab).catch(e => {reject(e)});
+            nationRow = await gm.findVertical(nation, 'A', tab).catch(e => {reject(e)});
+            priceCol = await gm.findHorizontal(target, 4, tab).catch(e => {reject(e)});
+            value = await get(`${priceCol + nationRow}`, tab).catch(e => {reject(e)});
             if (tech) {
                 techInfo = await getArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
                 techInfo[0] = parseInt(techInfo[0]);
             }
-            value = parseInt(value.replace(/[,|$]/g, ''));
+            if (value === undefined) {
+                value = 0;
+            } else {
+                value = parseInt(value.replace(/[,|$]/g, ''));
+            }
         } catch (e) {
             console.error(e);
             reject(e);
         }
-
-
 
         if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
             reject('Wrong name');
@@ -101,7 +105,6 @@ exports.findData = function findData(target, nation, tech, tab) {
                 } else {
                     resolve([techInfo, priceCol, nationRow, value]);
                 }
-
             } else {
                 gm.findHorizontal('Surface', 1)
                 .then(incrementsCols => {

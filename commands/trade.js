@@ -37,7 +37,7 @@ module.exports = {
             tab = 'Stockpiles';
         }
         message.delete();
-        gm.findData(unit, nation)
+        gm.findData(unit, nation, false, tab)
         .then(data => {
             if (data[0] * 4 * amount > money) {
                 return message.channel.send('The price of this trade is lower than production cost of the vehicles!')
@@ -49,8 +49,7 @@ module.exports = {
                 .then(() => {
                     transfer(customerRow, data[1], amount, money, message, !type, tab)
                     .then(() => {
-                        gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s for 
-                        ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
+                        gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
                         message.channel.send(`Transaction with ${message.mentions.users.first().username} finished and assets delivered!`)
                             .then(msg => msg.delete({timeout: 10000}));
                     })
@@ -74,14 +73,13 @@ function transfer(nationRow, unitCol, amount, money, message, type, tab) {
             .then(unitsAmount => {
                 if (type) {
                     unitsAmount = parseInt(unitsAmount) - amount;
+                } else if (unitsAmount === undefined) {
+                    unitsAmount =  amount;
                 } else {
                     unitsAmount = parseInt(unitsAmount) + amount;
                 }
-                if(unitsAmount < 0) {
-                    reject('Not enough units to sell!');
-                    return;
-                }
-                get(`B${nationRow}`, tab)
+                if(unitsAmount < 0) return reject('Not enough units to sell!');
+                get(`B${nationRow}`)
                     .then(balance => {
                         if (type) {
                             balance = parseInt(balance.replace(/[,|$]/g, '')) + money;
@@ -90,7 +88,7 @@ function transfer(nationRow, unitCol, amount, money, message, type, tab) {
                         }
                         set( `${unitCol + nationRow}`, unitsAmount, tab)
                             .then(() => {
-                                set(`B${nationRow}`, balance, tab).then(() => {
+                                set(`B${nationRow}`, balance).then(() => {
                                     resolve();
                                 })
                             })

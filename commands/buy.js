@@ -49,7 +49,7 @@ module.exports = {
             tab = 'Stockpiles';
         }
 
-        findData(args[1], cfg.users[message.author.id].nation, tab)
+        findData(args[1], cfg.users[message.author.id].nation, false,tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;
             if (tab !== undefined) cost /= 4;
@@ -80,23 +80,18 @@ module.exports = {
                         //Accepted, deleting embed and writing response.
                         msg.delete();
                         msg.channel.send('Purchasing assets. ✅').then(newMessage => newMessage.delete({timeout: 15000}));
-                        get(`${data[1]+data[2]}`, tab)
-                        .then(amount => {
-                            amount = amount === false ? 0 : parseInt(amount);
-                            //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
-                            set(`${data[1]+data[2]}`, amount + args[0], tab);
-                            get(`B${data[2]}`)
-                                .then(balance => {
-                                    set(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
-                                })
-                                .catch(err => console.error(err));
-                            if (cost < 0) {
-                                report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
-                            } else {
-                                report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
-                            }
-                        })
-                        .catch(err => console.error(err));
+                        //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
+                        set(`${data[1]+data[2]}`, data[3] + args[0], tab);
+                        get(`B${data[2]}`)
+                            .then(balance => {
+                                set(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
+                            })
+                            .catch(err => console.error(err));
+                        if (cost < 0) {
+                            report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
+                        } else {
+                            report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
+                        }
                     } else {
                         msg.delete();
                         msg.channel.send('Operation was canceled. ❌').then(newMessage => newMessage.delete({timeout: 5000}));

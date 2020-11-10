@@ -100,9 +100,6 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
 
 /**
- * TODO Ultimate goal:   KSP mod for development price directly in game.
- * TODO Hyper goal:      Map integration via xml editing.
- * TODO Super goal:      Turn command.
- * Trade embed and confirmation of the customer/recipient nation in DMs or something like that.
- * Can be working with reacting on old messages, then checking if its the correct message and then doing the task?
+ * TODO Hyper goal:   	KSP mod for development price directly in game.
+ * TODO Super goal:     Map integration via xml editing.
  **/

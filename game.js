@@ -1,5 +1,5 @@
 const gm = require('./game'), cfg = require('./config.json'),
-    units = require('./units.json'), {get, getArray, toCoordinate} = require("./sheet");
+    units = require('./units.json'), {get, set, getArray, toCoordinate} = require("./sheet");
 
 /**
  * Function finds row of target in column of sheet tab.
@@ -135,6 +135,7 @@ exports.findData = function findData(target, nation, tech, tab) {
     });
 }
 
+
 /**
  * Function reports to the moderator channel the specified report String.
  * @param message   Message object which specifies server to search main channel in.
@@ -144,5 +145,50 @@ exports.findData = function findData(target, nation, tech, tab) {
 exports.report = function report(message, report, command = '') {
     let today = new Date();
     let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`);
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`).then(e => console.log(e));
+}
+
+
+/**
+ * Function makes trade transaction between two countries.
+ * @param nationRow             Number of nation row.
+ * @param unitCol               String of traded asset col.
+ * @param amount                Number of assets traded.
+ * @param money                 Number money paid.
+ * @param message               Message object to respond to.
+ * @param type                  Boolean type of transaction.
+ * @param tab                   String tab of sheet.
+ * @return {Promise<String>}    Returns result.
+ */
+exports.transfer = function transfer(nationRow, unitCol, amount, money, message, type, tab) {
+    return new Promise(function (resolve, reject) {
+        get(`${unitCol + nationRow}`, tab)
+            .then(unitsAmount => {
+                if (type) {
+                    unitsAmount = parseInt(unitsAmount) - amount;
+                } else if (unitsAmount === undefined) {
+                    unitsAmount =  amount;
+                } else {
+                    unitsAmount = parseInt(unitsAmount) + amount;
+                }
+                if(unitsAmount < 0) return reject('Not enough units to sell!');
+                get(`B${nationRow}`)
+                    .then(balance => {
+                        if (type) {
+                            balance = parseInt(balance.replace(/[,|$]/g, '')) + money;
+                        } else {
+                            balance = parseInt(balance.replace(/[,|$]/g, '')) - money;
+                        }
+                        set( `${unitCol + nationRow}`, unitsAmount, tab)
+                            .then(() => {
+                                set(`B${nationRow}`, balance).then(() => {
+                                    resolve('Success.');
+                                })
+                            })
+                            .catch(err => reject(err));
+                    })
+                    .catch(err => reject(err));
+            })
+            .catch(err => reject(err));
+    })
 }

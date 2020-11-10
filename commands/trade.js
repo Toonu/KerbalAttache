@@ -1,13 +1,24 @@
-const cfg = require("./../config.json"), gm = require("./../game"),
-    units = require('./../units.json'), {get, set} = require("../sheet");
+const cfg = require("./../config.json"), gm = require("./../game"), units = require('./../units.json');
+const {exportFile} = require("../jsonManagement");
 module.exports = {
     name: 'trade',
-    description: 'Command for setting trade value of assets you have traded! When you purchase or sell an asset, you should put the price you paid here.',
+    description: 'Command for making trade transactions between nations. Note that you can have only one pending transaction at time!',
     args: true,
-    usage: '[sell | buy] [numberOfAssets] [assetType] [money] [@customer]\n\n**Assets:**\n*Buildings:* AIRPORT, FOB, PORT, RADAR\n*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF\n*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV\n*Naval assets:* K, F, DD, CC, BC, BB, CL, CV\n**Weapons:**\n*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD\n*Surface:* CRUISE, BALLISTIC, ABM, ASM\n*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD',
+    usage: `[sell | buy] [numberOfAssets] [assetType] [money] [@customer]
+
+**Assets:**
+*Buildings:* AIRPORT, FOB, PORT, RADAR
+*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF
+*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV
+*Naval assets:* K, F, DD, CC, BC, BB, CL, CV
+
+**Weapons:**
+*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD
+*Surface:* CRUISE, BALLISTIC, ABM, ASM
+*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD`,
     cooldown: 5,
-    guildOnly: true,
-    execute: async function execute(message, args) {
+    guildOnly: false,
+    execute: async function trade(message, args) {
         const nation = cfg.users[message.author.id].nation;
         const customer = cfg.users[message.mentions.users.first().id].nation;
         const money = parseInt(args[3]);
@@ -43,59 +54,30 @@ module.exports = {
                 return message.channel.send('The price of this trade is lower than production cost of the vehicles!')
                     .then(msg => msg.delete({timeout: 10000}));
             }
-            gm.findVertical(customer, 'A')
-            .then(customerRow => {
-                transfer(data[2], data[1], amount, money, message, type, tab)
-                .then(() => {
-                    transfer(customerRow, data[1], amount, money, message, !type, tab)
-                    .then(() => {
-                        gm.report(message, `<@${message.author.id}> has traded ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
-                        message.channel.send(`Transaction with ${message.mentions.users.first().username} finished and assets delivered!`)
-                            .then(msg => msg.delete({timeout: 10000}));
-                    })
-                    .catch(err => {
-                        message.channel.send(err).then(msg => msg.delete({timeout: 10000}));
-                    })
-                })
-                .catch(err => {
-                    message.channel.send(err).then(msg => msg.delete({timeout: 10000}));
-                })
-            })
-            .catch(err => console.error(err));
+
+
+            gm.report(message, `<@${message.author.id}> has proposed to ${args[0].toLowerCase()} ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
+            message.channel.send(`Transaction with ${message.mentions.users.first().username} was proposed to recipient and delivered!`)
+                .then(msg => msg.delete({timeout: 10000}));
+            message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
+He ${args[0].toLowerCase()} ${amount} ${unit}s to you for ***${money.toLocaleString('fr-FR', {style: 'currency', currency: cfg.money})}***
+
+To accept the transaction, type ?accept in your server channel.`);
+
+            cfg.trade[message.mentions.users.first().id] = {
+                "nation": nation,
+                "amount": amount,
+                "money": money,
+                "unit": unit,
+                "type": type,
+                "tab": tab,
+                "transaction": args[0].toLowerCase(),
+                "nationRow": data[2],
+                "unitCol": data[1],
+                "message": message
+            }
+            exportFile('config.json', cfg);
         })
         .catch(err => console.error(err));
     },
 };
-
-function transfer(nationRow, unitCol, amount, money, message, type, tab) {
-    return new Promise(function (resolve, reject) {
-        get(`${unitCol + nationRow}`, tab)
-            .then(unitsAmount => {
-                if (type) {
-                    unitsAmount = parseInt(unitsAmount) - amount;
-                } else if (unitsAmount === undefined) {
-                    unitsAmount =  amount;
-                } else {
-                    unitsAmount = parseInt(unitsAmount) + amount;
-                }
-                if(unitsAmount < 0) return reject('Not enough units to sell!');
-                get(`B${nationRow}`)
-                    .then(balance => {
-                        if (type) {
-                            balance = parseInt(balance.replace(/[,|$]/g, '')) + money;
-                        } else {
-                            balance = parseInt(balance.replace(/[,|$]/g, '')) - money;
-                        }
-                        set( `${unitCol + nationRow}`, unitsAmount, tab)
-                            .then(() => {
-                                set(`B${nationRow}`, balance).then(() => {
-                                    resolve();
-                                })
-                            })
-                            .catch(err => reject(err));
-                    })
-                    .catch(err => reject(err));
-            })
-            .catch(err => reject(err));
-    })
-}

@@ -1,6 +1,5 @@
 const cfg = require('./../config.json'), js = require('../jsonManagement'),
-    {setArray, getArray} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
-const {set} = require("../sheet");
+    {setArray, getArray, set} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
 module.exports = {
     name: 'turn',
     description: 'Command to finish turn and calculate the chart data!',

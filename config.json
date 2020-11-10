@@ -114,9 +114,15 @@
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
+        },
+        "363338561698922498": {
+            "nation": "DIM",
+            "color": "undefined",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
         }
     },
-    "trade": {
-
-    }
+    "trade": {}
 }

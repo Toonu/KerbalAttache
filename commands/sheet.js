@@ -5,7 +5,7 @@ module.exports = {
     args: false,
     usage: '[M:@user]',
     cooldown: 5,
-    guildOnly: true,
+    guildOnly: false,
     execute: function sheet(message, args) {
         //If no argument or tag of user, shows link to his sheet.
         if (args[0] === undefined || args[0].startsWith('<@')) {

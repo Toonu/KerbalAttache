@@ -42,6 +42,9 @@ exports.exportFile = function exportFile(file, data) {
  * @returns {boolean}   True if has permission, else False.
  */
 exports.perm = function perm(message, level, msg) {
+    if (message.channel.type === 'dm') {
+        return true;
+    }
     // noinspection JSUnresolvedVariable
     let adm = cfg.servers[message.guild.id].administrators;
     // noinspection JSUnresolvedVariable

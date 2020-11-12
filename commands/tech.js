@@ -39,7 +39,7 @@ Possible operations:
             result.push(await unlocks(nation));
             result.push(false);
         } else if (args[0] === 'research') {
-            if (parseInt(args[1].substring(0, 2)) >= cfg.era) {
+            if (parseInt(args[1].substring(0, 2)) >= cfg.era || (args[1].startsWith('Early') && cfg.era === 50)) {
                 result.push('The technology is too futuristic!');
                 result.push(false);
             } else {
@@ -71,10 +71,10 @@ Possible operations:
         message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
             if (msg.length < 5) {
                 msg.forEach(m => {
-                    m.delete({timeout: 16000})
+                    m.delete({timeout: 32000})
                 });
             } else {
-                msg.delete({timeout: 16000});
+                msg.delete({timeout: 32000});
             }
         });
         if (result[1]) {

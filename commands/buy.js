@@ -104,7 +104,7 @@ Assets do not need to be written in capital letters, the command is case insensi
                         msg.delete();
                         msg.channel.send('Operation was canceled. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                     }
-                }).catch(() => {
+                }).catch(err => {
                     msg.delete();
                     msg.channel.send('Operation timed out. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                 });

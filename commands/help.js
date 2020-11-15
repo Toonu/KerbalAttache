@@ -46,7 +46,7 @@ module.exports = {
 		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
 		message.channel.send(data).then(msg => {
-			msg.delete({timeout: 15000});
+			msg.delete({timeout: 32000});
 		})
 		message.delete();
 	},

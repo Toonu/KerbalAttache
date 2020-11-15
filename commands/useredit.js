@@ -41,11 +41,11 @@ notes, (Moderators only: nation, color, sheet, map, cf)`,
         } else if (args[0] === 'map' && permission) {
             cfg.users[user].map = data;
         } else if (args[0] === 'cf' && permission) {
-            cfg.users[user].cf = data;
+            cfg.users[user].cf = parseInt(data);
         } else {
             message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 9000}));
-            message.delete({timeout: 9000});
-            return;
+            return message.delete({timeout: 9000});
+
         }
 
         exportFile("config.json", cfg);

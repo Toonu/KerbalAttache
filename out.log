@@ -1,22 +1,19 @@
 Deployed and ready!
-[2020-11-12 21:54:30 UTC] Server Nations of Unity: KerNations Redux (Toonu): ?buy 100 MBT <@!257922404511121408>
+[2020-11-15 21:45:26 UTC] Server Ruse (Toonu): ?turn
 <ref *2> Message {
   channel: <ref *1> TextChannel {
     type: 'text',
     deleted: false,
-    id: '770921356111773698',
-    name: 'reports',
-    rawPosition: 25,
-    parentID: '470258156682084380',
-    permissionOverwrites: Collection(4) [Map] {
-      '470258156682084373' => [PermissionOverwrites],
-      '470260541785636865' => [PermissionOverwrites],
-      '591521990972669980' => [PermissionOverwrites],
-      '716608480810631178' => [PermissionOverwrites]
+    id: '768476039496073227',
+    name: 'log',
+    rawPosition: 15,
+    parentID: '768480394521477151',
+    permissionOverwrites: Collection(1) [Map] {
+      '768471917874905108' => [PermissionOverwrites]
     },
     topic: null,
     nsfw: false,
-    lastMessageID: '776550537147318292',
+    lastMessageID: '777635414085074954',
     rateLimitPerUser: 0,
     lastPinTimestamp: null,
     guild: Guild {
@@ -27,30 +24,30 @@ Deployed and ready!
       voiceStates: [VoiceStateManager],
       deleted: false,
       available: true,
-      id: '470258156682084373',
+      id: '768471917874905108',
       shardID: 0,
-      name: 'Nations of Unity: KerNations Redux',
-      icon: '32e5f54c60fb6b99cce1f7f7e54ec8af',
+      name: 'Ruse',
+      icon: 'c3c8659ac2dc535724378663f3f42fff',
       splash: null,
       discoverySplash: null,
-      region: 'us-east',
-      memberCount: 62,
-      large: true,
+      region: 'europe',
+      memberCount: 11,
+      large: false,
       features: [],
       applicationID: null,
       afkTimeout: 300,
       afkChannelID: null,
-      systemChannelID: '470260369789812736',
+      systemChannelID: '768471917874905111',
       embedEnabled: undefined,
       premiumTier: 0,
       premiumSubscriptionCount: 0,
-      verificationLevel: 'NONE',
+      verificationLevel: 'LOW',
       explicitContentFilter: 'DISABLED',
       mfaLevel: 0,
-      joinedTimestamp: 1603554370786,
+      joinedTimestamp: 1603377767658,
       defaultMessageNotifications: 'MENTIONS',
       systemChannelFlags: [SystemChannelFlags],
-      maximumMembers: 250000,
+      maximumMembers: 100000,
       maximumPresences: null,
       approximateMemberCount: null,
       approximatePresenceCount: null,
@@ -61,7 +58,7 @@ Deployed and ready!
       rulesChannelID: null,
       publicUpdatesChannelID: null,
       preferredLocale: 'en-US',
-      ownerID: '81154733842112512',
+      ownerID: '319919565079576576',
       emojis: [GuildEmojiManager]
     },
     messages: MessageManager {
@@ -72,10 +69,10 @@ Deployed and ready!
     _typing: Map(0) {}
   },
   deleted: false,
-  id: '776550537147318292',
+  id: '777635414085074954',
   type: 'DEFAULT',
   system: false,
-  content: '[2020-11-12 21:54:35 UTC] [buy]: Iconia has bought 100 Main Battle Tank for 4?800?000,00 €',
+  content: '[2020-11-15 21:45:29 UTC] [turn]: Turn has been finished by <@319919565079576576>',
   author: ClientUser {
     id: '768845435455930428',
     system: null,
@@ -85,8 +82,8 @@ Deployed and ready!
     bot: true,
     discriminator: '6538',
     avatar: '395db2a6b93082ead5034c271d0b6284',
-    lastMessageID: '776550537147318292',
-    lastMessageChannelID: '770921356111773698',
+    lastMessageID: '777635414085074954',
+    lastMessageChannelID: '768476039496073227',
     verified: true,
     mfaEnabled: true,
     _typing: Map(0) {}
@@ -96,7 +93,7 @@ Deployed and ready!
   nonce: null,
   embeds: [],
   attachments: Collection(0) [Map] {},
-  createdTimestamp: 1605214475667,
+  createdTimestamp: 1605473130485,
   editedTimestamp: 0,
   reactions: ReactionManager {
     cacheType: [class Collection extends Collection],
@@ -105,7 +102,7 @@ Deployed and ready!
   },
   mentions: MessageMentions {
     everyone: false,
-    users: Collection(0) [Map] {},
+    users: Collection(1) [Map] { '319919565079576576' => [User] },
     roles: Collection(0) [Map] {},
     _members: null,
     _channels: null,

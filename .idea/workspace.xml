@@ -29,8 +29,11 @@
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/help.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/help.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/usercreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/usercreate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" afterPath="$PROJECT_DIR$/out.log" afterDir="false" />
@@ -95,6 +98,11 @@
       <workItem from="1605010094477" duration="706000" />
       <workItem from="1605187959789" duration="460000" />
       <workItem from="1605209797433" duration="4502000" />
+      <workItem from="1605467159450" duration="535000" />
+      <workItem from="1605468071456" duration="9000" />
+      <workItem from="1605468708131" duration="1980000" />
+      <workItem from="1605473079494" duration="75000" />
+      <workItem from="1605480339798" duration="19000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -194,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605220658163</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Added configuration of tech coefficient.">
+      <created>1605467676175</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1605467676175</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,7 +236,8 @@
     <MESSAGE value="Trade must be accepted by both sides." />
     <MESSAGE value="Command descriptions" />
     <MESSAGE value="Fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes" />
+    <MESSAGE value="Added configuration of tech coefficient." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added configuration of tech coefficient." />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="198" key="#Inspections" timestamp="1604961248596">
@@ -252,22 +268,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605187998516" />
-    <state width="1899" height="270" key="GridCell.Tab.0.bottom" timestamp="1605220664159">
+    <state width="1899" height="400" key="GridCell.Tab.0.bottom" timestamp="1605473153699">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="270" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605220664159" />
-    <state width="1899" height="270" key="GridCell.Tab.0.center" timestamp="1605220664159">
+    <state width="1899" height="400" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605473153699" />
+    <state width="1899" height="400" key="GridCell.Tab.0.center" timestamp="1605473153699">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="270" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605220664159" />
-    <state width="1899" height="270" key="GridCell.Tab.0.left" timestamp="1605220664159">
+    <state width="1899" height="400" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605473153699" />
+    <state width="1899" height="400" key="GridCell.Tab.0.left" timestamp="1605473153699">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="270" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605220664159" />
-    <state width="1899" height="270" key="GridCell.Tab.0.right" timestamp="1605220664159">
+    <state width="1899" height="400" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605473153699" />
+    <state width="1899" height="400" key="GridCell.Tab.0.right" timestamp="1605473153699">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="270" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605220664159" />
+    <state width="1899" height="400" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605473153699" />
     <state width="1899" height="270" key="GridCell.Tab.1.bottom" timestamp="1605220664159">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -320,10 +336,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1604777020784" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605220660236">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605467679492">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605220660236" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605467679492" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1604927958397">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -355,7 +371,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/game.js</url>
           <line>145</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>

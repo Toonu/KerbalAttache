@@ -1,4 +1,4 @@
-const cfg = require('./../config.json'), {exportFile, perm} = require("../jsonManagement");
+const cfg = require('./../config.json'), {exportFile, perm} = require("../jsonManagement"), {report} = require("../game");
 module.exports = {
     name: 'userdel',
     description: 'Command for deleting user from database.',
@@ -16,6 +16,7 @@ module.exports = {
         if (perm(message, 2, true)) {
             delete cfg.users[user.id];
             exportFile("config.json", cfg);
+            report(message, `${message.author.username} deleted user ${message.mentions.users.first().username}!`, this.name);
             message.channel.send("User deleted.").then(msg => msg.delete({timeout: 9000}));
             message.delete({timeout: 9000});
         }

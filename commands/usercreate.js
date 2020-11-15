@@ -18,6 +18,8 @@ module.exports = {
             if (result.startsWith('Nation')) {
                 report(message, `${result} by ${message.author.username}`, this.name);
                 message.channel.send('User created.').then(msg => msg.delete({timeout: 9000}));
+            } else {
+                message.channel.send(result).then(msg => msg.delete({timeout: 9000}));
             }
             message.delete({timeout: 9000});
         }

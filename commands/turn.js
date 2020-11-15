@@ -16,7 +16,7 @@ module.exports = {
         let techCol = await findHorizontal('RP', 4).catch(e => {console.log(e)});
         let dataRow = await findVertical('Data', 'A').catch(e => {console.log(e)});
         let balanceArray = await getArray(`A5`, `C${dataRow - 1}`).catch(e => {console.log(e)});
-        let researchArray = await getArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, 0).catch(e => {console.log(e)});
+        let researchArray = await getArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, -1).catch(e => {console.log(e)});
 
         balanceArray.forEach(r => {
             r[1] = parseInt(r[1].replace(/[,|$]/g, ''));

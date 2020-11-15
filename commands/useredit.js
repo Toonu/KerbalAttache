@@ -7,7 +7,7 @@ module.exports = {
     usage: `[operation] [data | del] [M:@user]
 Possible operations:
 
-notes, (Moderators only: nation, color, sheet, map)`,
+notes, (Moderators only: nation, color, sheet, map, cf)`,
     cooldown: 5,
     guildOnly: true,
     /**
@@ -39,7 +39,9 @@ notes, (Moderators only: nation, color, sheet, map)`,
         } else if (args[0] === 'sheet' && permission) {
             cfg.users[user].sheet = data;
         } else if (args[0] === 'map' && permission) {
-                cfg.users[user].map = data;
+            cfg.users[user].map = data;
+        } else if (args[0] === 'cf' && permission) {
+            cfg.users[user].cf = data;
         } else {
             message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 9000}));
             message.delete({timeout: 9000});

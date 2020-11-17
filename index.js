@@ -103,6 +103,5 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Hyper goal:   	KSP mod for development price directly in game.
  * TODO Super goal:     Map integration via xml editing.
  *
- * Buy command report shows who bought it, but not for whom.
  * Battle command for removal of lost units and weapons freely.
  **/

@@ -1,19 +1,26 @@
 Deployed and ready!
-[2020-11-15 21:45:26 UTC] Server Ruse (Toonu): ?turn
+[2020-11-18 22:55:5 UTC] Server Ruse (Toonu): ?battle <@!319919565079576576> <@!768845435455930428> <@!227222314645717002> <@!591521990972669980>   -u 1 AFV 1 IFV -s 2 L 5 M -s 2 VL 1 SPAAG -s 1 SAM 5 APC 55 ARM 1 Airport 120 MRSAM 100 SRAAM
 <ref *2> Message {
   channel: <ref *1> TextChannel {
     type: 'text',
     deleted: false,
-    id: '768476039496073227',
-    name: 'log',
-    rawPosition: 15,
+    id: '770982475228643369',
+    name: 'testing',
+    rawPosition: 17,
     parentID: '768480394521477151',
-    permissionOverwrites: Collection(1) [Map] {
-      '768471917874905108' => [PermissionOverwrites]
+    permissionOverwrites: Collection(8) [Map] {
+      '227222314645717002' => [PermissionOverwrites],
+      '281096636048867332' => [PermissionOverwrites],
+      '363338561698922498' => [PermissionOverwrites],
+      '591521990972669980' => [PermissionOverwrites],
+      '693908421396922480' => [PermissionOverwrites],
+      '768471917874905108' => [PermissionOverwrites],
+      '768846825254944829' => [PermissionOverwrites],
+      '257922404511121408' => [PermissionOverwrites]
     },
     topic: null,
     nsfw: false,
-    lastMessageID: '777635414085074954',
+    lastMessageID: '778740102473973770',
     rateLimitPerUser: 0,
     lastPinTimestamp: null,
     guild: Guild {
@@ -69,10 +76,24 @@ Deployed and ready!
     _typing: Map(0) {}
   },
   deleted: false,
-  id: '777635414085074954',
+  id: '778740102473973770',
   type: 'DEFAULT',
   system: false,
-  content: '[2020-11-15 21:45:29 UTC] [turn]: Turn has been finished by <@319919565079576576>',
+  content: '[2020-11-18 22:55:8 UTC]   [Battle results]:\n' +
+    '```ini\n' +
+    'Iconia lost 1 of AFV\n' +
+    'Iconia lost 1 of IFV\n' +
+    'Bot lost 2 of L\n' +
+    'Bot lost 5 of M\n' +
+    'Jyuren lost 2 of VL\n' +
+    'Jyuren lost 1 of SPAAG\n' +
+    'Korovia lost 1 of SAM\n' +
+    'Korovia lost 5 of APC\n' +
+    'Korovia lost 55 of ARM\n' +
+    'Korovia lost 1 of AIRPORT\n' +
+    'Korovia lost 120 of MRSAM\n' +
+    'Korovia lost 100 of SRAAM\n' +
+    '```',
   author: ClientUser {
     id: '768845435455930428',
     system: null,
@@ -82,7 +103,7 @@ Deployed and ready!
     bot: true,
     discriminator: '6538',
     avatar: '395db2a6b93082ead5034c271d0b6284',
-    lastMessageID: '777635414085074954',
+    lastMessageID: '778740102527451137',
     lastMessageChannelID: '768476039496073227',
     verified: true,
     mfaEnabled: true,
@@ -93,7 +114,7 @@ Deployed and ready!
   nonce: null,
   embeds: [],
   attachments: Collection(0) [Map] {},
-  createdTimestamp: 1605473130485,
+  createdTimestamp: 1605736508721,
   editedTimestamp: 0,
   reactions: ReactionManager {
     cacheType: [class Collection extends Collection],
@@ -102,7 +123,134 @@ Deployed and ready!
   },
   mentions: MessageMentions {
     everyone: false,
-    users: Collection(1) [Map] { '319919565079576576' => [User] },
+    users: Collection(0) [Map] {},
+    roles: Collection(0) [Map] {},
+    _members: null,
+    _channels: null,
+    crosspostedChannels: Collection(0) [Map] {}
+  },
+  webhookID: null,
+  application: null,
+  activity: null,
+  _edits: [],
+  flags: MessageFlags { bitfield: 0 },
+  reference: null
+}
+<ref *2> Message {
+  channel: <ref *1> TextChannel {
+    type: 'text',
+    deleted: false,
+    id: '768476039496073227',
+    name: 'log',
+    rawPosition: 15,
+    parentID: '768480394521477151',
+    permissionOverwrites: Collection(1) [Map] {
+      '768471917874905108' => [PermissionOverwrites]
+    },
+    topic: null,
+    nsfw: false,
+    lastMessageID: '778740102527451137',
+    rateLimitPerUser: 0,
+    lastPinTimestamp: null,
+    guild: Guild {
+      members: [GuildMemberManager],
+      channels: [GuildChannelManager],
+      roles: [RoleManager],
+      presences: [PresenceManager],
+      voiceStates: [VoiceStateManager],
+      deleted: false,
+      available: true,
+      id: '768471917874905108',
+      shardID: 0,
+      name: 'Ruse',
+      icon: 'c3c8659ac2dc535724378663f3f42fff',
+      splash: null,
+      discoverySplash: null,
+      region: 'europe',
+      memberCount: 11,
+      large: false,
+      features: [],
+      applicationID: null,
+      afkTimeout: 300,
+      afkChannelID: null,
+      systemChannelID: '768471917874905111',
+      embedEnabled: undefined,
+      premiumTier: 0,
+      premiumSubscriptionCount: 0,
+      verificationLevel: 'LOW',
+      explicitContentFilter: 'DISABLED',
+      mfaLevel: 0,
+      joinedTimestamp: 1603377767658,
+      defaultMessageNotifications: 'MENTIONS',
+      systemChannelFlags: [SystemChannelFlags],
+      maximumMembers: 100000,
+      maximumPresences: null,
+      approximateMemberCount: null,
+      approximatePresenceCount: null,
+      vanityURLCode: null,
+      vanityURLUses: null,
+      description: null,
+      banner: null,
+      rulesChannelID: null,
+      publicUpdatesChannelID: null,
+      preferredLocale: 'en-US',
+      ownerID: '319919565079576576',
+      emojis: [GuildEmojiManager]
+    },
+    messages: MessageManager {
+      cacheType: [class LimitedCollection extends Collection],
+      cache: [LimitedCollection [Map]],
+      channel: [Circular *1]
+    },
+    _typing: Map(0) {}
+  },
+  deleted: false,
+  id: '778740102527451137',
+  type: 'DEFAULT',
+  system: false,
+  content: '[2020-11-18 22:55:8 UTC] [Battle]: Battle announced in <#770982475228643369> had this reported problems:\n' +
+    '```Nation Iconia got into negative numbers with AFVs after this battle!\n' +
+    'Nation Bot got into negative numbers with Ls after this battle!\n' +
+    'Nation Bot got into negative numbers with Ms after this battle!\n' +
+    'Nation Jyuren got into negative numbers with VLs after this battle!\n' +
+    'Nation Jyuren got into negative numbers with SPAAGs after this battle!\n' +
+    'Nation Korovia got into negative numbers with SAMs after this battle!\n' +
+    'Nation Korovia got into negative numbers with APCs after this battle!\n' +
+    'Nation Korovia got into negative numbers with AIRPORTs after this battle!\n' +
+    'Nation Korovia got into negative numbers with ARMs after this battle!\n' +
+    'Nation Korovia got into negative numbers with MRSAMs after this battle!\n' +
+    'Nation Korovia got into negative numbers with SRAAMs after this battle!\n' +
+    '```',
+  author: ClientUser {
+    id: '768845435455930428',
+    system: null,
+    locale: null,
+    flags: UserFlags { bitfield: 0 },
+    username: 'KerbalBot',
+    bot: true,
+    discriminator: '6538',
+    avatar: '395db2a6b93082ead5034c271d0b6284',
+    lastMessageID: '778740102527451137',
+    lastMessageChannelID: '768476039496073227',
+    verified: true,
+    mfaEnabled: true,
+    _typing: Map(0) {}
+  },
+  pinned: false,
+  tts: false,
+  nonce: null,
+  embeds: [],
+  attachments: Collection(0) [Map] {},
+  createdTimestamp: 1605736508734,
+  editedTimestamp: 0,
+  reactions: ReactionManager {
+    cacheType: [class Collection extends Collection],
+    cache: Collection(0) [Map] {},
+    message: [Circular *2]
+  },
+  mentions: MessageMentions {
+    everyone: false,
+    users: Collection(0) [Map] {},
     roles: Collection(0) [Map] {},
     _members: null,
     _channels: null,

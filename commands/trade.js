@@ -6,16 +6,7 @@ module.exports = {
     args: true,
     usage: `[sell | buy] [numberOfAssets] [assetType] [money] [@customer]
 
-**Assets:**
-*Buildings:* AIRPORT, FOB, PORT, RADAR
-*Surface assets:* MBT, AFV, IFV, APC, SAM, SPAAG, SF
-*Aerospace assets:* L, M, H, LA, VL, VTOL, SAT, OV
-*Naval assets:* K, F, DD, CC, BC, BB, CL, CV
-
-**Weapons:**
-*Aerial:* SRAAM, MRAAM, LRAAM, AGM, ASHM, ATGM, SRSAM ,MRSAM, LRSAM, SEAD
-*Surface:* CRUISE, BALLISTIC, ABM, ASM
-*Bombs:* UNGUI, GUI, EW, RECON, FUEL, GUNPOD`,
+**Assets:** can be listed via **?buy** command.`,
     cooldown: 5,
     guildOnly: false,
     execute: async function trade(message, args) {

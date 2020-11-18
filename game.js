@@ -69,6 +69,10 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
  */
 exports.findData = function findData(target, nation, tech, tab) {
     return new Promise(async function(resolve, reject) {
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units[target][1])) {
+            tab = 'Stockpiles';
+        }
+
         let value;
         let priceRow;
         let nationRow;

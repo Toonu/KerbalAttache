@@ -52,11 +52,6 @@ Assets do not need to be written in capital letters, the command is case insensi
             return message.delete({timeout: 9000});
         }
 
-        //Assigning sheet tab.
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
-            tab = 'Stockpiles';
-        }
-
         findData(args[1], cfg.users[message.author.id].nation, false,tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;

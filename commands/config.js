@@ -5,7 +5,7 @@ module.exports = {
     args: true,
     usage: `[M:configuration] [M:newValue]
 Configurations:
-money, sheet, era, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel`,
+money, sheet, era, sname, smainid, sbattleid, sadminadd, sdevadd, sadmindel, sdevdel`,
     cooldown: 5,
     guildOnly: true,
     execute: function configBot(message, args) {
@@ -27,6 +27,8 @@ money, sheet, era, sname, smainid, sadminadd, sdevadd, sadmindel, sdevdel`,
                 cfg.servers[message.guild.id].name = args[1];
             } else if (args[0] === 'smainid') {
                 cfg.servers[message.guild.id].main_channel = args[1];
+            } else if (args[0] === 'sbattleid') {
+                cfg.servers[message.guild.id].battle_channel = args[1];
             } else if (args[0] === 'sadminadd') {
                 // noinspection JSUnresolvedVariable
                 cfg.servers[message.guild.id].administrators.push(args[1]);

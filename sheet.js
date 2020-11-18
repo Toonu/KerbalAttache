@@ -80,10 +80,27 @@ exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0,
                     for(let i = 0; i < rowSize.length; i++) {
                         if (rowSize[i] === '') {
                             rowSize.splice(i, 1, '.');
-                            //TODO Add increase of size for arrays smaller than the largest array in data.
                         }
                     }
                 }
+                let l = 0;
+
+                for (let
+                    row of data.data.values) {
+                    if (row.length > l) {
+                        l = row.length;
+                    }
+                }
+
+                for (let i = 0; i < data.data.values.length; i++){
+                    let size = data.data.values[i];
+                    if (size.length < l) {
+                        for (let li = l - size.length; li > 0; li--) {
+                            size.push('.');
+                        }
+                    }
+                }
+
                 resolve(data.data.values);
             })
             .catch(err => {

@@ -9,6 +9,10 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
 **Assets:** can be listed via **?buy** command.`,
     cooldown: 5,
     guildOnly: true,
+
+    /**
+     * Battle command prints results of a battle and removes all destroyed assets.
+     */
     execute: async function battle(message, args) {
         if (perm(message, 2, true)) {
             let userMap = Array.from(message.mentions.users);
@@ -144,7 +148,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
 
             let reportMsg = ''
             userMap.forEach(r => {r[2].forEach(g => {
-                    reportMsg += `${r[3]} lost ${g[1]} of ${g[0]}\n`
+                    reportMsg += `${r[3]} has lost ${g[1]} of ${g[0]} in this battle!\n`
                 })
             });
             let negativeMsg = '';
@@ -152,7 +156,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
                 negativeMsg += `${r}\n`;
             })
 
-            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:\n\`\`\`ini\n${reportMsg}\`\`\``).then(e => console.log(e));
+            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:\n\n\`\`\`ini\n${reportMsg}\`\`\``).then(e => console.log(e));
             report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> had this reported problems:\n\`\`\`${negativeMsg}\`\`\``, 'Battle');
         }
     }

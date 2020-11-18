@@ -103,5 +103,33 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Hyper goal:   	KSP mod for development price directly in game.
  * TODO Super goal:     Map integration via xml editing.
  *
- * Battle command for removal of lost units and weapons freely.
+ * Development command for requesting info on submitted crafts, its price, its status and comment, lists also all submitted craft of a person.
+ *
+ *
+ * Normal commands
+ * Userinfo
+ * Useredit
+ * Userdel
+ * Usercreate
+ * Test
+ * Spam
+ * Reload
+ * Prune
+ * Ping
+ * Map
+ * Help
+ * Config
+ * Sheet
+ *
+ * Sheet accessing commands.
+ *
+ * Turn
+ * Trade
+ * Tiles
+ * Tech
+ * Buy
+ * Battle
+ * Balance
+ * Accept
+ * Assets
  **/

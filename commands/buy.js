@@ -56,6 +56,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         .then(data => {
             let cost = data[0] * args[0] * 4;
             if (tab !== undefined) cost /= 4;
+            if (args[0] < 0) cost *= 0.7;
 
             // noinspection JSCheckFunctionSignatures
             const embed = new discord.MessageEmbed()

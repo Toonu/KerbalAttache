@@ -107,29 +107,32 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  *
  *
  * Normal commands
- * Userinfo
- * Useredit
- * Userdel
- * Usercreate
- * Test
- * Spam
- * Reload
- * Prune
- * Ping
- * Map
- * Help
- * Config
- * Sheet
+ *
+ * Userinfo 	✅	R
+ * Useredit		✅	R
+ * Userdel		✅	R
+ * Usercreate	✅	R
+ * Config		✅	R
+ *
+ * Test			✅
+ * Spam			✅
+ * Reload		✅
+ * Prune		✅
+ * Ping			✅
+ * Map			✅
+ * Sheet		✅
+ * Help			✅
  *
  * Sheet accessing commands.
  *
- * Turn
- * Trade
- * Tiles
- * Tech
- * Buy
- * Battle
- * Balance
- * Accept
- * Assets
+ * Assets		✅
+ * Balance		✅
+ *
+ * Accept		✅	R
+ * Battle		✅ 	R	NOT FULL TEST
+ * Buy			✅	R
+ * Tech			✅	R
+ * Tiles		✅	R
+ * Trade			R	NEED 2 PEOPLE
+ * Turn			✅	R
  **/

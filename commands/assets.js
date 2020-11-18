@@ -38,16 +38,16 @@ module.exports = {
             .catch(err => console.error(err));
 
         for (let i = 1; i < weaponArray[0].length; i++) {
-            if (weaponArray[0][i] === 'E') {
+            if (weaponArray[0][i] === 'END') {
                 break;
-            } else if (weaponArray[weaponArray.length - 1][i] !== '.') {
+            } else if (![',', '0'].includes(weaponArray[weaponArray.length - 1][i])) {
                 embedW.addField(weaponArray[0][i], weaponArray[weaponArray.length - 1][i], true);
             }
         }
         for (let i = 4; i < unitArray[unitArray.length - 1].length; i++) {
             if (unitArray[0][i] === 'Technology') {
                 break;
-            } else if (unitArray[unitArray.length - 1][i] !== '.') {
+            } else if (![',', '0'].includes(unitArray[unitArray.length - 1][i])) {
                 embed.addField(unitArray[0][i], unitArray[unitArray.length - 1][i], true);
             }
         }

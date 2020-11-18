@@ -156,8 +156,18 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
                 negativeMsg += `${r}\n`;
             })
 
-            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:\n\n\`\`\`ini\n${reportMsg}\`\`\``).then(e => console.log(e));
-            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> had this reported problems:\n\`\`\`${negativeMsg}\`\`\``, 'Battle');
+            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:
+
+\`\`\`ini
+${reportMsg}\`\`\``).then(e => console.log(e));
+
+
+            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> had this reported problems:
+\`\`\`${negativeMsg}\`\`\`
+
+***Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!***
+Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
+For better reference, negative numbers are highlighted with red in the sheet.`, 'Battle');
         }
     }
 };

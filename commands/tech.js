@@ -9,13 +9,14 @@ module.exports = {
     usage: `[operation] [operation type] [operation data] [M:@user]
 Possible operations:
 
-**budget [set | add]**          - Sets or adds money to user's research budget (use neg. number to decrease).
-**research [node | -node]**     - Researches specified tech tree node. Use minus letter to revert research.
-**list**                        - Lists all available categories.
-**list [category]**             - Lists all technological nodes in category.
-**list [node]**                 - Lists all information about technological node.
-**unlocked**                    - Shows information about everything you have unlocked. For specific node, use list.
-**change [node] [type] [data]** - Moderator configuration options.`,
+\`\`\`ini\n
+budget        [set | add]               - Sets or adds money to user's research budget (use neg. number to decrease).
+research      [node | -node]            - Researches specified tech tree node. Use minus letter to revert research.
+list                                    - Lists all available categories.
+list          [category]                - Lists all technological nodes in category.
+list          [node]                    - Lists all information about technological node.
+unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
+change        [node] [type] [data]      - Moderator configuration options.\`\`\``,
     cooldown: 5,
     guildOnly: true,
     execute: async function tech(message, args) {
@@ -66,6 +67,8 @@ Possible operations:
                 result.push(ch);
                 result.push(true);
             }
+        } else {
+            return message.delete();
         }
 
         message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
@@ -163,12 +166,13 @@ function list(category, nation, message) {
                             .then(collected => {
                                 let react = collected.first();
                                 if (react.emoji.name === '✅') {
-                                    research(category, nation).then(result => {
+                                    research(category, nation, 1).then(result => {
                                         resolve(result);
                                     })
+                                } else {
+                                    resolve('Operation canceled.');
                                 }
                                 msg.delete();
-                                resolve('Operation canceled.');
                             })
                             .catch(() => {
                                 msg.delete();
@@ -258,7 +262,7 @@ function research(node, nation, del = 1) {
     return new Promise(async function (resolve, reject) {
         try {
             if (del === 1) {
-                for await (const r of tt[node][3]) {
+                for (const r of tt[node][3]) {
                     await findData(r, nation, true, 'TechTree')
                         .then(unlocked => {
                             if (unlocked[0] === 0) throw 'You do not have the prerequisites to unlock the node!';
@@ -291,10 +295,10 @@ function research(node, nation, del = 1) {
             let coordinate = toCoordinate(from[0] + tt[node][4]);
             if (del === 1) {
                 await set(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
-                resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
+                return resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
             } else {
                 await set(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
-                resolve(`${tt[node][0]} was removed from ${nation}`);
+                return resolve(`${tt[node][0]} was removed from ${nation}`);
             }
         }
         return reject('Operation failed!');

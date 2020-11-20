@@ -17,7 +17,7 @@ list          [category]                - Lists all technological nodes in categ
 list          [node]                    - Lists all information about technological node.
 unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
 change        [node] [type] [data]      - Moderator configuration options.\`\`\``,
-    cooldown: 5,
+    cooldown: 2,
     guildOnly: true,
     execute: async function tech(message, args) {
         let del = 1;
@@ -40,7 +40,10 @@ change        [node] [type] [data]      - Moderator configuration options.\`\`\`
             result.push(await unlocks(nation));
             result.push(false);
         } else if (args[0] === 'research') {
-            if (parseInt(args[1].substring(0, 2)) >= cfg.era || (args[1].startsWith('Early') && cfg.era === 50)) {
+            if (args[1] === undefined) {
+                result.push('Argument empty. Canceling operation.');
+                result.push(false);
+            } else if (parseInt(args[1].substring(0, 2)) >= cfg.era || (args[1].startsWith('Early') && cfg.era === 50)) {
                 result.push('The technology is too futuristic!');
                 result.push(false);
             } else {
@@ -68,7 +71,8 @@ change        [node] [type] [data]      - Moderator configuration options.\`\`\`
                 result.push(true);
             }
         } else {
-            return message.delete();
+            result.push('Wrong operation type.');
+            result.push(false);
         }
 
         message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {

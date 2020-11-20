@@ -3,18 +3,20 @@ const fs = require('fs'), cfg = require('./config.json'), js = require('./jsonMa
  * Function creates new user of id with attributes of nation, color, sheet and map. Returns true if the user was created successfully.
  * @param id            Discord id
  * @param nationIn      Nation String name
+ * @param demonymIn     Nation demonym
  * @param colorIn       Color String hex number
  * @param sheet         Sheet string number
  * @param map           Map String link
  * @return String response of attributes of created user.
  */
-exports.createUser = function createUser(id, nationIn = 'undefined', colorIn = "undefined", sheet = '11111114', map = 'http://x.com/') {
+exports.createUser = function createUser(id, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe", sheet = '11111114', map = 'http://x.com/') {
     if (cfg.users[id] !== undefined) {
         return 'User already exists!';
     }
 
     cfg.users[id] = {
         nation: nationIn,
+        demonym: demonymIn,
         color: colorIn,
         cf: 1,
         sheet: sheet,
@@ -22,7 +24,7 @@ exports.createUser = function createUser(id, nationIn = 'undefined', colorIn = "
         notes: " ",
     }
     js.exportFile("config.json", cfg);
-    return`Nation ${nationIn} created with Discord id of ${id}`
+    return`Nation ${nationIn} created for user <@${id}>`
 };
 
 /**
@@ -65,10 +67,11 @@ exports.perm = function perm(message, level, msg) {
 /**
  * Function checks if user is pinged and assigns him as return, else assigns author.
  * @param message   Message to scan.
+ * @param level     Permissions level.
  */
-exports.ping = function ping(message) {
+exports.ping = function ping(message, level = 2) {
     let nation = message.author;
-    if(js.perm(message, 2, false) && message.mentions.users.first() !== undefined) {
+    if(js.perm(message, level, false) && message.mentions.users.first() !== undefined) {
         nation = message.mentions.users.first();
     }
     return nation;

@@ -61,7 +61,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             // noinspection JSCheckFunctionSignatures
             const embed = new discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`Office of Acquisitions`)
+            .setTitle(`${cfg.users[message.author.id].demonym}'s Office of Acquisitions`)
             .setURL('https://discord.js.org/')
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
@@ -105,6 +105,9 @@ Assets do not need to be written in capital letters, the command is case insensi
                     msg.channel.send('Operation timed out. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                 });
             }).catch(err => console.error(err));
-        }).catch(err => console.error(err));
+        }).catch(err => {
+            message.channel.send(err.message).then(msg => msg.delete({timeout: 9000}));
+            console.error(err);
+        });
     }
 };

@@ -1,3 +1,4 @@
+const {perm} = require("../jsonManagement");
 module.exports = {
 	name: 'prune',
 	description: 'Command prunes amount of messages from channel.',
@@ -9,8 +10,9 @@ module.exports = {
 		const amount = parseInt(args[0]) + 1;
 		if (isNaN(amount)) {
 			message.channel.send(`That doesn't seem to be a valid number. Canceling operation.`).then(msg => msg.delete({timeout: 9000}));
-			message.delete();
-			return;
+			return message.delete();
+		} else if (!perm(message, 1, true)) {
+			return message.delete();
 		}
 
 		let bool = false;

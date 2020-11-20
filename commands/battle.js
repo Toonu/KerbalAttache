@@ -27,7 +27,10 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
                         userMap[counter].push([]);
                     } else if (!regExp.test(args[i])) {
                         let num = parseInt(args[i - 1]);
-                        if (isNaN(num)) return message.reply(`Number ${args[i - 1]} is not a number!`);
+                        if (isNaN(num)) {
+                            message.reply(`Number ${args[i - 1]} is not a number!`).then(msg => msg.delete({timeout: 9000}));
+                            message.delete({timeout: 9000});
+                        }
                         userMap[counter][2].push([args[i].toUpperCase(), num]);
                     }
                 }
@@ -49,46 +52,40 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
             let end = await findHorizontal('Technology', 4);
             let rows = await findVertical('Data', 'A');
             let data = await getArray('A4', `${end + (parseInt(rows) + 1)}`).catch(e => console.error(e));
-            let userMapWp = JSON.parse(JSON.stringify(userMap));
-
-            for (let k = 0; k < userMap.length; k++) {
-                let user = userMap[k];
-                for (let item of data) {
-                    if (item[0] === user[3]) {
-                        for (let i = 0; i < user[2].length; i++) {
-                            for (let j = 3; j < item.length; j++) {
-                                if (user[2][i][0] === data[0][j]) {
-                                    if (item[j] !== '.') {
-                                        item[j] = parseInt(item[j]) - user[2][i][1];
-                                        if (parseInt(item[j]) - user[2][i][1] < 0) {
-                                            negative.push(`Nation ${user[3]} got into negative numbers with ${user[2][i][0]}s after this battle!`);
-                                        }
-                                    } else {
-                                        item[j] = 0 - user[2][i][1];
-                                        negative.push(`Nation ${user[3]} got into negative numbers with ${user[2][i][0]}s after this battle!`);
-                                    }
-                                    for (let k = 0; k < userMapWp[k][2].length; k++) {
-                                        if (userMapWp[k][2][k][0] === user[2][i][0]) {
-                                            userMapWp[k][2].splice(k, 1);
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-
-            for (let i = 0; i < data.length; i++) {
-                data[i].splice(0, 4);
-            }
 
             end = await findHorizontal('END', 4, 'Stockpiles');
             rows = await findVertical('Data', 'A', 'Stockpiles');
             let dataWp = await getArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(e => console.error(e));
+
+
+            for (let nation = 0; nation < data.length; nation++) {
+                for (let row = 0; row < userMap.length; row++) {
+                    //Looping through inputted nations vs sheet nations and finding the right one.
+                    if (data[row][0] === userMap[nation][3]) {
+                        //Checking sheet nation name versus inputted name.
+                        for (let asset = 0; asset < userMap[nation][2][asset].length; asset++) {
+                            //Looping through inputted assets of a nation.
+                            let res = loop(data, row, nation, asset, userMap, negative);
+                            if (!res[0]) {
+                                let res = loop(dataWp, row, nation, asset, userMap, negative);
+                                dataWp = res[1];
+                            } else {
+                                data = res[1];
+                            }
+
+                            userMap = res[1];
+                            negative = res[3];
+                            break;
+                        }
+                    }
+                }
+            }
+            console.log('x');
+        }
+/*
+            for (let i = 0; i < data.length; i++) {
+                data[i].splice(0, 4);
+            }
 
             for (let user of userMapWp) {
                 for (let item of dataWp) {
@@ -159,15 +156,56 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
             message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:
 
 \`\`\`ini
-${reportMsg}\`\`\``).then(e => console.log(e));
+${reportMsg}\`\`\``).catch(e => console.error(e));
 
-
-            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> had this reported problems:
+            if (negativeMsg.length > 0) {
+                report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> had this reported problems:
 \`\`\`${negativeMsg}\`\`\`
 
 ***Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!***
 Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
 For better reference, negative numbers are highlighted with red in the sheet.`, 'Battle');
-        }
+            }
+        }*/
     }
 };
+
+function loop(data, row, nation, asset, userMap, negative) {
+    let result = false;
+    for (let col = 1; col < data[0].length; col++) {
+        //Looping through sheet cells of a nation.
+        if (data[0][col] === userMap[row][2][asset][0]) {
+            //Comparing value of cell with inputted asset name.
+            if (data[row][col] !== '.') {
+                data[row][col] = parseInt(data[row][col]) - userMap[row][2][asset][1];
+                if (data[row][col] < 0) {
+                    negative.push(`Nation ${userMap[col][3]} got into negative numbers with ${userMap[col][2][col][0]}s after this battle!`);
+                }
+                result = true;
+            } else {
+                data[row][col] = 0 - userMap[row][2][asset][1];
+                negative.push(`Nation ${userMap[col][3]} got into negative numbers with ${userMap[col][2][col][0]}s after this battle!`);
+                result = true;
+            }
+            break;
+        }
+    }
+    return [result, data, userMap, negative];
+}
+
+
+/*
+                            for (let col = 4; col < data[0].length; col++) {
+                                //Looping through sheet cells of a nation.
+                                if (data[0][col] === userMap[row][2][asset][0]) {
+                                    //Comparing value of cell with inputted asset name.
+                                    if (data[row][col] !== '.') {
+                                        data[row][col] = parseInt(data[row][col]) - userMap[row][2][asset][1];
+                                        if (data[row][col] < 0) {
+                                            negative.push(`Nation ${userMap[col][3]} got into negative numbers with ${userMap[col][2][col][0]}s after this battle!`);
+                                        }
+                                    } else {
+                                        data[row][col] = 0 - userMap[row][2][asset][1];
+                                        negative.push(`Nation ${userMap[col][3]} got into negative numbers with ${userMap[col][2][col][0]}s after this battle!`);
+                                    }
+ */

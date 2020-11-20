@@ -1,11 +1,12 @@
-const cfg = require("./../config.json"), gm = require("./../game"), units = require('./../units.json');
-const {exportFile} = require("../jsonManagement");
+const cfg = require("./../config.json"), gm = require("./../game"), units = require('./../units.json'),
+    {exportFile} = require("../jsonManagement");
 module.exports = {
     name: 'trade',
     description: 'Command for making trade transactions between nations. Note that you can have only one pending transaction at time!',
     args: true,
     usage: `[sell | buy] [numberOfAssets] [assetType] [money] [@customer]
 
+Eg. ?trade sell 2 IFV 20000 @User
 **Assets:** can be listed via **?buy** command.`,
     cooldown: 5,
     guildOnly: false,

@@ -11,12 +11,24 @@ money, sheet, era, sname, smainid, sbattleid, sadminadd, sdevadd, sadmindel, sde
     execute: function configBot(message, args) {
         const cfg = require('./../config.json')
         const js = require('../jsonManagement');
+        let data;
 
         if (js.perm(message, 2)) {
             if (!['money', 'sheet', 'sname'].includes(args[0]) && isNaN(parseInt(args[1]))) {
                 message.channel.send('Not a proper ID/Number.').then(msg => msg.delete({timeout: 9000}));
-                message.delete({timeout: 50});
-                return;
+                return message.delete({timeout: 50});
+            } else if (args[0] === 'era') {
+                data = parseInt(args[1]);
+                if (data % 10 !== 0) {
+                    message.channel.send('Era must have zero at the end. Eg. 50, 60...').then(msg => msg.delete({timeout: 9000}));
+                    return message.delete({timeout: 50});
+                }
+            } else if (args[0] === 'money') {
+                let regExp = new RegExp(/[A-Z]{3}/g);
+                if (!regExp.test(args[1])) {
+                    message.channel.send('Money must have upper case name, not symbol. Eg. EUR, USD...').then(msg => msg.delete({timeout: 9000}));
+                    return message.delete({timeout: 50});
+                }
             }
 
             if (args[0] === 'money') {
@@ -54,11 +66,10 @@ money, sheet, era, sname, smainid, sbattleid, sadminadd, sdevadd, sadmindel, sde
                     }
                 }
             } else if (args[0] === 'era') {
-                cfg.era = parseInt(args[1]);
+                cfg.era = data;
             } else {
                 message.reply('Wrong configuration type argument.').then(msg => msg.delete({timeout: 9000}));
-                message.delete({timeout: 9000});
-                return;
+                return message.delete({timeout: 9000});
             }
 
             js.exportFile('config.json', cfg);

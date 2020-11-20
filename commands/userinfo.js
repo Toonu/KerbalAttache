@@ -15,7 +15,7 @@ module.exports = {
         let user = ping(message);
 
         if(cfg.users[user.id] === undefined) {
-            report(message, `${createUser(user.id, args[1], args[2], args[3], args[4])} by ${message.author.username}`, 'user create');
+            report(message, `${createUser(user.id)} created by <@${message.author.id}>`, 'user create');
             userinfo(message, args);
         } else {
             // noinspection JSCheckFunctionSignatures
@@ -36,7 +36,6 @@ module.exports = {
             }
             message.channel.send(element).then(msg => msg.delete({timeout: 9000}));
             message.delete({timeout: 9000});
-
         }
 	},
 };

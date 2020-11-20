@@ -10,16 +10,12 @@ module.exports = {
         args[0] = parseInt(args[0]);
         if (isNaN(args[0])) {
             message.reply('that doesn\'t seem to be a valid number. Canceling operation.').then(msg => msg.delete({timeout: 9000}));
-            message.delete();
-            return;
-        }
-
-        if (perm(message, 1)) {
-            message.delete()
+        } else if (perm(message, 1, true)) {
 			for (let i = 0; i < parseInt(args[0]) - 1; i++) {
 				message.channel.send('Pong.');
 			}
 			message.channel.send('Done!');
         }
+        message.delete()
 	},
 };

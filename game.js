@@ -38,7 +38,7 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
         let e = 64; //char A dec num
 
         let col = 'BA';
-        if(tab === 'TechTree') col = 'HO'
+        if(tab === 'TechTree') col = 'HQ'
 
         getArray(`A${row}`, `${col + row}`, 0, 0, tab)
             .then(array => {
@@ -148,8 +148,8 @@ exports.findData = function findData(target, nation, tech, tab) {
  */
 exports.report = function report(message, report, command = '') {
     let today = new Date();
-    let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`).then(e => console.log(e));
+    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`).catch(e => console.log(e));
 }
 
 

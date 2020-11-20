@@ -46,7 +46,7 @@ module.exports = {
                     .then(() => {
                         message.channel.send('Tiles set!').then(msg => msg.delete({timeout: 9000}));
                         message.delete();
-                        report(message, `Tiles set to ${newTiles} for ${cfg.users[user].nation} by ${message.author.username}!`, this.name)
+                        report(message, `Tiles set to ${newTiles} for ${cfg.users[user].nation} by <@${message.author.id}>!`, this.name)
                     })
             } else {
                 message.channel.send('Tiles cannot go into negative numbers. Canceling operation.').then(msg => msg.delete({timeout: 9000}));

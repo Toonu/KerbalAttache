@@ -31,7 +31,11 @@ client.on('message', message => {
 	const commandName = args.shift().toLowerCase();
 
 	//If command doesnt exist.
-	if (!client.commands.has(commandName)) return;
+	if (!client.commands.has(commandName)) {
+		message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
+		message.delete();
+	}
+
 	//Else
 	const command = client.commands.get(commandName);
 
@@ -103,36 +107,34 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Hyper goal:   	KSP mod for development price directly in game.
  * TODO Super goal:     Map integration via xml editing.
  *
- * Development command for requesting info on submitted crafts, its price, its status and comment, lists also all submitted craft of a person.
+ * Development (?sub) command for requesting info on submitted crafts, its price, its status and comment, lists also all submitted craft of a person.
  *
  *
- * Normal commands
+ *				❌✅	Perm	Access	Reports	Result
+ * Map			✅	P0		C				Tested. Myself and second user.
+ * Sheet		✅	P0		C				Tested. Myself and second user.
+ * Userinfo 	✅	P0		C		R		Tested and reported. Myself and second user.
+ * Useredit		✅	P2		C		R		Tested and reported. Edge cases handled. Myself and second user.
+ * Userdel		✅	P2		C		R		Tested and reported. Edge cases handled. Second user.
+ * Usercreate	✅	P2		C		R		Tested and reported. Edge cases handled. Second user.
+ * Config		✅	P2		C		R		Tested and reported. Edge cases handled.
  *
- * Userinfo 	✅	R
- * Useredit		✅	R
- * Userdel		✅	R
- * Usercreate	✅	R
- * Config		✅	R
+ * Test			✅	P0						No arguments, cannot be broken.
+ * Ping			✅	P0						No arguments, cannot be broken.
+ * Help			✅	P0						Wrong command name tested.
+ * Spam			✅	P1						NaN and no arguments test passed.
+ * Reload		✅	P1						Wrong command name tested.
+ * Prune		✅	P1						NaN and no arguments test passed.
  *
- * Test			✅
- * Spam			✅
- * Reload		✅
- * Prune		✅
- * Ping			✅
- * Map			✅
- * Sheet		✅
- * Help			✅
+ * Assets		✅	P0		S				Tested both on myself and another user.
+ * Balance		✅	P0		S				Tested both on myself and another user.
+ * Sub			TBA	P0		S
+ * Tech			❌	P0		S		R
+ * Accept		❌	P0		S		R
+ * Trade		❌	P0		C/S		R
  *
- * Sheet accessing commands.
- *
- * Assets		✅
- * Balance		✅
- *
- * Accept		✅	R
- * Battle		✅ 	R	NOT FULL TEST
- * Buy			✅	R
- * Tech			✅	R
- * Tiles		✅	R
- * Trade			R	NEED 2 PEOPLE
- * Turn			✅	R
+ * Battle		❌ 	P2		S		R
+ * Buy			✅	P2		S		R		Tested and reported. Edge cases handled. Myself.
+ * Tiles		✅	P2		S		R		Tested and reported. Edge cases handled. Myself and second user.
+ * Turn			✅	P2		C/S		R		No arguments, cannot be broken. Sheet and config.json actions confirmed.
  **/

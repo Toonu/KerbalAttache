@@ -7,6 +7,7 @@ module.exports = {
     description: 'Command for managing your research.',
     args: true,
     usage: `[operation] [operation type] [operation data] [M:@user]
+    
 Possible operations:
 
 \`\`\`ini\n
@@ -16,7 +17,10 @@ list                                    - Lists all available categories.
 list          [category]                - Lists all technological nodes in category.
 list          [node]                    - Lists all information about technological node.
 unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
-change        [node] [type] [data]      - Moderator configuration options.\`\`\``,
+change        [node] [type] [data]      - Moderator configuration options.\`\`\`
+Configs types: name, category, reqadd, reqdel
+Use underscores or nothing instead of spaces.
+`,
     cooldown: 2,
     guildOnly: true,
     execute: async function tech(message, args) {
@@ -274,7 +278,9 @@ function research(node, nation, del = 1) {
                 }
             }
         } catch (err) {
-            console.log(err);
+            if (err instanceof TypeError) {
+                return reject('Operation failed due to non-existent node!');
+            }
             return reject(err);
         }
 
@@ -338,6 +344,8 @@ function change(data) {
             }
         }
         newData = undefined;
+    } else {
+        return `Wrong operation specified. Please retry.`;
     }
     exportFile("tt.json", tt);
     return `${data[1]} ${data[2]} was changed to ${newData}`;

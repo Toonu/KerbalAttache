@@ -33,7 +33,7 @@ client.on('message', message => {
 	//If command doesnt exist.
 	if (!client.commands.has(commandName)) {
 		message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-		message.delete();
+		message.delete().then(r => r);
 	}
 
 	//Else
@@ -129,12 +129,12 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * Assets		✅	P0		S				Tested both on myself and another user.
  * Balance		✅	P0		S				Tested both on myself and another user.
  * Sub			TBA	P0		S
- * Tech			❌	P0		S		R
+ * Tech			✅	P0		S		R		Tested and reported. Edge cases handled. Myself and second user.
  * Accept		❌	P0		S		R
  * Trade		❌	P0		C/S		R
  *
- * Battle		❌ 	P2		S		R
+ * Battle		✅ 	P2		S		R		Tested and reported. Edge cases handled. Multiple users.
  * Buy			✅	P2		S		R		Tested and reported. Edge cases handled. Myself.
  * Tiles		✅	P2		S		R		Tested and reported. Edge cases handled. Myself and second user.
- * Turn			✅	P2		C/S		R		No arguments, cannot be broken. Sheet and config.json actions confirmed.
+ * Turn			✅	P2		C/S		R		Tested and reported. No arguments taken.
  **/

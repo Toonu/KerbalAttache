@@ -1,5 +1,8 @@
-Debugger listening on ws://127.0.0.1:60615/51deefe3-1e80-4f06-b665-33dbe84aaf2b
+Debugger listening on ws://127.0.0.1:51618/a59424cc-f2a5-475a-ba47-1756caec8589
 For help, see: https://nodejs.org/en/docs/inspector
 Debugger attached.
 Deployed and ready!
-[2020-11-20 14:21:40 UTC] Server Ruse (Toonu): ?battle <@!319919565079576576> <@!768845435455930428>  -u 2 ifv 2 sraam -s 2 ifv 2 sraam
+[2020-11-20 20:29:57 UTC] Server Ruse (Toonu): ?sub <@!768845435455930428>
+Error in vertical: undefined
+[2020-11-20 20:30:11 UTC] Server Ruse (Toonu): ?sub
+Error in vertical: undefined

@@ -6,18 +6,20 @@ const gm = require('./game'), cfg = require('./config.json'),
  * @param target                String of searched target.
  * @param col                   String of column letter.
  * @param tab                   String of tab name.
+ * @param height                Height shift
  * @return {Promise<Number>}    Number of row.
  */
-exports.findVertical = function findVertical(target, col, tab) {
+exports.findVertical = function findVertical(target, col, tab, height = 1) {
     return new Promise(function (resolve, reject) {
-        getArray(`${col}1`, `${col}100`, 0, 0, tab)
+        let max = height + 99;
+        getArray(`${col + height}`, `${col + max}`, 0, 0, tab)
             .then(array => {
                 const regex = new RegExp("^" + target + ".*", "g");
                 let result = array.findIndex(function (currentValue) {
                     if (regex.test(currentValue)) return true;
                 });
                 if (result === -1) {
-                    reject(undefined);
+                    return reject(undefined);
                 }
                 resolve(result + 1);
             })

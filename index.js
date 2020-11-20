@@ -107,34 +107,7 @@ client.login(CLIENT_TOKEN).catch(err => console.log(err));
  * TODO Hyper goal:   	KSP mod for development price directly in game.
  * TODO Super goal:     Map integration via xml editing.
  *
- * Development (?sub) command for requesting info on submitted crafts, its price, its status and comment, lists also all submitted craft of a person.
+ * Buy command not buying weapon parts.
+ * Trade command not trading weapon parts.
  *
- *
- *				❌✅	Perm	Access	Reports	Result
- * Map			✅	P0		C				Tested. Myself and second user.
- * Sheet		✅	P0		C				Tested. Myself and second user.
- * Userinfo 	✅	P0		C		R		Tested and reported. Myself and second user.
- * Useredit		✅	P2		C		R		Tested and reported. Edge cases handled. Myself and second user.
- * Userdel		✅	P2		C		R		Tested and reported. Edge cases handled. Second user.
- * Usercreate	✅	P2		C		R		Tested and reported. Edge cases handled. Second user.
- * Config		✅	P2		C		R		Tested and reported. Edge cases handled.
- *
- * Test			✅	P0						No arguments, cannot be broken.
- * Ping			✅	P0						No arguments, cannot be broken.
- * Help			✅	P0						Wrong command name tested.
- * Spam			✅	P1						NaN and no arguments test passed.
- * Reload		✅	P1						Wrong command name tested.
- * Prune		✅	P1						NaN and no arguments test passed.
- *
- * Assets		✅	P0		S				Tested both on myself and another user.
- * Balance		✅	P0		S				Tested both on myself and another user.
- * Sub			TBA	P0		S
- * Tech			✅	P0		S		R		Tested and reported. Edge cases handled. Myself and second user.
- * Accept		❌	P0		S		R
- * Trade		❌	P0		C/S		R
- *
- * Battle		✅ 	P2		S		R		Tested and reported. Edge cases handled. Multiple users.
- * Buy			✅	P2		S		R		Tested and reported. Edge cases handled. Myself.
- * Tiles		✅	P2		S		R		Tested and reported. Edge cases handled. Myself and second user.
- * Turn			✅	P2		C/S		R		Tested and reported. No arguments taken.
  **/

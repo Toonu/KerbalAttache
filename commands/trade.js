@@ -47,12 +47,11 @@ Eg. ?trade sell 2 IFV 20000 @User
                     .then(msg => msg.delete({timeout: 10000}));
             }
 
-
-            gm.report(message, `<@${message.author.id}> has proposed to ${args[0].toLowerCase()} ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} with <@${message.mentions.users.first().id}>!`, this.name);
-            message.channel.send(`Transaction with ${message.mentions.users.first().username} was proposed to recipient and delivered!`)
+            gm.report(message, `<@${message.author.id}> has proposed to ${args[0].toLowerCase()} <@${message.mentions.users.first().id}> ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}!`, this.name);
+            message.channel.send(`Proposition of transaction with ${message.mentions.users.first().username} was delivered to the recipient!`)
                 .then(msg => msg.delete({timeout: 10000}));
             message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
-He ${args[0].toLowerCase()} ${amount} ${unit}s to you for ***${money.toLocaleString('fr-FR', {style: 'currency', currency: cfg.money})}***
+The proposer wants to ${args[0].toLowerCase()} you ${amount} ${unit}s for ***${money.toLocaleString('fr-FR', {style: 'currency', currency: cfg.money})}***
 
 To accept the transaction, type ?accept in your server channel.`);
 

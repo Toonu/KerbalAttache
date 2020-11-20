@@ -13,6 +13,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         function filter(reaction, user) {
             return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
+
          //No arguments lists the categories.
         if(args[0] === undefined) {
             let newMessage = ``, l = 0;
@@ -30,11 +31,9 @@ Assets do not need to be written in capital letters, the command is case insensi
                 });
             } catch (e) {}
 
-
             message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
             .then(msg => msg.delete({ timeout: 30000 }))
             return message.delete({timeout: 50});
-
         }
 
         //Checking input arguments.
@@ -52,7 +51,11 @@ Assets do not need to be written in capital letters, the command is case insensi
             return message.delete({timeout: 9000});
         }
 
-        findData(args[1], cfg.users[message.author.id].nation, false,tab)
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
+            tab = 'Stockpiles';
+        }
+
+        findData(args[1], cfg.users[message.author.id].nation, false, tab)
         .then(data => {
             let cost = data[0] * args[0] * 4;
             if (tab !== undefined) cost /= 4;

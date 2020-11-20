@@ -4,7 +4,7 @@ module.exports = {
     name: 'sub',
     description: 'Command for getting information about your subscriptions!',
     args: false,
-    usage: '[craftName] [M:@user]\n\nIf no craft name is specified, lists all of your crafts.',
+    usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {
@@ -19,30 +19,38 @@ module.exports = {
         let data = await getArray('A1', `AK${end + row - 1}`, 0, 0, 'Database');
 
         let nat = cfg.users[nation.id].nation;
-        for (let i = data.length - 1; i > 0; i--) {
-            if (data[i][1] !== nat) {
-                data.splice(i, 1);
-            }
-        }
-
         let analyse = '';
-        if (args[0] === undefined) {
-            let l = 0;
-            for (let asset of data) if (asset.length > l) l = asset.length;
-            for (let asset of data) {
-                analyse += `[${asset[2].paddingLeft(l)}] ${asset[23] + asset[24] + asset[25]} ${asset[21]} ${asset[26]}
- ${asset[33]} ${asset[36]}`;
-            }
-        } else {
-            for (let asset of data) {
-                if (asset[0] === args[0]) {
-                    analyse += `[${asset[2].paddingLeft(l)}] ${asset[23] + asset[24] + asset[25]} ${asset[21]} ${asset[26]}
- ${asset[33]} ${asset[36]}`;
-                }
+        let array = [];
+
+        for (let i = data.length - 1; i > 0; i--) {
+            if ((args[0] === `<@!${nation.id}>` || args[0] === undefined) && data[i][1] === nat) {
+                array.push(data[i]);
             }
         }
 
-        message.channel.send(`\`\`\`ini\n${analyse}\`\`\``).then(msg => msg.delete({timeout: 9000}));
+        let l = 0;
+
+        array.forEach(r => {
+            if (r[2].length > l) {
+                l = r[2].length;
+            }
+        })
+
+        array.forEach(r => {
+            let money = parseInt(r[33].replace(/[,|$]/g, ''));
+            money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
+            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(16)} ${money.padEnd(15)} ${r[26].padStart(10)} ${r[36]}\n`;
+        })
+
+        message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
+            if (msg.length < 5) {
+                msg.forEach(m => {
+                    m.delete({timeout: 32000})
+                });
+            } else {
+                msg.delete({timeout: 32000});
+            }
+        });
         return message.delete();
-    },
+    }
 };

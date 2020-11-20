@@ -36,8 +36,8 @@ module.exports = {
                         transfer(customerRow, columnRow, amount, money, msg, !type, tab)
                             .then(() => {
                                 try {
-                                    report(message, `<@${msg.authorID}>'s ${args} transaction of ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} was accepted by <@${message.author.id}>!`, this.name);
-                                    message.channel.send(`Transaction was finished and delivered!`)
+                                    report(message, `<@${msg.author.id}>'s ${args} transaction of ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })} was accepted by <@${message.author.id}>!`, this.name);
+                                    message.channel.send(`Transaction was accepted and delivered!`)
                                         .then(msg => msg.delete({timeout: 10000}));
                                     delete cfg.trade[message.author.id];
                                     exportFile('config.json', cfg);

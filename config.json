@@ -128,6 +128,15 @@
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
+        },
+        "363338561698922498": {
+            "nation": "Bot",
+            "demonym": "undefined",
+            "color": "fffffe",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
         }
     },
     "trade": {}

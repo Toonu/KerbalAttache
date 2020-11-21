@@ -3,6 +3,7 @@ module.exports = {
 	name: 'reload',
 	description: 'Reloads a command.',
 	args: true,
+	guildOnly: true,
 	execute: function reload(message, args) {
 		if (!perm(message, 1)) return;
 

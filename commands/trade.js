@@ -9,7 +9,7 @@ module.exports = {
 Eg. ?trade sell 2 IFV 20000 @User
 **Assets:** can be listed via **?buy** command.`,
     cooldown: 5,
-    guildOnly: false,
+    guildOnly: true,
     execute: async function trade(message, args) {
         const nation = cfg.users[message.author.id].nation;
         const customer = cfg.users[message.mentions.users.first().id].nation;

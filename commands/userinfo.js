@@ -6,6 +6,7 @@ module.exports = {
 	args: false,
 	usage: '[@user]',
 	cooldown: 5,
+    guildOnly: true,
     /**
      * Method print embeds public user info from the config file.
      * @param message   Message author taken as printed user.

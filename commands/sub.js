@@ -12,7 +12,7 @@ module.exports = {
         let row = -99;
         let end = undefined;
 
-        while (end === undefined) {
+        while (end === undefined && row < 300) {
             row += 100;
             end = await findVertical('Data', `B`, 'Database', row);
         }
@@ -39,7 +39,7 @@ module.exports = {
         array.forEach(r => {
             let money = parseInt(r[33].replace(/[,|$]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(16)} ${money.padEnd(15)} ${r[26].padStart(10)} ${r[36]}\n`;
+            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(10)} ${r[36]}\n`;
         })
 
         message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {

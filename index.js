@@ -98,16 +98,12 @@ client.on('message', message => {
 	}
 });
 
-//const {CLIENT_TOKEN} = process.env;
-const {CLIENT_TOKEN} = require('./env.json');
+const {CLIENT_TOKEN} = process.env;
+//const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
 
 /**
  * TODO Hyper goal:   	KSP mod for development price directly in game.
  * TODO Super goal:     Map integration via xml editing.
- *
- * Buy command not buying weapon parts.
- * Trade command not trading weapon parts.
- *
  **/

@@ -82,10 +82,10 @@ Use underscores or nothing instead of spaces.
         message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
             if (msg.length < 5) {
                 msg.forEach(m => {
-                    m.delete({timeout: 32000})
+                    m.delete({timeout: 64000})
                 });
             } else {
-                msg.delete({timeout: 32000});
+                msg.delete({timeout: 64000});
             }
         });
         if (result[1]) {

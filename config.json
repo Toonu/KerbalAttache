@@ -1,9 +1,9 @@
 {
     "prefix": "?",
-    "sheet": "19u_Eu9534JWtPNn-3X1cJGljJRyJGpoq6YXJ8DB3HWc",
+    "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
     "money": "EUR",
     "era": 75,
-    "turn": 10,
+    "turn": 24,
     "servers": {
         "768471917874905108": {
             "name": "Ruse",
@@ -33,16 +33,16 @@
         "693908421396922480": {
             "nation": "Bunny_Republic",
             "demonym": "Bunny",
-            "color": "undefined",
+            "color": "fffffe",
             "cf": 1,
-            "sheet": "11111114",
-            "map": "www.x.com",
+            "sheet": "1KmwkYzprNyJnYwcEpYikSvDAj26E20TGHB78IFguUOc",
+            "map": "https://app.diagrams.net/#G1mpbMlbwjEgNup5sAyMVwMvYl3NECVckm",
             "notes": " "
         },
         "472210194814730250": {
             "nation": "Laveska",
             "demonym": "Laveskan",
-            "color": "Light Blue",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "19qpR5maq7Zcly368synyk_E5hivJNB6bV8Eh1oIT74I",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
@@ -51,7 +51,7 @@
         "301471023298248705": {
             "nation": "Orion",
             "demonym": "Orionian",
-            "color": "Deep Blue",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "135y44pp_3bvZH93MVH_fVsgtpnJH6muV1NmdNLEwRiw",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
@@ -60,7 +60,7 @@
         "388547669028503553": {
             "nation": "DIM",
             "demonym": "DIMinan",
-            "color": "Green",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "1UHXGJF2P9gsRNGvx_HK0tBRTJiL_iYxHImVzGI322w0",
             "map": "https://app.diagrams.net/#G1mIndL4fmxCgEs3kfsMB2PR5kvHhDhWVN",
@@ -69,7 +69,7 @@
         "257922404511121408": {
             "nation": "Rusland",
             "demonym": "Ruslandish",
-            "color": "Dark Red",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "1WOAn_jBSX2eheY9P0ov6Od-J6R7-hwEIfSIj0ZIbt2U",
             "map": "https://app.diagrams.net/#G1mpbMlbwjEgNup5sAyMVwMvYl3NECVckm",
@@ -78,7 +78,7 @@
         "211547891276185601": {
             "nation": "EoL",
             "demonym": "Empire of Light",
-            "color": "Purple",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "17uQDO0vjICnoxZ7dFiQhKnkZHWdH2y1zTw-HFESUADI",
             "map": "https://app.diagrams.net/#G1mIndL4fmxCgEs3kfsMB2PR5kvHhDhWVN",
@@ -87,7 +87,7 @@
         "227222314645717002": {
             "nation": "Jyuren",
             "demonym": "Jyurenian",
-            "color": "Bright Red",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "1IrN3l2fLKJ6-gcoJ5FCZJ3CEsPLo4bOOIEu6oHQGv1k",
             "map": "https://app.diagrams.net/#G1i3yc6KuBuD8h3tfkcu2RZw65sAU85_cs",
@@ -96,16 +96,16 @@
         "319919565079576576": {
             "nation": "Iconia",
             "demonym": "Iconian",
-            "color": "Iconian",
+            "color": "fffffe",
             "cf": 1,
-            "sheet": "11111114",
-            "map": "http://x.com/",
+            "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
+            "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
             "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
         },
         "591521990972669980": {
             "nation": "Korovia",
             "demonym": "Korovian",
-            "color": "Bright Green",
+            "color": "fffffe",
             "cf": 1,
             "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
@@ -114,24 +114,15 @@
         "300424948193820674": {
             "nation": "Mazuai",
             "demonym": "Mazuaian",
-            "color": "undefined",
+            "color": "fffffe",
             "cf": 1,
-            "sheet": "11111114",
-            "map": "http://x.com/",
+            "sheet": "1rzrha-_jFklprWxpO3pM7iexM7Fo9cLmYQKZY9aHe2A",
+            "map": "https://app.diagrams.net/#G1mpbMlbwjEgNup5sAyMVwMvYl3NECVckm",
             "notes": " "
         },
         "768845435455930428": {
             "nation": "Bot",
             "demonym": "Botish",
-            "color": "fffffe",
-            "cf": 1,
-            "sheet": "11111114",
-            "map": "http://x.com/",
-            "notes": " "
-        },
-        "363338561698922498": {
-            "nation": "Bot",
-            "demonym": "undefined",
             "color": "fffffe",
             "cf": 1,
             "sheet": "11111114",

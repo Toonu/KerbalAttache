@@ -16,7 +16,7 @@
         0
     ],
     "70tankgun": [
-        "Rod Research",
+        "Long-rod Research",
         "tech",
         "gunTank",
         [
@@ -25,7 +25,7 @@
         0
     ],
     "80tankgun": [
-        "80's Tank Weaponry",
+        "Advanced long-rod penetrators.",
         "tech",
         "gunTank",
         [
@@ -181,14 +181,14 @@
         1
     ],
     "50turboprops": [
-        "Turboprops",
+        "Turbopropeller engines",
         "tech",
         "engines",
         [],
         1
     ],
     "50jet": [
-        "Early jet engines.",
+        "Early 50's jet engines.",
         "tech",
         "engines",
         [],
@@ -276,33 +276,26 @@
         ],
         1
     ],
-    "earlydefradar": [
-        "Jammer Research",
-        "tech",
-        "radarsAir",
-        [],
-        1
-    ],
-    "earlyoffradar": [
+    "earlyradar": [
         "Air-to-Air Radar Research",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [],
         1
     ],
     "60tgt": [
         "60's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
-            "earlyoffradar"
+            "earlyradar"
         ],
         1
     ],
     "70tgt": [
         "70's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
             "60tgt"
         ],
@@ -311,7 +304,7 @@
     "80tgt": [
         "80's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
             "70tgt"
         ],
@@ -320,7 +313,7 @@
     "90tgt": [
         "90's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
             "80tgt"
         ],
@@ -329,7 +322,7 @@
     "00tgt": [
         "00's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
             "90tgt"
         ],
@@ -338,7 +331,7 @@
     "10tgt": [
         "10's Air-Targeting Radar",
         "tech",
-        "radarsAir",
+        "radarsA2A",
         [
             "00tgt"
         ],
@@ -347,16 +340,16 @@
     "60ground": [
         "60's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
-            "earlyoffradar"
+            "earlyradar"
         ],
         0
     ],
     "70ground": [
         "70's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
             "60ground"
         ],
@@ -365,7 +358,7 @@
     "80ground": [
         "80's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
             "70ground"
         ],
@@ -374,7 +367,7 @@
     "90ground": [
         "90's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
             "80ground"
         ],
@@ -383,7 +376,7 @@
     "00ground": [
         "00's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
             "90ground"
         ],
@@ -392,18 +385,27 @@
     "10ground": [
         "10's Ground Targeting Radar",
         "tech",
-        "radarsGround",
+        "radarsA2G",
         [
             "00ground"
         ],
         0
+    ],
+    "earlyawacs": [
+        "50's AWACS",
+        "tech",
+        "awacs",
+        [
+            "earlysearch"
+        ],
+        1
     ],
     "60awacs": [
         "60's AWACS",
         "tech",
         "awacs",
         [
-            "earlydefradar"
+            "earlyawacs"
         ],
         1
     ],
@@ -452,55 +454,62 @@
         ],
         1
     ],
-    "60search": [
-        "60's Search Radar",
+    "earlysearch": [
+        "50's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
+        [],
+        0
+    ],
+    "60search": [
+        "60's Ground Search Radars",
+        "tech",
+        "radarsSurfaceSearch",
         [
-            "earlydefradar"
+            "earlysearch"
         ],
         0
     ],
     "70search": [
-        "70's Search Radar",
+        "70's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [
             "60search"
         ],
         0
     ],
     "80search": [
-        "80's Search Radar",
+        "80's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [
             "70search"
         ],
         0
     ],
     "90search": [
-        "90's Search Radar",
+        "90's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [
             "80search"
         ],
         0
     ],
     "00search": [
-        "00's Search Radar",
+        "00's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [
             "90search"
         ],
         0
     ],
     "10search": [
-        "10's Search Radar",
+        "10's Ground Search Radars",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [
             "00search"
         ],
@@ -509,23 +518,32 @@
     "00iads": [
         "IADS Framework",
         "tech",
-        "radarsSearch",
+        "radarsSurfaceSearch",
         [],
+        0
+    ],
+    "earlytrg": [
+        "50's Targeting Radar",
+        "tech",
+        "radarsSurfaceTrg",
+        [
+            "earlyradar"
+        ],
         0
     ],
     "60trg": [
         "60's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
-            "earlyoffradar"
+            "earlytrg"
         ],
         0
     ],
     "70trg": [
         "70's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
             "60trg"
         ],
@@ -534,7 +552,7 @@
     "80trg": [
         "80's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
             "70trg"
         ],
@@ -543,7 +561,7 @@
     "90trg": [
         "90's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
             "80trg"
         ],
@@ -552,7 +570,7 @@
     "00trg": [
         "00's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
             "90trg"
         ],
@@ -561,25 +579,32 @@
     "10trg": [
         "10's Targeting Radar",
         "tech",
-        "radarsTargeting",
+        "radarsSurfaceTrg",
         [
             "00trg"
         ],
         0
     ],
+    "earlyecm": [
+        "Jammer Research",
+        "tech",
+        "ecm",
+        [],
+        1
+    ],
     "60ecm": [
         "60's ECM Systems",
         "tech",
-        "ecmEquipment",
+        "ecm",
         [
-            "earlydefradar"
+            "earlyecm"
         ],
         1
     ],
     "70ecm": [
         "70's ECM Systems",
         "tech",
-        "ecmEquipment",
+        "ecm",
         [
             "60ecm"
         ],
@@ -588,36 +613,18 @@
     "80ecm": [
         "80's ECM Systems",
         "tech",
-        "ecmEquipment",
+        "ecm",
         [
             "70ecm"
-        ],
-        1
-    ],
-    "90ecm": [
-        "90's ECM Systems",
-        "tech",
-        "ecmEquipment",
-        [
-            "80ecm"
-        ],
-        1
-    ],
-    "00ecm": [
-        "00's ECM Systems",
-        "tech",
-        "ecmEquipment",
-        [
-            "90ecm"
         ],
         1
     ],
     "10ecm": [
         "10's ECM Systems",
         "tech",
-        "ecmEquipment",
+        "ecm",
         [
-            "00ecm"
+            "80ecm"
         ],
         1
     ],
@@ -847,21 +854,12 @@
         ],
         1
     ],
-    "70lrsam": [
-        "70's Long-Range SAMs",
-        "tech",
-        "missilesLRSAM",
-        [
-            "60lrsam"
-        ],
-        1
-    ],
     "80lrsam": [
         "80's Long-Range SAMs",
         "tech",
         "missilesLRSAM",
         [
-            "70lrsam"
+            "60lrsam"
         ],
         1
     ],
@@ -901,60 +899,10 @@
         ],
         1
     ],
-    "earlyabm": [
-        "Early Anti-Ballistic Missiles",
-        "tech",
-        "missilesABM",
-        [],
-        0
-    ],
-    "80abm": [
-        "80's Anti-Ballistic Missiles",
-        "tech",
-        "missilesABM",
-        [
-            "earlyabm"
-        ],
-        0
-    ],
-    "90abm": [
-        "90's Anti-Ballistic Missiles",
-        "tech",
-        "missilesABM",
-        [
-            "80abm"
-        ],
-        0
-    ],
-    "00abm": [
-        "00's Anti-Ballistic Missiles",
-        "tech",
-        "missilesABM",
-        [
-            "90abm"
-        ],
-        0
-    ],
-    "20abm": [
-        "20's Anti-Ballistic Missiles",
-        "tech",
-        "missilesABM",
-        [
-            "00abm"
-        ],
-        0
-    ],
     "earlysraam": [
         "IR Seeker Research",
         "tech",
         "missilesSRAAM",
-        [],
-        1
-    ],
-    "earlymraam": [
-        "Radar Seeker Research",
-        "tech",
-        "missilesMRAAM",
         [],
         1
     ],
@@ -1019,6 +967,13 @@
         [
             "10sraam"
         ],
+        1
+    ],
+    "earlymraam": [
+        "Radar Seeker Research",
+        "tech",
+        "missilesMRAAM",
+        [],
         1
     ],
     "60mraam": [
@@ -1127,132 +1082,6 @@
         [],
         1
     ],
-    "60ashm": [
-        "60's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "earlyagm"
-        ],
-        1
-    ],
-    "70ashm": [
-        "70's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "60ashm"
-        ],
-        1
-    ],
-    "80ashm": [
-        "80's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "70ashm"
-        ],
-        1
-    ],
-    "90ashm": [
-        "90's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "80ashm"
-        ],
-        1
-    ],
-    "00ashm": [
-        "00's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "90ashm"
-        ],
-        1
-    ],
-    "10ashm": [
-        "10's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "00ashm"
-        ],
-        1
-    ],
-    "20ashm": [
-        "20's Air-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "10ashm"
-        ],
-        1
-    ],
-    "60ship": [
-        "Early Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "earlyagm"
-        ],
-        2
-    ],
-    "70ship": [
-        "70's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "60ship"
-        ],
-        2
-    ],
-    "80ship": [
-        "80's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "70ship"
-        ],
-        2
-    ],
-    "90ship": [
-        "90's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "80ship"
-        ],
-        2
-    ],
-    "00ship": [
-        "00's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "90ship"
-        ],
-        2
-    ],
-    "10ship": [
-        "10's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "00ship"
-        ],
-        2
-    ],
-    "20ship": [
-        "20's Ship-To-Ship Missiles",
-        "tech",
-        "missilesASHM",
-        [
-            "10ship"
-        ],
-        2
-    ],
     "60agm": [
         "60's Air-To-Ground Missiles",
         "tech",
@@ -1316,6 +1145,132 @@
         ],
         1
     ],
+    "60ashm": [
+        "60's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "earlyagm"
+        ],
+        1
+    ],
+    "70ashm": [
+        "70's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "60ashm"
+        ],
+        1
+    ],
+    "80ashm": [
+        "80's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "70ashm"
+        ],
+        1
+    ],
+    "90ashm": [
+        "90's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "80ashm"
+        ],
+        1
+    ],
+    "00ashm": [
+        "00's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "90ashm"
+        ],
+        1
+    ],
+    "10ashm": [
+        "10's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "00ashm"
+        ],
+        1
+    ],
+    "20ashm": [
+        "20's Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "10ashm"
+        ],
+        1
+    ],
+    "60ssm": [
+        "60s Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "earlyagm"
+        ],
+        2
+    ],
+    "70ssm": [
+        "70's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "60ssm"
+        ],
+        2
+    ],
+    "80ssm": [
+        "80's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "70ssm"
+        ],
+        2
+    ],
+    "90ssm": [
+        "90's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "80ssm"
+        ],
+        2
+    ],
+    "00ssm": [
+        "00's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "90ssm"
+        ],
+        2
+    ],
+    "10ssm": [
+        "10's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "00ssm"
+        ],
+        2
+    ],
+    "20ssm": [
+        "20's Ship-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
+        [
+            "10ssm"
+        ],
+        2
+    ],
     "60arm": [
         "60's Anti-Radiation Missiles",
         "tech",
@@ -1370,10 +1325,53 @@
         ],
         1
     ],
+    "70abm": [
+        "Early Anti-Ballistic Missiles",
+        "tech",
+        "missilesABM",
+        [],
+        0
+    ],
+    "80abm": [
+        "80's Anti-Ballistic Missiles",
+        "tech",
+        "missilesABM",
+        [
+            "70abm"
+        ],
+        0
+    ],
+    "90abm": [
+        "90's Anti-Ballistic Missiles",
+        "tech",
+        "missilesABM",
+        [
+            "80abm"
+        ],
+        0
+    ],
+    "00abm": [
+        "00's Anti-Ballistic Missiles",
+        "tech",
+        "missilesABM",
+        [
+            "90abm"
+        ],
+        0
+    ],
+    "20abm": [
+        "20's Anti-Ballistic Missiles",
+        "tech",
+        "missilesABM",
+        [
+            "00abm"
+        ],
+        0
+    ],
     "60alcm": [
         "60's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "earlyagm"
         ],
@@ -1382,7 +1380,7 @@
     "70alcm": [
         "70's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "60alcm"
         ],
@@ -1391,7 +1389,7 @@
     "80alcm": [
         "80's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "70alcm"
         ],
@@ -1400,7 +1398,7 @@
     "90alcm": [
         "90's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "80alcm"
         ],
@@ -1409,7 +1407,7 @@
     "00alcm": [
         "00's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "90alcm"
         ],
@@ -1418,7 +1416,7 @@
     "10alcm": [
         "10's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "00alcm"
         ],
@@ -1427,7 +1425,7 @@
     "20alcm": [
         "20's Cruise Missiles",
         "tech",
-        "missilesCruiser",
+        "missilesCruise",
         [
             "10alcm"
         ],
@@ -1436,14 +1434,14 @@
     "earlytbm": [
         "Early TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [],
         0
     ],
     "60tbm": [
         "60's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "earlytbm"
         ],
@@ -1452,7 +1450,7 @@
     "70tbm": [
         "70's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "60tbm"
         ],
@@ -1461,7 +1459,7 @@
     "80tbm": [
         "80's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "70tbm"
         ],
@@ -1470,7 +1468,7 @@
     "90tbm": [
         "90's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "80tbm"
         ],
@@ -1479,7 +1477,7 @@
     "00tbm": [
         "00's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "90tbm"
         ],
@@ -1488,7 +1486,7 @@
     "10tbm": [
         "10's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "00tbm"
         ],
@@ -1497,7 +1495,7 @@
     "20tbm": [
         "20's TBMs",
         "tech",
-        "missilesBallistics",
+        "missilesBallistic",
         [
             "10tbm"
         ],
@@ -1856,8 +1854,8 @@
         3
     ],
     "categories": {
-        "satellites": "Satellites",
-        "drones": "Drones",
+        "satellites": "Satellite and orbital technologies",
+        "drones": "Drone technologies",
         "reactiveArmor": "Reactive and explosive armour",
         "compArmor": "Composite armour",
         "gunTank": "Tank gunnery",
@@ -1865,11 +1863,11 @@
         "ciws": "Close-in Weapon Systems",
         "engines": "Aerial Engines",
         "awacs": "AWACS",
-        "radarsAir": "Aerial radars",
-        "radarsGround": "Surface radars",
-        "radarsSearch": "Search radars",
-        "radarsTargeting": "Targeting radars",
-        "ecmEquipment": "ECM Equipment",
+        "radarsA2A": "Aerial radars",
+        "radarsA2G": "Aerial ground targetting radars",
+        "radarsSurfaceSearch": "Surface search radars",
+        "radarsSurfaceTrg": "Surface targeting radars",
+        "ecm": "ECM Equipment",
         "missilesATGM": "Anti-Tank Guided Missiles",
         "missilesSRSAM": "Short-Range Surface-to-Air Missiles.",
         "missilesMRSAM": "Medium-Range Surface-to-Air Missiles.",
@@ -1881,8 +1879,8 @@
         "missilesASHM": "Anti-Ship Missiles",
         "missilesABM": "Anti-Ballistic Missiles",
         "missilesARM": "Anti-Radiation Missiles",
-        "missilesCruiser": "Cruise missiles",
-        "missilesBallistics": "Ballistic Missiles",
+        "missilesCruise": "Cruise missiles",
+        "missilesBallistic": "Ballistic Missiles",
         "engineeringSurface": "Surface technologies",
         "engineeringNaval": "Naval technologies",
         "engineeringAerial": "Aerial technologies",

@@ -3,12 +3,13 @@
     "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
     "money": "EUR",
     "era": 75,
-    "turn": 24,
+    "turn": 25,
     "servers": {
         "768471917874905108": {
             "name": "Ruse",
             "main_channel": "768476039496073227",
             "battle_channel": "770982475228643369",
+            "announcements": "770982475228643369",
             "administrators": [
                 "768474211333177444"
             ],
@@ -20,6 +21,7 @@
             "name": "NoU",
             "main_channel": "770921356111773698",
             "battle_channel": "572807672055988234",
+            "announcements": "685907863184474124",
             "administrators": [
                 "716608480810631178",
                 "470260541785636865"

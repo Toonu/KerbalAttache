@@ -33,16 +33,20 @@ client.on('message', message => {
 	//If command doesnt exist.
 	if (!client.commands.has(commandName)) {
 		message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-		message.delete().then(r => r);
+		message.delete();
 	}
 
 	//Else
 	const command = client.commands.get(commandName);
+    if (command === undefined) {
+        return message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
+        message.delete();
+    }
 
 	//Checking for DMs
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return message.reply('I can\'t execute that command inside DMs!');
-	}
+    }
 
 	//Checking for arguments
 	if (command.args && !args.length) {
@@ -51,10 +55,9 @@ client.on('message', message => {
 			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
 		}
 		// noinspection JSUnresolvedFunction
-		message.channel.send(reply).then(() => {
+		return message.channel.send(reply).then(() => {
 			message.delete({timeout: 10000}).catch(err => console.log(err));
 		});
-		return;
 	}
 
 	//Checking for cool down
@@ -98,8 +101,8 @@ client.on('message', message => {
 	}
 });
 
-//const {CLIENT_TOKEN} = process.env;
-const {CLIENT_TOKEN} = require('./env.json');
+const {CLIENT_TOKEN} = process.env;
+//const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
 

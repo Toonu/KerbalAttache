@@ -64,8 +64,10 @@ module.exports = {
 
         await setArray('B5', balanceArray);
         await setArray(techCol + 5, newResearch);
-        await set(`B${dataRow + 1}`, cfg.turn);
+        await set(`B${dataRow + 1}`, cfg.turn + ' ' + message.author.username);
         await set(`B${dataRow + 2}`, dateTime);
         report(message, `Turn has been finished by <@${message.author.id}>`, this.name);
+        message.client.channels.cache.get(cfg.servers[message.guild.id].announcements).send(`<@519315646606082052> Turn has been finished!`).catch(e => console.log(e));
+
     }
 };

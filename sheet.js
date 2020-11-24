@@ -53,6 +53,7 @@ exports.get = function getInternal(coordinate,tab = 'Maintenance') {
  * @param colSize               Number Size extension in columns.
  * @param rowSize               Number Size extension in rows.
  * @param tab                   String tab name.
+ * @param full                  If coordinates have to be full (allows A1:A if true).
  * @return {Promise<Array>}     Returns data array or rejects String error message.
  */
 exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance', full = false) {

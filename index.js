@@ -101,8 +101,8 @@ client.on('message', message => {
 	}
 });
 
-const {CLIENT_TOKEN} = process.env;
-//const {CLIENT_TOKEN} = require('./env.json');
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
 

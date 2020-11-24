@@ -1,8 +1,8 @@
 const cfg = require('./config.json'), {google} = require('googleapis'), sh = require('./sheet');
 let client;
 let gs;
-const {private_key, client_email} = process.env;
-//const {private_key, client_email} = require('./env.json');
+//const {private_key, client_email} = process.env;
+const {private_key, client_email} = require('./env.json');
 
 
 /**
@@ -55,13 +55,13 @@ exports.get = function getInternal(coordinate,tab = 'Maintenance') {
  * @param tab                   String tab name.
  * @return {Promise<Array>}     Returns data array or rejects String error message.
  */
-exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance') {
+exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance', full = false) {
     return new Promise(function (resolve, reject) {
         rowSize = parseInt(rowSize);
         colSize = parseInt(colSize);
 
         let temporaryCordY;
-        if (!isCoordinate(cordX) || !isCoordinate(cordY)) {
+        if ((!isCoordinate(cordX) || !isCoordinate(cordY)) && !full) {
             reject('Coordinates not correct.')
         } else if (colSize !== 0 || rowSize !== 0) {
             temporaryCordY = sh.fromCoordinate(cordY);

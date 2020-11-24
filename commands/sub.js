@@ -9,14 +9,8 @@ module.exports = {
     guildOnly: true,
     execute: async function sub(message, args) {
         let nation = ping(message, 2);
-        let row = -99;
-        let end = undefined;
 
-        while (end === undefined && row < 300) {
-            row += 100;
-            end = await findVertical('Data', `B`, 'Database', row);
-        }
-        let data = await getArray('A1', `AK${end + row - 1}`, 0, 0, 'Database');
+        let data = await getArray('A1', 'AF', 0, 0, 'Database', true).catch(e => console.error(e));
 
         let nat = cfg.users[nation.id].nation;
         let analyse = '';
@@ -37,9 +31,12 @@ module.exports = {
         })
 
         array.forEach(r => {
-            let money = parseInt(r[33].replace(/[,|$]/g, ''));
+            let money = parseInt(r[27].replace(/[,|$]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(10)} ${r[36]}\n`;
+            if (r[26] === 'Upgrade') {
+                r[26] += `of ${r[28]}`
+            }
+            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(30)}$ ${r[30]}\n`;
         })
 
         message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
@@ -52,5 +49,5 @@ module.exports = {
             }
         });
         return message.delete();
-    }
+    },
 };

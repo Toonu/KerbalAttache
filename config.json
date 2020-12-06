@@ -130,7 +130,59 @@
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
+        },
+        "312900789947596800": {
+            "nation": "RKWC",
+            "demonym": "undefined",
+            "color": "fffffe",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "177326763632754688": {
+            "nation": "Northkurb",
+            "demonym": "undefined",
+            "color": "fffffe",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
         }
     },
-    "trade": {}
+    "trade": {
+        "312900789947596800": {
+            "nation": "Korovia",
+            "amount": 10,
+            "money": 500000,
+            "unit": "MBT",
+            "type": false,
+            "transaction": "buy",
+            "nationRow": 6,
+            "unitCol": "I",
+            "message": {
+                "channelID": "698435574368960602",
+                "deleted": true,
+                "id": "782841529861144596",
+                "type": "DEFAULT",
+                "system": false,
+                "content": "?trade buy 10 mbt 500000 <@!312900789947596800>",
+                "authorID": "591521990972669980",
+                "pinned": false,
+                "tts": false,
+                "nonce": "782841520867770368",
+                "embeds": [],
+                "attachments": [],
+                "createdTimestamp": 1606714365211,
+                "editedTimestamp": 0,
+                "webhookID": null,
+                "applicationID": null,
+                "activity": null,
+                "flags": 0,
+                "reference": null,
+                "guildID": "470258156682084373",
+                "cleanContent": "?trade buy 10 mbt 500000 @​RKWC"
+            }
+        }
+    }
 }

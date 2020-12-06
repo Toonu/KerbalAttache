@@ -15,7 +15,7 @@
     "SAT": ["Orbital Satellite", "orbital"], 
     "OV": ["Orbital Vehicle", "orbital"],
     "K": ["Corvette", "naval"], 
-    "F": ["Frigate", "naval"], 
+    "FF": ["Frigate", "naval"], 
     "DD": ["Destroyer", "naval"], 
     "CC": ["Cruiser", "naval"], 
     "BC": ["Battlecruiser", "naval"], 

@@ -33,6 +33,10 @@ Eg. ?trade sell 2 IFV 20000 @User
             message.channel.send('Nation does not exist in our database. Contact moderator or retry.')
                 .then(msg => msg.delete({timeout: 5000}));
             return message.delete();
+        } else if (amount === 0) {
+            message.channel.send('You cannot send just the money kiddo.')
+                .then(msg => msg.delete({timeout: 5000}));
+            return message.delete();
         }
 
         type = !type.startsWith('buy');

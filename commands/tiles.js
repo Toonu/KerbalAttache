@@ -18,7 +18,7 @@ module.exports = {
             message.channel.send('You can get information about amount of your tiles in ?balance.').then(msg => msg.delete({timeout: 9000}));
             fail = true;
         }
-        args[0] = parseInt(args[0]);
+        args[0] = parseFloat(args[0]);
         if (isNaN(args[0])) {
             message.channel.send('Argument is not a number. Canceling operation.').then(msg => msg.delete({timeout: 9000}));
             fail = true;
@@ -39,7 +39,7 @@ module.exports = {
             } else {
                 tiles[3] = tiles[3];
             }
-            let newTiles = parseInt(args[0]) + tiles[3]
+            let newTiles = parseFloat(args[0]) + tiles[3]
             //Checking whether the number of tiles would go into negative.
             if (newTiles >= 0) {
                 set(`${tiles[1] + tiles[2]}`, newTiles)

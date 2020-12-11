@@ -15,7 +15,7 @@
     "SAT": ["Orbital Satellite", "orbital"], 
     "OV": ["Orbital Vehicle", "orbital"],
     "K": ["Corvette", "naval"], 
-    "F": ["Frigate", "naval"], 
+    "FF": ["Frigate", "naval"], 
     "DD": ["Destroyer", "naval"], 
     "CC": ["Cruiser", "naval"], 
     "BC": ["Battlecruiser", "naval"], 
@@ -45,7 +45,7 @@
     "AIRPORT": ["Airfield", "aerial"], 
     "FOB": ["Forward Operating Base", "surface"], 
     "PORT": ["Naval port", "naval"], 
-    "RADAR": ["Radar site", "buildings"],
+    "RADAR": ["Radar site", "surface"],
     "ResBudget": ["Research", "other"],
     "Coefficient": ["Research", "other"],
     "Tiles": ["Tiles", "other"]

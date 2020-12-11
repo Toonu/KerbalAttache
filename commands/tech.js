@@ -156,7 +156,7 @@ function list(category, nation, message) {
                     .setURL('https://discord.js.org/') //URL clickable from the title
                     .setThumbnail('https://imgur.com/IvUHO31.png')
                     .addFields(
-                        { name: 'Unlocks:', value: `\`\`\`\n${newMessage}\`\`\``},
+                        { name: 'Unlocks:', value: `\`\`\`${newMessage}\`\`\``},
                         { name: 'Cost:', value: `${data[0][0]}RP`, inline: true},
                         { name: 'Buy?', value: `✅`, inline: true},
                     )

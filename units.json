@@ -45,7 +45,7 @@
     "AIRPORT": ["Airfield", "aerial"], 
     "FOB": ["Forward Operating Base", "surface"], 
     "PORT": ["Naval port", "naval"], 
-    "RADAR": ["Radar site", "buildings"],
+    "RADAR": ["Radar site", "surface"],
     "ResBudget": ["Research", "other"],
     "Coefficient": ["Research", "other"],
     "Tiles": ["Tiles", "other"]

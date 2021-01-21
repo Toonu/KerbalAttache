@@ -3,7 +3,7 @@
     "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
     "money": "EUR",
     "era": 75,
-    "turn": 25,
+    "turn": 26,
     "servers": {
         "768471917874905108": {
             "name": "Ruse",
@@ -54,16 +54,16 @@
             "nation": "Orion",
             "demonym": "Orionian",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "135y44pp_3bvZH93MVH_fVsgtpnJH6muV1NmdNLEwRiw",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
             "notes": "Stage 4 Chronic Metagamer."
         },
         "388547669028503553": {
             "nation": "DIM",
-            "demonym": "DIMinan",
+            "demonym": "DIM",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "1UHXGJF2P9gsRNGvx_HK0tBRTJiL_iYxHImVzGI322w0",
             "map": "https://app.diagrams.net/#G1mIndL4fmxCgEs3kfsMB2PR5kvHhDhWVN",
             "notes": " "
@@ -90,7 +90,7 @@
             "nation": "Jyuren",
             "demonym": "Jyurenian",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "1IrN3l2fLKJ6-gcoJ5FCZJ3CEsPLo4bOOIEu6oHQGv1k",
             "map": "https://app.diagrams.net/#G1i3yc6KuBuD8h3tfkcu2RZw65sAU85_cs",
             "notes": "Furry gang but well armed, well trained and very lethal. Hopefully."
@@ -99,7 +99,7 @@
             "nation": "Iconia",
             "demonym": "Iconian",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
             "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
@@ -108,7 +108,7 @@
             "nation": "Korovia",
             "demonym": "Korovian",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
             "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
             "notes": " "
@@ -133,25 +133,25 @@
         },
         "312900789947596800": {
             "nation": "RKWC",
-            "demonym": "undefined",
+            "demonym": "Company",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
         },
         "177326763632754688": {
             "nation": "Northkurb",
-            "demonym": "undefined",
+            "demonym": "Company",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
         },
         "452567898368638996": {
             "nation": "SAL",
-            "demonym": "undefined",
+            "demonym": "Company",
             "color": "fffffe",
             "cf": 1,
             "sheet": "11111114",

@@ -131,6 +131,8 @@ For better reference, negative numbers are highlighted with red in the sheet.`
             }
             report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> by <@${message.author.id}>
             ${problems}`, 'Battle');
+
+            message.delete();
         }
     }
 };

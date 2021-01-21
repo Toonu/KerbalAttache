@@ -16,7 +16,7 @@ module.exports = {
     execute: async function accept(message) {
         let data = cfg.trade[message.author.id];
         if (data === undefined) {
-            message.channel.send('No trade exists and therefore none can be accepted.')
+            return message.channel.send('No trade exists and therefore none can be accepted.')
         }
 
         let nationRow = data.nationRow;

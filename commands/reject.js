@@ -16,7 +16,7 @@ module.exports = {
     execute: async function reject(message) {
         let data = cfg.trade[message.author.id];
         if (data === undefined) {
-            message.channel.send('No trade exists and therefore none can be accepted.')
+            message.channel.send('No trade exists and therefore none can be rejected.')
         } else {
             delete cfg.trade[message.author.id];
             exportFile('config.json', cfg);

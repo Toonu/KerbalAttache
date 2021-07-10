@@ -1,96 +1,70 @@
-const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = require("../jsonManagement"),
-    {report} = require("../game");
 module.exports = {
     name: 'useredit',
-    description: 'Command for editing user data in the database! Your notes are always editable even without permissions.',
+    description: 'Command for editing users! Your notes are always editable',
     args: true,
-    usage: `[operation] [data | del] [M:@user]
-    
-Possible operations:
-\`\`\`
-notes | notes
-\`\`\`
-Moderators only: 
-\`\`\`
-n  | nation
-d  | demonym
-c  | color
-s  | sheet
-m  | map
-cf | coefficient
-\`\`\``,
+    usage: '<operation> <data/del> <A:@user>\Operations:\n0: Nation (M), 1: color (M), 2: pwd (M), 3: notes (U), permissions to edit the value are in ()',
     cooldown: 5,
     guildOnly: true,
-    /**
-     * Method edits user parameters in main config file with new data.
-     * @param message   Message author taken as printed user.
-     * @param args      Operation String, New data String, User tag.
-     * @param msg       If message is shown.
-     * @returns {*}     Error message.
-     */
-    execute: function useredit(message, args, msg = true) {
-        let permission = perm(message, 2, false);
-        let user = ping(message).id;
+    execute: function execute(message, args) {
+        const js = require('./../json');
+        const cfg = require('./../config.json')
 
-        let data = args[1];
-        //Collects all data arguments
-        if (args[1] === 'del') {
-            data = ' ';
-        } else {
-            for (let i = 2; i < args.length; i++) {
-                if (!args[i].startsWith('<@')) {
-                    data += ` ${args[i]}`;
+        if (js.perm(message, 2) || (args[0] == '3' && message.mentions.users.first() == message.author)) {
+            let user = message.author;
+
+            try {
+                args[0] = parseInt(args[0]);
+                if (isNaN(args[0])) throw 'Argument type is not a number! Canceling operation'
+                if (args[2] != undefined) {
+                    user = message.mentions.users.first();
                 }
+            } catch(err) {
+                console.error(err);
+                return;
             }
-        }
 
-        if (cfg.users[user] === undefined) {
-            report(message, `${createUser(user, args[1], args[2], args[3], args[4])} created by <@${message.author.id}>`, this.name);
-            useredit(message, args);
-            message.delete({timeout: 9000});
-        }
-
-        if (args[0] === 'notes') {
-            cfg.users[user].notes = data;
-        } else if (args[0] === 'n' && permission) {
-            cfg.users[user].nation = data;
-        } else if (args[0] === 'd' && permission) {
-            cfg.users[user].demonym = data;
-        } else if (args[0] === 'c' && permission) {
-            if (data.length > 6) {
-                if (msg) message.delete({timeout: 9000});
-                return message.channel.send('Argument is not a color hex number. Modification failed.').then(msg => msg.delete({timeout: 9000}));
-            }
-            cfg.users[user].color = data;
-        } else if (args[0] === 's' && permission) {
-            cfg.users[user].sheet = args[1];
-            data = args[1];
-        } else if (args[0] === 'm' && permission) {
-            let regExp = new RegExp(/https:\/\/app.diagrams\.net\/.+/);
-            if (regExp.test(args[1])) {
-                cfg.users[user].map = args[1];
-                data = args[1]
+            if(cfg.users[user.id] == undefined) {
+                js.createUser(user.id);
+                execute(message, args);
+                return;
+            } else if (args[1] == 'del' && modifyUser(user.id, args[0], 'undefined')) {
+                message.channel.send('User property deleted.');
+            } else if (modifyUser(user.id, args[0], args[1])) {
+                message.channel.send('User property modified.');
             } else {
-                if (msg) message.delete({timeout: 9000});
-                return message.channel.send('Argument is not a map URL link. Modification failed.').then(msg => msg.delete({timeout: 9000}));
+                message.channel.send('Modification failed.');
             }
-        } else if (args[0] === 'cf' && permission) {
-            data = parseInt(data);
-            if (isNaN(data)) {
-                if (msg) message.delete({timeout: 9000});
-                return message.channel.send('Argument is not a number. Modification failed.').then(msg => msg.delete({timeout: 9000}));
-            }
-            cfg.users[user].cf = data;
-        } else {
-            if (msg) message.delete({timeout: 9000});
-            return message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name').then(msg => msg.delete({timeout: 9000}));
-        }
-
-        exportFile("config.json", cfg);
-        if (msg) {
-            message.channel.send('User property modified.').then(msg => msg.delete({timeout: 9000}));
-            message.delete({timeout: 9000});
-            report(message, `<@${message.author.id}> modified <@${user}>'s ${args[0]} to ${data}.`, this.name)
-        }
+        }        
     }
 };
+
+function modifyUser(id, type, data) {
+    const js = require('./../json');
+    const cfg = require('./../config.json');
+
+    switch(type) {
+        case 0:
+            cfg.users[id].nation = data;
+            break;
+        case 1:
+            cfg.users[id].color = data;
+            break;
+        case 2:
+            cfg.users[id].cf = data;
+            break;
+        case 3:
+            cfg.users[id].notes = data;
+            break;
+        case 4:
+            cfg.users[id].sheet = data;
+            break;
+        case 5:
+            cfg.users[id].egg = data;
+            break;
+        default:
+            return false;
+    }
+
+    js.exportFile("config.json", cfg);
+    return true;
+}

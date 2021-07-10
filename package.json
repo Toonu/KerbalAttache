@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js|node keep_alive.js"
+    "start": "node index.js  > out.log &|node keep_alive.js"
   },
   "keywords": [],
   "engines": {

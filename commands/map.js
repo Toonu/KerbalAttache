@@ -1,26 +1,39 @@
-const {ping} = require("../jsonManagement"), discord = require('discord.js'), cfg = require('../config.json');
 module.exports = {
     name: 'map',
-    description: 'Command for getting link to you private map. Do NOT use in public channels.',
+    description: 'Command for getting link to you map. Do NOT use in public channels.',
     args: false,
-    usage: '[M:@user]',
+    usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
-    execute: function mapLink(message) {
+    execute: function execute(message, args) {   
+        const cfg = require("./../config.json");
+        const js = require('./../json');
+        const Discord = require('discord.js');
         try {
-            let userMap = cfg.users[ping(message).id].map;
-            const embed = new discord.MessageEmbed()
-                .setColor('#faf6f6')
+            let map;
+            if (args[0] != undefined && js.perm(message, 2)) {
+                map = cfg.users[message.mentions.users.first().id].map;
+            } else {
+                map = cfg.users[message.author.id].map;
+            }
+            
+            const embed = new Discord.MessageEmbed()
+                .setColor('#0099ff')
                 .setTitle('Your map link.')
-                .setURL(userMap)
+                .setURL(map)
                 .setThumbnail('https://imgur.com/IvUHO31.png')
-                .setFooter('Made by the Attaché to the United Nations\nThis message will be auto-destructed in 15 seconds!', 'https://imgur.com/KLLkY2J.png');
+                .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
 
-            message.channel.send(embed).then(msg => {msg.delete({ timeout: 15000 });});
+            message.channel.send(embed)
+            .then(msg => {
+                msg.delete({ timeout: 10000 });
+                message.delete({ timeout: 10000 });
+            })
+            .catch(err => console.log(msg));
+
         } catch(err) {
             console.log(err);
-            message.channel.send("No map assigned.").then(msg => {msg.delete({timeout: 9000});});
+            message.channel.send("No map assigned.")
         }
-        message.delete();
     }
 }

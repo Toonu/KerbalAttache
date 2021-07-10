@@ -1,96 +1,116 @@
-const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
 module.exports = {
     name: 'assets',
-    description: 'Command for getting your current asset list! Do NOT use in public channels.',
+    description: 'Command for getting your current assets! Do NOT use in public channels.',
     args: false,
-    usage: '[M:@user]',
+    usage: '<M:@user>',
     cooldown: 5,
     guildOnly: true,
-    execute: async function assets(message) {
+    execute: async function execute(message, args) { 
         const cfg = require('./../config.json')
-        const discord = require('discord.js');
+        const js = require('./../json');
+        const fn = require('./../fn')
+        const gm = require('./../game');
+        const Discord = require('discord.js');
 
-        let user = ping(message).id;
-        let nation = cfg.users[user].nation;
 
-        const embed = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user].sheet}/edit#gid=0`)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        let nation = cfg.users[message.author.id].nation;
+        let user  = message.author;
+        if (args[0] != undefined && js.perm(message, 2)) {
+            nation = cfg.users[message.mentions.users.first().id].nation;
+            user = message.mentions.users.first();
+        } else if (args[0] != undefined) {
+            return;
+        }
+        
+        var embed = new Discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`National Roster of ${nation}`)
+        .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
-        const embedW = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user].sheet}/edit#gid=0`)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        var embedW = new Discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`National Roster of ${nation}`)
+        .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user.id].sheet}/edit#gid=0`)
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
+        const t = new RegExp(/^[0-9]+/g);
 
         //Weapons setup
-        let nationRow = await findVertical(nation, 'A', 'Stockpiles')
-            .catch(err => console.error(err));
+        await gm.findVertical(nation, 'A', message, 'Stockpiles')
+            .then(nationRow => {
+                fn.ss(['getA', 'A4', `W${nationRow}`], message, 'Stockpiles')
+                .then(weapArr => { 
+                    for(var i = 1; i < weapArr[0].length; i++) {
+                        if (weapArr[weapArr.length-1][i] != '.') {
+                            embedW.addField(weapArr[0][i], weapArr[weapArr.length-1][i], true);
+                        }
+                    }
+                })
+                .catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));  
 
-        let weaponArray = await getArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
-            .catch(err => console.error(err));
-        let unitArray = await getArray('A4', `BA${nationRow}`)
-            .catch(err => console.error(err));
-
-        for (let i = 1; i < weaponArray[0].length; i++) {
-            if (weaponArray[0][i] === 'END') {
-                break;
-            } else if (![',', '0'].includes(weaponArray[weaponArray.length - 1][i])) {
-                embedW.addField(weaponArray[0][i], weaponArray[weaponArray.length - 1][i], true);
+        //Units setup
+        endCol = await gm.findHorizontal('Surface', 1, message)
+        endCol = fn.toCoord(endCol - 1);
+        let unitNames = await fn.ss(['getA', 'E4', `${endCol}4`], message)
+        nationRow = await gm.findVertical(nation, 'A', message)
+        array = await fn.ss(['getA', `A${nationRow}`, `${endCol}${nationRow}`], message)
+        for(var i = 4; i < array[0].length; i++) {
+            if (array[0][i] != '.') {
+                embed.addField(unitNames[0][i - 4], array[0][i], true);
             }
         }
-        for (let i = 4; i < unitArray[unitArray.length - 1].length; i++) {
-            if (unitArray[0][i] === 'Technology') {
-                break;
-            } else if (![',', '0'].includes(unitArray[unitArray.length - 1][i])) {
-                embed.addField(unitArray[0][i], unitArray[unitArray.length - 1][i], true);
-            }
-        }
 
-        message.delete();
         //Embed switching mechanism
         let currentEmbed = embed;
         let switchEmbeds = await embUnits(currentEmbed, message);
-        //Prints first embed, if its switched, returns Array with true,embed msg.
-        // Then switches to the other embed, then deletes the old and prints new. Then loop again.
         while(switchEmbeds[0]) {
-            currentEmbed = currentEmbed === embed ? embedW : embed;
+            if (switchEmbeds[0] && currentEmbed == embed) {
+                currentEmbed = embedW;
+            } else {
+                currentEmbed = embed;
+            }
             switchEmbeds[1].delete();
             switchEmbeds = await embUnits(currentEmbed, message);
         }
     }    
 }
 
+
 function embUnits(embed, message) {
-    return new Promise(function (resolve) {
-        function emojiFilter(reaction, user) {
-            return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌') && user.id === message.author.id;
-        }
+    return new Promise(function (resolve, reject) {
+        const emojiFilter = (reaction, user) => {
+	        return (reaction.emoji.name === '➡️' || reaction.emoji.name === '⬅️' || reaction.emoji.name === '❌') && user.id === message.author.id;
+        };
 
         message.channel.send(embed)
             .then(msg => {
-                msg.react('❌').catch(err => console.log(err));
-                msg.react('➡️').catch(err => console.log(err));
+                msg.react('⬅️');
+                msg.react('➡️');
+                msg.react('❌');
                 msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
                     .then(collected => {
-                        let react = collected.first();
-                        if (react.emoji.name === '➡️') {
+                        react = collected.first();
+                        if (react.emoji.name == '➡️' || react.emoji.name == '⬅️' ) {
                             resolve([true,msg]);
-                        } else if (react.emoji.name === '❌') {
+                        } else if (react.emoji.name == '❌') {
                             msg.delete();
+                            message.delete();
                             resolve([false,msg]);
                         }
                     })
-                    .catch(() => {
+                    .catch(err => {
                         msg.delete();
+                        message.delete();
                     })
             })
-            .catch(() => {
+            .catch(err => {
+                msg.delete();
+                message.delete();
                 resolve([false]);
             })
     })

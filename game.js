@@ -1,118 +1,200 @@
-const fs = require('fs');
-const {google} = require('googleapis');
-const fn = require('./fn');
-const gm = require('./game');
-const cfg = require('./config.json');
-const units = require('./units.json');
+const gm = require('./game'), cfg = require('./config.json'),
+    units = require('./units.json'), {get, set, getArray, toCoordinate} = require("./sheet");
 
-//Function finds first element target in column.
-exports.findVertical = function findVertical(target, col, message, tab) {
+/**
+ * Function finds row of target in column of sheet tab.
+ * @param target                String of searched target.
+ * @param col                   String of column letter.
+ * @param tab                   String of tab name.
+ * @param height                Height shift
+ * @return {Promise<Number>}    Number of row.
+ */
+exports.findVertical = function findVertical(target, col, tab, height = 1) {
     return new Promise(function (resolve, reject) {
-        //console.log('Col: ' + col + 'tab: ' + tab);
-        fn.ss(['getA', `${col}1`, `${col}100`], message, tab)
+        let max = height + 99;
+        getArray(`${col + height}`, `${col + max}`, 0, 0, tab)
             .then(array => {
-                //console.log(array);
-                var height = 0;
-                var rege = new RegExp("^"+target+".*", "g");
-                for (const element of array) {
-                    height += 1;
-                    if (rege.test(element[0])) {
-                        resolve(height);
+                const regex = new RegExp("^" + target + ".*", "g");
+                let result = array.findIndex(function (currentValue) {
+                    if (regex.test(currentValue)) return true;
+                });
+                if (result === -1) {
+                    return reject(undefined);
                 }
-            }
-            reject('Not found in vertical range.');
+                resolve(result + 1);
             })
-            .catch(err => reject('Error in vertical: ' + err));
-    });
+            .catch((err) => reject(console.log(err)));
+    }).catch(err => console.log('Error in vertical: ' + err));
 }
 
-//Function finds first row containing the target in row. Returns char number.
-exports.findHorizontal = function findHorizontal(target, row, message, tab) {
-    return new Promise(function (resolve, reject) {
-        var e = 64; //char A dec num
 
-        var col = 'BA';
-        if(tab == 'TechTree') {
-            col = 'HO'
-        }
-        //console.log(col);
-        fn.ss(['getA', `A${row}`, `${col + row}`], message, tab)
+/**
+ * Function returns targets column in row of sheet tab.
+ * @param target                String of searched target.
+ * @param row                   Number of row.
+ * @param tab                   String of tab name.
+ * @return {Promise<String>}    Letter of column.
+ */
+exports.findHorizontal = function findHorizontal(target, row, tab) {
+    return new Promise(function (resolve, reject) {
+        let e = 64; //char A dec num
+
+        let col = 'BA';
+        if(tab === 'TechTree') col = 'HQ'
+
+        getArray(`A${row}`, `${col + row}`, 0, 0, tab)
             .then(array => {
-                //console.log(array);
-                for (const element of array[0]) {
-                    e += 1;
-                    if (element == target) {
-                        resolve(e);
+                const regex = new RegExp("^" + target + ".*", "g");
+                let result = array[0].findIndex(function (currentValue) {
+                    if (regex.test(currentValue)) {
+                        return true;
                     }
+                });
+                if (result === -1) {
+                    reject(undefined);
                 }
-            reject('Not found in horizontal range.');
+                result = toCoordinate(result + e + 1);
+                resolve(result);
             })
-            .catch(err => reject('Error in horizontal: ' + err));
-    });
+            .catch((err) => reject(console.log(err)));
+    }).catch(err => console.log('Error in horizontal: ' + err));
 }
 
-/*
-Finds unit maintenance price with reflection to the nation technological level.
-Returns the int maintenance price, column of the price and row of the nation.
-*/
-exports.findUnitPrice = function(unit, message, nation, tab, tech) {
+
+/**
+ * Function finds target in nation's data of sheet tab. Tech true if tech tree item.
+ * @param target                    String searched item.
+ * @param nation                    String nation name.
+ * @param tech                      Boolean true if tech tree search.
+ * @param tab                       Sheet tab name.
+ * @return {Promise<Array>}         Array of [BottomPrice, Column of item, Row of nation, Value of nation's item].
+ */
+exports.findData = function findData(target, nation, tech, tab) {
     return new Promise(async function(resolve, reject) {
-        //console.log(tab);
-        let priceRow = await gm.findVertical('Data', 'A', message, tab).catch(err => console.error('PriceRowErr: ' + err));
-        let nationRow = await gm.findVertical(nation, 'A', message, tab).catch(err => console.error('NationRowErr: ' + err));
-        let priceCol = await gm.findHorizontal(unit, 4, message, tab).catch(err => console.error('PriceColErr: ' + err));
-        let rp;
-        if (tech) {
-            rp = await fn.ss(['get', `${fn.toCoord(priceCol) + nationRow}`], message, tab)
+        if (!tech && ['wpSurface', 'wpAerial', 'systems'].includes(units[target][1])) {
+            tab = 'Stockpiles';
         }
-        
-        //console.log('Priceitems' + priceRow +'n'+ nationRow +'c'+ fn.toCoord(priceCol));
-        if(priceRow == undefined || nationRow == undefined || priceCol == undefined) {
+
+        let value;
+        let priceRow;
+        let nationRow;
+        let priceCol;
+        let techInfo;
+        try {
+            priceRow = await gm.findVertical('Data', 'A', tab).catch(e => {reject(e)});
+            nationRow = await gm.findVertical(nation, 'A', tab).catch(e => {reject(e)});
+            priceCol = await gm.findHorizontal(target, 4, tab).catch(e => {reject(e)});
+            value = await get(`${priceCol + nationRow}`, tab).catch(e => {reject(e)});
+            if (tech) {
+                techInfo = await getArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
+                techInfo[0] = parseInt(techInfo[0]);
+            }
+            if (value === undefined) {
+                value = 0;
+            } else {
+                value = parseInt(value.replace(/[,|$]/g, ''));
+            }
+        } catch (e) {
+            console.error(e);
+            reject(e);
+        }
+
+        if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
             reject('Wrong name');
         }
-
-        
-        let price;
-        fn.ss(['get', `${fn.toCoord(priceCol) + priceRow}`], message, tab)
-        .then(amount => {
-            price = parseInt(amount);
-            if (tech || ['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
-                resolve([price, priceCol, nationRow, rp]);
-            } else if (['other'].includes(units[unit][1])) {
-                fn.ss(['get', `${fn.toCoord(priceCol)+nationRow}`], message, tab)
-                .then(amount => {
-                    resolve([amount, priceCol, nationRow]);
-                }).catch(err => console.error(err));
+        get(`${priceCol + priceRow}`, tab)
+        .then(price => {
+            price = parseInt(price);
+            if (tech || ['other', 'wpSurface', 'wpAerial', 'systems'].includes(units[target][1])) {
+                if (!tech) {
+                    resolve([price, priceCol, nationRow, value]);
+                } else {
+                    resolve([techInfo, priceCol, nationRow, value]);
+                }
             } else {
-                let techCol;
-                gm.findHorizontal('Surface', 1, message)
-                .then(col => {
-                    techCol = fn.toCoord(col);
-                    //console.log(techCol);
-                    fn.ss(['getA', `${techCol}${nationRow}`, `${techCol}${nationRow}`, '3', '0'], message)
+                gm.findHorizontal('Surface', 1)
+                .then(incrementsCols => {
+                    getArray(`${incrementsCols}${nationRow}`, `${incrementsCols}${nationRow}`, 3, 0)
                     .then(techLevel => {
-                        //console.log(techLevel);
-                        switch(units[unit][1]) {
+                        switch(units[target][1]) {
                             case 'surface':
-                                resolve([(price * (techLevel[0][0]/4+0.975)), priceCol, nationRow]);
+                                resolve([(price * (techLevel[0][0]/4+0.975)), priceCol, nationRow, value]);
+                                break;
                             case 'aerial':
-                                resolve([(price * (techLevel[0][1]/4+0.975)), priceCol, nationRow]);
+                                resolve([(price * (techLevel[0][1]/4+0.975)), priceCol, nationRow, value]);
+                                break;
                             case 'naval':
-                                resolve([(price * (techLevel[0][2]/4+0.975)), priceCol, nationRow]);
+                                resolve([(price * (techLevel[0][2]/4+0.975)), priceCol, nationRow, value]);
+                                break;
                             case 'orbital':
-                                resolve([(price * (techLevel[0][3]/4+0.975)), priceCol, nationRow]);
+                                resolve([(price * (techLevel[0][3]/4+0.975)), priceCol, nationRow, value]);
+                                break;
                             default:
                                 resolve([price, priceCol, nationRow]);
                         }
-                    })
-                    .catch(err => console.error(err));
-                })
-                .catch(err => console.error(err));
+                    }).catch(err => console.error(err));
+                }).catch(err => console.error(err));
             }
-        })
-        .catch(err => console.error(err));
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
-exports.report = function(message, data) {
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(data);
+
+
+/**
+ * Function reports to the moderator channel the specified report String.
+ * @param message   Message object which specifies server to search main channel in.
+ * @param report    String with a message to report.
+ * @param command   String command in which report is from.
+ */
+exports.report = function report(message, report, command = '') {
+    let today = new Date();
+    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`).catch(e => console.log(e));
+}
+
+
+/**
+ * Function makes trade transaction between two countries.
+ * @param nationRow             Number of nation row.
+ * @param unitCol               String of traded asset col.
+ * @param amount                Number of assets traded.
+ * @param money                 Number money paid.
+ * @param message               Message object to respond to.
+ * @param type                  Boolean type of transaction.
+ * @param tab                   String tab of sheet.
+ * @return {Promise<String>}    Returns result.
+ */
+exports.transfer = function transfer(nationRow, unitCol, amount, money, message, type, tab) {
+    return new Promise(function (resolve, reject) {
+        get(`${unitCol + nationRow}`, tab)
+            .then(unitsAmount => {
+                if (type) {
+                    unitsAmount = parseInt(unitsAmount) - amount;
+                } else if (unitsAmount === undefined) {
+                    unitsAmount =  amount;
+                } else {
+                    unitsAmount = parseInt(unitsAmount) + amount;
+                }
+                if(unitsAmount < 0) return reject('Not enough units to sell!');
+                get(`B${nationRow}`)
+                    .then(balance => {
+                        if (type) {
+                            balance = parseInt(balance.replace(/[,|$]/g, '')) + money;
+                        } else {
+                            balance = parseInt(balance.replace(/[,|$]/g, '')) - money;
+                        }
+                        set( `${unitCol + nationRow}`, unitsAmount, tab)
+                            .then(() => {
+                                set(`B${nationRow}`, balance).then(() => {
+                                    resolve('Success.');
+                                })
+                            })
+                            .catch(err => reject(err));
+                    })
+                    .catch(err => reject(err));
+            })
+            .catch(err => reject(err));
+    })
 }

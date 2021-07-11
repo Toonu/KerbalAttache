@@ -1,6 +1,0 @@
-
-Ultimategoal:   KSP mod for development price directly ingame.
-Hypergoal:      Map integration via xml editing.
-Supergoal:      Turn command.
-
-Turn comamnd.

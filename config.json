@@ -49,8 +49,70 @@
             "sheet": "11111114",
             "map": "http://x.com/",
             "notes": " "
+        },
+        "693908421396922480": {
+            "nation": "EE",
+            "demonym": "E&E",
+            "color": "700300",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "312900789947596800": {
+            "nation": "Kroviska",
+            "demonym": "Kroviska",
+            "color": "7f0020",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "472210194814730250": {
+            "nation": "Ofeliya",
+            "demonym": "Ofeliya",
+            "color": "ff8500",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "227222314645717002": {
+            "nation": "undefined",
+            "demonym": "Magnella",
+            "color": "5510ff",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "591521990972669980": {
+            "nation": "Commonwealth",
+            "demonym": "Commonwealthean",
+            "color": "2b3990",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "715551445742649344": {
+            "nation": "Velka",
+            "demonym": "Velkan",
+            "color": "94e02d",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
+        },
+        "752676284521250837": {
+            "nation": "Sharkion",
+            "demonym": "undefined",
+            "color": "00ff21",
+            "cf": 1,
+            "sheet": "11111114",
+            "map": "http://x.com/",
+            "notes": " "
         }
     },
-    "trade": {
-    }
+    "trade": {}
 }

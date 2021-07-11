@@ -34,7 +34,7 @@ module.exports = {
         analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} ${"Range (in RU)"}\n`;
 
         array.forEach(r => {
-            let money = parseInt(r[27].replace(/[,|€]/g, ''));
+            let money = parseInt(r[24].replace(/[,|€]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
             if (r[21] === 'Upgrade') {
                 r[21] += `of ${r[22]}`

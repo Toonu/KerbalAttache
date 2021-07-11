@@ -40,7 +40,7 @@ client.on('message', message => {
 	const command = client.commands.get(commandName);
     if (command === undefined) {
         message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-		return message.delete();
+        return message.delete();
     }
 
 	//Checking for DMs

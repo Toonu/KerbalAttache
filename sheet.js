@@ -55,13 +55,15 @@ exports.get = function getInternal(coordinate,tab = 'Maintenance') {
  * @param tab                   String tab name.
  * @return {Promise<Array>}     Returns data array or rejects String error message.
  */
-exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance') {
+exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance', skipY = false) {
     return new Promise(function (resolve, reject) {
         rowSize = parseInt(rowSize);
         colSize = parseInt(colSize);
 
         let temporaryCordY;
-        if (!isCoordinate(cordX) || !isCoordinate(cordY)) {
+        if (!isCoordinate(cordX)) {
+            reject('Coordinates not correct.')
+        } else if (!isCoordinate(cordY) && !skipY) {
             reject('Coordinates not correct.')
         } else if (colSize !== 0 || rowSize !== 0) {
             temporaryCordY = sh.fromCoordinate(cordY);

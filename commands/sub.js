@@ -10,7 +10,7 @@ module.exports = {
     execute: async function sub(message, args) {
         let nation = ping(message, 2);
 
-        let data = await getArray('A1', 'AF', 0, 0, 'Database', true).catch(e => console.error(e));
+        let data = await getArray('A1', 'AA', 0, 0, 'Database', true).catch(e => console.error(e));
 
         let nat = cfg.users[nation.id].nation;
         let analyse = '';
@@ -30,13 +30,14 @@ module.exports = {
             }
         })
 
+        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} ${"Range (in RU)"}\n`;
         array.forEach(r => {
-            let money = parseInt(r[24].replace(/[,|$]/g, ''));
+            let money = parseInt(r[24].replace(/[,|€]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
             if (r[21] === 'Upgrade') {
                 r[21] += `of ${r[22]}`
             }
-            analyse += `[${r[2].padStart(l)}] ${r[2]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(30)}$ ${r[25]}\n`;
+            analyse += `[${r[2].padStart(l)}] ${r[6]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[21].padEnd(30)} ${r[26]}\n`;
         })
 
         message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {

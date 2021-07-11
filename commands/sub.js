@@ -36,8 +36,8 @@ module.exports = {
         array.forEach(r => {
             let money = parseInt(r[27].replace(/[,|€]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            if (r[26] === 'Upgrade') {
-                r[26] += `of ${r[28]}`
+            if (r[21] === 'Upgrade') {
+                r[21] += `of ${r[22]}`
             }
             analyse += `[${r[2].padStart(l)}] ${r[6]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[21].padEnd(30)} ${r[26]}\n`;
         })

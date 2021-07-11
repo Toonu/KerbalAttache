@@ -1,25 +1,23 @@
+const cfg = require('./../config.json'), {exportFile, perm} = require("../jsonManagement"), {report} = require("../game");
 module.exports = {
     name: 'userdel',
-    description: 'Command for deleting user from database!',
+    description: 'Command for deleting tagged user from database.',
     args: true,
-    usage: '<M:@user>',
-    perms: 'Moderator',
+    usage: '[M:@user]',
     cooldown: 5,
     guildOnly: true,
-    execute(message, args) {
-        const js = require('./../json');
-        const cfg = require('./../config.json');
-
-        var user = message.mentions.users.first();
-        if(user == undefined) {
-            message.channel.send('No user specified, please retry. ');
-            return;
-        }
-
-        if (js.perm(message, 2)) {
+    execute: function userdel(message) {
+        const user = message.mentions.users.first();
+        if (user === undefined) {
+            message.channel.send('No user specified, please retry.').then(msg => msg.delete({timeout: 9000}));
+        } else if (cfg.users[user.id] === undefined) {
+            message.channel.send('User does not exist, please retry.').then(msg => msg.delete({timeout: 9000}));
+        } else if (perm(message, 2, true)) {
             delete cfg.users[user.id];
-            js.exportFile("config.json", cfg);
-            message.channel.send("User deleted.")
+            exportFile("config.json", cfg);
+            report(message, `<@${message.author.id}> deleted user <@${message.mentions.users.first().id}>!`, this.name);
+            message.channel.send("User deleted.").then(msg => msg.delete({timeout: 9000}));
         }
+        return message.delete({timeout: 12000});
     }
 };

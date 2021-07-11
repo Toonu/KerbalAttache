@@ -31,12 +31,12 @@ module.exports = {
         })
 
         array.forEach(r => {
-            let money = parseInt(r[24].replace(/[,|$]/g, ''));
+            let money = parseInt(r[27].replace(/[,|$]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            if (r[21] === 'Upgrade') {
-                r[21] += `of ${r[22]}`
+            if (r[26] === 'Upgrade') {
+                r[26] += `of ${r[28]}`
             }
-            analyse += `[${r[2].padStart(l)}] ${r[2]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(30)}$ ${r[25]}\n`;
+            analyse += `[${r[2].padStart(l)}] ${r[21]} ${(r[23] + r[24] + r[25]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[26].padEnd(30)}$ ${r[30]}\n`;
         })
 
         message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {

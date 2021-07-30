@@ -252,13 +252,6 @@
         [],
         2
     ],
-    "50supercarrier": [
-        "Supercarrier Engineering",
-        "tech",
-        "engineering",
-        [],
-        2
-    ],
     "50airlift": [
         "Airlift Rigging",
         "tech",
@@ -307,6 +300,13 @@
         "engineering",
         [],
         0
+    ],
+    "70supercarrier": [
+        "Supercarrier Engineering",
+        "tech",
+        "engineering",
+        [],
+        2
     ],
     "70vtol": [
         "VTOL Technology",

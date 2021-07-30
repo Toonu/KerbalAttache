@@ -27,7 +27,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Removal of unnecessary Sheet command.">
+    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Bugfix of missing bracket.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tt.json" beforeDir="false" afterPath="$PROJECT_DIR$/tt.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,7 +134,7 @@
       <workItem from="1626069373457" duration="174000" />
       <workItem from="1626069753216" duration="196000" />
       <workItem from="1627573542664" duration="8749000" />
-      <workItem from="1627629038494" duration="1726000" />
+      <workItem from="1627629038494" duration="2374000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -295,7 +297,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627629812073</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Bugfix of missing bracket.">
+      <created>1627630800931</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1627630800931</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -331,7 +340,8 @@
     <MESSAGE value="Sub quickfix" />
     <MESSAGE value="Fixed sub command." />
     <MESSAGE value="Removal of unnecessary Sheet command." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removal of unnecessary Sheet command." />
+    <MESSAGE value="Bugfix of missing bracket." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bugfix of missing bracket." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

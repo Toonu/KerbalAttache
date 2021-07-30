@@ -27,6 +27,8 @@
     },
     "50trg": [
         "50' Aerial targeting radars",
+        "tech",
+        "radarA2A",
         [
             "40search"
         ],
@@ -34,6 +36,8 @@
     ],
     "60trg": [
         "60' Aerial targeting radars",
+        "tech",
+        "radarA2A",
         [
             "50trg"
         ],
@@ -41,6 +45,8 @@
     ],
     "70trg": [
         "70' Aerial targeting radars",
+        "tech",
+        "radarA2A",
         [
             "60trg"
         ],
@@ -48,6 +54,8 @@
     ],
     "50ground": [
         "50' Surface Surveillance radars",
+        "tech",
+        "radarSurfaceTarget",
         [
             "40search"
         ],
@@ -55,6 +63,8 @@
     ],
     "60ground": [
         "60' Surface Surveillance radars",
+        "tech",
+        "radarSurfaceTarget",
         [
             "50ground"
         ],
@@ -62,6 +72,8 @@
     ],
     "70ground": [
         "70' Surface Surveillance radars",
+        "tech",
+        "radarSurfaceTarget",
         [
             "60ground"
         ],
@@ -69,6 +81,8 @@
     ],
     "50aew": [
         "50' Airborne Early Warning radars",
+        "tech",
+        "radarAEW",
         [
             "50search"
         ],
@@ -76,6 +90,8 @@
     ],
     "60aew": [
         "60' Airborne Early Warning radars",
+        "tech",
+        "radarAEW",
         [
             "50aew"
         ],
@@ -83,6 +99,8 @@
     ],
     "70aew": [
         "70' Airborne Early Warning radars",
+        "tech",
+        "radarAEW",
         [
             "60aew"
         ],
@@ -90,6 +108,8 @@
     ],
     "40search": [
         "40' Surface Search or Early Warning radars",
+        "tech",
+        "radarSurfaceSearch",
         [
             "50search"
         ],
@@ -97,6 +117,8 @@
     ],
     "50search": [
         "60' Surface Search or Early Warning radars",
+        "tech",
+        "radarSurfaceSearch",
         [
             "40search"
         ],
@@ -104,6 +126,8 @@
     ],
     "60search": [
         "60' Surface Search or Early Warning radars",
+        "tech",
+        "radarSurfaceSearch",
         [
             "50search"
         ],
@@ -111,6 +135,8 @@
     ],
     "70search": [
         "70' Surface Search or Early Warning radars",
+        "tech",
+        "radarSurfaceSearch",
         [
             "60search"
         ],
@@ -118,16 +144,22 @@
     ],
     "50turboprops": [
         "Turboprop engines",
+        "tech",
+        "engines",
         [],
         1
     ],
     "50jet": [
         "Early 50' jet engines.",
+        "tech",
+        "engines",
         [],
         1
     ],
     "50jetlate": [
         "Late 50' Jet Engines",
+        "tech",
+        "engines",
         [
             "50jet"
         ],
@@ -135,6 +167,8 @@
     ],
     "60jet": [
         "Early 60' Jet Engines",
+        "tech",
+        "engines",
         [
             "50jetlate",
             "60heat"
@@ -143,6 +177,8 @@
     ],
     "60jetlate": [
         "Late 60' Jet Engines",
+        "tech",
+        "engines",
         [
             "60jet"
         ],
@@ -150,6 +186,8 @@
     ],
     "70jet": [
         "70' Jet Engines",
+        "tech",
+        "engines",
         [
             "60jetlate"
         ],
@@ -157,6 +195,8 @@
     ],
     "80jet": [
         "80' Jet Engines",
+        "tech",
+        "engines",
         [
             "70jet"
         ],
@@ -164,6 +204,8 @@
     ],
     "90jet": [
         "90' Jet Engines",
+        "tech",
+        "engines",
         [
             "80jet"
         ],
@@ -171,6 +213,8 @@
     ],
     "00jet": [
         "00' Jet Engines",
+        "tech",
+        "engines",
         [
             "90jet"
         ],
@@ -178,6 +222,8 @@
     ],
     "10jet": [
         "10' Jet Engines",
+        "tech",
+        "engines",
         [
             "00jet"
         ],
@@ -185,6 +231,8 @@
     ],
     "20jet": [
         "20' Jet Engines",
+        "tech",
+        "engines",
         [
             "10jet"
         ],
@@ -192,61 +240,85 @@
     ],
     "50amphibious": [
         "Amphibious Vehicles",
+        "tech",
+        "engineering",
         [],
         2
     ],
     "50catapult": [
         "Steam Catapults",
+        "tech",
+        "engineering",
         [],
         2
     ],
     "50airlift": [
         "Airlift Rigging",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "50selfsealing": [
         "Self Sealing Fuel Tanks",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "50smoke": [
         "Smoke Grenades",
+        "tech",
+        "engineering",
         [],
         0
     ],
     "60heat": [
         "Heat-Resistant Materials",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "60wings": [
         "Variable Sweep Wings",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "60refuel": [
         "Aerial Refueling Tech",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "70spaced": [
         "Spaced Armor",
+        "tech",
+        "engineering",
         [],
         0
     ],
     "70supercarrier": [
         "Supercarrier Engineering",
+        "tech",
+        "engineering",
         [],
         2
     ],
     "70vtol": [
         "VTOL Technology",
+        "tech",
+        "engineering",
         [],
         1
     ],
     "70fps": [
         "Fire protection Systems",
+        "tech",
+        "engineering",
         [
             "50selfsealing"
         ],
@@ -254,6 +326,8 @@
     ],
     "80stealth": [
         "1st Generation Stealth",
+        "tech",
+        "engineering",
         [
             "60heat"
         ],
@@ -261,6 +335,8 @@
     ],
     "90stealth": [
         "2nd Generation Stealth",
+        "tech",
+        "engineering",
         [
             "80stealth"
         ],
@@ -268,6 +344,8 @@
     ],
     "20stealth": [
         "3rd Generation Stealth",
+        "tech",
+        "engineering",
         [
             "90stealth"
         ],
@@ -275,11 +353,15 @@
     ],
     "50guidance": [
         "50' Guidance Systems",
+        "tech",
+        "targeting",
         [],
         1
     ],
     "60guidance": [
         "60' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "50guidance"
         ],
@@ -287,6 +369,8 @@
     ],
     "70guidance": [
         "70' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "60guidance"
         ],
@@ -294,6 +378,8 @@
     ],
     "80guidance": [
         "80' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "70guidance"
         ],
@@ -301,6 +387,8 @@
     ],
     "90guidance": [
         "90' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "80guidance"
         ],
@@ -308,6 +396,8 @@
     ],
     "00guidance": [
         "00' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "90guidance"
         ],
@@ -315,6 +405,8 @@
     ],
     "10guidance": [
         "10' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "00guidance"
         ],
@@ -322,6 +414,8 @@
     ],
     "20guidance": [
         "10' Guidance Systems",
+        "tech",
+        "targeting",
         [
             "10guidance"
         ],
@@ -329,11 +423,15 @@
     ],
     "50ecm": [
         "Electronic jamming research",
+        "tech",
+        "ecm",
         [],
         1
     ],
     "60ecm": [
         "60' ECM Systems",
+        "tech",
+        "ecm",
         [
             "50ecm"
         ],
@@ -341,6 +439,8 @@
     ],
     "70ecm": [
         "70' ECM Systems",
+        "tech",
+        "ecm",
         [
             "60ecm"
         ],
@@ -348,6 +448,8 @@
     ],
     "80ecm": [
         "80' ECM Systems",
+        "tech",
+        "ecm",
         [
             "70ecm"
         ],
@@ -355,6 +457,8 @@
     ],
     "90ecm": [
         "90' ECM Systems",
+        "tech",
+        "ecm",
         [
             "80ecm"
         ],
@@ -362,6 +466,8 @@
     ],
     "00ecm": [
         "00' ECM Systems",
+        "tech",
+        "ecm",
         [
             "90ecm"
         ],
@@ -369,6 +475,8 @@
     ],
     "20ecm": [
         "20' ECM Systems",
+        "tech",
+        "ecm",
         [
             "00ecm"
         ],
@@ -376,11 +484,15 @@
     ],
     "50armour": [
         "Armour Development",
+        "tech",
+        "armour",
         [],
         0
     ],
     "60armour": [
         "Composite Armour Development",
+        "tech",
+        "armour",
         [
             "50armour"
         ],
@@ -388,6 +500,8 @@
     ],
     "70armour": [
         "Composite Armor",
+        "tech",
+        "armour",
         [
             "60armour"
         ],
@@ -395,6 +509,8 @@
     ],
     "80armour": [
         "Composite Armor+",
+        "tech",
+        "armour",
         [
             "70armour"
         ],
@@ -402,6 +518,8 @@
     ],
     "90armour": [
         "External Composite Armor",
+        "tech",
+        "armour",
         [
             "80armour"
         ],
@@ -409,6 +527,8 @@
     ],
     "00armour": [
         "Advanced Composite Armor",
+        "tech",
+        "armour",
         [
             "90armour"
         ],
@@ -416,6 +536,8 @@
     ],
     "10armour": [
         "Modern Composite Armor",
+        "tech",
+        "armour",
         [
             "00armour"
         ],
@@ -423,6 +545,8 @@
     ],
     "70era": [
         "Initial ERA Research",
+        "tech",
+        "armour",
         [
             "60armour"
         ],
@@ -430,6 +554,8 @@
     ],
     "80era": [
         "ERA Research",
+        "tech",
+        "armour",
         [
             "70era"
         ],
@@ -437,6 +563,8 @@
     ],
     "00era": [
         "Advanced ERA Research",
+        "tech",
+        "armour",
         [
             "80era"
         ],
@@ -444,6 +572,8 @@
     ],
     "10era": [
         "NxRA Research",
+        "tech",
+        "armour",
         [
             "00era"
         ],
@@ -451,16 +581,22 @@
     ],
     "00iads": [
         "IADS Framework",
+        "tech",
+        "radarSurfaceTarget",
         [],
         0
     ],
     "earlycomputing": [
         "Computing",
+        "tech",
+        "drones",
         [],
         1
     ],
     "60drone": [
         "Disposable Reconnaissance Drone",
+        "tech",
+        "drones",
         [
             "earlycomputing"
         ],
@@ -468,6 +604,8 @@
     ],
     "70drone": [
         "Early Reusable Reconnaissance Drone",
+        "tech",
+        "drones",
         [
             "60drone"
         ],
@@ -475,6 +613,8 @@
     ],
     "80drone": [
         "Modern Reusable Reconnaissance Drone",
+        "tech",
+        "drones",
         [
             "70drone"
         ],
@@ -482,6 +622,8 @@
     ],
     "90drone": [
         "Early Combat Drone",
+        "tech",
+        "drones",
         [
             "60drone"
         ],
@@ -489,6 +631,8 @@
     ],
     "00drone": [
         "Modern Combat Drone",
+        "tech",
+        "drones",
         [
             "90drone"
         ],
@@ -496,6 +640,8 @@
     ],
     "10drone": [
         "Advanced Combat Drone",
+        "tech",
+        "drones",
         [
             "00drone"
         ],
@@ -503,27 +649,35 @@
     ],
     "20drone": [
         "Future Autonomous Combat Drone",
+        "tech",
+        "drones",
         [
             "10drone"
         ],
         1
     ],
     "60sat": [
-        "Early Reconnaissance Satellites",
+        "Early Reconnaisance Satellites",
+        "tech",
+        "satellites",
         [
             "earlycomputing"
         ],
         3
     ],
     "70sat": [
-        "Adv. Reconnaissance Satellites",
+        "Adv. Reconnaisance Satellites",
+        "tech",
+        "satellites",
         [
             "60sat"
         ],
         3
     ],
     "80sat": [
-        "GPS Reconnaissance Satellites",
+        "GPS Reconnaisance Satellites",
+        "tech",
+        "satellites",
         [
             "60sat"
         ],
@@ -531,6 +685,8 @@
     ],
     "10sat": [
         "Block III Reconnaissance Satellites",
+        "tech",
+        "satellites",
         [
             "80sat"
         ],
@@ -538,11 +694,15 @@
     ],
     "50lgun": [
         "50' Light Weapon Systems",
+        "tech",
+        "gun",
         [],
         0
     ],
     "60lgun": [
         "60' Light Weapon Systems",
+        "tech",
+        "gun",
         [
             "50lgun"
         ],
@@ -550,6 +710,8 @@
     ],
     "70lgun": [
         "70' Light Weapon Systems",
+        "tech",
+        "gun",
         [
             "60lgun"
         ],
@@ -557,6 +719,8 @@
     ],
     "50gun": [
         "50' Gunnery Research",
+        "tech",
+        "gun",
         [
             "50lgun"
         ],
@@ -564,6 +728,8 @@
     ],
     "60gun": [
         "60' Advanced Penetrators",
+        "tech",
+        "gun",
         [
             "50gun"
         ],
@@ -571,6 +737,8 @@
     ],
     "70gun": [
         "70' Long-rod Research",
+        "tech",
+        "gun",
         [
             "60gun"
         ],
@@ -578,11 +746,15 @@
     ],
     "50autocannon": [
         "50' Autocannon Research",
+        "tech",
+        "gun",
         [],
         0
     ],
     "60autocannon": [
         "60' Autocannons",
+        "tech",
+        "gun",
         [
             "50autocannon"
         ],
@@ -590,6 +762,8 @@
     ],
     "70autocannon": [
         "70' Autocannons",
+        "tech",
+        "gun",
         [
             "60autocannon"
         ],
@@ -597,11 +771,15 @@
     ],
     "60ciws": [
         "60' Point Defence Weapons",
+        "tech",
+        "gunNaval",
         [],
         2
     ],
     "70ciws": [
         "70' Point Defence Weapons",
+        "tech",
+        "gunNaval",
         [
             "60ciws"
         ],
@@ -609,6 +787,8 @@
     ],
     "80ciws": [
         "80' Point Defence Weapons",
+        "tech",
+        "gunNaval",
         [
             "70ciws"
         ],
@@ -616,6 +796,8 @@
     ],
     "00ciws": [
         "00' Point Defence Weapons",
+        "tech",
+        "gunNaval",
         [
             "80ciws"
         ],
@@ -623,11 +805,15 @@
     ],
     "60navalgun": [
         "60' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [],
         2
     ],
     "70navalgun": [
         "70' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [
             "60navalgun"
         ],
@@ -635,6 +821,8 @@
     ],
     "80navalgun": [
         "80' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [
             "70navalgun"
         ],
@@ -642,6 +830,8 @@
     ],
     "90navalgun": [
         "90' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [
             "80navalgun"
         ],
@@ -649,6 +839,8 @@
     ],
     "00navalgun": [
         "00' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [
             "90navalgun"
         ],
@@ -656,6 +848,8 @@
     ],
     "10navalgun": [
         "10' Naval Weapon Systems",
+        "tech",
+        "gunNaval",
         [
             "00navalgun"
         ],
@@ -663,11 +857,15 @@
     ],
     "50atgm": [
         "Early ATGMs",
+        "tech",
+        "missilesATGM",
         [],
         0
     ],
     "60atgm": [
         "60' ATGMs",
+        "tech",
+        "missilesATGM",
         [
             "50atgm"
         ],
@@ -675,6 +873,8 @@
     ],
     "70atgm": [
         "70' ATGMs",
+        "tech",
+        "missilesATGM",
         [
             "60atgm"
         ],
@@ -682,11 +882,15 @@
     ],
     "50srsam": [
         "Early Short-Range SAMs",
+        "tech",
+        "missilesSRSAM",
         [],
         0
     ],
     "60srsam": [
         "60' Short-Range SAMs",
+        "tech",
+        "missilesSRSAM",
         [
             "50srsam"
         ],
@@ -694,6 +898,8 @@
     ],
     "70srsam": [
         "70' Short-Range SAMs",
+        "tech",
+        "missilesSRSAM",
         [
             "60srsam"
         ],
@@ -701,6 +907,8 @@
     ],
     "60vsrsam": [
         "60' Very Short-Range SAMs",
+        "tech",
+        "missilesSRSAM",
         [
             "60srsam"
         ],
@@ -708,6 +916,8 @@
     ],
     "70vsrsam": [
         "70' Very Short-Range SAMs",
+        "tech",
+        "missilesSRSAM",
         [
             "70srsam"
         ],
@@ -715,11 +925,15 @@
     ],
     "50mrsam": [
         "Early Medium-Range SAMs",
+        "tech",
+        "missilesMRSAM",
         [],
         0
     ],
     "60mrsam": [
         "60' Medium-Range SAMs",
+        "tech",
+        "missilesMRSAM",
         [
             "50mrsam"
         ],
@@ -727,6 +941,8 @@
     ],
     "70mrsam": [
         "70' Medium-Range SAMs",
+        "tech",
+        "missilesMRSAM",
         [
             "60mrsam"
         ],
@@ -734,11 +950,15 @@
     ],
     "50lrsam": [
         "Early Long-Range SAMs",
+        "tech",
+        "missilesLRSAM",
         [],
         0
     ],
     "60lrsam": [
         "60' Long-Range SAMs",
+        "tech",
+        "missilesLRSAM",
         [
             "50lrsam"
         ],
@@ -746,11 +966,15 @@
     ],
     "50sraam": [
         "IR Seeker Research",
+        "tech",
+        "missilesSRAAM",
         [],
         1
     ],
     "60sraam": [
         "60' SRAAMs",
+        "tech",
+        "missilesSRAAM",
         [
             "50sraam"
         ],
@@ -758,6 +982,8 @@
     ],
     "70sraam": [
         "70' SRAAMs",
+        "tech",
+        "missilesSRAAM",
         [
             "60sraam"
         ],
@@ -765,11 +991,15 @@
     ],
     "50mraam": [
         "Radar Seeker Research",
+        "tech",
+        "missilesMRAAM",
         [],
         1
     ],
     "60mraam": [
         "60' MRAAMs",
+        "tech",
+        "missilesMRAAM",
         [
             "50sraam"
         ],
@@ -777,6 +1007,8 @@
     ],
     "70mraam": [
         "70' MRAAMs",
+        "tech",
+        "missilesMRAAM",
         [
             "60mraam"
         ],
@@ -784,6 +1016,8 @@
     ],
     "70lraam": [
         "70' LRAAMs",
+        "tech",
+        "missilesLRAAM",
         [
             "60mraam"
         ],
@@ -791,11 +1025,15 @@
     ],
     "50agm": [
         "Air-to-Surface Weapons Research",
+        "tech",
+        "missilesAGM",
         [],
         1
     ],
     "60agm": [
         "60' Air-To-Ground Missiles",
+        "tech",
+        "missilesAGM",
         [
             "50agm"
         ],
@@ -803,6 +1041,8 @@
     ],
     "70agm": [
         "70' Air-To-Ground Missiles",
+        "tech",
+        "missilesAGM",
         [
             "60agm"
         ],
@@ -810,11 +1050,15 @@
     ],
     "60ashm": [
         "60' Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
         [],
         2
     ],
     "70ashm": [
         "70' Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
         [
             "60ashm"
         ],
@@ -822,6 +1066,8 @@
     ],
     "60aashm": [
         "60' Air-Launched Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
         [
             "50agm"
         ],
@@ -829,6 +1075,8 @@
     ],
     "70aashm": [
         "70' Air-Launched Air-To-Ship Missiles",
+        "tech",
+        "missilesASHM",
         [
             "60aashm"
         ],
@@ -836,6 +1084,8 @@
     ],
     "60arm": [
         "60' Anti-Radiation Missiles",
+        "tech",
+        "missileOther",
         [
             "50agm"
         ],
@@ -843,6 +1093,8 @@
     ],
     "70arm": [
         "70' Anti-Radiation Missiles",
+        "tech",
+        "missileOther",
         [
             "60arm"
         ],
@@ -850,6 +1102,8 @@
     ],
     "60cm": [
         "60' Cruise Missiles",
+        "tech",
+        "missileOther",
         [
             "50agm"
         ],
@@ -857,6 +1111,8 @@
     ],
     "70cm": [
         "70' Cruise Missiles",
+        "tech",
+        "missileOther",
         [
             "60cm"
         ],
@@ -864,11 +1120,15 @@
     ],
     "60tbm": [
         "60' Tactical Ballistic Missiles",
+        "tech",
+        "missileOther",
         [],
         0
     ],
     "60dec": [
         "60' Decoy Missiles",
+        "tech",
+        "missileOther",
         [
             "60tbm"
         ],
@@ -876,6 +1136,8 @@
     ],
     "50bmb": [
         "50' Bombs",
+        "tech",
+        "missileOther",
         [],
         1
     ]

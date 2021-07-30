@@ -10,6 +10,7 @@ module.exports = {
 		const amount = parseInt(args[0]) + 1;
 		if (isNaN(amount)) {
 			message.channel.send(`That doesn't seem to be a valid number. Canceling operation.`).then(msg => msg.delete({timeout: 9000}));
+
 			return message.delete();
 		} else if (!perm(message, 1, true)) {
 			return message.delete();
@@ -22,12 +23,12 @@ module.exports = {
 		message.channel.bulkDelete(amount, bool)
 			.then(() => {
 				console.log(`Deleted ${amount}`);
+				message.channel.send(`Deleted ${amount}`).then(msg => msg.delete({timeout: 9000}))
 			})
-			.catch(err => {
-				console.log(err.message);
-				message.channel.send(err.message).then(msg => {
-					msg.delete({timeout: 9000});
-				})
+			.catch(error => {
+				console.error(error);
+				message.channel.send(error.message).then(msg => msg.delete({timeout: 9000}))
 			})
+
 	}
 };

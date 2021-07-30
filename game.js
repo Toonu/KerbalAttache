@@ -23,7 +23,10 @@ exports.findVertical = function findVertical(target, col, tab, height = 1) {
                 }
                 resolve(result + 1);
             })
-            .catch((err) => reject(console.log(err)));
+            .catch(error => {
+                console.error(error)
+                reject(error)
+            });
     }).catch(err => console.log('Error in vertical: ' + err));
 }
 
@@ -56,7 +59,10 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
                 result = toCoordinate(result + e + 1);
                 resolve(result);
             })
-            .catch((err) => reject(console.log(err)));
+            .catch(error => {
+                console.error(error)
+                reject(error)
+            })
     }).catch(err => console.log('Error in horizontal: ' + err));
 }
 

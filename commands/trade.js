@@ -6,8 +6,8 @@ module.exports = {
     args: true,
     usage: `[sell | buy] [numberOfAssets] [assetType] [money] [@customer]
 
-Eg. ?trade sell 2 IFV 20000 @User
-**Assets:** can be listed via **?buy** command.`,
+Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
+**Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function trade(message, args) {
@@ -57,7 +57,7 @@ Eg. ?trade sell 2 IFV 20000 @User
             message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
 The proposer wants to ${args[0].toLowerCase()} you ${amount} ${unit}s for ***${money.toLocaleString('fr-FR', {style: 'currency', currency: cfg.money})}***
 
-To accept the transaction, type ?accept in your server channel.`);
+To accept the transaction, type ${cfg.prefix}accept in your server channel.`);
 
             cfg.trade[message.mentions.users.first().id] = {
                 "nation": nation,

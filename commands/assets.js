@@ -1,5 +1,5 @@
 const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
-const cfg = require("./../config.json");
+require("./../config.json");
 module.exports = {
     name: 'assets',
     description: 'Command for getting your current asset list! Do NOT use in public channels.',

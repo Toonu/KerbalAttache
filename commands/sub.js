@@ -1,5 +1,5 @@
 const {ping} = require("../jsonManagement"), {getArray} = require("../sheet"),
-    cfg = require('../config.json'), {findVertical} = require("../game");
+    cfg = require('../config.json');
 module.exports = {
     name: 'sub',
     description: 'Command for getting information about your subscriptions!',
@@ -31,7 +31,7 @@ module.exports = {
         })
 
         //Header
-        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} ${"Range (in RU)"}\n`;
+        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} Range (in RU)\n`;
 
         array.forEach(r => {
             let money = parseInt(r[24].replace(/[,|€]/g, ''));

@@ -15,7 +15,7 @@ module.exports = {
         if (!perm(message, 2, true)) {
             fail = true;
         } else if (args[0] === undefined) {
-            message.channel.send('You can get information about amount of your tiles in ?balance.').then(msg => msg.delete({timeout: 9000}));
+            message.channel.send(`You can get information about amount of your tiles in ${cfg.prefix}balance.`).then(msg => msg.delete({timeout: 9000}));
             fail = true;
         }
         args[0] = parseFloat(args[0]);

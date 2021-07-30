@@ -1,4 +1,5 @@
 const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
+require("./../config.json");
 module.exports = {
     name: 'assets',
     description: 'Command for getting your current asset list! Do NOT use in public channels.',
@@ -16,14 +17,14 @@ module.exports = {
         const embed = new discord.MessageEmbed()
             .setColor('#065535')
             .setTitle(`National Roster of ${nation}`)
-            .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user].sheet}/edit#gid=0`)
+            .setURL(cfg.users[user].map)
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
         const embedW = new discord.MessageEmbed()
             .setColor('#065535')
             .setTitle(`National Roster of ${nation}`)
-            .setURL(`https://docs.google.com/spreadsheets/d/${cfg.users[user].sheet}/edit#gid=0`)
+            .setURL(cfg.users[user].map)
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 

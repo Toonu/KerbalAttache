@@ -41,7 +41,7 @@ module.exports = {
                             { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
                             { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
                             { name: 'Research budget:', value: parseInt(element[rpCol+1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money }), inline: true},
-                            { name: 'Research points:', value: `${parseInt(element[rpCol])}RP`, inline: true},
+                            { name: 'Research points:', value: `${parseInt(element[rpCol].replace(",", ""))}RP`, inline: true},
                             { name: 'Tiles:', value: parseInt(element[tilesCol])},
                         )
                         .setFooter('Made by the Attaché to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');

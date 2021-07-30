@@ -32,7 +32,11 @@ Use underscores or nothing instead of spaces.
             if (['set', 'add'].includes(args[1]) && !isNaN(amount)) {
                 let bool = (args[1] === 'set') ? 0 : 1;
                 result.push(await budget(amount, nation, bool));
-                result.push(true);
+                if (result[0].includes("lower")) {
+                    result.push(false);
+                } else {
+                    result.push(true)
+                }
             } else {
                 result.push('Argument is not a number or operation is not set/add. Canceling operation.');
                 result.push(false);
@@ -109,7 +113,10 @@ function budget(amount, nation, add) {
             .then(data => {
                 if (data[3] === false) data[3] = 0;
                 let budget = data[3]*add + amount;
-                if (budget < 0) reject('Budget cannot be set lower than 0!');
+                if (budget < 0) {
+                    reject('Budget cannot be set lower than 0!');
+                    return;
+                }
                 set(`${data[1]+data[2]}`, budget).then(() => {
                     resolve(`Research budget modified to ${budget.toLocaleString(`fr-FR`, { style: 'currency', currency: cfg.money })}`);
                 }).catch(err => {

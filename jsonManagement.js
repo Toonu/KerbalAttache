@@ -9,7 +9,7 @@ const fs = require('fs'), cfg = require('./config.json'), js = require('./jsonMa
  * @param map           Map String link
  * @return String response of attributes of created user.
  */
-exports.createUser = function createUser(id, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe", sheet = '11111114', map = 'http://x.com/') {
+exports.createUser = function createUser(id, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe", sheet = '11111114', map = 'https://discord.com/') {
     if (cfg.users[id] !== undefined) {
         return 'User already exists!';
     }
@@ -19,7 +19,6 @@ exports.createUser = function createUser(id, nationIn = 'undefined', demonymIn =
         demonym: demonymIn,
         color: colorIn,
         cf: 1,
-        sheet: sheet,
         map: map,
         notes: " ",
     }
@@ -52,9 +51,9 @@ exports.perm = function perm(message, level, msg) {
     // noinspection JSUnresolvedVariable
     let dev = cfg.servers[message.guild.id].developers;
 
-    if (level === 2 && (adm.some(r=> message.member.roles.cache.has(r)))) {
+    if (level === 2 && (adm.some(r => message.member.roles.cache.has(r)))) {
         return true;
-    } else if (level === 1 && (adm.some(r=> message.member.roles.cache.has(r)) || dev.some(r=> message.member.roles.cache.has(r)))) {
+    } else if (level === 1 && (adm.some(r => message.member.roles.cache.has(r)) || dev.some(r=> message.member.roles.cache.has(r)))) {
         return true;
     }
     if (msg) {

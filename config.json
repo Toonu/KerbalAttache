@@ -2,21 +2,9 @@
     "prefix": ".",
     "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
     "money": "EUR",
-    "era": 40,
+    "era": 55,
     "turn": 0,
     "servers": {
-        "768471917874905108": {
-            "name": "Ruse",
-            "main_channel": "768476039496073227",
-            "battle_channel": "770982475228643369",
-            "announcements": "770982475228643369",
-            "administrators": [
-                "768474211333177444"
-            ],
-            "developers": [
-                "768474267351646238"
-            ]
-        },
         "470258156682084373": {
             "name": "NoU",
             "main_channel": "770921356111773698",
@@ -35,10 +23,9 @@
         "319919565079576576": {
             "nation": "Iconia",
             "demonym": "Iconian",
-            "color": "fffffe",
-            "cf": 1.1,
-            "sheet": "1UCQn4drkoMB0u6LtmxbMRY6PBQVOawoS_sUC78czvOk",
-            "map": "https://app.diagrams.net/#G1sCrlxqWYfjGuYSr8TwWnPQ5J5ihp1wGz",
+            "color": "0065bd",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
             "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
         },
         "768845435455930428": {
@@ -46,11 +33,89 @@
             "demonym": "Botish",
             "color": "fffffe",
             "cf": 1,
-            "sheet": "11111114",
-            "map": "http://x.com/",
+            "map": "https://discord.com/",
+            "notes": " "
+        },
+        "693908421396922480": {
+            "nation": "EE",
+            "demonym": "E&E",
+            "color": "700300",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
+            "notes": " "
+        },
+        "312900789947596800": {
+            "nation": "Kroviska",
+            "demonym": "Kroviskan",
+            "color": "7f0020",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing",
+            "notes": " "
+        },
+        "472210194814730250": {
+            "nation": "Ofeliya",
+            "demonym": "Ofeliyan",
+            "color": "ff8500",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
+            "notes": " "
+        },
+        "227222314645717002": {
+            "nation": "Magnellan",
+            "demonym": "Magnellan",
+            "color": "5510ff",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing",
+            "notes": " "
+        },
+        "591521990972669980": {
+            "nation": "Commonwealth",
+            "demonym": "Commonwealth",
+            "color": "2b3990",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
+            "notes": " "
+        },
+        "715551445742649344": {
+            "nation": "Velka",
+            "demonym": "Velkan",
+            "color": "94e02d",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
+            "notes": " "
+        },
+        "752676284521250837": {
+            "nation": "Sharkion",
+            "demonym": "Shark",
+            "color": "00ff21",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
+            "notes": " "
+        },
+        "211547891276185601": {
+            "nation": "GL",
+            "demonym": "Gaia-Lucian",
+            "color": "ffc90e",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
+            "notes": " "
+        },
+        "81586294727118848": {
+            "nation": "TSR",
+            "demonym": "Starks",
+            "color": "aa4545",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
+            "notes": " "
+        },
+        "591774826834952193": {
+            "nation": "Elbe",
+            "demonym": "Elbian",
+            "color": "3d6395",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/16OAitE9Ip8iznwAryQFJ2NMpbzDxYRoi/view?usp=sharing",
             "notes": " "
         }
     },
-    "trade": {
-    }
+    "trade": {}
 }

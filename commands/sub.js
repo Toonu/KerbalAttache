@@ -1,5 +1,5 @@
 const {ping} = require("../jsonManagement"), {getArray} = require("../sheet"),
-    cfg = require('../config.json'), {findVertical} = require("../game");
+    cfg = require('../config.json');
 module.exports = {
     name: 'sub',
     description: 'Command for getting information about your subscriptions!',
@@ -31,13 +31,13 @@ module.exports = {
         })
 
         //Header
-        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} ${"Range (in RU)"}\n`;
+        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} Range (in RU)\n`;
 
         array.forEach(r => {
-            let money = parseInt(r[27].replace(/[,|€]/g, ''));
+            let money = parseInt(r[24].replace(/[,|€]/g, ''));
             money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            if (r[26] === 'Upgrade') {
-                r[26] += `of ${r[28]}`
+            if (r[21] === 'Upgrade') {
+                r[21] += `of ${r[22]}`
             }
             analyse += `[${r[2].padStart(l)}] ${r[6]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[21].padEnd(30)} ${r[26]}\n`;
         })

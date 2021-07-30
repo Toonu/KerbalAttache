@@ -6,7 +6,7 @@ module.exports = {
     args: false,
     usage: `[@users] -u [number unit] 
 Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
-**Assets:** can be listed via **?buy** command.`,
+**Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
 

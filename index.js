@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
 const fn = require("./sheet");
-const keep_alive = require('./keep_alive.js')
 const js = require("./jsonManagement");
 
 //Adds commands from the command folder collection.
@@ -105,8 +104,3 @@ const {CLIENT_TOKEN} = process.env;
 //const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(err => console.log(err));
 
-
-/**
- * TODO Hyper goal:   	KSP mod for development price directly in game.
- * TODO Super goal:     Map integration via xml editing.
- **/

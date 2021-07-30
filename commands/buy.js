@@ -6,7 +6,7 @@ module.exports = {
     args: false,
     usage: `[amount] [asset]
 Assets do not need to be written in capital letters, the command is case insensitive.
-**Assets:** can be listed via **?buy** command.`,
+**Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function buy(message, args, tab = undefined) {
@@ -86,7 +86,7 @@ Assets do not need to be written in capital letters, the command is case insensi
                     if (react.emoji.name === '✅') {
                         //Accepted, deleting embed and writing response.
                         msg.delete();
-                        msg.channel.send('Purchasing assets. ✅').then(newMessage => newMessage.delete({timeout: 15000}));
+                        msg.channel.send('Purchasing assets. ✅ Do not forget to place them onto your map!').then(newMessage => newMessage.delete({timeout: 15000}));
                         //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
                         set(`${data[1]+data[2]}`, data[3] + args[0], tab);
                         get(`B${data[2]}`)
@@ -103,7 +103,8 @@ Assets do not need to be written in capital letters, the command is case insensi
                         msg.delete();
                         msg.channel.send('Operation was canceled. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                     }
-                }).catch(err => {
+                }).catch(error => {
+                    console.error(error)
                     msg.delete();
                     msg.channel.send('Operation timed out. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
                 });

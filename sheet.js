@@ -72,7 +72,8 @@ exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0,
         const request = {
             spreadsheetId: cfg.sheet,
             "range": `${tab}!${cordX}:${cordY}`,
-            "majorDimension": "ROWS"
+            "majorDimension": "ROWS",
+            "valueRenderOption": "UNFORMATTED_VALUE"
         };
 
         gs.spreadsheets.values.get(request)

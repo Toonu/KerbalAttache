@@ -270,7 +270,7 @@ function research(node, nation, del = 1) {
     return new Promise(async function (resolve, reject) {
         try {
             if (del === 1) {
-                for (const r of tt[node][3]) {
+                for (const r of tt[node][1]) {
                     await findData(r, nation, true, 'TechTree')
                         .then(unlocked => {
                             if (unlocked[0] === 0) throw 'You do not have the prerequisites to unlock the node!';
@@ -302,12 +302,12 @@ function research(node, nation, del = 1) {
             let increments = await findHorizontal('Technology', 4).catch(e => {reject(e)});
             let incrementArray = await getArray(`${increments}5`, `${increments}5`, 4, data[2] - 5).catch(e => {reject(e)});
             let from = fromCoordinate(increments);
-            let coordinate = toCoordinate(from[0] + tt[node][4]);
+            let coordinate = toCoordinate(from[0] + tt[node][2]);
             if (del === 1) {
-                await set(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
+                await set(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][2]]) + 0.1)).catch(e => {reject(e)});
                 return resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
             } else {
-                await set(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
+                await set(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][2]]) - 0.1)).catch(e => {reject(e)});
                 return resolve(`${tt[node][0]} was removed from ${nation}`);
             }
         }

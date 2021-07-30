@@ -62,9 +62,6 @@ cf | coefficient
                 return message.channel.send('Argument is not a color hex number. Modification failed.').then(msg => msg.delete({timeout: 9000}));
             }
             cfg.users[user].color = data;
-        } else if (args[0] === 's' && permission) {
-            cfg.users[user].sheet = args[1];
-            data = args[1];
         } else if (args[0] === 'm' && permission) {
             let regExp = new RegExp(/https:\/\/app.diagrams\.net\/.+/);
             if (regExp.test(args[1])) {

@@ -27,8 +27,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Fixed sub command.">
+    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Removal of unnecessary Sheet command.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tt.json" beforeDir="false" afterPath="$PROJECT_DIR$/tt.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,8 +77,8 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
-    <property name="ts.external.directory.path" value="D:\JetBrains\WebStorm 2020.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
@@ -132,7 +133,8 @@
       <workItem from="1626068647496" duration="671000" />
       <workItem from="1626069373457" duration="174000" />
       <workItem from="1626069753216" duration="196000" />
-      <workItem from="1627573542664" duration="6768000" />
+      <workItem from="1627573542664" duration="8749000" />
+      <workItem from="1627629038494" duration="1622000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -288,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606234372359</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Removal of unnecessary Sheet command.">
+      <created>1627629812073</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1627629812073</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,7 +332,8 @@
     <MESSAGE value="Sub command fixes." />
     <MESSAGE value="Sub quickfix" />
     <MESSAGE value="Fixed sub command." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed sub command." />
+    <MESSAGE value="Removal of unnecessary Sheet command." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removal of unnecessary Sheet command." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

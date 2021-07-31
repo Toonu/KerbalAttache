@@ -1,6 +1,6 @@
 const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../utils'),
     tt = require('./../tt.json'), discord = require('discord.js'),
-    {getCell, set, getCellArray, toCoordinate, fromCoordinate} = require("../sheet"),
+    {getCell, setCell, getCellArray, toCoordinate, fromCoordinate} = require("../sheet"),
     {findData, findHorizontal, findVertical, report} = require("../game");
 module.exports = {
     name: 'tech',
@@ -102,9 +102,9 @@ Use underscores or nothing instead of spaces.
 
 /**
  * Function modifies user's budget in the main sheet.
- * @param amount                    Number amount to add or set.
+ * @param amount                    Number amount to add or setCell.
  * @param nation                    String Nation name for budget that is modified.
- * @param add                       If budget is added or set to the original one [1 | 0]
+ * @param add                       If budget is added or setCell to the original one [1 | 0]
  * @return {Promise<String>}        Returns String message about the success of the operation.
  */
 function budget(amount, nation, add) {
@@ -117,7 +117,7 @@ function budget(amount, nation, add) {
                     reject('Budget cannot be set lower than 0!');
                     return;
                 }
-                set(`${data[1]+data[2]}`, budget).then(() => {
+                setCell(`${data[1]+data[2]}`, budget).then(() => {
                     resolve(`Research budget modified to ${budget.toLocaleString(`fr-FR`, { style: 'currency', currency: cfg.money })}`);
                 }).catch(err => {
                     reject(err);
@@ -301,9 +301,9 @@ function research(node, nation, del = 1) {
         if (data[0][0] > rp && del !== 0) return reject('Not enough Research Points!');
 
         //Setting node to 1 and then setting RP
-        let result = await set(`${data[1] + data[2]}`, del, 'TechTree').catch(e => {reject(e)});
+        let result = await setCell(`${data[1] + data[2]}`, del, 'TechTree').catch(e => {reject(e)});
         if (result) {
-            if (del === 1) set(`${rpCol + data[2]}`, rp - data[0][0]).catch(e => {reject(e)});
+            if (del === 1) setCell(`${rpCol + data[2]}`, rp - data[0][0]).catch(e => {reject(e)});
 
             //Tech increments change
             let increments = await findHorizontal('Technology', 4).catch(e => {reject(e)});
@@ -311,10 +311,10 @@ function research(node, nation, del = 1) {
             let from = fromCoordinate(increments);
             let coordinate = toCoordinate(from[0] + tt[node][4]);
             if (del === 1) {
-                await set(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
+                await setCell(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
                 return resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
             } else {
-                await set(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
+                await setCell(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
                 return resolve(`${tt[node][0]} was removed from ${nation}`);
             }
         }

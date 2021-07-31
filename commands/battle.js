@@ -1,5 +1,5 @@
 const {perm} = require("../utils"), cfg = require('../config.json'), units = require('../units.json'),
-{findHorizontal, findVertical, report} = require("../game"), {getCellArray, setArray} = require("../sheet");
+{findHorizontal, findVertical, report} = require("../game"), {getCellArray, setCellArray} = require("../sheet");
 module.exports = {
     name: 'battle',
     description: 'Command for removing units after battle!',
@@ -99,8 +99,8 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
             data = zero(data);
             dataWp = zero(dataWp);
 
-            await setArray('E5', data);
-            await setArray('B5', dataWp, 'Stockpiles');
+            await setCellArray('E5', data);
+            await setCellArray('B5', dataWp, 'Stockpiles');
 
             let today = new Date();
             let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();

@@ -1,71 +1,81 @@
 const cfg = require('./../config.json'), js = require('../utils'),
-    {setArray, getCellArray, set} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
+    {setCellArray, getCellArray, setCell} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
 module.exports = {
     name: 'turn',
     description: 'Command for finishing turn and updating the sheet data!',
-    args: false,
-    usage: '',
+    args: 0,
+    usage: `${cfg.prefix}turn`,
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message) {
         if(!js.perm(message, 2, true)) return;
 
-        let newResearch = [];
-        let coefficient = [];
+        let data = await getCellArray('A1', 'AN', cfg.main, true)
+            .catch(error => {
+                console.error(error);
+                return message.channel.send(error)
+                    .then(errorMessage => errorMessage.delete({timeout: 6000}).catch(error => console.error(error)))
+                    .catch(error => console.error(error));
+        });
 
-        let techCol = await findHorizontal('RP', 4).catch(e => {console.error(e)});
-        let dataRow = await findVertical('Data', 'A').catch(e => {console.error(e)});
-        let balanceArray = await getCellArray(`A5`, `C${dataRow - 1}`).catch(e => {console.error(e)});
-        let researchArray = await getCellArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, -1).catch(e => {console.error(e)});
-
-        balanceArray.forEach(r => {
-            r[1] = parseInt(r[1].replace(/[,|$]/g, ''));
-            r[2] = parseInt(r[2].replace(/[,|$]/g, ''));
-            r[1] += r[2];
-            r.splice(2, 1);
-        })
-
-        for (const [key, value] of Object.entries(cfg.users)) {
-            coefficient.push([value.nation, value.cf, key]);
+        let accountColumn;
+        let balanceColumn;
+        let researchColumn;
+        let researchBudgetColumn;
+        let nationColumn = data[0];
+        let coefficientColumn;
+        let dataStart = 0;
+        let dataEnd = 0;
+        for (dataEnd; dataEnd < data[0].length; dataEnd++) {
+            if (data[0][dataEnd] !== '' && dataStart === 0) dataStart = dataEnd;
+            else if (data[0][dataEnd] === 'Turn') break;
         }
 
-        let i = 0;
-        researchArray.forEach(r => {
-            r[0] = parseFloat(r[0].replace(/[,]/g, ''));
-            r[1] = parseInt(r[1].replace(/[,|$]/g, ''));
-            r[2] = parseInt(r[2].replace(/[,|$]/g, ''));
-            r.push(balanceArray[i][0]);
-            r.push(false);
-            i++;
+        for (const column of data) {
+            if (column[0].startsWith('Account')) accountColumn = column;
+            else if (column[0].startsWith('Balance')) balanceColumn = column;
+            else if (column[3].startsWith('RP')) researchColumn = column;
+            else if (column[3].startsWith('ResBudget')) researchBudgetColumn = column;
+            else if (column[3].startsWith('Coefficient')) coefficientColumn = column;
+        }
 
-            let nation;
-            for(nation of coefficient) {
-                if(nation[0] === r[3]) {
-                    newResearch.push([r[0] + ((nation[1] * r[1])/20000), r[1], r[1]])
-                    r[4] = true;
-                    if (r[1] === r[2] && cfg.users[nation[2]].cf <= 2) {
-                        cfg.users[nation[2]].cf += 0.1;
+        //Adding balance to player accounts.
+        for (let row = dataStart; row < dataEnd; row++) {
+            accountColumn[row] -= balanceColumn[row];
+            let failsafe = false;
+
+            for (const [key, value] of Object.entries(cfg.users)) {
+                if (value.nation === nationColumn[row]) {
+                    let researchBudget = researchBudgetColumn[row];
+
+                    researchColumn[row] += (researchBudget / 20000) * value.cf;
+                    if (coefficientColumn[row] === researchBudget && value.cf < 2) {
+                        cfg.users[key].cf += 0.1;
                     } else {
-                        cfg.users[nation[2]].cf = 1;
+                        cfg.users[key].cf = 1;
                     }
+                    coefficientColumn[row] = researchBudget;
+                    failsafe = true;
+                    break;
                 }
             }
-        })
+            //Checks for missing nations.
+            if (!failsafe) {
+                message.channel.send(`Cancelling turn process. Not all states are accounted for.`)
+                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
+                    .catch(networkError => console.error(networkError));
+            }
+        }
 
         cfg.turn += 1;
         js.exportFile('config.json', cfg);
         let today = new Date();
-        let dateTime = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+        accountColumn[dataEnd] = `${cfg.turn} ${message.author.username}`;
+        accountColumn[dataEnd + 1] = dateTime;
 
+        await setCellArray('A1', data, cfg.main);
 
-        balanceArray.forEach(r => {
-            r.splice(0, 1);
-        })
-
-        await setArray('B5', balanceArray);
-        await setArray(techCol + 5, newResearch);
-        await set(`B${dataRow + 1}`, cfg.turn + ' ' + message.author.username);
-        await set(`B${dataRow + 2}`, dateTime);
         report(message, `Turn has been finished by <@${message.author.id}>`, this.name);
         message.client.channels.cache.get(cfg.servers[message.guild.id].announcements).send(`<@519315646606082052> Turn has been finished!`).catch(e => console.error(e));
 

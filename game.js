@@ -1,5 +1,5 @@
 const gm = require('./game'), cfg = require('./config.json'),
-    units = require('./units.json'), {getCell, set, getCellArray, toCoordinate} = require("./sheet");
+    units = require('./units.json'), {getCell, setCell, getCellArray, toCoordinate} = require("./sheet");
 
 /**
  * Function finds row of target in column of sheet tab.
@@ -202,9 +202,9 @@ exports.transfer = function transfer(nationRow, unitCol, amount, money, message,
                         } else {
                             balance = parseInt(balance.replace(/[,|$]/g, '')) - money;
                         }
-                        set( `${unitCol + nationRow}`, unitsAmount, tab)
+                        setCell( `${unitCol + nationRow}`, unitsAmount, tab)
                             .then(() => {
-                                set(`B${nationRow}`, balance).then(() => {
+                                setCell(`B${nationRow}`, balance).then(() => {
                                     resolve('Success.');
                                 })
                             })

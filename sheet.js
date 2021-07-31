@@ -41,9 +41,10 @@ exports.getCell = function getCell(cell, sheetTab) {
  * @param X                 String First coordinate.
  * @param Y                 String Second coordinate.
  * @param sheetTab          String tab name.
+ * @param dominantColumn    Bool if sort result by column.
  * @return {Promise<Array>} Returns data resulting array or reject error String message.
  */
-exports.getCellArray = function getCellArray(X, Y, sheetTab) {
+exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
         if (!isCoordinate(X) || !new RegExp(/[A-Z]+/g).test(Y)) {
             return reject('Coordinate X is not correct.')
@@ -52,12 +53,17 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab) {
         gs.spreadsheets.values.get({
             spreadsheetId: cfg.sheet,
             range: `${sheetTab}!${X}:${Y}`,
-            majorDimension: "ROWS",
+            majorDimension: dominantColumn ? 'COLUMNS' : 'ROWS',
             valueRenderOption: "UNFORMATTED_VALUE"
         })
         .then(data => {
             let maximalLength = 0;
 
+            for (const row of data.data.values) {
+                if (row.length > maximalLength) maximalLength = row.length;
+            }
+
+            /**
             //Two loops fill the empty values with dot so they are not ignored in embeds.
             for(const row of data.data.values) {
                 for(let column = 0; column < row.length; column++) {
@@ -67,12 +73,12 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab) {
                 }
                 if (row.length > maximalLength) maximalLength = row.length;
             }
-
+            **/
             //Second loop fills in the ends if the row is showrter than maximal row to keep the array rectangular.
             for (let row = 0; row < data.data.values.length; row++) {
-                if (row.length < maximalLength) {
-                    for (let i = maximalLength - row.length; i > 0; i--) {
-                        data.data.values[row].push('.');
+                if (data.data.values[row].length < maximalLength) {
+                    for (let i = maximalLength - data.data.values[row].length; i > 0; i--) {
+                        data.data.values[row].push('');
                     }
                 }
             }
@@ -85,13 +91,13 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab) {
 
 
 /**
- * Function sets cell on coordinate to new value in sheetTab of the sheet.
+ * Function sets coordinate cell to a new value in sheet tab.
  * @param coordinate            Coordinate String of cell.
  * @param value                 Value to set. If undefined, cell becomes empty.
- * @param sheetTab                   Tab of sheet where operation takes place.
+ * @param sheetTab              Tab of sheet where operation takes place.
  * @return {Promise<Array>}     Returns if successful or rejects with String error message.
  */
-exports.set = function setInternal(coordinate, value, sheetTab) {
+exports.setCell = function setCell(coordinate, value, sheetTab) {
     return new Promise(function (resolve, reject) {
         if (isCoordinate(coordinate)) {
             gs.spreadsheets.values.update({
@@ -101,7 +107,7 @@ exports.set = function setInternal(coordinate, value, sheetTab) {
                 resource: {values: [[value]]}
             })
                 .then(() => resolve('Operation successful.'))
-                .catch(err => reject(err.message));
+                .catch(error => reject(error.message));
         }
     });
 }
@@ -111,12 +117,12 @@ exports.set = function setInternal(coordinate, value, sheetTab) {
  * Function sets array of values into from the coordinate cell in sheet sheetTab.
  * @param coordinate            String coordinate.
  * @param values                Array of arrays(rows) of values(cols).
- * @param sheetTab                   String sheet sheetTab name.
- * @return {Promise<String>}   Returns String.
+ * @param sheetTab              String sheet sheetTab name.
+ * @return {Promise<String>}    Returns String with success or error message reject..
  */
-exports.setArray = function setAInternal(coordinate, values, sheetTab) {
+exports.setCellArray = function setCellArray(coordinate, values, sheetTab) {
     return new Promise(function (resolve, reject) {
-        const pushData = {
+        gs.spreadsheets.values.batchUpdate({
             spreadsheetId: cfg.sheet,
             resource: {
                 valueInputOption: 'RAW',
@@ -126,10 +132,7 @@ exports.setArray = function setAInternal(coordinate, values, sheetTab) {
                     "values": values,
                 }
             },
-        };
-        gs.spreadsheets.values.batchUpdate(pushData)
-            .then(() => resolve('Operation successful.'))
-            .catch(err => reject(err.message));
+        }).then(() => resolve('Operation successful.')).catch(error => reject(error.message));
     });
 }
 

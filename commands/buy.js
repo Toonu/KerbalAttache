@@ -1,5 +1,5 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
-    {report, findData} = require("../game"), {getCell, set} = require("../sheet");
+    {report, findData} = require("../game"), {getCell, setCell} = require("../sheet");
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets. Do NOT use in public channels.',
@@ -88,10 +88,10 @@ Assets do not need to be written in capital letters, the command is case insensi
                         msg.delete();
                         msg.channel.send('Purchasing assets. ✅ Do not forget to place them onto your map!').then(newMessage => newMessage.delete({timeout: 15000}));
                         //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
-                        set(`${data[1]+data[2]}`, data[3] + args[0], tab);
+                        setCell(`${data[1]+data[2]}`, data[3] + args[0], tab);
                         getCell(`B${data[2]}`)
                             .then(balance => {
-                                set(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
+                                setCell(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
                             })
                             .catch(err => console.error(err));
                         if (cost < 0) {

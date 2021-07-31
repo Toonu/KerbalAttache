@@ -1,5 +1,5 @@
 const cfg = require("./../config.json"), {report, findData} = require("../game"),
-    {set} = require("../sheet"), {perm, ping} = require("../utils");
+    {setCell} = require("../sheet"), {perm, ping} = require("../utils");
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount of nation.',
@@ -42,7 +42,7 @@ module.exports = {
             let newTiles = parseFloat(args[0]) + tiles[3]
             //Checking whether the number of tiles would go into negative.
             if (newTiles >= 0) {
-                set(`${tiles[1] + tiles[2]}`, newTiles)
+                setCell(`${tiles[1] + tiles[2]}`, newTiles)
                     .then(() => {
                         message.channel.send('Tiles set!').then(msg => msg.delete({timeout: 9000}));
                         message.delete();

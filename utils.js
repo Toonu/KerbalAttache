@@ -5,7 +5,6 @@ const fs = require('fs'), cfg = require('./config.json'), js = require('./utils'
  * @param nationIn      Nation String name
  * @param demonymIn     Nation demonym
  * @param colorIn       Color String hex number
- * @param sheet         Sheet string number
  * @param map           Map String link
  * @return String response of attributes of created user.
  */

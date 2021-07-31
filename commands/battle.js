@@ -115,7 +115,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
                 negativeMsg += `${r}\n`;
             })
 
-            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:
+            message.client.channels.cache.get(cfg.servers[message.guild.id].battleid).send(`[${dateTime} UTC]   [Battle results]:
 
 \`\`\`ini
 ${reportMsg}\`\`\``).catch(e => console.error(e));
@@ -129,7 +129,7 @@ ${reportMsg}\`\`\``).catch(e => console.error(e));
 Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
 For better reference, negative numbers are highlighted with red in the sheet.`
             }
-            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> by <@${message.author.id}>
+            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battleid}> by <@${message.author.id}>
             ${problems}`, 'Battle');
 
             message.delete();

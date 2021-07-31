@@ -105,32 +105,31 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * balance
  * battle
  * buy
- * config
- * map
  * reject
- * sub
  * tech
  * tiles
  * trade
  * turn
- * usercreate
  * game
- * json
  * sheet - to and fromCoordinate
  *
  * XXX
  *
+ * config
  * help
+ * map
  * ping
  * prune
  * reload
  * spam
+ * sub
  * usercreate
  * userdel
  * useredit
  * userinfo
  *
  * index
+ * utils
 **/
 
 

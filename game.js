@@ -156,8 +156,8 @@ exports.findData = function findData(target, nation, tech, tab) {
  */
 exports.report = function report(message, report, command = '') {
     let today = new Date();
-    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`)
+    let dateTime = `${today.getUTCFullYear()}.${(today.getUTCMonth() < 10 ? '0' : '') + (today.getUTCMonth() + 1)}.${(today.getUTCDate() < 10 ? '0' : '') + today.getUTCDate()} ${today.getUTCHours()}:${(today.getUTCMinutes() < 10 ? '0' : '') + today.getUTCMinutes()}:${(today.getUTCSeconds() < 10 ? '0' : '') + today.getUTCSeconds()}`;
+    message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${report}`)
         .catch(networkError => console.error(networkError));
 }
 

@@ -2,9 +2,9 @@ const {ping} = require("../utils"), {getCellArray} = require("../sheet"),
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
-    description: 'Command for getting information about your subscriptions!',
+    description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list stay.',
     args: 0,
-    usage: `${cfg.prefix}sub [O:persistent <true/false>] [M:<@user>]`,
+    usage: `${cfg.prefix}sub [PERSIST] [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {

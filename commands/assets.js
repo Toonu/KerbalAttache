@@ -1,4 +1,4 @@
-const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
+const {getCellArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../utils");
 require("./../config.json");
 module.exports = {
     name: 'assets',
@@ -19,23 +19,23 @@ module.exports = {
             .setTitle(`National Roster of ${nation}`)
             .setURL(cfg.users[user].map)
             .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+            .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
         const embedW = new discord.MessageEmbed()
             .setColor('#065535')
             .setTitle(`National Roster of ${nation}`)
             .setURL(cfg.users[user].map)
             .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+            .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 
 
         //Weapons setup
         let nationRow = await findVertical(nation, 'A', 'Stockpiles')
             .catch(err => console.error(err));
 
-        let weaponArray = await getArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
+        let weaponArray = await getCellArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
             .catch(err => console.error(err));
-        let unitArray = await getArray('A4', `BA${nationRow}`)
+        let unitArray = await getCellArray('A4', `BA${nationRow}`)
             .catch(err => console.error(err));
 
         for (let i = 1; i < weaponArray[0].length; i++) {
@@ -75,8 +75,8 @@ function embUnits(embed, message) {
 
         message.channel.send(embed)
             .then(msg => {
-                msg.react('❌').catch(err => console.log(err));
-                msg.react('➡️').catch(err => console.log(err));
+                msg.react('❌').catch(err => console.error(err));
+                msg.react('➡️').catch(err => console.error(err));
                 msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
                     .then(collected => {
                         let react = collected.first();

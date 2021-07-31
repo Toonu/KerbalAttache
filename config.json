@@ -2,8 +2,12 @@
     "prefix": ".",
     "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
     "money": "EUR",
+    "moneyLocale": "fr-FR",
     "era": 55,
     "turn": 0,
+    "submissions": "Database",
+    "main": "Maintenance",
+    "systems": "Stockpiles",
     "servers": {
         "470258156682084373": {
             "name": "NoU",

@@ -10,7 +10,7 @@ money, sheet, era, sname, smainid, sbattleid, sadminadd, sdevadd, sadmindel, sde
     guildOnly: true,
     execute: function configBot(message, args) {
         const cfg = require('./../config.json')
-        const js = require('../jsonManagement');
+        const js = require('../utils');
         let data;
 
         if (js.perm(message, 2)) {

@@ -1,5 +1,5 @@
 const cfg = require("./../config.json"), {report, findData} = require("../game"),
-    {set} = require("../sheet"), {perm, ping} = require("../jsonManagement");
+    {set} = require("../sheet"), {perm, ping} = require("../utils");
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount of nation.',

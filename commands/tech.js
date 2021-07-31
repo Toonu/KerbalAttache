@@ -1,6 +1,6 @@
-const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../jsonManagement'),
+const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../utils'),
     tt = require('./../tt.json'), discord = require('discord.js'),
-    {get, set, getArray, toCoordinate, fromCoordinate} = require("../sheet"),
+    {getCell, set, getCellArray, toCoordinate, fromCoordinate} = require("../sheet"),
     {findData, findHorizontal, findVertical, report} = require("../game");
 module.exports = {
     name: 'tech',
@@ -167,7 +167,7 @@ function list(category, nation, message) {
                         { name: 'Cost:', value: `${data[0][0]}RP`, inline: true},
                         { name: 'Buy?', value: `✅`, inline: true},
                     )
-                    .setFooter('Made by the Attaché to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+                    .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
 
                 function filter(reaction, user) {
                     return ((reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id);
@@ -175,8 +175,8 @@ function list(category, nation, message) {
 
                 message.channel.send(embed)
                     .then(msg => {
-                        msg.react('✅').catch(err => console.log(err));
-                        msg.react('❌').catch(err => console.log(err));
+                        msg.react('✅').catch(err => console.error(err));
+                        msg.react('❌').catch(err => console.error(err));
                         msg.awaitReactions(filter, { max: 1, time: 32000, errors: ['time'] })
                             .then(collected => {
                                 let react = collected.first();
@@ -237,9 +237,9 @@ function unlocks(nation) {
         try {
             let nationRow = await findVertical(nation, 'A');
             let dataRow = await findVertical('Data', 'A', 'TechTree');
-            nodes = await getArray(`A${nationRow}`, `HO${nationRow}`, 0, 0, 'TechTree');
-            data = await getArray(`A${dataRow}`, `HO${dataRow}`, 0, 1, 'TechTree');
-            names = await getArray('A4', 'HO4', 0, 0, 'TechTree');
+            nodes = await getCellArray(`A${nationRow}`, `HO${nationRow}`, 0, 0, 'TechTree');
+            data = await getCellArray(`A${dataRow}`, `HO${dataRow}`, 0, 1, 'TechTree');
+            names = await getCellArray('A4', 'HO4', 0, 0, 'TechTree');
         } catch (e) {
             reject(e);
         }
@@ -297,7 +297,7 @@ function research(node, nation, del = 1) {
 
         //Checking rp amount
         let rpCol = await findHorizontal('RP', 4).catch(e => {reject(e)});
-        let rp = parseInt((await get(`${rpCol + data[2]}`)).replace(/[,]/g, ''));
+        let rp = parseInt((await getCell(`${rpCol + data[2]}`)).replace(/[,]/g, ''));
         if (data[0][0] > rp && del !== 0) return reject('Not enough Research Points!');
 
         //Setting node to 1 and then setting RP
@@ -307,7 +307,7 @@ function research(node, nation, del = 1) {
 
             //Tech increments change
             let increments = await findHorizontal('Technology', 4).catch(e => {reject(e)});
-            let incrementArray = await getArray(`${increments}5`, `${increments}5`, 4, data[2] - 5).catch(e => {reject(e)});
+            let incrementArray = await getCellArray(`${increments}5`, `${increments}5`, 4, data[2] - 5).catch(e => {reject(e)});
             let from = fromCoordinate(increments);
             let coordinate = toCoordinate(from[0] + tt[node][4]);
             if (del === 1) {

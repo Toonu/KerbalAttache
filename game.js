@@ -1,5 +1,5 @@
 const gm = require('./game'), cfg = require('./config.json'),
-    units = require('./units.json'), {get, set, getArray, toCoordinate} = require("./sheet");
+    units = require('./units.json'), {getCell, set, getCellArray, toCoordinate} = require("./sheet");
 
 /**
  * Function finds row of target in column of sheet tab.
@@ -12,7 +12,7 @@ const gm = require('./game'), cfg = require('./config.json'),
 exports.findVertical = function findVertical(target, col, tab, height = 1) {
     return new Promise(function (resolve, reject) {
         let max = height + 99;
-        getArray(`${col + height}`, `${col + max}`, 0, 0, tab)
+        getCellArray(`${col + height}`, `${col + max}`, 0, 0, tab)
             .then(array => {
                 const regex = new RegExp("^" + target + ".*", "g");
                 let result = array.findIndex(function (currentValue) {
@@ -27,7 +27,7 @@ exports.findVertical = function findVertical(target, col, tab, height = 1) {
                 console.error(error)
                 reject(error)
             });
-    }).catch(err => console.log('Error in vertical: ' + err));
+    }).catch(error => console.error('Error in vertical: ' + error));
 }
 
 
@@ -45,7 +45,7 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
         let col = 'BA';
         if(tab === 'TechTree') col = 'HQ'
 
-        getArray(`A${row}`, `${col + row}`, 0, 0, tab)
+        getCellArray(`A${row}`, `${col + row}`, 0, 0, tab)
             .then(array => {
                 const regex = new RegExp("^" + target + ".*", "g");
                 let result = array[0].findIndex(function (currentValue) {
@@ -63,7 +63,7 @@ exports.findHorizontal = function findHorizontal(target, row, tab) {
                 console.error(error)
                 reject(error)
             })
-    }).catch(err => console.log('Error in horizontal: ' + err));
+    }).catch(err => console.error('Error in horizontal: ' + err));
 }
 
 
@@ -90,9 +90,9 @@ exports.findData = function findData(target, nation, tech, tab) {
             priceRow = await gm.findVertical('Data', 'A', tab).catch(e => {reject(e)});
             nationRow = await gm.findVertical(nation, 'A', tab).catch(e => {reject(e)});
             priceCol = await gm.findHorizontal(target, 4, tab).catch(e => {reject(e)});
-            value = await get(`${priceCol + nationRow}`, tab).catch(e => {reject(e)});
+            value = await getCell(`${priceCol + nationRow}`, tab).catch(e => {reject(e)});
             if (tech) {
-                techInfo = await getArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
+                techInfo = await getCellArray(`${priceCol + priceRow}`, `${priceCol + priceRow}`, 0, 1, tab);
                 techInfo[0] = parseInt(techInfo[0]);
             }
             if (value === undefined) {
@@ -108,7 +108,7 @@ exports.findData = function findData(target, nation, tech, tab) {
         if(priceRow === undefined || nationRow === undefined || priceCol === undefined) {
             reject('Wrong name');
         }
-        get(`${priceCol + priceRow}`, tab)
+        getCell(`${priceCol + priceRow}`, tab)
         .then(price => {
             price = parseInt(price);
             if (tech || ['other', 'wpSurface', 'wpAerial', 'systems'].includes(units[target][1])) {
@@ -120,7 +120,7 @@ exports.findData = function findData(target, nation, tech, tab) {
             } else {
                 gm.findHorizontal('Surface', 1)
                 .then(incrementsCols => {
-                    getArray(`${incrementsCols}${nationRow}`, `${incrementsCols}${nationRow}`, 3, 0)
+                    getCellArray(`${incrementsCols}${nationRow}`, `${incrementsCols}${nationRow}`, 3, 0)
                     .then(techLevel => {
                         switch(units[target][1]) {
                             case 'surface':
@@ -149,17 +149,28 @@ exports.findData = function findData(target, nation, tech, tab) {
 
 
 /**
- * Function reports to the moderator channel the specified report String.
+ * Function reports information into the moderator channel.
  * @param message   Message object which specifies server to search main channel in.
  * @param report    String with a message to report.
- * @param command   String command in which report is from.
+ * @param command   String command name the report originated from.
  */
 exports.report = function report(message, report, command = '') {
     let today = new Date();
     let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`).catch(e => console.log(e));
+    message.client.channels.cache.get(cfg.servers[message.guild.id].main_channel).send(`[${dateTime} UTC] [${command}]: ${report}`)
+        .catch(networkError => console.error(networkError));
 }
 
+
+/**
+ * Function logs a message to the console with formatting..
+ * @param report    String with a message to log.
+ */
+exports.log = function log(report) {
+    let today = new Date();
+    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    console.log(`[${dateTime} UTC] ${report}`);
+}
 
 /**
  * Function makes trade transaction between two countries.
@@ -174,7 +185,7 @@ exports.report = function report(message, report, command = '') {
  */
 exports.transfer = function transfer(nationRow, unitCol, amount, money, message, type, tab) {
     return new Promise(function (resolve, reject) {
-        get(`${unitCol + nationRow}`, tab)
+        getCell(`${unitCol + nationRow}`, tab)
             .then(unitsAmount => {
                 if (type) {
                     unitsAmount = parseInt(unitsAmount) - amount;
@@ -184,7 +195,7 @@ exports.transfer = function transfer(nationRow, unitCol, amount, money, message,
                     unitsAmount = parseInt(unitsAmount) + amount;
                 }
                 if(unitsAmount < 0) return reject('Not enough units to sell!');
-                get(`B${nationRow}`)
+                getCell(`B${nationRow}`)
                     .then(balance => {
                         if (type) {
                             balance = parseInt(balance.replace(/[,|$]/g, '')) + money;

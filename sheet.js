@@ -1,8 +1,8 @@
-const cfg = require('./config.json'), {google} = require('googleapis'), sh = require('./sheet');
+const cfg = require('./config.json'), {google} = require('googleapis');
 let client;
 let gs;
-const {private_key, client_email} = process.env;
-//const {private_key, client_email} = require('./env.json');
+//const {private_key, client_email} = process.env;
+const {private_key, client_email} = require('./env.json');
 
 
 /**
@@ -16,157 +16,120 @@ exports.init = function init() {
 
 
 /**
- * Function returns value of cell at coordinate of the tab in the sheet.
- * @param coordinate            Coordinate of cell.
- * @param tab                   Sheet tab.
+ * Function returns value of cell in the tab of the sheet.
+ * @param cell                  Coordinate of cell.
+ * @param sheetTab              Sheet sheetTab.
  * @return {Promise<String>}    Returns cell value or rejects with String error message.
  */
-exports.get = function getInternal(coordinate,tab = 'Maintenance') {
+exports.getCell = function getCell(cell, sheetTab) {
     return new Promise(function (resolve, reject) {
-        if (isCoordinate(coordinate)) {
-            const request = {
+        if (isCoordinate(cell)) {
+            gs.spreadsheets.values.get({
                 spreadsheetId: cfg.sheet,
-                range:  `${tab}!${coordinate}`
-            };
-            gs.spreadsheets.values.get(request)
-                .then(data => {
-                    let dataArray = data.data.values;
-
-                    if (dataArray !== undefined) {
-                        resolve(dataArray[0][0]);
-                    } else {
-                        resolve(undefined);
-                    }
-                })
-                .catch(err => {
-                    reject(err.message);
-                });
-        }
-    });
-}
-
-
-/**
- * Function gets array of values from cordX to cordY with extension of col and row Sizes in tab of sheet.
- * @param cordX                 String First coordinate.
- * @param cordY                 String Second coordinate.
- * @param colSize               Number Size extension in columns.
- * @param rowSize               Number Size extension in rows.
- * @param tab                   String tab name.
- * @param full                  If coordinates have to be full (allows A1:A if true).
- * @return {Promise<Array>}     Returns data array or rejects String error message.
- */
-exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance', full = false) {
-    return new Promise(function (resolve, reject) {
-        rowSize = parseInt(rowSize);
-        colSize = parseInt(colSize);
-
-        let temporaryCordY;
-        if ((!isCoordinate(cordX) || !isCoordinate(cordY)) && !full) {
-            reject('Coordinates not correct.')
-        } else if (colSize !== 0 || rowSize !== 0) {
-            temporaryCordY = sh.fromCoordinate(cordY);
-            cordY = sh.toCoordinate(temporaryCordY[0] + colSize) + (temporaryCordY[1] + rowSize);
-        }
-
-        const request = {
-            spreadsheetId: cfg.sheet,
-            "range": `${tab}!${cordX}:${cordY}`,
-            "majorDimension": "ROWS",
-            "valueRenderOption": "UNFORMATTED_VALUE"
-        };
-
-        gs.spreadsheets.values.get(request)
-            .then(data => {
-                for(rowSize of data.data.values) {
-                    for(let i = 0; i < rowSize.length; i++) {
-                        if (rowSize[i] === '') {
-                            rowSize.splice(i, 1, '.');
-                        }
-                    }
-                }
-                let l = 0;
-
-                for (let
-                    row of data.data.values) {
-                    if (row.length > l) {
-                        l = row.length;
-                    }
-                }
-
-                for (let i = 0; i < data.data.values.length; i++){
-                    let size = data.data.values[i];
-                    if (size.length < l) {
-                        for (let li = l - size.length; li > 0; li--) {
-                            size.push('.');
-                        }
-                    }
-                }
-
-                resolve(data.data.values);
+                range:  `${sheetTab}!${cell}`,
+                valueRenderOption: "UNFORMATTED_VALUE"
             })
-            .catch(err => {
-                reject(err.message);
-            });
+            .then(data => resolve(data.data.values))
+            .catch(error => reject(error.message));
+        }
     });
 }
 
 
 /**
- * Function sets cell on coordinate to new value in tab of the sheet.
+ * Function gets array of values between coordinate X and Y in sheet tab. Additionally the array blank spaces are filled with dots. Optionally fullY can be set to true to ignore coordinate check of the second coordinate.
+ * @param X                 String First coordinate.
+ * @param Y                 String Second coordinate.
+ * @param sheetTab          String tab name.
+ * @return {Promise<Array>} Returns data resulting array or reject error String message.
+ */
+exports.getCellArray = function getCellArray(X, Y, sheetTab) {
+    return new Promise(function (resolve, reject) {
+        if (!isCoordinate(X) || !new RegExp(/[A-Z]+/g).test(Y)) {
+            return reject('Coordinate X is not correct.')
+        }
+
+        gs.spreadsheets.values.get({
+            spreadsheetId: cfg.sheet,
+            range: `${sheetTab}!${X}:${Y}`,
+            majorDimension: "ROWS",
+            valueRenderOption: "UNFORMATTED_VALUE"
+        })
+        .then(data => {
+            let maximalLength = 0;
+
+            //Two loops fill the empty values with dot so they are not ignored in embeds.
+            for(const row of data.data.values) {
+                for(let column = 0; column < row.length; column++) {
+                    if (row[column] === '') {
+                        row.splice(column, 1, '.');
+                    }
+                }
+                if (row.length > maximalLength) maximalLength = row.length;
+            }
+
+            //Second loop fills in the ends if the row is showrter than maximal row to keep the array rectangular.
+            for (let row = 0; row < data.data.values.length; row++) {
+                if (row.length < maximalLength) {
+                    for (let i = maximalLength - row.length; i > 0; i--) {
+                        data.data.values[row].push('.');
+                    }
+                }
+            }
+
+            resolve(data.data.values);
+        })
+        .catch(error => reject(error.message));
+    });
+}
+
+
+/**
+ * Function sets cell on coordinate to new value in sheetTab of the sheet.
  * @param coordinate            Coordinate String of cell.
  * @param value                 Value to set. If undefined, cell becomes empty.
- * @param tab                   Tab of sheet where operation takes place.
+ * @param sheetTab                   Tab of sheet where operation takes place.
  * @return {Promise<Array>}     Returns if successful or rejects with String error message.
  */
-exports.set = function setInternal(coordinate, value = '', tab  = 'Maintenance') {
+exports.set = function setInternal(coordinate, value, sheetTab) {
     return new Promise(function (resolve, reject) {
         if (isCoordinate(coordinate)) {
-            const pushData = {
+            gs.spreadsheets.values.update({
                 spreadsheetId: cfg.sheet,
-                range: `${tab}!${coordinate}`,
+                range: `${sheetTab}!${coordinate}`,
                 valueInputOption: 'RAW',
                 resource: {values: [[value]]}
-            };
-            gs.spreadsheets.values.update(pushData)
-                .then(() => {
-                    resolve('Operation successful.')
-                })
-                .catch(err => {
-                    reject(err.message)
-                });
+            })
+                .then(() => resolve('Operation successful.'))
+                .catch(err => reject(err.message));
         }
     });
 }
 
 
 /**
- * Function sets array of values into from the coordinate cell in sheet tab.
+ * Function sets array of values into from the coordinate cell in sheet sheetTab.
  * @param coordinate            String coordinate.
  * @param values                Array of arrays(rows) of values(cols).
- * @param tab                   String sheet tab name.
+ * @param sheetTab                   String sheet sheetTab name.
  * @return {Promise<String>}   Returns String.
  */
-exports.setArray = function setAInternal(coordinate, values, tab = 'Maintenance') {
+exports.setArray = function setAInternal(coordinate, values, sheetTab) {
     return new Promise(function (resolve, reject) {
         const pushData = {
             spreadsheetId: cfg.sheet,
             resource: {
                 valueInputOption: 'RAW',
                 data: {
-                    "range": `${tab}!${coordinate}`,
+                    "range": `${sheetTab}!${coordinate}`,
                     "majorDimension": "ROWS",
                     "values": values,
                 }
             },
         };
         gs.spreadsheets.values.batchUpdate(pushData)
-            .then(() => {
-                resolve('Operation successful.')
-            })
-            .catch(err => {
-                reject(err.message);
-            });
+            .then(() => resolve('Operation successful.'))
+            .catch(err => reject(err.message));
     });
 }
 
@@ -177,8 +140,7 @@ exports.setArray = function setAInternal(coordinate, values, tab = 'Maintenance'
  * @return {boolean}    Returns true/false if correct/wrong.
  */
 function isCoordinate(coordinate) {
-    let regExp = new RegExp(/[A-Z]+[0-9]+/g);
-    return regExp.test(coordinate.toUpperCase());
+    return new RegExp(/[A-Z]+[0-9]+/g).test(coordinate);
 }
 
 

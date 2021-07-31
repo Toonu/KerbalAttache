@@ -1,56 +1,59 @@
-const {ping} = require("../jsonManagement"), {getArray} = require("../sheet"),
+const {ping} = require("../utils"), {getCellArray} = require("../sheet"),
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
     description: 'Command for getting information about your subscriptions!',
-    args: false,
-    usage: '[M:@user]',
+    args: 0,
+    usage: `${cfg.prefix}sub [O:persistent <true/false>] [M:<@user>]`,
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {
-        let nation = ping(message, 2);
+        let submissionsData = await getCellArray('A1', 'AA', cfg.submissions)
+            .catch(error => {
+                console.error(error);
+                return message.channel.send(error)
+                    .then(errorMessage => errorMessage.delete({timeout: 6000}).catch(error => console.error(error)))
+                    .catch(error => console.error(error));
+            });
 
-        let data = await getArray('A1', 'AA', 0, 0, 'Database', true).catch(e => console.error(e));
+        //Checks if the message has ping to determine searched nation.
+        let nation = cfg.users[ping(message, 2).id].nation;
 
-        let nat = cfg.users[nation.id].nation;
-        let analyse = '';
-        let array = [];
-
-        for (let i = data.length - 1; i > 0; i--) {
-            if ((args[0] === `<@!${nation.id}>` || args[0] === undefined) && data[i][1] === nat) {
-                array.push(data[i]);
+        //Loop filters out nation's submissions and pads them in the future with the longest one up to 18 spaces.
+        let nationSubmissions = [];
+        let maximalLength = 0;
+        for (const row of submissionsData) {
+            if (row[1] === nation) {
+                nationSubmissions.push(row);
+                if (row[2].length > maximalLength) {
+                    maximalLength = row[2].length;
+                    if (maximalLength > 18) {
+                        maximalLength = 18;
+                        break;
+                    }
+                }
             }
         }
 
-        let l = 0;
+        //Header line
+        let displayResult = `${"[Asset]".padEnd(maximalLength)}   Era ${"Class ".padEnd(11)}${"Price".padEnd(16)}${"Notes".padEnd(20)}Range (in RU)\n`;
 
-        array.forEach(r => {
-            if (r[2].length > l) {
-                l = r[2].length;
-            }
+        //Handling money and upgrades
+        nationSubmissions.forEach(column => {
+            let money = column[24].toLocaleString(cfg.moneyLocale, { style: 'currency', currency: cfg.money });
+            //Handles upgrades
+            if (column[21] === 'Upgrade') column[21] += ` of ${column[22].substring(0, 18)}`;
+            displayResult += `[${column[2].substring(0, 18).padStart(maximalLength)}] ${column[6]} ${(column[5]).padEnd(10)} ${money.padEnd(16)} ${column[21].padEnd(30)} ${column[26]}\n`;
         })
 
-        //Header
-        analyse += `[${"Asset".padStart(l)}] Era ${"Classification".padEnd(24)} ${"Price".padEnd(15)} ${"Notes".padEnd(30)} Range (in RU)\n`;
-
-        array.forEach(r => {
-            let money = parseInt(r[24].replace(/[,|€]/g, ''));
-            money = money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money });
-            if (r[21] === 'Upgrade') {
-                r[21] += `of ${r[22]}`
-            }
-            analyse += `[${r[2].padStart(l)}] ${r[6]} ${(r[5]).replace('.', '').padEnd(24)} ${money.padEnd(15)} ${r[21].padEnd(30)} ${r[26]}\n`;
-        })
-
-        message.channel.send(`\`\`\`ini\n${analyse}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
-            if (msg.length < 5) {
-                msg.forEach(m => {
-                    m.delete({timeout: 32000})
-                });
-            } else {
-                msg.delete({timeout: 32000});
-            }
-        });
-        return message.delete();
+        message.channel.send(`\`\`\`ini\n${displayResult}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
+            .then(submissionMessages => {
+                if (args.some(r => {if (r === "true") return true})) {
+                    submissionMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 32000})
+                        .catch(error => console.error(error)));
+                }
+            })
+            .catch(error => console.error(error));
+        message.delete().catch(error => console.error(error));
     },
 };

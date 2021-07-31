@@ -1,5 +1,5 @@
 const {report, findVertical, transfer} = require('./../game'), cfg = require('./../config.json'),
-    {exportFile} = require("../jsonManagement");
+    {exportFile} = require("../utils");
 module.exports = {
     name: 'accept',
     description: 'Command for accepting trade transaction proposal!',

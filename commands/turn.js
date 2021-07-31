@@ -1,5 +1,5 @@
-const cfg = require('./../config.json'), js = require('../jsonManagement'),
-    {setArray, getArray, set} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
+const cfg = require('./../config.json'), js = require('../utils'),
+    {setArray, getCellArray, set} = require("../sheet"), {findVertical, findHorizontal, report} = require("../game");
 module.exports = {
     name: 'turn',
     description: 'Command for finishing turn and updating the sheet data!',
@@ -13,10 +13,10 @@ module.exports = {
         let newResearch = [];
         let coefficient = [];
 
-        let techCol = await findHorizontal('RP', 4).catch(e => {console.log(e)});
-        let dataRow = await findVertical('Data', 'A').catch(e => {console.log(e)});
-        let balanceArray = await getArray(`A5`, `C${dataRow - 1}`).catch(e => {console.log(e)});
-        let researchArray = await getArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, -1).catch(e => {console.log(e)});
+        let techCol = await findHorizontal('RP', 4).catch(e => {console.error(e)});
+        let dataRow = await findVertical('Data', 'A').catch(e => {console.error(e)});
+        let balanceArray = await getCellArray(`A5`, `C${dataRow - 1}`).catch(e => {console.error(e)});
+        let researchArray = await getCellArray(`${techCol}5`, `${techCol + (dataRow - 1)}`, 2, -1).catch(e => {console.error(e)});
 
         balanceArray.forEach(r => {
             r[1] = parseInt(r[1].replace(/[,|$]/g, ''));
@@ -67,7 +67,7 @@ module.exports = {
         await set(`B${dataRow + 1}`, cfg.turn + ' ' + message.author.username);
         await set(`B${dataRow + 2}`, dateTime);
         report(message, `Turn has been finished by <@${message.author.id}>`, this.name);
-        message.client.channels.cache.get(cfg.servers[message.guild.id].announcements).send(`<@519315646606082052> Turn has been finished!`).catch(e => console.log(e));
+        message.client.channels.cache.get(cfg.servers[message.guild.id].announcements).send(`<@519315646606082052> Turn has been finished!`).catch(e => console.error(e));
 
     }
 };

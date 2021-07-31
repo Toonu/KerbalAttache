@@ -1,5 +1,5 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
-    {report, findData} = require("../game"), {get, set} = require("../sheet");
+    {report, findData} = require("../game"), {getCell, set} = require("../sheet");
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets. Do NOT use in public channels.',
@@ -74,7 +74,7 @@ Assets do not need to be written in capital letters, the command is case insensi
                 { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
-            .setFooter('Made by the Attaché to the United Nations', 'https://imgur.com/KLLkY2J.png');
+            .setFooter('Made by the Attachè to the United Nations', 'https://imgur.com/KLLkY2J.png');
             message.channel.send(embed)
             .then(msg => {
                 message.delete();
@@ -89,7 +89,7 @@ Assets do not need to be written in capital letters, the command is case insensi
                         msg.channel.send('Purchasing assets. ✅ Do not forget to place them onto your map!').then(newMessage => newMessage.delete({timeout: 15000}));
                         //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
                         set(`${data[1]+data[2]}`, data[3] + args[0], tab);
-                        get(`B${data[2]}`)
+                        getCell(`B${data[2]}`)
                             .then(balance => {
                                 set(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
                             })

@@ -1,9 +1,6 @@
-const cfg = require('./config.json');
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const fs = require('fs');
-const fn = require("./sheet");
-const js = require("./jsonManagement");
+const {prefix} = require('./config.json'), Discord = require('discord.js'),
+fs = require('fs'), fn = require("./sheet"), js = require("./utils");
+client = new Discord.Client();
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
@@ -17,49 +14,43 @@ for (const file of commandFiles) {
 
 //Starts the bot
 client.on('ready', () => {
-	console.log('Deployed and ready!');
-	client.user.setActivity("over players.", { type: "WATCHING" }).catch(err => console.log(err));
+	log(`Deployed and ready!`);
+	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => console.error(error));
 	fn.init();
 });
 
 client.on('message', message => {
-	if (!message.content.startsWith(cfg.prefix) || message.author.bot) return;
+	//Ignored messages without a prefix.
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
   
-	//Prepares the arguments and command
-	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	//Prepares the arguments.
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
 
-	//If command doesnt exist.
-	if (!client.commands.has(commandName)) {
-		message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-		return message.delete();
-	}
-
-	//Else
-	const command = client.commands.get(commandName);
+	//Finds the command.
+	const command = client.commands.get(args.shift().toLowerCase());
     if (command === undefined) {
-        message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-        return message.delete();
+        message.channel.send('Not a command!')
+			.then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
+			.catch(networkError => console.error(networkError));
+        return message.delete().catch(error => console.error(error));
     }
 
-	//Checking for DMs
+	//Checking for DMs.
 	if (command.guildOnly && message.channel.type === 'dm') {
-		return message.reply('I can\'t execute that command inside DMs!');
+		message.reply('I can\'t execute this command inside DMs!').catch(networkError => console.error(networkError));
+		return message.delete().catch(error => console.error(error));
     }
 
-	//Checking for arguments
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${message.author}!`;
-		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
-		}
-		// noinspection JSUnresolvedFunction
-		return message.channel.send(reply).then(() => {
-			message.delete({timeout: 10000}).catch(err => console.log(err));
-		});
+	//Checking for arguments.
+	if (command.args && (!args.length || command.args > args.length)) {
+		message.channel.send(`You didn't provide all required arguments, ${message.author.username}!
+The proper usage would be:\n${command.usage}\n\nFor more information, type ${prefix}help ${command.name}.`)
+			.then(helpMessage => helpMessage.delete({timeout: 20000}).catch(error => console.error(error)))
+			.catch(networkError => console.error(networkError));
+		return message.delete().catch(error => console.error(error));
 	}
 
-	//Checking for cool down
+	//Checking for cool down.
 	if (!coolDowns.has(command.name)) {
 		coolDowns.set(command.name, new Discord.Collection());
 	}
@@ -74,33 +65,72 @@ client.on('message', message => {
 		if (now < expirationTime && message.author.id !== '319919565079576576') {
 			const timeLeft = (expirationTime - now) / 1000;
 			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-				.then(() => {
-					message.delete({timeout: 10000}).catch(err => console.log(err));
-				});
+				.then(errorMessage => {
+					errorMessage.delete({timeout: 10000}).catch(error => console.error(error));
+					message.delete().catch(error => console.error(error));
+				})
+				.catch(networkError => log.error(networkError));
 		}
 	}
 	if (!js.perm(message, 1)) {
 		timestamps.set(message.author.id, now);
 	}
 	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
-	
+
+	//Executing the actual command.
 	try {
-		let today = new Date();
-		let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 		if (message.channel.type === 'dm') {
-            console.log(`[${dateTime} UTC] DM from ${message.author.username}: ${message.content}`);
+            log(`DM from ${message.author.username}: ${message.content}`);
         } else {
-			console.log(`[${dateTime} UTC] Server ${message.guild.name} (${message.author.username}): ${message.content}`);
+			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);
 	} catch (error) {
 		console.error(error);
 		message.reply('There was an error trying to execute that command!')
-			.then(() => message.delete({timeout: 10000}));
+			.then(errorMessage => errorMessage.delete({timeout: 10000}).catch(error => console.error(error)))
+			.catch(networkError => console.error(networkError));
+		message.delete().catch(error => console.error(error));
 	}
 });
 
-const {CLIENT_TOKEN} = process.env;
-//const {CLIENT_TOKEN} = require('./env.json');
-client.login(CLIENT_TOKEN).catch(err => console.log(err));
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
+const {log} = require("./game");
+client.login(CLIENT_TOKEN).catch(error => console.error(error));
+
+/**
+ * accept
+ * assets
+ * balance
+ * battle
+ * buy
+ * config
+ * map
+ * reject
+ * sub
+ * tech
+ * tiles
+ * trade
+ * turn
+ * usercreate
+ * game
+ * json
+ * sheet - to and fromCoordinate
+ *
+ * XXX
+ *
+ * help
+ * ping
+ * prune
+ * reload
+ * spam
+ * usercreate
+ * userdel
+ * useredit
+ * userinfo
+ *
+ * index
+**/
+
 

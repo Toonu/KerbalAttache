@@ -1,5 +1,5 @@
-const {perm} = require("../jsonManagement"), cfg = require('../config.json'), units = require('../units.json'),
-{findHorizontal, findVertical, report} = require("../game"), {getArray, setArray} = require("../sheet");
+const {perm} = require("../utils"), cfg = require('../config.json'), units = require('../units.json'),
+{findHorizontal, findVertical, report} = require("../game"), {getCellArray, setArray} = require("../sheet");
 module.exports = {
     name: 'battle',
     description: 'Command for removing units after battle!',
@@ -56,13 +56,13 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
 
             let end = await findHorizontal('Technology', 4);
             let rows = await findVertical('Data', 'A');
-            let data = await getArray('A4', `${end + (parseInt(rows) + 1)}`).catch(e => console.error(e));
+            let data = await getCellArray('A4', `${end + (parseInt(rows) + 1)}`).catch(e => console.error(e));
 
             // noinspection ReuseOfLocalVariableJS
             end = await findHorizontal('END', 4, 'Stockpiles');
             // noinspection ReuseOfLocalVariableJS
             rows = await findVertical('Data', 'A', 'Stockpiles');
-            let dataWp = await getArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(e => console.error(e));
+            let dataWp = await getCellArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(e => console.error(e));
 
             for (let nation = 0; nation < userMap.length; nation++) {
                 for (let row = 0; row < data.length; row++) {

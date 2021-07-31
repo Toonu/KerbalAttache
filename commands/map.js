@@ -1,4 +1,4 @@
-const {ping} = require("../jsonManagement"), discord = require('discord.js'), cfg = require('../config.json');
+const {ping} = require("../utils"), discord = require('discord.js'), cfg = require('../config.json');
 module.exports = {
     name: 'map',
     description: 'Command for getting link to you private map. Do NOT use in public channels.',
@@ -14,11 +14,11 @@ module.exports = {
                 .setTitle('Your map link.')
                 .setURL(userMap)
                 .setThumbnail('https://imgur.com/IvUHO31.png')
-                .setFooter('Made by the Attaché to the United Nations\nThis message will be auto-destructed in 15 seconds!', 'https://imgur.com/KLLkY2J.png');
+                .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 15 seconds!', 'https://imgur.com/KLLkY2J.png');
 
             message.channel.send(embed).then(msg => {msg.delete({ timeout: 15000 });});
-        } catch(err) {
-            console.log(err);
+        } catch(error) {
+            console.error(error);
             message.channel.send("No map assigned.").then(msg => {msg.delete({timeout: 9000});});
         }
         message.delete();

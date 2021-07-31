@@ -1,4 +1,4 @@
-const {exportFile} = require("../jsonManagement");
+const {exportFile} = require("../utils");
 cfg = require('./../config.json');
 module.exports = {
     name: 'reject',

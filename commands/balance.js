@@ -1,5 +1,5 @@
-const {ping} = require("../jsonManagement"), {findVertical} = require("../game"), cfg = require('./../config.json'),
-    discord = require('discord.js'), {getArray} = require("../sheet");
+const {ping} = require("../utils"), {findVertical} = require("../game"), cfg = require('./../config.json'),
+    discord = require('discord.js'), {getCellArray} = require("../sheet");
 module.exports = {
     name: 'balance',
     description: 'Command for getting the statistics about your state! Do NOT use in public channels.',
@@ -15,7 +15,7 @@ module.exports = {
         let nation = cfg.users[ping(message).id].nation;
 
         findVertical('Data', 'A').then(dataRow => {
-            getArray('A4', `AZ${dataRow - 1}`).then(array => {
+            getCellArray('A4', `AZ${dataRow - 1}`).then(array => {
                 //Backup values by default.
                 let rpCol = 36;
                 let tilesCol = 39;
@@ -44,11 +44,11 @@ module.exports = {
                             { name: 'Research points:', value: `${parseInt(element[rpCol].replace(",", ""))}RP`, inline: true},
                             { name: 'Tiles:', value: parseInt(element[tilesCol])},
                         )
-                        .setFooter('Made by the Attaché to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
+                        .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
 
                         message.channel.send(embed)
                         .then(msg => {
-                            msg.react('❌').catch(err => console.log(err));
+                            msg.react('❌').catch(err => console.error(err));
                             msg.awaitReactions(emojiFilter, { max: 1, time: 32000, errors: ['time']})
                                 .then(collected => {
                                     let react = collected.first();
@@ -59,11 +59,11 @@ module.exports = {
                                 .catch(() => {
                                     msg.delete();
                                 });
-                        }).catch(err => console.log(err));
+                        }).catch(err => console.error(err));
                     }
                 })
-            }).catch(err => console.log(err));
-        }).catch(err => console.log(err));
+            }).catch(err => console.error(err));
+        }).catch(err => console.error(err));
         //Cleaning original message.
         message.delete();
     }

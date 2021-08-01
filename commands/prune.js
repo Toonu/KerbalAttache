@@ -1,9 +1,10 @@
-const {perm} = require("../utils"), {log} = require("../game"), {prefix} = require('../config.json')
+const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json')
 
 module.exports = {
 	name: 'prune',
-	description: 'Command prunes amount of messages from channel. Set Old to true to enable deleting messages older than two weeks.',
-	usage: `${prefix}prune [AMOUNT] [OLD]`,
+	description: 'Command prunes N messages from channel.',
+	usage: `${prefix}prune [AMOUNT] [OLD]
+	Setting OLD option to true to enables deleting messages older than two weeks.`,
 	guildOnly: true,
 	args: 1,
 	cooldown: 5,
@@ -11,11 +12,7 @@ module.exports = {
 		//Parse returns NaN if NaN.
 		args[0] = parseInt(args[0]) + 1;
 		if (isNaN(args[0])) {
-			message.channel.send(`That doesn't seem to be a valid number. Canceling operation.`)
-				.then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-				.catch(networkError => console.error(networkError));
-
-			return message.delete().catch(error => console.error(error));
+			return messageHandler(message, new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
 		} else if (!perm(message, 1)) {
 			return message.delete().catch(error => console.error(error));
 		}
@@ -32,10 +29,7 @@ module.exports = {
 			await message.channel.bulkDelete(100, bool)
 				.then(() => args[0] -= 100)
 				.catch(error => {
-					console.error(error);
-					message.channel.send(error.message)
-						.then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-						.catch(networkError => console.error(networkError))
+					return messageHandler(message, error, true);
 				});
 		}
 
@@ -43,16 +37,11 @@ module.exports = {
 			message.channel.bulkDelete(args[0], bool)
 				.then(() => {
 					//Logs the operation.
-					message.channel.send(`Deleted ${args[0]} messages.`)
-						.then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-						.catch(networkError => console.error(networkError));
+					messageHandler(message, `Deleted ${args[0]} messages.`);
 					log(`Messages deleted: ${args[0]}`);
 				})
 				.catch(error => {
-				console.error(error);
-				message.channel.send(error.message)
-					.then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-					.catch(networkError => console.error(networkError));
+					messageHandler(message, error);
 			});
 		}
 	}

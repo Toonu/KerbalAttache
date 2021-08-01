@@ -1,49 +1,41 @@
-const {report} = require("../game"), cfg = require('../config.json'), js = require('../utils');
+const cfg = require('../config.json'), {messageHandler, report, perm, exportFile} = require("../utils");
 module.exports = {
     name: 'config',
-    description: 'Commands for configuring the bot settings. Write del instead of the value to remove the role value.',
+    description: 'Command for configuring the bot settings.',
     args: 2,
-    usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]
-OPTIONS:
-\`\`\`
-money       STRING  (Currency code such as EUR/USD string.)
-moneyLocale STRING  (Currency formatting such as fr-FR string.)
-sheet       STRING  (Sheet ID string.)
-era         INT     (Decimal integer, such as 50.)
-sname       STRING  (Server internal name string.)
-smainid     INT     (Server main announcements channel ID integer.)
-sbattleid   INT     (Server battle announcements channel ID integer.)
-sadmin      INT DEL (Server administrator roles integer.)
-sdev        INT DEL (Server developer roles integer.)
-sheadofstateSTRING  (Server Head of State role string.)
-main        STRING  (Sheet main tab string.)
-submissions STRING  (Sheet submissions tab string.)
-systems     STRING  (Sheet systems tab string.)
-\`\`\`
-`,
+    usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]\n
+    OPTIONS followed by new value:
+    \`\`\`
+    money           STRING  (Currency code such as EUR/USD string.)
+    moneyLocale     STRING  (Currency formatting such as fr-FR string.)
+    sheet           STRING  (Sheet ID string.)
+    era             INT     (Decimal integer, such as 50.)
+    sname           STRING  (Server internal name string.)
+    smainid         INT     (Server main announcements channel ID integer.)
+    sbattleid       INT     (Server battle announcements channel ID integer.)
+    sadmin          INT DEL (Server administrator roles integer.)
+    sdev            INT DEL (Server developer roles integer.)
+    sheadofstate    STRING  (Server Head of State role string.)
+    main            STRING  (Sheet main tab string.)
+    submissions     STRING  (Sheet submissions tab string.)
+    systems         STRING  (Sheet systems tab string.)
+    \`\`\`
+    Del option works only for role lists.
+    `,
     cooldown: 5,
     guildOnly: true,
     execute: function configBot(message, args) {
-        if (js.perm(message, 2)) {
+        if (perm(message, 2)) {
             if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0]) && isNaN(parseInt(args[1]))) {
-                message.channel.send('Not a proper ID/Number.')
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
-                return message.delete({timeout: 50}).catch(error => console.error(error));
+                return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
             } else if (args[0] === 'era') {
                 args[1] = parseInt(args[1]);
                 if (args[1] % 10 !== 0) {
-                    message.channel.send('Era must have zero at the end. Eg. 50, 60...')
-                        .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                        .catch(networkError => console.error(networkError));
-                    return message.delete({timeout: 50}).catch(error => console.error(error));
+                    return messageHandler(message, new Error('InvalidFormatException: Era must have zero at the end. Eg. 50, 60...'), true);
                 }
             } else if (args[0] === 'money') {
                 if (!new RegExp(/[A-Z]{3}/g).test(args[1])) {
-                    message.channel.send('Money must be using their abbreviation, not a symbol. Eg. EUR, USD...')
-                        .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                        .catch(networkError => console.error(networkError));
-                    return message.delete({timeout: 50}).catch(error => console.error(error));
+                    return messageHandler(message, new Error('InvalidFormatException: Money must be using their abbreviation, not a symbol. Eg. EUR, USD...'), true);
                 }
             }
 
@@ -82,18 +74,12 @@ systems     STRING  (Sheet systems tab string.)
                     }
                     break;
                 default:
-                    message.reply('Wrong configuration type argument.')
-                        .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                        .catch(networkError => console.error(networkError)).catch(error => console.error(error));
-                    return message.delete({timeout: 9000});
+                    return messageHandler(message, new Error('InvalidArgumentException: Non-existing configuration option argument.'), true);
             }
 
-            js.exportFile('config.json', cfg);
-            message.channel.send('Operation finished.')
-                .then(replyMessage => replyMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                .catch(networkError => console.error(networkError));
+            exportFile('config.json', cfg);
             report(message, `${message.author.username} changed configuration ${args[0]} to ${args[1]}`, this.name);
-            message.delete({timeout: 9000}).catch(error => console.error(error));
+            messageHandler(message, 'Operation finished.', true);
         }
     }
 };

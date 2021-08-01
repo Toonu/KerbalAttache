@@ -14,7 +14,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
      * Battle command prints results of a battle and removes all destroyed assets.
      */
     execute: async function battle(message, args) {
-        if (perm(message, 2, true)) {
+        if (perm(message, 2)) {
             let userMap = Array.from(message.mentions.users);
             let counter = -1;
             let regExp = new RegExp(/[0-9]/);

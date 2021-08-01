@@ -1,4 +1,4 @@
-const {prefix} = require('../config.json');
+const {prefix} = require('../config.json'), {messageHandler} = require("../utils");
 
 module.exports = {
 	name: 'ping',
@@ -7,10 +7,6 @@ module.exports = {
 	args: 0,
 	guildOnly: true,
 	execute(message) {
-		message.channel.send('Pong.')
-			.then(pongMessage => pongMessage.delete({timeout: 9000})
-				.catch(error => console.error(error)))
-			.catch(networkError => console.error(networkError));
-		message.delete().catch(error => console.error(error));
+		messageHandler(message, 'Pong.', true);
 	},
 };

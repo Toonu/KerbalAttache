@@ -1,7 +1,7 @@
-const {perm} = require("../utils"), {prefix} = require('../config.json'), {log} = require("../game");
+const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json');
 module.exports = {
 	name: 'spam',
-	description: 'Command for sending spam messages.',
+	description: 'Command for spamming messages.',
 	args: 1,
 	usage: `${prefix}spam [AMOUNT] [MESSAGE]`,
 	cooldown: 5,
@@ -10,22 +10,20 @@ module.exports = {
 		//Parsing returns NaN if NaN.
 		args[0] = parseInt(args[0]);
         if (isNaN(args[0])) {
-            message.reply('That doesn\'t seem to be a valid number. Canceling operation.')
-				.then(errorMessage => errorMessage.delete({timeout: 9000})
-					.catch(error => console.error(error)))
-				.catch(networkError => console.error(networkError));
+        	return messageHandler(message, new Error('InvalidTypeException: That does not seem to be a valid number. Canceling operation.'), true)
         } else if (perm(message, 1)) {
+        	//Spamming
 			let spamNumber;
 			for (spamNumber = 1; spamNumber < args[0]; spamNumber++) {
+				//Not using handler to not delete the message.
 				if (!args[1]) {
 					message.channel.send(spamNumber).catch(networkError => console.error(networkError));
 				} else {
 					message.channel.send(args[1]).catch(networkError => console.error(networkError));
 				}
 			}
-			message.channel.send('Done!').catch(networkError => console.error(networkError));
+			messageHandler(message, 'Done!', true)
 			log(`Spammed ${spamNumber + 1} of messages.`);
         }
-        message.delete().catch(error => console.error(error));
 	},
 };

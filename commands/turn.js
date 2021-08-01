@@ -1,6 +1,5 @@
-const cfg = require('./../config.json'), js = require('../utils'),
-    {setCellArray, getCellArray} = require("../sheet"), {report} = require("../game");
-const {toColumn} = require("../utils");
+const cfg = require('./../config.json'), {setCellArray, getCellArray, toColumn} = require("../sheet"),
+    {messageHandler, log, report, perm, exportFile} = require("../utils");
 module.exports = {
     name: 'turn',
     description: 'Command for finishing turn and updating the sheet data!',
@@ -9,15 +8,12 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message) {
-        if(!js.perm(message, 2, true)) return;
+        if(!perm(message, 2, true)) return;
 
         let data = await getCellArray('A1', 'AN', cfg.main, true)
             .catch(error => {
-                console.error(error);
-                return message.channel.send(error)
-                    .then(errorMessage => errorMessage.delete({timeout: 6000}).catch(error => console.error(error)))
-                    .catch(error => console.error(error));
-        });
+                return messageHandler(message, error, true);
+            });
 
         let accountColumn;
         let balanceColumn;
@@ -45,27 +41,19 @@ module.exports = {
 
         //Check
         if (!accountColumn || !balanceColumn || !rpColumn || !rpBudgetColumn || !coefficientColumn
-            || dataStart || dataEnd) {
-            message.channel.send(`Cancelling turn process. Not all sheet columns were found.`)
-                .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                .catch(networkError => console.error(networkError));
-            return console.error(`Cancelling turn process. Not all sheet columns were found.`);
+            || !dataStart || !dataEnd) {
+            return messageHandler(message, new Error(`NotFoundException: Cancelling turn process. Not all sheet columns were found.`), true);
         }
 
         //Accounting balance and research.
         for (let row = dataStart; row < dataEnd; row++) {
-            let account = data[accountColumn][row];
-            let balance = data[balanceColumn][row];
 
             //Check for number.
-            if (Number.isNaN(account) || Number.isNaN(balance)) {
-                message.channel.send(`Cancelling turn process. Not all accounting columns are numbers.`)
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
-                return console.error(`Cancelling turn process. Not all accounting columns are numbers.`);
+            if (Number.isNaN(data[accountColumn][row]) || Number.isNaN(data[balanceColumn][row])) {
+                return messageHandler(message, new Error(`InvalidTypeException: Cancelling turn process. Not all accounting columns contains numbers.`), true);
             }
 
-            account += balance;
+            data[accountColumn][row] += data[balanceColumn][row];
             let failsafe = false;
 
             //Going through saved config users to find respective data.
@@ -75,10 +63,7 @@ module.exports = {
 
                     //Check for number
                     if (Number.isNaN(researchBudget)) {
-                        message.channel.send(`Cancelling turn process. Not all research columns are numbers.`)
-                            .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                            .catch(networkError => console.error(networkError));
-                        return console.error(`Cancelling turn process. Not all research columns are numbers.`);
+                        return messageHandler(message, new Error(`InvalidTypeException: Cancelling turn process. Not all research columns contains numbers.`), true);
                     }
 
                     //Research coefficient calculation and updating.
@@ -97,38 +82,30 @@ module.exports = {
             }
             //Checks for missing config nations.
             if (!failsafe) {
-                message.channel.send(`Cancelling turn process. Not all states are accounted for.`)
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
-                return console.error(`Cancelling turn process. Not all states are accounted for.`);
+                return messageHandler(message, new Error(`NotFoundException: Cancelling turn process. Not all states are accounted for.`), true);
             }
         }
 
         //Adding turn data to the bottom of the sheet.
+        cfg.turn += 1;
         let today = new Date();
         data[accountColumn][dataEnd] = `${cfg.turn} ${message.author.username}`;
         data[accountColumn][dataEnd + 1] = `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
 
-        cfg.turn += 1;
-
         //Point of no return. Modifying real online data bellow.
-        js.exportFile('config.json', cfg);
+        exportFile('config.json', cfg);
 
         let accountColLetter = toColumn(accountColumn);
         let rpColLetter = toColumn(rpColumn);
         await setCellArray( `${accountColLetter}1`, [data[accountColumn]], cfg.main, true)
             .catch(error => {
-                message.channel.send(`Cancelling turn process. Some values has been modified and must be checked.`)
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
-                return console.error(error);
+                log(`Cancelling turn process. Some values has been modified and must be checked.`, true);
+                return messageHandler(message, error, true);
             });
         await setCellArray(`${rpColLetter}1`, [data[rpColumn], data[rpBudgetColumn], data[coefficientColumn]], cfg.main, true)
             .catch(error => {
-                message.channel.send(`Cancelling turn process. Some values has been modified and must be checked.`)
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
-                return console.error(error);
+                log(`Cancelling turn process. Some values has been modified and must be checked.`, true);
+                return messageHandler(message, error, true);
             });
 
         //Logging and announcing.

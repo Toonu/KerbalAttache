@@ -4,14 +4,14 @@ module.exports = {
     name: 'usercreate',
     description: 'Command for creating new user in the database.',
     args: 0,
-    usage: `${cfg.prefix}usercreate OPTION... [USER]...
+    usage: `${cfg.prefix}usercreate OPTION... [USER]...\n
     OPTIONS followed by new value:
-    
+    \`\`\`
     -n [nation] string
     -c [color] hex colour int
     -m [map] URL
     -d [demonym] string
-    -notes [notes] string`,
+    -notes [notes] string\`\`\``,
     cooldown: 5,
     guildOnly: true,
     execute: function usercreate(message, args) {
@@ -21,13 +21,13 @@ module.exports = {
         const user = message.mentions.users.first().id;
         if (perm(message, 2)) {
             try {
-                report(message, `${createUser(user)} created by <@${message.author.id}>`, 'usercreate');
+                createUser(user);
             } catch (error) {
                 return messageHandler(message, error, true);
             }
 
             //Uses useredit command to assign the values.
-            for (let i = 1; i < args.length; i++) {
+            for (let i = 0; i < args.length; i++) {
 
                 //Concentrates spaced values
                 let data = '';
@@ -43,7 +43,7 @@ module.exports = {
                     execute(message, [args[i], data.trim()], false);
                 }
             }
-
+            report(message, `Nation ${cfg.users[user].nation} was created for user ${message.mentions.users.first().username} created by <@${message.author.id}>`, 'usercreate');
             messageHandler(message, 'User was created.', true);
         }
     }

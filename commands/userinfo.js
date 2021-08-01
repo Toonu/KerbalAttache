@@ -4,7 +4,7 @@ const cfg = require('../config.json'), {createUser, ping, messageHandler, report
     Discord = require('discord.js');
 module.exports = {
 	name: 'userinfo',
-	description: 'Command shows user information. Other user information can be used only by moderator.',
+	description: 'Command shows user information.',
 	args: 0,
 	usage: `${cfg.prefix}userinfo [USER]`,
 	cooldown: 5,

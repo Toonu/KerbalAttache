@@ -1,4 +1,4 @@
-const {ping} = require("../utils"), {getCellArray} = require("../sheet"),
+const {ping, messageHandler} = require("../utils"), {getCellArray} = require("../sheet"),
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
@@ -10,10 +10,7 @@ module.exports = {
     execute: async function sub(message, args) {
         let submissionsData = await getCellArray('A1', 'AA', cfg.submissions)
             .catch(error => {
-                console.error(error);
-                return message.channel.send(error)
-                    .then(errorMessage => errorMessage.delete({timeout: 6000}).catch(error => console.error(error)))
-                    .catch(error => console.error(error));
+                return messageHandler(message, error, true);
             });
 
         //Checks if the message has ping to determine searched nation.

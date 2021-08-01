@@ -1,19 +1,18 @@
-const cfg = require('./../config.json'), {exportFile, createUser, perm, ping, report, messageHandler} = require('../utils');
+const cfg = require('./../config.json'), {exportFile, perm, ping, report, messageHandler} = require('../utils');
 
 module.exports = {
     name: 'useredit',
-    description: 'Command for editing user data! Your notes are always editable even without permissions. ' +
+    description: 'Command for editing user data. Your notes are always editable even without clearance. ' +
         'Write del instead of data to remove the data.',
     args: 2,
-    usage: `${cfg.prefix}useredit [OPTION] [DATA / DEL] [USER]
-    
-OPTIONS:
-
--n [nation] string
--c [color] hex colour int
--m [map] URL
--d [demonym] string
--notes [notes] string\`,`,
+    usage: `${cfg.prefix}useredit [OPTION] [DATA / DEL] [USER]\n
+    OPTIONS followed by new value:
+    \`\`\`
+    -n [nation] string
+    -c [color] hex colour int
+    -m [map] URL
+    -d [demonym] string
+    -notes [notes] string\`\`\``,
     cooldown: 5,
     guildOnly: true,
     /**
@@ -32,7 +31,8 @@ OPTIONS:
             user = ping(message).id;
             //Creating non-existent user.
             if (!cfg.users[user]) {
-                report(message, `${createUser(user)} created by <@${message.author.id}>`, 'useredit');
+                // noinspection ExceptionCaughtLocallyJS
+                throw new Error('User does not exist! Please create user first!');
             }
         } catch (error) {
             return messageHandler(message, error, true);

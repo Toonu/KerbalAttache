@@ -1,5 +1,5 @@
 const {prefix} = require('./config.json'), Discord = require('discord.js'),
-fs = require('fs'), fn = require("./sheet"), {log, perm} = require("./utils");
+fs = require('fs'), {init} = require("./sheet"), {log, perm, messageHandler} = require("./utils");
 client = new Discord.Client();
 
 //const {CLIENT_TOKEN} = process.env;
@@ -19,7 +19,7 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	log(`Deployed and ready!`);
 	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => console.error(error));
-	fn.init();
+	init();
 });
 
 client.on('message', message => {
@@ -31,26 +31,18 @@ client.on('message', message => {
 
 	//Finds the command.
 	const command = client.commands.get(args.shift().toLowerCase());
-    if (!command) {
-        message.channel.send('Not a command!')
-			.then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
-			.catch(networkError => console.error(networkError));
-        return message.delete().catch(error => console.error(error));
-    }
+
+	if (!command) return messageHandler(message, 'Not a command!', true);
 
 	//Checking for DMs.
 	if (command.guildOnly && message.channel.type === 'dm') {
-		message.reply('I can\'t execute this command inside DMs!').catch(networkError => console.error(networkError));
-		return message.delete().catch(error => console.error(error));
+		return messageHandler(message, 'I cannot execute this command inside DMs!', true);
     }
 
 	//Checking for arguments.
 	if (command.args && (!args.length || command.args > args.length)) {
-		message.channel.send(`You didn't provide all required arguments, ${message.author.username}!
-The proper usage would be:\n${command.usage}\n\nFor more information, type ${prefix}help ${command.name}.`)
-			.then(helpMessage => helpMessage.delete({timeout: 20000}).catch(error => console.error(error)))
-			.catch(networkError => console.error(networkError));
-		return message.delete().catch(error => console.error(error));
+		return messageHandler(message, `You didn't provide all required arguments, ${message.author.username}!
+The proper usage would be:\n${command.usage}\n\nFor more information, type ${prefix}help ${command.name}.`, true, 20000);
 	}
 
 	//Checking for cool down.
@@ -67,15 +59,10 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 
 		if (now < expirationTime && message.author.id !== '319919565079576576') {
 			const timeLeft = (expirationTime - now) / 1000;
-			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-				.then(errorMessage => {
-					errorMessage.delete({timeout: 10000}).catch(error => console.error(error));
-					message.delete().catch(error => console.error(error));
-				})
-				.catch(networkError => log.error(networkError));
+			messageHandler(message, `Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`, true);
 		}
 	}
-	if (!perm(message, 1)) {
+	if (!perm(message, 1, false)) {
 		timestamps.set(message.author.id, now);
 	}
 	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
@@ -89,11 +76,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 		}
 		command.execute(message, args);
 	} catch (error) {
-		console.error(error);
-		message.reply('There was an error trying to execute that command!')
-			.then(errorMessage => errorMessage.delete({timeout: 10000}).catch(error => console.error(error)))
-			.catch(networkError => console.error(networkError));
-		message.delete().catch(error => console.error(error));
+		messageHandler(message, 'There was an error trying to execute that command!');
+		messageHandler(message, error, true);
 	}
 });
 
@@ -107,32 +91,28 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * buy
  * reject
  * tech
- * tiles
  * trade
  * game
  *
- * XXX
+ * YYY
  *
  * config
  * help
  * map
  * ping
  * prune
- * reload
  * spam
  * sub
+ * tiles
  * turn
  * usercreate
+ * userdel
+ * useredit
+ * userinfo
  *
  * index
  * sheet
  * utils
- *
- * YYY
- *
- * userdel
- * useredit
- * userinfo
 **/
 
 

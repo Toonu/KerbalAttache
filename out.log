@@ -1,23 +1,15 @@
-[2021-8-1 18:33:8 UTC] Deployed and ready!
-[2021-8-1 18:33:10 UTC] Server Nations of Unity (Toonu): .usercreate -n Aki -c fffffd -d Ak -notes bla bla bla -m https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing <@!356065937318871041>
-[2021-8-1 18:33:10 UTC] Nation undefined created for user <@356065937318871041> created by <@319919565079576576>
-[2021-8-1 18:36:46 UTC] Server Nations of Unity (Toonu): .help usercreate
-[2021-8-1 18:36:55 UTC] Server Nations of Unity (Toonu): .usercreate -n Aki -c fffffd -d Ak -notes bla bla bla -m https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing <@!356065937318871041>
-[2021-8-1 18:36:55 UTC] User already exists!
-Error: User already exists!
-    at createUser (/Users/toonu/GitProjects/KerbalAttache/utils.js:16:15)
-    at Object.usercreate [as execute] (/Users/toonu/GitProjects/KerbalAttache/commands/usercreate.js:24:36)
-    at Client.<anonymous> (/Users/toonu/GitProjects/KerbalAttache/index.js:90:11)
-    at Client.emit (events.js:315:20)
-    at MessageCreateAction.handle (/Users/toonu/GitProjects/KerbalAttache/node_modules/discord.js/src/client/actions/MessageCreate.js:31:14)
-    at Object.module.exports [as MESSAGE_CREATE] (/Users/toonu/GitProjects/KerbalAttache/node_modules/discord.js/src/client/websocket/handlers/MESSAGE_CREATE.js:4:32)
-    at WebSocketManager.handlePacket (/Users/toonu/GitProjects/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:384:31)
-    at WebSocketShard.onPacket (/Users/toonu/GitProjects/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:444:22)
-    at WebSocketShard.onMessage (/Users/toonu/GitProjects/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
-    at WebSocket.onMessage (/Users/toonu/GitProjects/KerbalAttache/node_modules/ws/lib/event-target.js:132:16)
-[2021-8-1 18:37:1 UTC] Server Nations of Unity (Toonu): .userdel <@!356065937318871041>
-[2021-8-1 18:37:1 UTC] undefined deleted user <@Aki>!
-[2021-8-1 18:37:9 UTC] Server Nations of Unity (Toonu): .usercreate -n Aki -c fffffd -d Ak -notes bla bla bla -m https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing <@!356065937318871041>
-[2021-8-1 18:37:9 UTC] Nation undefined created for user <@356065937318871041> created by <@319919565079576576>
-[2021-8-1 18:37:13 UTC] Server Nations of Unity (Toonu): .userdel <@!356065937318871041>
-[2021-8-1 18:37:13 UTC] undefined deleted user <@Aki>!
+[0m[0K[?25lDebugger listen[0K[9G[?25h[?25lDebugger listening on ws://127.0.0.1:50298/fddb587b-f3da-4419-9643-7302f102ec7c[0K
+For help, see: https://nodejs.org/en/docs/inspector[0K
+[0K[?25hDebugger attached.[0K[?25l
+[0K[?25h[LOG][2021-8-1 23:55:26 UTC] Deployed and ready![0K[?25l
+[0K[?25h[LOG][2021-8-1 23:55:29 UTC] Server Nations of Unity (Toonu): .tiles 2 <@!319919565079576576>[0K[?25l
+[0K[?25hWaiting for the debugger to disconnect...[0K[?25l
+D:\GitProjects\KerbalAttache\commands\tiles.js:42[0K
+            report(message, `Tiles set to ${data[column][row]} for ${cfg.users[user].nation} by <@${message.author.id}>[0K!
+`, this.name);[0K
+            ^[0K
+[0K
+ReferenceError: report is not defined[0K
+    at Object.tiles [as execute] (D:\GitProjects\KerbalAttache\commands\tiles.js:42:13)[0K
+[0;37;90m    at processTicksAndRejections (node:internal/process/task_queues:93:5)[0m[0K
+[0K[?25h

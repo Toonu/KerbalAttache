@@ -46,7 +46,7 @@ exports.getCell = function getCell(cell, sheetTab) {
  */
 exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
-        if (!isCoordinate(X) || !new RegExp(/[A-Z]+/g).test(Y)) {
+        if (!isCoordinate(X) || !isCoordinate(Y, true)) {
             return reject('Coordinate X is not correct.')
         }
 
@@ -120,19 +120,21 @@ exports.setCell = function setCell(coordinate, value, sheetTab) {
  * @param sheetTab              String sheet sheetTab name.
  * @return {Promise<String>}    Returns String with success or error message reject..
  */
-exports.setCellArray = function setCellArray(coordinate, values, sheetTab) {
+exports.setCellArray = function setCellArray(coordinate, values, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
         gs.spreadsheets.values.batchUpdate({
             spreadsheetId: cfg.sheet,
             resource: {
                 valueInputOption: 'RAW',
+                responseValueRenderOption: 'UNFORMATTED_VALUE',
                 data: {
                     "range": `${sheetTab}!${coordinate}`,
-                    "majorDimension": "ROWS",
+                    "majorDimension": dominantColumn ? 'COLUMNS' : 'ROWS',
                     "values": values,
                 }
             },
-        }).then(() => resolve('Operation successful.')).catch(error => reject(error.message));
+        }).then(() => resolve('Operation successful.'))
+            .catch(error => reject(error.message));
     });
 }
 
@@ -140,85 +142,12 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab) {
 /**
  * Function checks if the coordinate is in correct format.
  * @param coordinate    Coordinate to check.
+ * @param ignoreNumber  Bool that allows ignoring coordinate number.
  * @return {boolean}    Returns true/false if correct/wrong.
  */
-function isCoordinate(coordinate) {
+function isCoordinate(coordinate, ignoreNumber = false) {
+    if (ignoreNumber) {
+        return new RegExp(/[A-Z]+/g).test(coordinate);
+    }
     return new RegExp(/[A-Z]+[0-9]+/g).test(coordinate);
-}
-
-
-/**
- * Function changes column number into sheet coordinate.
- * @param num           Number to convert
- * @return {string}     Sheet coordinate String.
- */
-exports.toCoordinate = function toCoordinate(num) {
-    num = parseInt(num);
-
-    if (num > 298) {
-        return 'I'+String.fromCharCode(num - 234);
-    } else if (num > 272) {
-        return 'H'+String.fromCharCode(num - 208);
-    } else if (num > 246) {
-        return 'G'+String.fromCharCode(num - 182);
-    } else if (num > 220) {
-        return 'F'+String.fromCharCode(num - 156);
-    } else if (num > 194) {
-        return 'E'+String.fromCharCode(num - 130);
-    } else if (num > 168) {
-        return 'D'+String.fromCharCode(num - 104);
-    } else if (num > 142) {
-        return 'C'+String.fromCharCode(num - 78);
-    } else if (num > 116) {
-        return 'B'+String.fromCharCode(num - 52);
-    } else if (num > 90) {
-        return 'A'+String.fromCharCode(num - 26);
-    } else {
-        return String.fromCharCode(num);
-    }
-}
-
-
-/**
- * Function changes column coordinate into number.
- * @param coordinate    Coordinate to convert.
- * @return {[number, number]|[number, number]}
- */
-exports.fromCoordinate = function fromCoordinate(coordinate) {
-    let letters = 0;
-
-    if (coordinate.charCodeAt(1) > 64) {
-        letters += coordinate.charCodeAt(1);
-    } else {
-        return [coordinate.charCodeAt(0), parseInt(coordinate.substring(1, coordinate.length))];
-    }
-
-    let numbers = '';
-    for (let i = 0; i < coordinate.length; i++) {
-        if (coordinate.charCodeAt(i) < 65) {
-            numbers += coordinate.charAt(i);
-        }
-    }
-
-    if (coordinate.startsWith('I')) {
-        letters += 234;
-    } else if (coordinate.startsWith('H')) {
-        letters += 208;
-    } else if (coordinate.startsWith('G')) {
-        letters += 182;
-    } else if (coordinate.startsWith('F')) {
-        letters += 156;
-    } else if (coordinate.startsWith('E')) {
-        letters += 130;
-    } else if (coordinate.startsWith('D')) {
-        letters += 104;
-    } else if (coordinate.startsWith('C')) {
-        letters += 78;
-    } else if (coordinate.startsWith('B')) {
-        letters += 52;
-    } else if (coordinate.startsWith('A')) {
-        letters += 26;
-    }
-
-    return [letters, parseInt(numbers)];
 }

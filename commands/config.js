@@ -15,6 +15,7 @@ smainid     INT     (Server main announcements channel ID integer.)
 sbattleid   INT     (Server battle announcements channel ID integer.)
 sadmin      INT DEL (Server administrator roles integer.)
 sdev        INT DEL (Server developer roles integer.)
+sheadofstateSTRING  (Server Head of State role string.)
 main        STRING  (Sheet main tab string.)
 submissions STRING  (Sheet submissions tab string.)
 systems     STRING  (Sheet systems tab string.)
@@ -24,7 +25,7 @@ systems     STRING  (Sheet systems tab string.)
     guildOnly: true,
     execute: function configBot(message, args) {
         if (js.perm(message, 2)) {
-            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale'].includes(args[0]) && isNaN(parseInt(args[1]))) {
+            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0]) && isNaN(parseInt(args[1]))) {
                 message.channel.send('Not a proper ID/Number.')
                     .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
                     .catch(networkError => console.error(networkError));
@@ -59,6 +60,7 @@ systems     STRING  (Sheet systems tab string.)
                 case 'sname':
                 case 'smainid':
                 case 'sbattleid':
+                case 'sheadofstate':
                     cfg.servers[message.guild.id][args[0].substring(1)] = args[1];
                     break;
                 case 'sadmin':

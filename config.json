@@ -1,6 +1,6 @@
 {
     "prefix": ".",
-    "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
+    "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
     "moneyLocale": "fr-FR",
     "era": 50,
@@ -14,6 +14,7 @@
             "mainid": "770921356111773698",
             "battleid": "572807672055988234",
             "announcements": "685907863184474124",
+            "headofstate": "519315646606082052",
             "administrators": [
                 "859820323544367145",
                 "470260541785636865"
@@ -28,7 +29,7 @@
             "nation": "Iconia",
             "demonym": "Iconian",
             "color": "0065bd",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
             "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
         },
@@ -44,7 +45,7 @@
             "nation": "EE",
             "demonym": "E&E",
             "color": "700300",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " "
         },
@@ -52,7 +53,7 @@
             "nation": "Kroviska",
             "demonym": "Kroviskan",
             "color": "7f0020",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing",
             "notes": " "
         },
@@ -60,7 +61,7 @@
             "nation": "Ofeliya",
             "demonym": "Ofeliyan",
             "color": "ff8500",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
             "notes": " "
         },
@@ -68,7 +69,7 @@
             "nation": "Magnella",
             "demonym": "Magnellan",
             "color": "5510ff",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing",
             "notes": " "
         },
@@ -76,7 +77,7 @@
             "nation": "Commonwealth",
             "demonym": "Commonwealth",
             "color": "2b3990",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
             "notes": " "
         },
@@ -84,7 +85,7 @@
             "nation": "Velka",
             "demonym": "Velkan",
             "color": "94e02d",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " "
         },
@@ -92,7 +93,7 @@
             "nation": "Sharkion",
             "demonym": "Shark",
             "color": "00ff21",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " "
         },
@@ -100,7 +101,7 @@
             "nation": "GL",
             "demonym": "Gaia-Lucian",
             "color": "ffc90e",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
             "notes": " "
         },
@@ -108,7 +109,7 @@
             "nation": "TSR",
             "demonym": "Starks",
             "color": "aa4545",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
             "notes": " "
         },
@@ -116,7 +117,7 @@
             "nation": "Elbe",
             "demonym": "Elbian",
             "color": "3d6395",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/16OAitE9Ip8iznwAryQFJ2NMpbzDxYRoi/view?usp=sharing",
             "notes": " "
         }

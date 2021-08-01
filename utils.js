@@ -36,6 +36,18 @@ exports.exportFile = function exportFile(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));
 };
 
+exports.toColumn = function toColumn(num) {
+    let column = '';
+    let preceding = 0;
+    while (num > 25) {
+        num -= 26;
+        preceding++;
+    }
+    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
+    column += String.fromCharCode(65 + num);
+    return column;
+};
+
 /**
  * Function checks message author permission against the level of permission needed.
  * @param message       Message checked.

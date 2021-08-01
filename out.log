@@ -1,5 +1,33 @@
-Debugger listening on ws://127.0.0.1:57818/f4f235ae-f62b-4cfd-86af-bb408e083687
-For help, see: https://nodejs.org/en/docs/inspector
-Debugger attached.
-[2021-7-31 23:29:37 UTC] Deployed and ready!
-[2021-7-31 23:29:41 UTC] Server Nations of Unity (Toonu): .turn
+[2021-8-1 14:35:23 UTC] Deployed and ready!
+[2021-8-1 14:35:23 UTC] Server Nations of Unity (Toonu): .prune 50
+[2021-8-1 14:35:23 UTC] Messages deleted: 51
+[2021-8-1 14:35:30 UTC] Server Nations of Unity (Toonu): .prune 20
+[2021-8-1 14:35:30 UTC] Messages deleted: 21
+[2021-8-1 14:35:47 UTC] Server Nations of Unity (Toonu): .prune 30
+[2021-8-1 14:35:47 UTC] Messages deleted: 31
+[2021-8-1 14:35:56 UTC] Server Nations of Unity (Toonu): .prune 16
+[2021-8-1 14:35:56 UTC] Messages deleted: 17
+DiscordAPIError: Unknown Message
+    at RequestHandler.execute (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/rest/RequestHandler.js:154:13)
+[90m    at processTicksAndRejections (internal/process/task_queues.js:93:5)[39m
+    at async RequestHandler.push (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/rest/RequestHandler.js:39:14)
+    at async MessageManager.delete (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/managers/MessageManager.js:126:5) {
+  method: [32m'delete'[39m,
+  path: [32m'/channels/770921356111773698/messages/871370641893388330'[39m,
+  code: [33m10008[39m,
+  httpStatus: [33m404[39m
+}
+[2021-8-1 14:36:2 UTC] Server Nations of Unity (Toonu): .prune 16
+[2021-8-1 14:36:3 UTC] Messages deleted: 17
+DiscordAPIError: Unknown Message
+    at RequestHandler.execute (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/rest/RequestHandler.js:154:13)
+[90m    at processTicksAndRejections (internal/process/task_queues.js:93:5)[39m
+    at async RequestHandler.push (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/rest/RequestHandler.js:39:14)
+    at async MessageManager.delete (/Users/toonu/GitProjects/KerbalAttache/node_modules/[4mdiscord.js[24m/src/managers/MessageManager.js:126:5) {
+  method: [32m'delete'[39m,
+  path: [32m'/channels/770921356111773698/messages/871370679403044884'[39m,
+  code: [33m10008[39m,
+  httpStatus: [33m404[39m
+}
+[2021-8-1 14:36:20 UTC] Server Nations of Unity (Toonu): .prune 4
+[2021-8-1 14:36:20 UTC] Messages deleted: 5

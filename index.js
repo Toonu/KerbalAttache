@@ -109,9 +109,7 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * tech
  * tiles
  * trade
- * turn
  * game
- * sheet - to and fromCoordinate
  *
  * XXX
  *
@@ -123,6 +121,7 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * reload
  * spam
  * sub
+ * turn
  * usercreate
  * userdel
  * useredit
@@ -130,6 +129,7 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  *
  * index
  * utils
+ * sheet
 **/
 
 

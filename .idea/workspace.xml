@@ -29,15 +29,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Fixing negative research budget and 1000+ RPs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/battle.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/battle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tiles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" afterPath="$PROJECT_DIR$/out.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,6 +143,7 @@
       <workItem from="1626069753216" duration="196000" />
       <workItem from="1627573542664" duration="8749000" />
       <workItem from="1627629038494" duration="8786000" />
+      <workItem from="1627811998026" duration="7758000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -374,23 +373,20 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/config.js</url>
-          <line>91</line>
-          <properties lambdaOrdinal="-1" />
+          <line>93</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/config.js</url>
-          <line>65</line>
-          <properties lambdaOrdinal="-1" />
+          <line>67</line>
           <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/turn.js</url>
-          <line>69</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="NodeJSConfigurationType">
+        <watch expression="cfg.users" language="JavaScript" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

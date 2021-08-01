@@ -1,5 +1,5 @@
-const cfg = require('./../config.json'), {exportFile, createUser, perm, ping} = require("../utils"),
-    {report} = require("../game");
+const cfg = require('./../config.json'), {exportFile, createUser, perm, ping, report, messageHandler} = require('../utils');
+
 module.exports = {
     name: 'useredit',
     description: 'Command for editing user data! Your notes are always editable even without permissions. ' +
@@ -16,9 +16,27 @@ OPTIONS:
 -notes [notes] string\`,`,
     cooldown: 5,
     guildOnly: true,
-    execute: function useredit(message, args, msg = true) {
-        let permission = perm(message, 2, msg);
-        let user = ping(message).id;
+    /**
+     * Function edits user data in the configuration.
+     * @param message to gather information from.
+     * @param {Array} args command arguments.
+     * @param showMessage if reply messages should be shown.
+     * @return {void|*}
+     */
+    execute: function useredit(message, args, showMessage = true) {
+        let permission;
+        let user;
+
+        try {
+            permission = perm(message, 2, showMessage);
+            user = ping(message).id;
+            //Creating non-existent user.
+            if (!cfg.users[user]) {
+                report(message, `${createUser(user)} created by <@${message.author.id}>`, 'useredit');
+            }
+        } catch (error) {
+            return messageHandler(message, error, true);
+        }
 
         let data = args[1];
         //Collects all data arguments and merges them together.
@@ -32,10 +50,6 @@ OPTIONS:
             }
         }
 
-        if (cfg.users[user] === undefined) {
-            report(message, `${createUser(user)} created by <@${message.author.id}>`, this.name);
-            useredit(message, args);
-        }
 
         if (args[0] === '-notes') {
             cfg.users[user].notes = data;
@@ -45,45 +59,29 @@ OPTIONS:
             cfg.users[user].demonym = data;
         } else if (args[0] === '-c' && permission) {
             if (data.length !== 6) {
-                if (msg) message.delete().catch(error => console.error(error));
-                return message.channel.send('Argument is not a color hex number. Modification failed.')
-                    .then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a color hex number. Modification failed.'), showMessage);
             }
             cfg.users[user].color = data.toLowerCase();
         } else if (args[0] === '-m' && permission) {
             if (new RegExp(/https:\/\/drive.google\.com\/file\/d\/.+/).test(args[1])) {
                 cfg.users[user].map = data;
             } else {
-                if (msg) message.delete().catch(error => console.error(error));
-                return message.channel.send('Argument is not a map URL link. Modification failed.')
-                    .then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a map URL link. Modification failed.'), showMessage);
             }
         } else if (args[0] === '-cf' && permission) {
             data = parseInt(data);
             if (isNaN(data)) {
-                if (msg) message.delete().catch(error => console.error(error));
-                return message.channel.send('Argument is not a number. Modification failed.')
-                    .then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-                    .catch(networkError => console.error(networkError));
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a number. Modification failed.'), showMessage);
             }
             cfg.users[user].cf = data;
         } else {
-            if (msg) message.delete()
-                .catch(error => console.error(error));
-            return message.channel.send('Modification failed either due to insufficient permissions or wrong attribute name')
-                .then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-                .catch(networkError => console.error(networkError));
+            return messageHandler(message, new Error('InvalidArgumentException: Modification failed either due to insufficient permissions or wrong attribute name'), showMessage);
         }
 
-        exportFile("config.json", cfg);
-        if (msg) {
-            message.channel.send('User property modified.')
-                .then(msg => msg.delete({timeout: 9000}).catch(error => console.error(error)))
-                .catch(networkError => console.error(networkError));
-            message.delete().catch(error => console.error(error));
-            report(message, `<@${message.author.id}> modified <@${user}>'s ${args[0]} to ${data}.`, this.name)
+        exportFile('config.json', cfg);
+        if (showMessage) {
+            report(message, `<@${message.author.id}> modified <@${user}>'s ${args[0]} to ${data}.`, this.name);
+            messageHandler(message, 'User property modified.', showMessage);
         }
     }
 };

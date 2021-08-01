@@ -1,16 +1,19 @@
 const fs = require('fs'), cfg = require('./config.json'), js = require('./utils');
+
 /**
  * Function creates new user of id with attributes of nation, color, sheet and map. Returns true if the user was created successfully.
- * @param id            Discord id
- * @param nationIn      Nation String name
- * @param demonymIn     Nation demonym
- * @param colorIn       Color String hex number
- * @param map           Map String link
- * @return String response of attributes of created user.
+ * @param {string} id Discord id
+ * @param {string} nationIn      Nation String name
+ * @param {string} demonymIn     Nation demonym
+ * @param {string} colorIn       Color String hex number
+ * @param {string} map           Map String link
+ * @return {string} response of attributes of created user or error message.
  */
 exports.createUser = function createUser(id, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe", map = 'https://discord.com/') {
-    if (cfg.users[id] !== undefined) {
-        return 'User already exists!';
+    if (!id) {
+        throw new Error('Id is undefined!') ;
+    } else if (cfg.users[id]) {
+        throw new Error('User already exists!');
     }
 
     //Adds user to the json file.
@@ -36,26 +39,16 @@ exports.exportFile = function exportFile(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 4));
 };
 
-exports.toColumn = function toColumn(num) {
-    let column = '';
-    let preceding = 0;
-    while (num > 25) {
-        num -= 26;
-        preceding++;
-    }
-    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
-    column += String.fromCharCode(65 + num);
-    return column;
-};
-
 /**
- * Function checks message author permission against the level of permission needed.
- * @param message       Message checked.
- * @param level         Permission level.
- * @param showMessage = true           Msg boolean specifies if message should be written in case of not high enough clearance.
- * @returns {boolean}   True if has permission, else False.
+ * Function checks message author clearance level against the defined level.
+ * @param {module:"discord.js".Message} message Message checked.
+ * @param {number} level Clearance level. 1 for developer, 2 for administrator.
+ * @param {boolean} showMessage If rejecting message should be written.
+ * @returns {boolean} True if author has permission, else False.
+ * @throws {Error} Invalid Argument Exception: message or level is undefined.
  */
 exports.perm = function perm(message, level, showMessage = true) {
+    if (!message || !level || isNaN(level)) throw new Error('Invalid Argument Exception: Message or level is undefined.');
     if (message.channel.type === 'dm') return true;
 
     let clearance = false;
@@ -79,14 +72,20 @@ exports.perm = function perm(message, level, showMessage = true) {
 };
 
 /**
- * Function checks if message contains a user ping and the message originates from the moderator. If there is, assigns him as the message nation, else assigns the message author.
- * @param message   Message to analyse.
- * @param level     Optional argument to check the clearance level. Defaults to administrator.
+ * Function checks if message contains a user ping and the message originates from the moderator.
+ * <br>&nbsp;&nbsp;
+ * <br>If there is, returns the pinged user, alternatively returns the message author.
+ * @param message {module:"discord.js".Message} Message to analyse.
+ * @param level {number} Optional argument to check the clearance level. Defaults to administrator.
+ * @return {module:"discord.js".User} Returns message author or pinged user.
+ * @throws {Error} InvalidArgumentException: message is undefined.
  */
 exports.ping = function ping(message, level = 2) {
+    if (!message) throw new Error('Invalid Argument Exception: Message is undefined.')
+
     let nation = message.author;
 
-    if (message.mentions.users.first() !== undefined) {
+    if (message.mentions.users.first()) {
         if (js.perm(message, level, false)) {
             nation = message.mentions.users.first();
         } else {
@@ -99,3 +98,52 @@ exports.ping = function ping(message, level = 2) {
     return nation;
 }
 
+/**
+ * Function reports an error or a message to the console and the Discord channel of the original message.
+ * <br>&nbsp;&nbsp;
+ * <br>Logs into the console if the content is Error.
+ * @param {module:"discord.js".Message} message Message for channel to reply in.
+ * @param content {string || module:"discord.js".MessageEmbed || Error} Reported object.
+ * @param {boolean} deleteMessage If the message should be deleted.
+ * @param timer {number} Timeout for the posted message.
+ */
+exports.messageHandler = function messageHandler(message, content, deleteMessage = false,timer = 10000) {
+    if (content instanceof Error) {
+            js.log(`${content.message}\n${content.stack}`);
+        content = content.message;
+    }
+    message.channel.send(content)
+        .then(msg => msg.delete({timeout: timer}).catch(error => js.log(error, true)))
+        .catch(networkError => js.log(networkError, true));
+    if (deleteMessage) message.delete().catch(error => js.log(error, true));
+}
+
+
+/**
+ * Function logs a message to the console with timestamp.
+ * @param {string} report Message to log.
+ * @param {boolean} erroneous is true if console.error is used.
+ */
+exports.log = function log(report, erroneous = false) {
+    let today = new Date();
+    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+    if (erroneous) {
+        console.error(`[${dateTime} UTC] ${report}`);
+    } else {
+        console.log(`[${dateTime} UTC] ${report}`);
+    }
+}
+
+/**
+ * Function reports information into the moderator channel and logs it into the console.
+ * @param {module:"discord.js".Message} message specifies server to search main channel in.
+ * @param {string} report    message to report.
+ * @param {string} command   command name the report originated from.
+ */
+exports.report = function report(message, report, command = '') {
+    let today = new Date();
+    let dateTime = `${today.getUTCFullYear()}.${(today.getUTCMonth() < 10 ? '0' : '') + (today.getUTCMonth() + 1)}.${(today.getUTCDate() < 10 ? '0' : '') + today.getUTCDate()} ${today.getUTCHours()}:${(today.getUTCMinutes() < 10 ? '0' : '') + today.getUTCMinutes()}:${(today.getUTCSeconds() < 10 ? '0' : '') + today.getUTCSeconds()}`;
+    js.log(report);
+    message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${report}`)
+        .catch(networkError => console.error(networkError));
+}

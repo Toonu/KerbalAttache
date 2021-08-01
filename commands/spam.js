@@ -17,7 +17,7 @@ module.exports = {
         } else if (perm(message, 1)) {
 			let spamNumber;
 			for (spamNumber = 1; spamNumber < args[0]; spamNumber++) {
-				if (args[1] === undefined) {
+				if (!args[1]) {
 					message.channel.send(spamNumber).catch(networkError => console.error(networkError));
 				} else {
 					message.channel.send(args[1]).catch(networkError => console.error(networkError));

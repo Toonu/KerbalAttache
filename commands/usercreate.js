@@ -1,11 +1,10 @@
-const {prefix} = require("../config.json"), {report} = require("../game"), {createUser, perm} = require("../utils"),
+const cfg = require('../config.json'), {report, createUser, perm, messageHandler} = require('../utils'),
     {execute} = require('../commands/useredit');
-const cfg = require("./../config.json");
 module.exports = {
     name: 'usercreate',
     description: 'Command for creating new user in the database.',
     args: 0,
-    usage: `${prefix}usercreate OPTION... [USER]...
+    usage: `${cfg.prefix}usercreate OPTION... [USER]...
     OPTIONS followed by new value:
     
     -n [nation] string
@@ -16,15 +15,16 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: function usercreate(message, args) {
-        const user = message.mentions.users.first();
-        if (user === undefined) {
-            message.channel.send('No user specified, please retry. ')
-                .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error))
-                .catch(networkError => console.error(networkError)));
-            return message.delete({timeout: 9000}).catch(error => console.error(error));
+        if (message.mentions.users.size === 0) {
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true);
         }
+        const user = message.mentions.users.first().id;
         if (perm(message, 2)) {
-            let result = createUser(user.id);
+            try {
+                report(message, `${createUser(user)} created by <@${message.author.id}>`, 'usercreate');
+            } catch (error) {
+                return messageHandler(message, error, true);
+            }
 
             //Uses useredit command to assign the values.
             for (let i = 1; i < args.length; i++) {
@@ -44,17 +44,7 @@ module.exports = {
                 }
             }
 
-            if (result.startsWith('Nation')) {
-                report(message, `Nation ${cfg.users[user.id].nation} was created by <@${message.author.id}>`, this.name);
-                message.channel.send('User created.')
-                    .then(successMessage => successMessage.delete({timeout: 9000}).catch(error => console.error(error))
-                    .catch(networkError => console.error(networkError)));
-            } else {
-                message.channel.send(result)
-                    .then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error))
-                    .catch(networkError => console.error(networkError)));
-            }
-            message.delete().catch(error => console.error(error));
+            messageHandler(message, 'User was created.', true);
         }
     }
 };

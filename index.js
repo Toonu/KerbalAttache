@@ -1,6 +1,9 @@
 const {prefix} = require('./config.json'), Discord = require('discord.js'),
-fs = require('fs'), fn = require("./sheet"), js = require("./utils");
+fs = require('fs'), fn = require("./sheet"), {log, perm} = require("./utils");
 client = new Discord.Client();
+
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
@@ -28,7 +31,7 @@ client.on('message', message => {
 
 	//Finds the command.
 	const command = client.commands.get(args.shift().toLowerCase());
-    if (command === undefined) {
+    if (!command) {
         message.channel.send('Not a command!')
 			.then(errorMessage => errorMessage.delete({timeout: 9000}).catch(error => console.error(error)))
 			.catch(networkError => console.error(networkError));
@@ -72,7 +75,7 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 				.catch(networkError => log.error(networkError));
 		}
 	}
-	if (!js.perm(message, 1)) {
+	if (!perm(message, 1)) {
 		timestamps.set(message.author.id, now);
 	}
 	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
@@ -94,9 +97,6 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	}
 });
 
-//const {CLIENT_TOKEN} = process.env;
-const {CLIENT_TOKEN} = require('./env.json');
-const {log} = require("./game");
 client.login(CLIENT_TOKEN).catch(error => console.error(error));
 
 /**
@@ -123,13 +123,16 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * sub
  * turn
  * usercreate
+ *
+ * index
+ * sheet
+ * utils
+ *
+ * YYY
+ *
  * userdel
  * useredit
  * userinfo
- *
- * index
- * utils
- * sheet
 **/
 
 

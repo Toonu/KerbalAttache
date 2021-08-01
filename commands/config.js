@@ -65,7 +65,8 @@ systems     STRING  (Sheet systems tab string.)
                     break;
                 case 'sadmin':
                 case 'sdev':
-                    let del = (args[2] !== undefined && args[2].toLowerCase() === 'del');
+                    //del is not undefined and is del
+                    let del = (args[2] && args[2].toLowerCase() === 'del');
                     let roles = args[0] === 'sadmin' ? cfg.servers[message.guild.id].administrators
                         : cfg.servers[message.guild.id].developers;
 

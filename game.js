@@ -1,4 +1,4 @@
-const gm = require('./game'), cfg = require('./config.json'),
+const gm = require('./game'),
     units = require('./units.json'), {getCell, setCell, getCellArray, toCoordinate} = require("./sheet");
 
 /**
@@ -149,30 +149,6 @@ exports.findData = function findData(target, nation, tech, tab) {
 
 
 /**
- * Function reports information into the moderator channel.
- * @param message   Message object which specifies server to search main channel in.
- * @param report    String with a message to report.
- * @param command   String command name the report originated from.
- */
-exports.report = function report(message, report, command = '') {
-    let today = new Date();
-    let dateTime = `${today.getUTCFullYear()}.${(today.getUTCMonth() < 10 ? '0' : '') + (today.getUTCMonth() + 1)}.${(today.getUTCDate() < 10 ? '0' : '') + today.getUTCDate()} ${today.getUTCHours()}:${(today.getUTCMinutes() < 10 ? '0' : '') + today.getUTCMinutes()}:${(today.getUTCSeconds() < 10 ? '0' : '') + today.getUTCSeconds()}`;
-    message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${report}`)
-        .catch(networkError => console.error(networkError));
-}
-
-
-/**
- * Function logs a message to the console with formatting..
- * @param report    String with a message to log.
- */
-exports.log = function log(report) {
-    let today = new Date();
-    let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-    console.log(`[${dateTime} UTC] ${report}`);
-}
-
-/**
  * Function makes trade transaction between two countries.
  * @param nationRow             Number of nation row.
  * @param unitCol               String of traded asset col.
@@ -189,7 +165,7 @@ exports.transfer = function transfer(nationRow, unitCol, amount, money, message,
             .then(unitsAmount => {
                 if (type) {
                     unitsAmount = parseInt(unitsAmount) - amount;
-                } else if (unitsAmount === undefined) {
+                } else if (!unitsAmount) {
                     unitsAmount =  amount;
                 } else {
                     unitsAmount = parseInt(unitsAmount) + amount;

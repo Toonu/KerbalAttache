@@ -15,7 +15,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         }
 
          //No arguments lists the categories.
-        if(args[0] === undefined) {
+        if(!args[0]) {
             let newMessage = ``, l = 0;
             Object.keys(units).forEach(item => {
                  // noinspection ReuseOfLocalVariableJS

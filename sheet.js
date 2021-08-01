@@ -141,9 +141,10 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab, domin
 
 /**
  * Function checks if the coordinate is in correct format.
- * @param coordinate    Coordinate to check.
- * @param ignoreNumber  Bool that allows ignoring coordinate number.
- * @return {boolean}    Returns true/false if correct/wrong.
+ * @param {string} coordinate Checked coordinate.
+ * @param {boolean} ignoreNumber  Bool allowing ignoring the coordinate number.
+ * @return {boolean} Returns true/false if correct/wrong.
+ * @private
  */
 function isCoordinate(coordinate, ignoreNumber = false) {
     if (ignoreNumber) {
@@ -151,3 +152,15 @@ function isCoordinate(coordinate, ignoreNumber = false) {
     }
     return new RegExp(/[A-Z]+[0-9]+/g).test(coordinate);
 }
+
+exports.toColumn = function toColumn(num) {
+    let column = '';
+    let preceding = 0;
+    while (num > 25) {
+        num -= 26;
+        preceding++;
+    }
+    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
+    column += String.fromCharCode(65 + num);
+    return column;
+};

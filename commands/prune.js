@@ -22,7 +22,8 @@ module.exports = {
 
 		//Parse oldMessages bool.
 		let bool = false;
-		if (args[1] !== undefined && args[1].toLowerCase() === "true") {
+		//if is not undefined and is true
+		if (args[1] && args[1].toLowerCase() === "true") {
 			bool = true;
 		}
 

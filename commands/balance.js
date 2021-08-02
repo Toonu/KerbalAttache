@@ -1,70 +1,83 @@
-const {ping} = require("../utils"), {findVertical} = require("../game"), cfg = require('./../config.json'),
+const {ping, messageHandler, formatCurrency} = require("../utils"), cfg = require('./../config.json'),
     discord = require('discord.js'), {getCellArray} = require("../sheet");
+
 module.exports = {
     name: 'balance',
     description: 'Command for getting the statistics about your state! Do NOT use in public channels.',
-    args: false,
-    usage: '[M:@user]',
+    args: 0,
+    usage: `${cfg.prefix}balance [USER]`,
     cooldown: 5,
     guildOnly: true,
-    execute: function balance(message) {
+    execute: async function balance(message) {
         function emojiFilter(reaction, user) {
             return (reaction.emoji.name === '❌') && user.id === message.author.id;
         }
 
+        //Getting user
         let nation = cfg.users[ping(message).id].nation;
+        let data = await getCellArray('A1', 'AN', cfg.main, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
 
-        findVertical('Data', 'A').then(dataRow => {
-            getCellArray('A4', `AZ${dataRow - 1}`).then(array => {
-                //Backup values by default.
-                let rpCol = 36;
-                let tilesCol = 39;
-                for (let i = 4; i < array.length; i++) {
-                    if (array[i] === 'RP') {
-                        rpCol = i;
-                    }
-                    if (array[i] === 'Tiles') {
-                        tilesCol = i;
-                    }
-                }
+        let accountColumn;
+        let balanceColumn;
+        let rpColumn;
+        let rpBudgetColumn;
+        let tilesColumn;
+        let row = 0;
 
-                array.forEach(element => {
-                    if (element[0].startsWith(nation)) {
-                        // noinspection JSCheckFunctionSignatures
-                        const embed = new discord.MessageEmbed()
-                        .setColor('#e0b319')
-                        .setTitle(`National Bank of ${nation}`)
-                        .setURL('https://discord.js.org/') //URL clickable from the title
-                        .setThumbnail('https://imgur.com/IvUHO31.png')
-                        .addFields(
-                            { name: 'Nation:', value: nation},
-                            { name: 'Account:', value: parseInt(element[1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
-                            { name: 'Balance:', value: parseInt(element[2].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
-                            { name: 'Research budget:', value: parseInt(element[rpCol+1].replace(/[,|$]/g, '')).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money }), inline: true},
-                            { name: 'Research points:', value: `${parseInt(element[rpCol].replace(",", ""))}RP`, inline: true},
-                            { name: 'Tiles:', value: parseInt(element[tilesCol])},
-                        )
-                        .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
+        //Getting row and columns.
+        for (row; row < data[0].length; row++) {
+            if (data[0][row] === nation) break;
+        }
 
-                        message.channel.send(embed)
-                        .then(msg => {
-                            msg.react('❌').catch(err => console.error(err));
-                            msg.awaitReactions(emojiFilter, { max: 1, time: 32000, errors: ['time']})
-                                .then(collected => {
-                                    let react = collected.first();
-                                    if (react.emoji.name === '❌') {
-                                        msg.delete();
-                                    }
-                                })
-                                .catch(() => {
-                                    msg.delete();
-                                });
-                        }).catch(err => console.error(err));
-                    }
-                })
-            }).catch(err => console.error(err));
-        }).catch(err => console.error(err));
-        //Cleaning original message.
-        message.delete();
+        for (let column = 0; column < data.length; column++) {
+            if (data[column][0].startsWith('Account')) accountColumn = column;
+            else if (data[column][0].startsWith('Balance')) balanceColumn = column;
+            else if (data[column][3].startsWith('RP')) rpColumn = column;
+            else if (data[column][3].startsWith('ResBudget')) rpBudgetColumn = column;
+            else if (data[column][3].startsWith('Tiles')) tilesColumn = column;
+        }
+
+        const embed = new discord.MessageEmbed()
+            .setColor('#e0b319')
+            .setTitle(`National Bank of ${nation}`)
+            .setURL('https://discord.js.org/') //URL clickable from the title
+            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .addFields(
+                {name: 'Nation:', value: nation},
+                {
+                    name: 'Account:',
+                    value: formatCurrency(data[accountColumn][row])
+                },
+                {
+                    name: 'Balance:',
+                    value: formatCurrency(data[balanceColumn][row])
+                },
+                {
+                    name: 'Research budget:',
+                    value: formatCurrency(data[rpBudgetColumn][row]),
+                    inline: true
+                },
+                {
+                    name: 'Research points:',
+                    value: `${new Intl.NumberFormat(cfg.moneyLocale, { minimumSignificantDigits: 3 }).format(data[rpColumn][row])} RP`,
+                    inline: true
+                },
+                {name: 'Tiles:', value: data[tilesColumn][row]},
+            )
+            .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
+
+        message.channel.send(embed).then(embedMessage => {
+                embedMessage.react('❌').catch(err => console.error(err));
+                embedMessage.awaitReactions(emojiFilter, {max: 1, time: 32000, errors: ['time']})
+                    .then(collected => {
+                        let react = collected.first();
+                        if (react.emoji.name === '❌') embedMessage.delete();
+                    })
+                    .catch(() => embedMessage.delete());
+            }).catch(error => console.error(error));
+        message.delete().catch(error => console.error(error));
     }
 }

@@ -1,78 +1,86 @@
-const cfg = require("./../config.json"), gm = require("./../game"), units = require('./../units.json'),
-    {exportFile} = require("../utils");
+const cfg = require("./../config.json"), units = require('./../units.json'),
+    {exportFile, messageHandler, report, formatCurrency} = require("../utils"), {getCellArray} = require("../sheet");
 module.exports = {
     name: 'trade',
     description: 'Command for making trade transactions between nations. Note that you can have only one pending transaction at time!',
-    args: true,
-    usage: `[sell | buy] [numberOfAssets] [assetType] [money] [@customer]
+    args: 5,
+    usage: `${cfg.prefix}trade [sell | buy] [AMOUNT] [ASSET] [PRICE] [USER]
 
 Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
 **Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function trade(message, args) {
-        const nation = cfg.users[message.author.id].nation;
-        const customer = cfg.users[message.mentions.users.first().id].nation;
+        const author = cfg.users[message.author.id].nation;
+        const recipient = cfg.users[message.mentions.users.first().id].nation;
         const money = parseInt(args[3]);
-        const unit = args[2].toUpperCase();
         const amount = parseInt(args[1]);
-        let type = args[0].toLowerCase();
-        let tab = undefined;
+        let unit = args[2].toUpperCase();
+        let isSelling = args[0].toLowerCase();
+        let tab = cfg.main;
+        let tabEnd = cfg.mainCol;
+        let authorRow = 0;
+        let recipientRow = 0;
+        let assetColumn = 0;
 
-        if(!units.hasOwnProperty(unit)) {
-            message.channel.send('AssetType not found. Please retry.').then(msg => msg.delete({timeout: 5000}));
-            return message.delete();
-        } else if (isNaN(amount) || isNaN(money)) {
-            message.channel.send('Argument money or number of assets is not a number. Canceling operation.')
-                .then(msg => msg.delete({timeout: 5000}));
-            return message.delete();
-        } else if (!type.startsWith('sell') && !type.startsWith('buy')) {
-            message.channel.send('First argument is not sell or buy.').then(msg => msg.delete({timeout: 5000}));
-            return message.delete();
-        } else if (nation === undefined || customer === undefined) {
-            message.channel.send('Nation does not exist in our database. Contact moderator or retry.')
-                .then(msg => msg.delete({timeout: 5000}));
-            return message.delete();
-        } else if (amount === 0) {
-            message.channel.send('You cannot send just the money kiddo.')
-                .then(msg => msg.delete({timeout: 5000}));
-            return message.delete();
+        //Checking for input errors.
+        if(!units.units.hasOwnProperty(unit)) return messageHandler(message, new Error('InvalidTypeException: AssetType not found. Please retry.'), true);
+        else if (isNaN(amount) || isNaN(money)) return messageHandler(message, new Error('InvalidTypeException: Argument money or number of assets is not a number. Canceling operation.'), true);
+        else if (!isSelling.startsWith('sell') && !isSelling.startsWith('buy')) return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
+        else if (author === undefined || recipient === undefined) return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
+        else if (amount === 0) return messageHandler(message, new Error('You cannot send just the money kiddo.'), true);
+
+        isSelling = !isSelling.startsWith('buy');
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units.units[unit][1])) {
+            tab = cfg.systems;
+            tabEnd = cfg.mainCol;
         }
 
-        type = !type.startsWith('buy');
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units[unit][1])) {
-            tab = 'Stockpiles';
+        unit = units.units[unit];
+        let data = await getCellArray('A1', tabEnd, tab, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
+
+        for (let i = 0; i < data.length; i++) {
+            if (data[0][i] === author) authorRow = i;
+            else if (data[0][i] === recipient) recipientRow = i;
         }
-        message.delete();
-        gm.findData(unit, nation, false, tab)
-        .then(data => {
-            if (data[0] * 4 * amount > money) {
-                return message.channel.send('The price of this trade is lower than production cost of the vehicles!')
-                    .then(msg => msg.delete({timeout: 10000}));
-            }
+        for (assetColumn; assetColumn < data.length; assetColumn++) {
+            if (args[2].toUpperCase() === data[assetColumn][cfg.mainRow]) break;
+        }
 
-            gm.report(message, `<@${message.author.id}> has proposed to ${args[0].toLowerCase()} <@${message.mentions.users.first().id}> ${amount} ${unit}s for ${money.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}!`, this.name);
-            message.channel.send(`Proposition of transaction with ${message.mentions.users.first().username} was delivered to the recipient!`)
-                .then(msg => msg.delete({timeout: 10000}));
-            message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
-The proposer wants to ${args[0].toLowerCase()} you ${amount} ${unit}s for ***${money.toLocaleString('fr-FR', {style: 'currency', currency: cfg.money})}***
+        //last check before transaction
+        if (unit.price > money) return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
+        else if (isSelling && data[assetColumn][authorRow] < amount) return messageHandler(message, new Error('You do not have enough vehicles to sell!'), true);
+        else if (!recipientRow || !authorRow || assetColumn) return messageHandler(message, new Error('Could not find author or "recipient"!'), true);
 
-To accept the transaction, type ${cfg.prefix}accept in your server channel.`);
+        await message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
+The proposer wants to ${isSelling ? 'sell' : "buy from"} you ${amount} ${args[2].toUpperCase()}s for ***${formatCurrency(money)}***
 
-            cfg.trade[message.mentions.users.first().id] = {
-                "nation": nation,
-                "amount": amount,
-                "money": money,
-                "unit": unit,
-                "type": type,
-                "tab": tab,
-                "transaction": args[0].toLowerCase(),
-                "nationRow": data[2],
-                "unitCol": data[1],
-                "message": message
-            }
-            exportFile('config.json', cfg);
-        })
-        .catch(err => console.error(err));
+To accept the transaction, type ${cfg.prefix}accept in your server channel.`)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
+
+        cfg.trade[message.mentions.users.first().id] = {
+            "author": author,
+            "authorRow": authorRow,
+            "recipient": recipient,
+            "recipientRow": recipientRow,
+            "amount": amount,
+            "money": money,
+            "unit": unit,
+            "unitCol": assetColumn,
+            "isSelling": isSelling,
+            "tab": tab,
+            "tabEnd": tabEnd,
+            "transaction": args[0].toLowerCase(),
+            "message": message
+        }
+        exportFile('config.json', cfg);
+
+        report(message, `<@${message.author.id}> has proposed to ${args[0].toLowerCase()} <@${message.mentions.users.first().id}> ${amount} ${args[2].toUpperCase()}s for ${formatCurrency(money)}!`, this.name);
+        messageHandler(message, `Proposition of transaction with ${message.mentions.users.first().username} was delivered to the recipient!`, true);
     },
 };

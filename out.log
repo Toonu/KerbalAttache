@@ -1,34 +1,11 @@
-[0m[0K[LOG][2021-8-2 23:6:57 UTC] Deployed and ready![0K[?25l
-[0K[?25h[LOG][2021-8-2 23:6:58 UTC] Server Nations of Unity (Toonu): .buy -2 sf[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:6:59 UTC] You cannot go into negative numbers of assets![0K[?25l
-Error: You cannot go into negative numbers of assets![0K
-    at Object.buy [as execute] (D:\GitProjects\KerbalAttache\commands\buy.js:69:37)[0K
-    at processTicksAndRejections (node:internal/process/task_queues:93:5)[0K
-[0K[?25h[ERR][2021-8-2 23:7:5 UTC] Unknown Message[0K[?25l
-DiscordAPIError: Unknown Message[0K
+[0m[0K[LOG][2021-8-3 0:20:57 UTC] Deployed and ready![0K[?25l
+[0K[?25h[LOG][2021-8-3 0:20:59 UTC] Server Nations of Unity (Toonu): .trade sell 2 mbt 100000 <@!768845435455930428>[0K[?25l
+[0K[?25h[ERR][2021-8-3 0:21:0 UTC] Cannot send messages to this user[0K[?25l
+DiscordAPIError: Cannot send messages to this user[0K
     at RequestHandler.execute (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:154:13)[0K
     at processTicksAndRejections (node:internal/process/task_queues:93:5)[0K
     at async RequestHandler.push (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:39:14)[0K
-    at async MessageManager.delete (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\managers\MessageManager.js:126:5)[0K
-[0K[?25h[LOG][2021-8-2 23:7:54 UTC] Server Nations of Unity (Toonu): .buy 1 bmb[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:7:59 UTC] Iconia has bought 1 Unguided bomb for 500,00 €[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:8 UTC] Server Nations of Unity (Toonu): .buy 10 recon[0K[?25l
-[LOG][2021-8-2 23:8:8 UTC] Asset not found.[0K
-Error: Asset not found.[0K
-    at Object.buy [as execute] (D:\GitProjects\KerbalAttache\commands\buy.js:26:44)[0K
-    at Client.<anonymous> (D:\GitProjects\KerbalAttache\index.js:75:11)[0K
-    at Client.emit (node:events:327:20)[0K
-    at MessageCreateAction.handle (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\actions\MessageCreate.js:31:14)[0K
-    at Object.module.exports [as MESSAGE_CREATE] (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\websocket\handlers\MESSAGE_CREATE.js:4:32)[0K
-    at WebSocketManager.handlePacket (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\websocket\WebSocketManager.js:384:31)[0K
-    at WebSocketShard.onPacket (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\websocket\WebSocketShard.js:444:22)[0K
-    at WebSocketShard.onMessage (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\client\websocket\WebSocketShard.js:301:10)[0K
-    at WebSocket.onMessage (D:\GitProjects\KerbalAttache\node_modules\ws\lib\event-target.js:132:16)[0K
-    at WebSocket.emit (node:events:327:20)[0K
-[0K[?25h[LOG][2021-8-2 23:8:14 UTC] Server Nations of Unity (Toonu): .buy 10 rec[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:20 UTC] Iconia has bought 10 Recon suite for 100?000,00 €[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:29 UTC] Server Nations of Unity (Toonu): .buy 1 rpod[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:32 UTC] Iconia has bought 1 Rocket pod for 4?000,00 €[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:38 UTC] Server Nations of Unity (Toonu): .buy 1 sraam[0K[?25l
-[0K[?25h[LOG][2021-8-2 23:8:43 UTC] Iconia has bought 1 Short-Range Air-to-Air Missile for 1?000,00 €[0K[?25l
+    at async ClientUser.createDM (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\structures\User.js:252:18)[0K
+    at async Object.trade [as execute] (D:\GitProjects\KerbalAttache\commands\trade.js:59:9)[0K
+[LOG][2021-8-3 0:21:0 UTC] <@319919565079576576> has proposed to sell <@768845435455930428> 2 MBTs for 100?000,00 €![0K
 [0K[?25h

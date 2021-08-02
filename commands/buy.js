@@ -23,7 +23,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             return messageHandler(message, new Error('InvalidArgumentException: Missing second argument.'), true);
         }
         let assetType = args[1].toUpperCase();
-        if(!units.hasOwnProperty(assetType)) {
+        if(!units.units.hasOwnProperty(assetType)) {
             return messageHandler(message, new Error('Asset not found.'), true);
         }
 
@@ -35,7 +35,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         let systemBackup;
 
         //Getting systems tab data if system is being purchased.
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units[assetType][1])) {
+        if (['wp', 'systems'].includes(units.units[assetType].type)) {
             systemData = await getCellArray('A1', cfg.systemsCol, cfg.systems, true)
                 .catch(error => {
                     return messageHandler(message, error, true);
@@ -64,7 +64,7 @@ Assets do not need to be written in capital letters, the command is case insensi
 
         let oldAmount = await getCell(toColumn(systemColumn)+(nationRow+1), systemData ? cfg.systems : cfg.main);
         let account = await getCell(toColumn(accountColumn)+(nationRow+1), cfg.main);
-        let unit = units[assetType];
+        let unit = units.units[assetType];
 
         if (oldAmount + amount < 0) {
             return messageHandler(message, new Error('You cannot go into negative numbers of assets!'), true, 20000);
@@ -78,8 +78,8 @@ Assets do not need to be written in capital letters, the command is case insensi
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
                 { name: 'Amount:', value: amount, inline: true},
-                { name: 'Asset', value: unit[0], inline: true},
-                { name: 'Cost:', value: formatCurrency(amount < 0 ? unit[2]*amount*0.7 : unit[2]*amount)},
+                { name: 'Asset', value: unit.desc, inline: true},
+                { name: 'Cost:', value: formatCurrency(unit.price * amount * (amount < 0 ? 0.7 : 1))},
                 { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
@@ -103,12 +103,12 @@ Assets do not need to be written in capital letters, the command is case insensi
                 if (result === resultOptions.confirm) {
                     if (amount < 0) {
                         messageHandler(message, 'Selling assets. ✅ Do not forget to remove them from your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${units[assetType][0]} for ${formatCurrency(Math.abs(unit[2]*amount))}`, this.name);
+                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${unit.desc} for ${formatCurrency(Math.abs(unit.price*amount*0.7))}`, this.name);
                     } else {
                         messageHandler(message, 'Purchasing assets. ✅ Do not forget to place them onto your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${units[assetType][0]} for ${formatCurrency(unit[2]*amount)}`, this.name);
+                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${unit.desc} for ${formatCurrency(unit.price*amount)}`, this.name);
                     }
-                    setCell(`${toColumn(accountColumn)}${nationRow+1}`, amount < 0 ? account - unit[2]*amount*0.7 : account - unit[2]*amount, cfg.main);
+                    setCell(`${toColumn(accountColumn)}${nationRow+1}`, account - unit.price * amount * (amount < 0 ? 0.7 : 1), cfg.main);
                     setCell(`${toColumn(systemColumn)}${nationRow+1}`, oldAmount+amount, systemData ? cfg.systems : cfg.main);
                 } else {
                     messageHandler(message, 'Operation was canceled or timed out. ❌', true);
@@ -121,16 +121,11 @@ Assets do not need to be written in capital letters, the command is case insensi
 function printAssets(message) {
     let newMessage = ``, l = 0;
 
-    Object.keys(units).every(function(asset) {
-        if (units[asset][2] === undefined) return false;
+    Object.keys(units.units).forEach(asset => {
         if (asset.length > l) l = asset.length;
-        return true;
     })
-
-    Object.keys(units).every(function(asset) {
-        if (units[asset][2] === undefined) return false;
-        newMessage += `[${asset.padStart(l)}] | ${units[asset][0].padEnd(40)} : ${units[asset][2]}\n`;
-        return true;
+    Object.keys(units.units).forEach(asset => {
+        newMessage += `[${asset.padStart(l)}] | ${units.units[asset].desc.padEnd(40)} : ${formatCurrency(units.units[asset].price)}\n`;
     })
 
     message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

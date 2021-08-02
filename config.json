@@ -136,5 +136,45 @@
             "notes": " "
         }
     },
-    "trade": {}
+    "trade": {
+        "768845435455930428": {
+            "nation": "Iconia",
+            "amount": 2,
+            "money": 100000,
+            "unit": {
+                "desc": "Main Battle Tank",
+                "type": "surface",
+                "price": 48000
+            },
+            "isSelling": true,
+            "tab": "Maintenance",
+            "tabEnd": "AN",
+            "transaction": "sell",
+            "nationRow": 4,
+            "unitCol": 8,
+            "message": {
+                "channelID": "770921356111773698",
+                "deleted": false,
+                "id": "871880289595568138",
+                "type": "DEFAULT",
+                "system": false,
+                "content": ".trade sell 2 mbt 100000 <@!768845435455930428>",
+                "authorID": "319919565079576576",
+                "pinned": false,
+                "tts": false,
+                "nonce": "871880288668483584",
+                "embeds": [],
+                "attachments": [],
+                "createdTimestamp": 1627942859792,
+                "editedTimestamp": 0,
+                "webhookID": null,
+                "applicationID": null,
+                "activity": null,
+                "flags": 0,
+                "reference": null,
+                "guildID": "470258156682084373",
+                "cleanContent": ".trade sell 2 mbt 100000 @​Attachè"
+            }
+        }
+    }
 }

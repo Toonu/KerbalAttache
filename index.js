@@ -2,13 +2,11 @@ const {prefix} = require('./config.json'), Discord = require('discord.js'),
 fs = require('fs'), {init} = require("./sheet"), {log, perm, messageHandler} = require("./utils");
 client = new Discord.Client();
 
-//const {CLIENT_TOKEN} = process.env;
-const {CLIENT_TOKEN} = require('./env.json');
-
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const coolDowns = new Discord.Collection();
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	
@@ -81,23 +79,25 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	}
 });
 
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => console.error(error));
 
 /**
- * accept
- * assets
- * balance
- * battle
- * buy
- * reject
- * tech
- * trade
+ * accept - sheet
+ * battle - sheet
+ * reject - sheet
+ * tech - sheet
+ * trade - sheet
  * game
  *
  * YYY
  *
  * check if the cfgCols are used in getCellArrays.
  *
+ * assets - sheet
+ * balance - sheet
+ * buy - sheet
  * config
  * help
  * map

@@ -12,7 +12,7 @@
     "mainRow": 3,
     "mainAccountingRow": 0,
     "systems": "Stockpiles",
-    "systemsCol": "U",
+    "systemsCol": "T",
     "systemsRow": 3,
     "servers": {
         "470258156682084373": {

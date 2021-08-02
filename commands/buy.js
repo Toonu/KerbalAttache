@@ -1,117 +1,143 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
-    {report, findData} = require("../game"), {getCell, setCell} = require("../sheet");
+    {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
+    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report} = require("../utils");
+// noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets. Do NOT use in public channels.',
-    args: false,
-    usage: `[amount] [asset]
+    args: 0,
+    usage: `${cfg.prefix}buy [AMOUNT] [ASSET]
 Assets do not need to be written in capital letters, the command is case insensitive.
 **Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
-    execute: async function buy(message, args, tab = undefined) {
-        function filter(reaction, user) {
-            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-        }
-
-         //No arguments lists the categories.
-        if(!args[0]) {
-            let newMessage = ``, l = 0;
-            Object.keys(units).forEach(item => {
-                 // noinspection ReuseOfLocalVariableJS
-                if (item.length > l) l = item.length;
-            });
-
-            try {
-                Object.keys(units).forEach(item => {
-                    if (item === 'ResBudget') {
-                        throw '';
-                    }
-                    newMessage += `[${item.padStart(l)}] ${units[item][0]}\n`;
-                });
-            } catch (e) {}
-
-            message.channel.send("Available weapons: \n" + `\`\`\`ini\n${newMessage}\`\`\``)
-            .then(msg => msg.delete({ timeout: 30000 }))
-            return message.delete({timeout: 50});
-        }
+    execute: async function buy(message, args) {
+        //No arguments lists the categories.
+        if(!args[0]) return printAssets(message);
 
         //Checking input arguments.
-        args[0] = parseInt(args[0]);
-        if (isNaN(args[0])) {
-            message.channel.send('Argument is not a number.').then(msg => msg.delete({timeout: 9000}));
-            return message.delete({timeout: 9000});
+        let amount = parseInt(args[0]);
+        if (isNaN(amount)) {
+            return messageHandler(message, new Error('InvalidTypeException: Argument is not a number.'), true);
         } else if (args[1] === undefined) {
-            message.channel.send('Missing second argument.').then(msg => msg.delete({timeout: 9000}));
-            return message.delete({timeout: 9000});
+            return messageHandler(message, new Error('InvalidArgumentException: Missing second argument.'), true);
         }
-        args[1] = args[1].toUpperCase();
-        if(!units.hasOwnProperty(args[1])) {
-            message.channel.send('Asset not found.').then(msg => msg.delete({timeout: 9000}));
-            return message.delete({timeout: 9000});
+        let assetType = args[1].toUpperCase();
+        if(!units.hasOwnProperty(assetType)) {
+            return messageHandler(message, new Error('Asset not found.'), true);
         }
 
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units[args[1]][1])) {
-            tab = 'Stockpiles';
+        let accountColumn;
+        let nationRow = 0;
+        let systemColumn = 0;
+        let nation = cfg.users[message.author.id];
+        let systemData;
+        let systemBackup;
+
+        //Getting systems tab data if system is being purchased.
+        if (['wpSurface', 'wpAerial', 'systems'].includes(units[assetType][1])) {
+            systemData = await getCellArray('A1', cfg.systemsCol, cfg.systems, true)
+                .catch(error => {
+                    return messageHandler(message, error, true);
+                });
+            for (systemColumn; systemColumn < systemData.length; systemColumn++) {
+                if (systemData[systemColumn][cfg.mainRow] === assetType) break;
+            }
+            systemBackup = systemColumn;
         }
 
-        findData(args[1], cfg.users[message.author.id].nation, false, tab)
-        .then(data => {
-            let cost = data[0] * args[0] * 4;
-            if (tab !== undefined) cost /= 4;
-            if (args[0] < 0) cost *= 0.7;
+        let mainData = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
 
-            // noinspection JSCheckFunctionSignatures
-            const embed = new discord.MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(`${cfg.users[message.author.id].demonym}'s Office of Acquisitions`)
+        for (nationRow; nationRow < mainData[0].length; nationRow++) {
+            if (mainData[0][nationRow] === nation.nation) break;
+        }
+
+        for (systemColumn = 0; systemColumn < mainData.length; systemColumn++) {
+            if (mainData[systemColumn][cfg.mainAccountingRow] === 'Account') accountColumn = systemColumn;
+            else if (!systemData && mainData[systemColumn][cfg.mainRow] === assetType) break;
+        }
+
+        systemData ? systemColumn = systemBackup : cfg.main;
+
+        let oldAmount = await getCell(toColumn(systemColumn)+(nationRow+1), systemData ? cfg.systems : cfg.main);
+        let account = await getCell(toColumn(accountColumn)+(nationRow+1), cfg.main);
+        let unit = units[assetType];
+
+        if (oldAmount + amount < 0) {
+            return messageHandler(message, new Error('You cannot go into negative numbers of assets!'), true, 20000);
+        }
+
+        // noinspection JSCheckFunctionSignatures
+        const embed = new discord.MessageEmbed()
+            .setColor(nation.color)
+            .setTitle(`${nation.demonym}'s Office of Acquisitions`)
             .setURL('https://discord.js.org/')
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
-                { name: 'Amount:', value: args[0], inline: true},
-                { name: 'Asset', value: units[args[1]][0], inline: true},
-                { name: 'Cost:', value: cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })},
+                { name: 'Amount:', value: amount, inline: true},
+                { name: 'Asset', value: unit[0], inline: true},
+                { name: 'Cost:', value: formatCurrency(amount < 0 ? unit[2]*amount*0.7 : unit[2]*amount)},
                 { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
             .setFooter('Made by the Attachè to the United Nations', 'https://imgur.com/KLLkY2J.png');
-            message.channel.send(embed)
-            .then(msg => {
-                message.delete();
-                msg.react("✅");
-                msg.react("❌");
-                msg.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-                .then(collected => {
-                    let react = collected.first();
-                    if (react.emoji.name === '✅') {
-                        //Accepted, deleting embed and writing response.
-                        msg.delete();
-                        msg.channel.send('Purchasing assets. ✅ Do not forget to place them onto your map!').then(newMessage => newMessage.delete({timeout: 15000}));
-                        //Setting new unit amount, getting account money and setting new amount and finally reporting to the moderator channel.
-                        setCell(`${data[1]+data[2]}`, data[3] + args[0], tab);
-                        getCell(`B${data[2]}`)
-                            .then(balance => {
-                                setCell(`B${data[2]}`, parseInt(balance.replace(/[,|$]/g, '')) - cost)
-                            })
-                            .catch(err => console.error(err));
-                        if (cost < 0) {
-                            report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(args[0])} ${units[args[1]][0]} for ${(Math.abs(cost)).toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
-                        } else {
-                            report(message, `${cfg.users[message.author.id].nation} has bought ${args[0]} ${units[args[1]][0]} for ${cost.toLocaleString('fr-FR', { style: 'currency', currency: cfg.money })}`, this.name);
-                        }
+
+        function filter(reaction, user) {
+            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
+        }
+
+        // noinspection JSUnusedLocalSymbols
+        function processReactions(reaction, embedMessage) {
+            if (reaction.emoji.name === '✅') {
+                return resultOptions.confirm;
+            } else if (reaction.emoji.name === '❌') {
+                return resultOptions.delete;
+            }
+        }
+
+        embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
+            .then(result => {
+                if (result === resultOptions.confirm) {
+                    if (amount < 0) {
+                        messageHandler(message, 'Selling assets. ✅ Do not forget to remove them from your map!' , true, 20000);
+                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${units[assetType][0]} for ${formatCurrency(Math.abs(unit[2]*amount))}`, this.name);
                     } else {
-                        msg.delete();
-                        msg.channel.send('Operation was canceled. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
+                        messageHandler(message, 'Purchasing assets. ✅ Do not forget to place them onto your map!' , true, 20000);
+                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${units[assetType][0]} for ${formatCurrency(unit[2]*amount)}`, this.name);
                     }
-                }).catch(error => {
-                    console.error(error)
-                    msg.delete();
-                    msg.channel.send('Operation timed out. ❌').then(newMessage => newMessage.delete({timeout: 5000}));
-                });
-            }).catch(err => console.error(err));
-        }).catch(err => {
-            message.channel.send(err.message).then(msg => msg.delete({timeout: 9000}));
-            console.error(err);
-        });
+                    setCell(`${toColumn(accountColumn)}${nationRow+1}`, amount < 0 ? account - unit[2]*amount*0.7 : account - unit[2]*amount, cfg.main);
+                    setCell(`${toColumn(systemColumn)}${nationRow+1}`, oldAmount+amount, systemData ? cfg.systems : cfg.main);
+                } else {
+                    messageHandler(message, 'Operation was canceled or timed out. ❌', true);
+                }
+            })
+            .catch(error => messageHandler(message, error, true));
     }
 };
+
+function printAssets(message) {
+    let newMessage = ``, l = 0;
+
+    Object.keys(units).every(function(asset) {
+        if (units[asset][2] === undefined) return false;
+        if (asset.length > l) l = asset.length;
+        return true;
+    })
+
+    Object.keys(units).every(function(asset) {
+        if (units[asset][2] === undefined) return false;
+        newMessage += `[${asset.padStart(l)}] | ${units[asset][0].padEnd(40)} : ${units[asset][2]}\n`;
+        return true;
+    })
+
+    message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
+        .then(assetMessages => {
+            assetMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 30000})
+                .catch(error => console.error(error)));
+        })
+        .catch(error => console.error(error));
+    return message.delete().catch(error => console.error(error));
+}

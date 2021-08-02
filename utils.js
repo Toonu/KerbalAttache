@@ -19,7 +19,8 @@ module.exports = {
     report: function report(message, content, command = '') {
         let today = new Date();
         let dateTime = `${today.getUTCFullYear()}.${(today.getUTCMonth() < 10 ? '0' : '') + (today.getUTCMonth() + 1)}.${(today.getUTCDate() < 10 ? '0' : '') + today.getUTCDate()} ${today.getUTCHours()}:${(today.getUTCMinutes() < 10 ? '0' : '') + today.getUTCMinutes()}:${(today.getUTCSeconds() < 10 ? '0' : '') + today.getUTCSeconds()}`;
-        exports.log(content);
+        module.exports.log(content);
+        // noinspection JSUnresolvedVariable,JSUnresolvedFunction
         message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${content}`)
             .catch(networkError => console.error(networkError));
     },
@@ -33,7 +34,8 @@ module.exports = {
         let today = new Date();
         let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
         if (erroneous) {
-            console.error(`[ERR][${dateTime} UTC] ${content}`);
+            if (content instanceof Error) console.error(`[ERR][${dateTime} UTC] ${content.message}\n${content.stack}`);
+            else console.error(`[ERR][${dateTime} UTC] ${content}`);
         } else {
             console.log(`[LOG][${dateTime} UTC] ${content}`);
         }
@@ -50,13 +52,13 @@ module.exports = {
      */
     messageHandler: function messageHandler(message, content, deleteMessage = false,timer = 10000) {
         if (content instanceof Error) {
-            exports.log(`${content.message}\n${content.stack}`);
+            module.exports.log(`${content.message}\n${content.stack}`);
             content = content.message;
         }
         message.channel.send(content)
-            .then(msg => msg.delete({timeout: timer}).catch(error => exports.log(error, true)))
-            .catch(networkError => exports.log(networkError, true));
-        if (deleteMessage) message.delete().catch(error => exports.log(error, true));
+            .then(msg => msg.delete({timeout: timer}).catch(error => module.exports.log(error, true)))
+            .catch(networkError => module.exports.log(networkError, true));
+        if (deleteMessage) message.delete().catch(error => module.exports.log(error, true));
     },
 
     /**
@@ -74,10 +76,10 @@ module.exports = {
         let nation = message.author;
 
         if (message.mentions.users.first()) {
-            if (exports.perm(message, level, false)) {
+            if (module.exports.perm(message, level, false)) {
                 nation = message.mentions.users.first();
             } else {
-                exports.messageHandler(message, 'You lack sufficient clearance to do this for tagged player. Defaulting to yourself.')
+                module.exports.messageHandler(message, 'You lack sufficient clearance to do this for tagged player. Defaulting to yourself.')
             }
         }
         return nation;
@@ -98,10 +100,12 @@ module.exports = {
         let clearance = false;
         switch (level) {
             case 1:
+                // noinspection JSUnresolvedVariable
                 clearance = (cfg.servers[message.guild.id].developers.some(r => message.member.roles.cache.has(r))
                     || cfg.servers[message.guild.id].administrators.some(r => message.member.roles.cache.has(r)));
                 break;
             case 2:
+                // noinspection JSUnresolvedVariable
                 clearance = (cfg.servers[message.guild.id].administrators.some(r => message.member.roles.cache.has(r)));
                 break;
             default:
@@ -109,7 +113,7 @@ module.exports = {
         }
 
         if (!clearance && showMessage === true)
-            exports.messageHandler(message, 'Directorate of Information apologies. Your clearance is not sufficient for this operation. Please contact the moderators if you deem this as an error.');
+            module.exports.messageHandler(message, 'Directorate of Information apologies. Your clearance is not sufficient for this operation. Please contact the moderators if you deem this as an error.');
         return clearance;
     },
 
@@ -140,7 +144,7 @@ module.exports = {
             notes: " ",
         }
 
-        exports.exportFile("config.json", cfg);
+        module.exports.exportFile("config.json", cfg);
         return`Nation ${nationIn} created for user <@${id}>`
     },
 
@@ -151,6 +155,98 @@ module.exports = {
      */
     exportFile: function exportFile(file, data) {
         fs.writeFileSync(file, JSON.stringify(data, null, 4));
+    },
+
+    resultOptions: Object.freeze({"delete":1, "confirm":2, "moveNext":3}),
+
+    /**
+     * Method switches between embeds.
+     * @param {module:"discord.js".Message} message                 Message channel to print embeds in.
+     * @param {Array<module:"discord.js".MessageEmbed>} embeds      Embeds Array to print.
+     * @param {Array<string>} reactions                             String emoji reactions to place on the message.
+     * @param {Function} emojiFilter                        Function to filter reactions. First argument being a reaction and second an user.
+     * @param {Function} processReactions                   Function to process filtered reactions. First argument being a reaction and second an embed message.
+     * @return {Promise<Error || Number>}                        Returns undefined or an Error message.
+     */
+    embedSwitcher: async function embedSwitcher(message, embeds, reactions, emojiFilter, processReactions) {
+        return new Promise(async function (resolve, reject) {
+            let i = 0;
+            let final = false;
+            while (true) {
+                await awaitEmbedReaction(message, reactions, embeds[i], emojiFilter, processReactions)
+                    .then(result => {
+                        switch (result) {
+                            case module.exports.resultOptions.delete:
+                            case module.exports.resultOptions.confirm:
+                                //return here kills merely result anonymous function, have to do this to return outside.
+                                final = true;
+                                resolve(result);
+                                break;
+                            default:
+                        }
+                    })
+                    .catch(error => {
+                        return reject(error);
+                    });
+
+                //Closes the embed loop.
+                if (final) return;
+
+                //Ensures infinite closed loop.
+                i++;
+                if (i === embeds.length) {
+                    i = 0;
+                }
+            }
+        })
     }
+}
+
+
+/**
+ * Function is a support function to the embedSwitcher to utilize await in a loop there.
+ * Function prints an embed and reacts to it, while awaiting reactions filtered by emojiFilter and handled by processReactions function.
+ * @private
+ * @param {module:"discord.js".Message} message         Message channel to print embeds in.
+ * @param {Array<string>} reactions                     String emoji reactions to place on the message.
+ * @param {module:"discord.js".MessageEmbed} embed      Embed to print.
+ * @param {Function} emojiFilter                        Function to filter reactions. First argument being a reaction and second an user.
+ * @param {Function} processReactions                   Function to process filtered reactions. First argument being a reaction and second an embed message.
+ * @return {Promise<Error || Number>}                   Returns Error or resultOptions enum.
+ */
+async function awaitEmbedReaction(message, reactions, embed, emojiFilter, processReactions) {
+    return new Promise(function (resolve, reject) {
+        message.channel.send(embed)
+            .then(embedMessage => {
+
+                //Reacting with emojis.
+                for (const reaction of reactions) {
+                    embedMessage.react(reaction).catch(error => {
+                        embedMessage.delete().catch(error => module.exports.log(error, true));
+                        return reject(error);
+                    });
+                }
+
+                //Processing reactions.
+                embedMessage.awaitReactions(emojiFilter, {max: 1, time: 60000, errors: ['time']})
+                    .then(async collectedReactions => {
+                        let result = processReactions(collectedReactions.first(), embedMessage);
+                        // noinspection FallThroughInSwitchStatementJS
+                        switch (result) {
+                            case module.exports.resultOptions.delete:
+                            case module.exports.resultOptions.moveNext:
+                            case module.exports.resultOptions.confirm:
+                                await embedMessage.delete().catch(error => module.exports.log(error, true));
+                                return resolve(result);
+                        }
+                    })
+                    .catch(() => {
+                        embedMessage.delete().catch(error => module.exports.log(error, true));
+                        return resolve(module.exports.resultOptions.delete);
+                    });
+            }).catch(error => {
+            return reject(error);
+        });
+    })
 }
 

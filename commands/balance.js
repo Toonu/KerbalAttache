@@ -1,4 +1,4 @@
-const {ping, messageHandler, formatCurrency} = require("../utils"), cfg = require('./../config.json'),
+const {ping, messageHandler, formatCurrency, log, embedSwitcher, resultOptions} = require("../utils"), cfg = require('./../config.json'),
     discord = require('discord.js'), {getCellArray} = require("../sheet");
 
 module.exports = {
@@ -9,10 +9,6 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function balance(message) {
-        function emojiFilter(reaction, user) {
-            return (reaction.emoji.name === '❌') && user.id === message.author.id;
-        }
-
         //Getting user
         let nation = cfg.users[ping(message).id].nation;
         let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
@@ -27,7 +23,7 @@ module.exports = {
         let tilesColumn;
         let row = 0;
 
-        //Getting row and columns.
+        //Getting rows and columns.
         for (row; row < data[0].length; row++) {
             if (data[0][row] === nation) break;
         }
@@ -40,6 +36,7 @@ module.exports = {
             else if (data[column][cfg.mainRow].startsWith('Tiles')) tilesColumn = column;
         }
 
+        // noinspection JSCheckFunctionSignatures
         const embed = new discord.MessageEmbed()
             .setColor('#e0b319')
             .setTitle(`National Bank of ${nation}`)
@@ -69,15 +66,30 @@ module.exports = {
             )
             .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
 
+
+        // noinspection JSUnusedLocalSymbols
+        function processReactions(reaction, embedMessage) {
+            if (reaction.emoji.name === '❌') return resultOptions.delete;
+        }
+
+        function emojiFilter(reaction, user) {
+            return (reaction.emoji.name === '❌') && user.id === message.author.id;
+        }
+
+        await embedSwitcher(message, [embed], ['❌'], emojiFilter, processReactions)
+            .then(() => message.delete().catch(error => log(error, true)))
+            .catch(error => messageHandler(message, error, true));
+
+        /**
+        //Sending it in.
         message.channel.send(embed).then(embedMessage => {
                 embedMessage.react('❌').catch(err => console.error(err));
                 embedMessage.awaitReactions(emojiFilter, {max: 1, time: 32000, errors: ['time']})
                     .then(collected => {
-                        let react = collected.first();
-                        if (react.emoji.name === '❌') embedMessage.delete();
+                        if (collected.first().emoji.name === '❌') embedMessage.delete();
                     })
                     .catch(() => embedMessage.delete());
             }).catch(error => console.error(error));
-        message.delete().catch(error => console.error(error));
+        message.delete().catch(error => console.error(error));**/
     }
 }

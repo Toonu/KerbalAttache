@@ -2,7 +2,7 @@ const {ping, messageHandler, formatCurrency} = require("../utils"), {getCellArra
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
-    description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list stay.',
+    description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list confirm.',
     args: 0,
     usage: `${cfg.prefix}sub [PERSIST] [USER]`,
     cooldown: 5,

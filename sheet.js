@@ -29,7 +29,7 @@ exports.getCell = function getCell(cell, sheetTab) {
                 range:  `${sheetTab}!${cell}`,
                 valueRenderOption: "UNFORMATTED_VALUE"
             })
-            .then(data => resolve(data.data.values))
+            .then(data => resolve(data.data.values[0][0]))
             .catch(error => reject(error.message));
         }
     });
@@ -94,7 +94,7 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
 /**
  * Function writes value into a cell at the specified coordinate in sheet tab.
  * @param {string} coordinate   target cell coordinate.
- * @param {string} value        value to write, undefined makes the cell empty.
+ * @param {string || number} value        value to write, undefined makes the cell empty.
  * @param {string} sheetTab     sheet tab name.
  * @return {Promise<Array>}     Returns string success message or rejects with an error message.
  */

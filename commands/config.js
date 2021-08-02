@@ -59,6 +59,7 @@ module.exports = {
                 case 'sdev':
                     //del is not undefined and is del
                     let del = (args[2] && args[2].toLowerCase() === 'del');
+                    // noinspection JSUnresolvedVariable
                     let roles = args[0] === 'sadmin' ? cfg.servers[message.guild.id].administrators
                         : cfg.servers[message.guild.id].developers;
 

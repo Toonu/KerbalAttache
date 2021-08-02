@@ -25,6 +25,7 @@ module.exports = {
             });
 
         for (column; column < data.length; column++) {
+            // noinspection JSUnresolvedVariable
             if (data[column][cfg.mainRow] && data[column][cfg.tilesRow].toLowerCase() === 'tiles') break;
         }
         for (row; row < data[0].length; row++) {

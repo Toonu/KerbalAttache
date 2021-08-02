@@ -96,6 +96,8 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  *
  * YYY
  *
+ * check if the cfgCols are used in getCellArrays.
+ *
  * config
  * help
  * map
@@ -103,8 +105,8 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * prune
  * spam
  * sub
- * tiles
- * turn
+ * tiles - sheet
+ * turn - sheet
  * usercreate
  * userdel
  * useredit

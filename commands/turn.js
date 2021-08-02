@@ -10,7 +10,7 @@ module.exports = {
     execute: async function turn(message) {
         if(!perm(message, 2, true)) return;
 
-        let data = await getCellArray('A1', 'AN', cfg.main, true)
+        let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
@@ -32,11 +32,11 @@ module.exports = {
 
         //Getting column integers.
         for (let column = 0; column < data.length; column++) {
-            if (data[column][0].startsWith('Account')) accountColumn = column;
-            else if (data[column][0].startsWith('Balance')) balanceColumn = column;
-            else if (data[column][3].startsWith('RP')) rpColumn = column;
-            else if (data[column][3].startsWith('ResBudget')) rpBudgetColumn = column;
-            else if (data[column][3].startsWith('Coefficient')) coefficientColumn = column;
+            if (data[column][cfg.mainAccountingRow].startsWith('Account')) accountColumn = column;
+            else if (data[column][cfg.mainAccountingRow].startsWith('Balance')) balanceColumn = column;
+            else if (data[column][cfg.mainRow].startsWith('RP')) rpColumn = column;
+            else if (data[column][cfg.mainRow].startsWith('ResBudget')) rpBudgetColumn = column;
+            else if (data[column][cfg.mainRow].startsWith('Coefficient')) coefficientColumn = column;
         }
 
         //Check

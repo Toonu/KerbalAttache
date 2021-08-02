@@ -19,13 +19,13 @@ module.exports = {
 
         let column = 0;
         let row = 0;
-        let data = await getCellArray('A1', 'AN', cfg.main, true)
+        let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
 
         for (column; column < data.length; column++) {
-            if (data[column][cfg.tilesRow] && data[column][cfg.tilesRow].toLowerCase() === 'tiles') break;
+            if (data[column][cfg.mainRow] && data[column][cfg.tilesRow].toLowerCase() === 'tiles') break;
         }
         for (row; row < data[0].length; row++) {
             if (data[0][row] === cfg.users[user].nation) break;

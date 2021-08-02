@@ -1,4 +1,4 @@
-const {ping, messageHandler} = require("../utils"), {getCellArray} = require("../sheet"),
+const {ping, messageHandler, formatCurrency} = require("../utils"), {getCellArray} = require("../sheet"),
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {
-        let submissionsData = await getCellArray('A1', 'AA', cfg.submissions)
+        let submissionsData = await getCellArray('A1', cfg.submissionsCol, cfg.submissions)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
@@ -37,11 +37,11 @@ module.exports = {
 
         //Handling money and upgrades
         nationSubmissions.forEach(column => {
-            let money = column[24].toLocaleString(cfg.moneyLocale, { style: 'currency', currency: cfg.money });
+            let money = formatCurrency(column[24]);
             //Handles upgrades
             if (column[21] === 'Upgrade') column[21] += ` of ${column[22].substring(0, 18)}`;
             displayResult += `[${column[2].substring(0, 18).padStart(maximalLength)}] ${column[6]} ${(column[5]).padEnd(10)} ${money.padEnd(16)} ${column[21].padEnd(30)} ${column[26]}\n`;
-        })
+        });
 
         message.channel.send(`\`\`\`ini\n${displayResult}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
             .then(submissionMessages => {

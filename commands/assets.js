@@ -1,98 +1,90 @@
-const {getCellArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../utils");
-require("./../config.json");
+const {getCellArray} = require("../sheet"), {findVertical} = require("../game"), {ping, messageHandler} = require("../utils"),
+    cfg = require("./../config.json"), discord = require('discord.js');
 module.exports = {
     name: 'assets',
     description: 'Command for getting your current asset list! Do NOT use in public channels.',
-    args: false,
-    usage: '[M:@user]',
+    args: 0,
+    usage: `${cfg.prefix}assets [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: async function assets(message) {
-        const cfg = require('./../config.json')
-        const discord = require('discord.js');
-
         let user = ping(message).id;
         let nation = cfg.users[user].nation;
 
-        const embed = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(cfg.users[user].map)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        const embedAssets = createEmbed(nation, user);
+        const embedSystems = createEmbed(nation, user);
 
-        const embedW = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(cfg.users[user].map)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        let dataSystems = await getCellArray('A1', cfg.systemsCol, cfg.systems, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
+        let dataMain = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
 
+        let row = 0;
+        for (row; row < dataMain[0].length; row++) {
+            if (dataMain[0][row] === nation) break;
+        }
 
-        //Weapons setup
-        let nationRow = await findVertical(nation, 'A', 'Stockpiles')
-            .catch(err => console.error(err));
-
-        let weaponArray = await getCellArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
-            .catch(err => console.error(err));
-        let unitArray = await getCellArray('A4', `BA${nationRow}`)
-            .catch(err => console.error(err));
-
-        for (let i = 1; i < weaponArray[0].length; i++) {
-            if (weaponArray[0][i] === 'END') {
-                break;
-            } else if (![',', '0'].includes(weaponArray[weaponArray.length - 1][i])) {
-                embedW.addField(weaponArray[0][i], weaponArray[weaponArray.length - 1][i], true);
+        for (const systemColumn of dataSystems) {
+            if (!Number.isNaN(systemColumn[row])) {
+                embedSystems.addField(systemColumn[cfg.systemsRow], systemColumn[row], true);
             }
         }
-        for (let i = 4; i < unitArray[unitArray.length - 1].length; i++) {
-            if (unitArray[0][i] === 'Technology') {
-                break;
-            } else if (![',', '0'].includes(unitArray[unitArray.length - 1][i])) {
-                embed.addField(unitArray[0][i], unitArray[unitArray.length - 1][i], true);
+        for (const assetColumn of dataMain) {
+            if (!Number.isNaN(assetColumn[row])) {
+                embedAssets.addField(assetColumn[cfg.systemsRow], assetColumn[row], true);
             }
         }
 
+        await embedSwitcher(message, [embedAssets, embedSystems]);
         message.delete();
-        //Embed switching mechanism
-        let currentEmbed = embed;
-        let switchEmbeds = await embUnits(currentEmbed, message);
-        //Prints first embed, if its switched, returns Array with true,embed msg.
-        // Then switches to the other embed, then deletes the old and prints new. Then loop again.
-        while(switchEmbeds[0]) {
-            currentEmbed = currentEmbed === embed ? embedW : embed;
-            switchEmbeds[1].delete();
-            switchEmbeds = await embUnits(currentEmbed, message);
-        }
     }    
 }
 
-function embUnits(embed, message) {
-    return new Promise(function (resolve) {
+/**
+ * Function creates embed header for a nation assets.
+ * @private
+ * @param {string} nation   nation name.
+ * @param {string} user     user name.
+ * @return {module:"discord.js".MessageEmbed} Returns embed message header.
+ */
+function createEmbed(nation, user) {
+    return new discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`National Roster of ${nation}`)
+        .setURL(cfg.users[user].map)
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+}
+
+async function embedSwitcher(embed, message) {
+    return new Promise(function (resolve, reject) {
         function emojiFilter(reaction, user) {
             return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
 
-        message.channel.send(embed)
-            .then(msg => {
-                msg.react('❌').catch(err => console.error(err));
-                msg.react('➡️').catch(err => console.error(err));
-                msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
-                    .then(collected => {
-                        let react = collected.first();
-                        if (react.emoji.name === '➡️') {
-                            resolve([true,msg]);
-                        } else if (react.emoji.name === '❌') {
-                            msg.delete();
-                            resolve([false,msg]);
-                        }
-                    })
-                    .catch(() => {
+        while (true) {
+
+        }
+
+        message.channel.send(embed).then(msg => {
+            msg.react('❌').catch(error => console.error(error));
+            msg.react('➡️').catch(error => console.error(error));
+            msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
+                .then(collected => {
+                    let react = collected.first();
+                    if (react.emoji.name === '➡️') {
+                        resolve([true,msg]);
+                    } else if (react.emoji.name === '❌') {
                         msg.delete();
-                    })
-            })
-            .catch(() => {
-                resolve([false]);
-            })
+                        resolve([false,msg]);
+                    }
+                })
+                .catch(() => msg.delete())
+        })
+        .catch(() => resolve([false]));
     })
 }

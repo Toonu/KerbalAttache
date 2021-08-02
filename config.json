@@ -6,9 +6,14 @@
     "era": 50,
     "turn": 3,
     "submissions": "Database",
+    "submissionsCol": "AA",
     "main": "Maintenance",
+    "mainCol": "AN",
+    "mainRow": 3,
+    "mainAccountingRow": 0,
     "systems": "Stockpiles",
-    "tilesRow": 3,
+    "systemsCol": "U",
+    "systemsRow": 3,
     "servers": {
         "470258156682084373": {
             "name": "NoU",

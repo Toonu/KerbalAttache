@@ -1,5 +1,16 @@
-Debugger listening on ws://127.0.0.1:53892/c950cf1e-3161-463a-8237-d3ecc44a2f58
-For help, see: https://nodejs.org/en/docs/inspector
-Debugger attached.
-[LOG][2021-8-5 15:46:8 UTC] Deployed and ready!
-[LOG][2021-8-5 15:46:10 UTC] Server Nations of Unity (Toonu): .battle <@!591521990972669980> <@!319919565079576576> <@!752676284521250837> -a 2 MBT 4 SRAAM 5 MM -a 4 CC 2 SPAAG -b 4 MBT 2 IFV -r a
+[LOG][2021-8-5 20:35:51 UTC] Deployed and ready!
+[LOG][2021-8-5 20:35:53 UTC] Server Nations of Unity (Toonu): .battle <@!591521990972669980> <@!319919565079576576> <@!752676284521250837> -a 2 MBT 4 SRAAM 5 MM -a 4 CC 2 SPAAG -b 4 MBT 2 IFV -r a -n Ha he hi ho
+[LOG][2021-8-5 20:35:54 UTC] Battle was announced in battle channel by Toonu. Problem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
+Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
+For better reference, negative numbers are highlighted with red in the sheet.
+
+```iniSaturn is missing 2 MBT
+,Saturn is missing 3 SRAAM
+,Saturn is missing 5 MM
+,Toonu is missing 3 CC
+,Toonu is missing 1 SPAAG
+,Dion Noe is missing 3 MBT
+,Dion Noe is missing 1 IFV
+```
+[LOG][2021-8-5 20:36:9 UTC] Server Nations of Unity (Toonu): .prune 10
+[LOG][2021-8-5 20:36:10 UTC] Messages deleted: 11

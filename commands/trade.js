@@ -54,7 +54,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
 
         //Branching tab to systems if a system is traded.
         isSelling = !isSelling.startsWith('buy');
-        if (['wpSurface', 'wpAerial', 'systems'].includes(asset.type)) {
+        if ('system' === asset.type) {
             tab = cfg.systems;
             tabEnd = cfg.systemsEndCol;
         }
@@ -125,7 +125,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
         else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
-            report(message, `Trade ID:${id} of user <@${user}> rejected!`)
+            report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject')
             delete tradeData[id];
             exportFile('config.json', cfg);
         } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);

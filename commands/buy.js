@@ -39,7 +39,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         let unit = units.units[assetType];
 
         //Getting systems tab data if system is being purchased.
-        if (['wp', 'systems'].includes(unit.type)) {
+        if ('system' === unit.type) {
             systemData = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
                 .catch(error => {
                     isErroneous = true;

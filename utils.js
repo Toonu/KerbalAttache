@@ -204,6 +204,28 @@ module.exports = {
                 }
             }
         })
+    },
+    findArrayData: function findArrayData(analysedData, searchItems, row) {
+        let failsafe = undefined;
+
+        for (let i = 0; i < searchItems.length; i++) {
+            for (let j = 0; j < analysedData.length; j++) {
+                let analysedItem = row ? analysedData[j][row] : analysedData[j];
+                if (searchItems[i] === analysedItem) {
+                    searchItems[i] = {
+                        nation: searchItems[i],
+                        position: j
+                    };
+                    failsafe = undefined;
+                    break;
+                } else {
+                    failsafe = searchItems[i];
+                }
+            }
+            if (failsafe) throw new Error(`NotFoundException: Item ${failsafe} not found in the array.`);
+        }
+
+        return searchItems;
     }
 }
 

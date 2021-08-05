@@ -3,277 +3,277 @@
         "MBT": {
             "name": "MBT",
             "desc": "Main Battle Tank",
-            "type": "surface",
+            "type": "asset",
             "price": 48000
         },
         "AFV": {
             "name": "AFV",
             "desc": "Armored Fighting Vehicle",
-            "type": "surface",
+            "type": "asset",
             "price": 32000
         },
         "IFV": {
             "name": "IFV",
             "desc": "Infantry Fighting Vehicle",
-            "type": "surface",
+            "type": "asset",
             "price": 20000
         },
         "APC": {
             "name": "APC",
             "desc": "Armored Personnel Carrier",
-            "type": "surface",
+            "type": "asset",
             "price": 8000
         },
         "MLV": {
             "name": "MLV",
             "desc": "Missile Launcher Vehicle",
-            "type": "surface",
+            "type": "asset",
             "price": 24000
         },
         "SPAAG": {
             "name": "SPAAG",
             "desc": "Self-propelled Anti-Air gun",
-            "type": "surface",
+            "type": "asset",
             "price": 16000
         },
         "SF": {
             "name": "SF",
             "desc": "Special Operation Force",
-            "type": "surface",
+            "type": "asset",
             "price": 80000
         },
         "LM": {
             "name": "LM",
             "desc": "Light Multirole Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 24000
         },
         "MM": {
             "name": "MM",
             "desc": "Medium Multirole Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 48000
         },
         "HM": {
             "name": "HM",
             "desc": "Heavy Multirole Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 80000
         },
         "LA": {
             "name": "LA",
             "desc": "Large Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 40000
         },
         "VL": {
             "name": "VL",
             "desc": "Very Large Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 104000
         },
         "VTOL": {
             "name": "VTOL",
             "desc": "Helicopter / VTOL Airframe",
-            "type": "aerial",
+            "type": "asset",
             "price": 40000
         },
         "SAT": {
             "name": "SAT",
             "desc": "Orbital Satellite",
-            "type": "orbital",
+            "type": "asset",
             "price": 160000
         },
         "OV": {
             "name": "OV",
             "desc": "Orbital Vehicle",
-            "type": "orbital",
+            "type": "asset",
             "price": 200000
         },
         "K": {
             "name": "K",
             "desc": "Corvette",
-            "type": "naval",
+            "type": "asset",
             "price": 16000
         },
         "FF": {
             "name": "FF",
             "desc": "Frigate",
-            "type": "naval",
+            "type": "asset",
             "price": 50000
         },
         "DD": {
             "name": "DD",
             "desc": "Destroyer",
-            "type": "naval",
+            "type": "asset",
             "price": 80000
         },
         "CC": {
             "name": "CC",
             "desc": "Cruiser",
-            "type": "naval",
+            "type": "asset",
             "price": 120000
         },
         "BC": {
             "name": "BC",
             "desc": "Battlecruiser",
-            "type": "naval",
+            "type": "asset",
             "price": 160000
         },
         "BB": {
             "name": "BB",
             "desc": "Battleship",
-            "type": "naval",
+            "type": "asset",
             "price": 240000
         },
         "CL": {
             "name": "CL",
             "desc": "Light Carrier",
-            "type": "naval",
+            "type": "asset",
             "price": 300000
         },
         "CV": {
             "name": "CV",
             "desc": "Fleet Carrier",
-            "type": "naval",
+            "type": "asset",
             "price": 600000
         },
         "CRUISE": {
             "name": "CRUISE",
             "desc": "Cruise Missile",
-            "type": "wp",
+            "type": "system",
             "price": 5000
         },
         "BALLISTIC": {
             "name": "BALLISTIC",
             "desc": "Ballistic Missile",
-            "type": "wp",
+            "type": "system",
             "price": 6000
         },
         "ASM": {
             "name": "ASM",
             "desc": "Anti-Satellite Missile",
-            "type": "wp",
+            "type": "system",
             "price": 20000
         },
         "ATGM": {
             "name": "ATGM",
             "desc": "Anti-Tank Guided Missile",
-            "type": "wp",
+            "type": "system",
             "price": 3000
         },
         "ASHM": {
             "name": "ASHM",
             "desc": "Anti-Ship Missile",
-            "type": "wp",
+            "type": "system",
             "price": 8000
         },
         "ARM": {
             "name": "ARM",
             "desc": "Anti-radiation Missile",
-            "type": "wp",
+            "type": "system",
             "price": 7000
         },
         "SRAAM": {
             "name": "SRAAM",
             "desc": "Short-Range Air-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 1000
         },
         "MRAAM": {
             "name": "MRAAM",
             "desc": "Medium-Range Air-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 2500
         },
         "LRAAM": {
             "name": "LRAAM",
             "desc": "Long-Range Air-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 5000
         },
         "SRSAM": {
             "name": "SRSAM",
             "desc": "Short-Range Surface-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 500
         },
         "MRSAM": {
             "name": "MRSAM",
             "desc": "Medium-Range Surface-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 3000
         },
         "LRSAM": {
             "name": "LRSAM",
             "desc": "Long-Range Surface-to-Air Missile",
-            "type": "wp",
+            "type": "system",
             "price": 7000
         },
         "BMB": {
             "name": "BMB",
             "desc": "Unguided bomb",
-            "type": "wp",
+            "type": "system",
             "price": 500
         },
         "GBMB": {
             "name": "GBMB",
             "desc": "Guided bomb",
-            "type": "wp",
+            "type": "system",
             "price": 1000
         },
         "GPOD": {
             "name": "GPOD",
             "desc": "Gunpod",
-            "type": "wp",
+            "type": "system",
             "price": 10000
         },
         "RPOD": {
             "name": "RPOD",
             "desc": "Rocket pod",
-            "type": "wp",
+            "type": "system",
             "price": 4000
         },
         "FUEL": {
             "name": "FUEL",
             "desc": "Fuel pod",
-            "type": "systems",
+            "type": "system",
             "price": 2000
         },
         "EW": {
             "name": "EW",
             "desc": "Electronic Warfare suite",
-            "type": "systems",
+            "type": "system",
             "price": 20000
         },
         "REC": {
             "name": "REC",
             "desc": "Recon suite",
-            "type": "systems",
+            "type": "system",
             "price": 10000
         },
         "AIRPORT": {
             "name": "AIRPORT",
             "desc": "Airfield",
-            "type": "aerial",
+            "type": "asset",
             "price": 200000
         },
         "FOB": {
             "name": "FOB",
             "desc": "Forward Operating Base",
-            "type": "surface",
+            "type": "asset",
             "price": 160000
         },
         "PORT": {
             "name": "PORT",
             "desc": "Naval port",
-            "type": "naval",
+            "type": "asset",
             "price": 100000
         },
         "RADAR": {
             "name": "RADAR",
             "desc": "Radar site",
-            "type": "surface",
+            "type": "asset",
             "price": 40000
         }
     }

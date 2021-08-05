@@ -22,7 +22,7 @@
         "470258156682084373": {
             "name": "NoU",
             "mainid": "770921356111773698",
-            "battleid": "572807672055988234",
+            "battleid": "806528269586530375",
             "announcements": "685907863184474124",
             "headofstate": "519315646606082052",
             "administrators": [
@@ -64,7 +64,7 @@
                     "asset": {
                         "name": "MBT",
                         "desc": "Main Battle Tank",
-                        "type": "surface",
+                        "type": "asset",
                         "price": 48000
                     },
                     "assetColumn": 8,
@@ -152,7 +152,7 @@
                     "asset": {
                         "name": "MBT",
                         "desc": "Main Battle Tank",
-                        "type": "surface",
+                        "type": "asset",
                         "price": 48000
                     },
                     "assetColumn": 40,

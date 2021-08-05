@@ -11,7 +11,7 @@ module.exports = {
     execute: async function balance(message) {
         //Getting user
         let nation = cfg.users[ping(message).id].nation;
-        let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+        let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
@@ -80,16 +80,15 @@ module.exports = {
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
 
-        /**
         //Sending it in.
         message.channel.send(embed).then(embedMessage => {
-                embedMessage.react('❌').catch(err => console.error(err));
+                embedMessage.react('❌').catch(error => log(error, true));
                 embedMessage.awaitReactions(emojiFilter, {max: 1, time: 32000, errors: ['time']})
                     .then(collected => {
                         if (collected.first().emoji.name === '❌') embedMessage.delete();
                     })
                     .catch(() => embedMessage.delete());
-            }).catch(error => console.error(error));
-        message.delete().catch(error => console.error(error));**/
+            }).catch(error => log(error, true));
+        message.delete().catch(error => log(error, true));
     }
 }

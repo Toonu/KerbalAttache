@@ -10,21 +10,18 @@ module.exports = {
 	cooldown: 5,
     guildOnly: true,
 	execute: function userinfo(message, args) {
-
-        //Defining user.
-	    let user;
+        //Gathering user info and validating input arguments.
+	    let user = ping(message);
+        let configUser = cfg.users[user.id];
         try {
-            user = ping(message);
-            if(!cfg.users[user.id]) {
+            if(!configUser) {
                 //Creating non-existent user
-                report(message, `${createUser(user.id)} created by <@${message.author.id}>`, 'userinfo');
+                report(message, `${createUser(user.id, user.username)} created by <@${message.author.id}>`, 'userinfo');
             }
         } catch (error) {
             return messageHandler(message, error, true);
         }
 
-        //Gathering user info and printing.
-        let configUser = cfg.users[user.id];
         // noinspection JSCheckFunctionSignatures
         const embed = new Discord.MessageEmbed()
         .setColor(configUser.color)
@@ -33,7 +30,7 @@ module.exports = {
         .setAuthor('Attachè to the UN presents')
         .setThumbnail('https://imgur.com/IvUHO31.png')
         .addFields(
-            { name: 'Username:', value: user.username, inline: true},
+            { name: 'Username:', value: configUser.name, inline: true},
             { name: 'Nation:', value: configUser.nation, inline: true},
             { name: 'Demonym:', value: configUser.demonym, inline: true},
             { name: 'Color:', value: configUser.color, inline: true},
@@ -41,9 +38,8 @@ module.exports = {
         )
         .setFooter('Made by the Attachè to the United Nations', 'https://imgur.com/KLLkY2J.png');
 
-        if (configUser.notes !== ' ') {
-            embed.addField('Information:', configUser.notes);
-        }
+        if (configUser.notes !== ' ') embed.addField('Information:', configUser.notes);
+
         messageHandler(message, embed, true);
 	},
 };

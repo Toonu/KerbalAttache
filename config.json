@@ -4,16 +4,20 @@
     "money": "EUR",
     "moneyLocale": "fr-FR",
     "era": 50,
-    "turn": 3,
+    "turn": -1,
     "submissions": "Database",
-    "submissionsCol": "AA",
+    "submissionsMainRow": 3,
+    "submissionsEndCol": "AA",
     "main": "Maintenance",
-    "mainCol": "AN",
     "mainRow": 3,
     "mainAccountingRow": 0,
+    "mainEndCol": "AN",
     "systems": "Stockpiles",
-    "systemsCol": "T",
-    "systemsRow": 3,
+    "systemsMainRow": 3,
+    "systemsEndCol": "T",
+    "tech": "TechTree",
+    "techEndCol": "EF",
+    "techMainRow": 1,
     "servers": {
         "470258156682084373": {
             "name": "NoU",
@@ -32,149 +36,150 @@
     },
     "users": {
         "319919565079576576": {
+            "name": "Toonu",
             "nation": "Iconia",
             "demonym": "Iconian",
             "color": "0065bd",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
-            "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
+            "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories",
+            "trades": {}
         },
         "768845435455930428": {
+            "name": "Attachè",
             "nation": "Bot",
             "demonym": "Botish",
             "color": "fffffe",
             "cf": 1,
             "map": "https://discord.com/",
-            "notes": " "
+            "notes": " ",
+            "trades": {
+                "1": {
+                    "authorID": "768845435455930428",
+                    "authorRow": 11,
+                    "recipientID": "319919565079576576",
+                    "recipientRow": 4,
+                    "amount": 2,
+                    "money": 100000,
+                    "asset": {
+                        "name": "MBT",
+                        "desc": "Main Battle Tank",
+                        "type": "surface",
+                        "price": 48000
+                    },
+                    "assetColumn": 8,
+                    "isSelling": true,
+                    "tab": "Maintenance"
+                }
+            }
         },
         "693908421396922480": {
+            "name": "The Bunny",
             "nation": "EE",
             "demonym": "E&E",
             "color": "700300",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "312900789947596800": {
+            "name": "Kerbal Nerd 123",
             "nation": "Kroviska",
             "demonym": "Kroviskan",
             "color": "7f0020",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "472210194814730250": {
+            "name": "DunaMoose",
             "nation": "Ofeliya",
             "demonym": "Ofeliyan",
             "color": "ff8500",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "227222314645717002": {
+            "name": "RoyalRedBird",
             "nation": "Magnella",
             "demonym": "Magnellan",
             "color": "5510ff",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "591521990972669980": {
+            "name": "Saturn",
             "nation": "Commonwealth",
             "demonym": "Commonwealth",
             "color": "2b3990",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "715551445742649344": {
+            "name": "Matt 1",
             "nation": "Velka",
             "demonym": "Velkan",
             "color": "94e02d",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "752676284521250837": {
+            "name": "Dion Noe",
             "nation": "Sharkion",
             "demonym": "Shark",
             "color": "00ff21",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "211547891276185601": {
+            "name": "Luminous",
             "nation": "GL",
             "demonym": "Gaia-Lucian",
             "color": "ffc90e",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "81586294727118848": {
+            "name": "Foran",
             "nation": "TSR",
             "demonym": "Starks",
             "color": "aa4545",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "591774826834952193": {
+            "name": "Belka_Standard",
             "nation": "Elbe",
             "demonym": "Elbian",
             "color": "3d6395",
-            "cf": 1.4000000000000004,
+            "cf": 1,
             "map": "https://drive.google.com/file/d/16OAitE9Ip8iznwAryQFJ2NMpbzDxYRoi/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "356065937318871041": {
-            "nation": "na",
-            "demonym": "undefined",
+            "name": "Aki",
             "color": "fffffe",
             "cf": 1,
             "map": "https://discord.com/",
-            "notes": " "
-        }
-    },
-    "trade": {
-        "768845435455930428": {
-            "nation": "Iconia",
-            "amount": 2,
-            "money": 100000,
-            "unit": {
-                "desc": "Main Battle Tank",
-                "type": "surface",
-                "price": 48000
-            },
-            "isSelling": true,
-            "tab": "Maintenance",
-            "tabEnd": "AN",
-            "transaction": "sell",
-            "nationRow": 4,
-            "unitCol": 8,
-            "message": {
-                "channelID": "770921356111773698",
-                "deleted": false,
-                "id": "871880289595568138",
-                "type": "DEFAULT",
-                "system": false,
-                "content": ".trade sell 2 mbt 100000 <@!768845435455930428>",
-                "authorID": "319919565079576576",
-                "pinned": false,
-                "tts": false,
-                "nonce": "871880288668483584",
-                "embeds": [],
-                "attachments": [],
-                "createdTimestamp": 1627942859792,
-                "editedTimestamp": 0,
-                "webhookID": null,
-                "applicationID": null,
-                "activity": null,
-                "flags": 0,
-                "reference": null,
-                "guildID": "470258156682084373",
-                "cleanContent": ".trade sell 2 mbt 100000 @​Attachè"
-            }
+            "notes": " ",
+            "trades": {}
         }
     }
 }

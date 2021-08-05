@@ -64,17 +64,6 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
                 if (row.length > maximalLength) maximalLength = row.length;
             }
 
-            /**
-            //Two loops fill the empty values with dot so they are not ignored in embeds.
-            for(const row of data.data.values) {
-                for(let column = 0; column < row.length; column++) {
-                    if (row[column] === '') {
-                        row.splice(column, 1, '.');
-                    }
-                }
-                if (row.length > maximalLength) maximalLength = row.length;
-            }
-            **/
             //Second loop fills in the ends if the row is shorter than maximal row to keep the array rectangular.
             for (let row = 0; row < data.data.values.length; row++) {
                 if (data.data.values[row].length < maximalLength) {

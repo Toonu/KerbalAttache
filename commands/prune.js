@@ -14,7 +14,7 @@ module.exports = {
 		if (isNaN(args[0])) {
 			return messageHandler(message, new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
 		} else if (!perm(message, 1)) {
-			return message.delete().catch(error => console.error(error));
+			return message.delete().catch(error => log(error, true));
 		}
 
 		//Parse oldMessages bool.

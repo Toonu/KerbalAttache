@@ -16,7 +16,7 @@ for (const file of commandFiles) {
 //Starts the bot
 client.on('ready', () => {
 	log(`Deployed and ready!`);
-	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => console.error(error));
+	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => log(error, true));
 	init();
 });
 
@@ -81,20 +81,19 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 
 //const {CLIENT_TOKEN} = process.env;
 const {CLIENT_TOKEN} = require('./env.json');
-client.login(CLIENT_TOKEN).catch(error => console.error(error));
+client.login(CLIENT_TOKEN).catch(error => log(error, true));
 
 /**
- * accept - sheet
  * battle - sheet
- * reject - sheet
  * tech - sheet
- * trade - sheet
- * game
  *
  * YYY
  *
- * check if the cfgCols are used in getCellArrays.
+ * Test em all!
+ * Go through each command possible failure points, extreme cases and possible fails.
+ * Function for finding columns?
  *
+ * accept
  * assets - sheet
  * balance - sheet
  * buy - sheet
@@ -103,9 +102,11 @@ client.login(CLIENT_TOKEN).catch(error => console.error(error));
  * map
  * ping
  * prune
+ * reject
  * spam
  * sub
  * tiles - sheet
+ * trade - sheet
  * turn - sheet
  * usercreate
  * userdel

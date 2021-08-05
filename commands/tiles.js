@@ -13,20 +13,24 @@ module.exports = {
         args[0] = parseFloat(args[0]);
 
         //Checking arguments and permissions.
-        if (!perm(message, 2)) return message.delete().catch(error => console.error(error));
-        else if (isNaN(args[0])) return messageHandler(message, 'InvalidTypeException: Argument is not a number. Canceling operation.', true);
-        else if (user === undefined) return messageHandler(message, 'InvalidArgumentException: No user specified. Canceling operation.', true);
+        if (!perm(message, 2)) return message.delete().catch(error => log(error, true));
+        else if (isNaN(args[0])) return messageHandler(message, new Error('InvalidTypeException: Argument is not a number. Canceling operation.'), true);
+        else if (user === undefined) return messageHandler(message, new Error('InvalidArgumentException: No user specified. Canceling operation.'), true);
 
         let column = 0;
         let row = 0;
-        let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+        let isErroneous = false;
+        let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
 
+        if (isErroneous) return;
+
         for (column; column < data.length; column++) {
             // noinspection JSUnresolvedVariable
-            if (data[column][cfg.mainRow] && data[column][cfg.tilesRow].toLowerCase() === 'tiles') break;
+            if (data[column][cfg.mainRow].toLowerCase() === 'tiles') break;
         }
         for (row; row < data[0].length; row++) {
             if (data[0][row] === cfg.users[user].nation) break;
@@ -35,9 +39,13 @@ module.exports = {
         if (data[column][row] > 0) {
             await setCellArray( `${toColumn(column)}1`, [data[column]], cfg.main, true)
                 .catch(error => {
+                    // noinspection ReuseOfLocalVariableJS
+                    isErroneous = true;
                     log(`Cancelling tile process due to an error. Consult log for more information.`, true);
                     return messageHandler(message, error, true);
                 });
+
+            if (isErroneous) return;
 
             //Logging and announcing.
             report(message, `Tiles set to ${data[column][row]} for ${cfg.users[user].nation} by <@${message.author.id}>!`, this.name);

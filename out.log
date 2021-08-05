@@ -1,11 +1,5 @@
-[0m[0K[LOG][2021-8-3 0:20:57 UTC] Deployed and ready![0K[?25l
-[0K[?25h[LOG][2021-8-3 0:20:59 UTC] Server Nations of Unity (Toonu): .trade sell 2 mbt 100000 <@!768845435455930428>[0K[?25l
-[0K[?25h[ERR][2021-8-3 0:21:0 UTC] Cannot send messages to this user[0K[?25l
-DiscordAPIError: Cannot send messages to this user[0K
-    at RequestHandler.execute (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:154:13)[0K
-    at processTicksAndRejections (node:internal/process/task_queues:93:5)[0K
-    at async RequestHandler.push (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\rest\RequestHandler.js:39:14)[0K
-    at async ClientUser.createDM (D:\GitProjects\KerbalAttache\node_modules\discord.js\src\structures\User.js:252:18)[0K
-    at async Object.trade [as execute] (D:\GitProjects\KerbalAttache\commands\trade.js:59:9)[0K
-[LOG][2021-8-3 0:21:0 UTC] <@319919565079576576> has proposed to sell <@768845435455930428> 2 MBTs for 100?000,00 €![0K
-[0K[?25h
+[LOG][2021-8-5 9:4:27 UTC] Deployed and ready!
+[LOG][2021-8-5 9:4:31 UTC] Server Nations of Unity (Toonu): .turn
+[LOG][2021-8-5 9:4:33 UTC] Turn has been finished by <@319919565079576576>.
+[LOG][2021-8-5 9:5:14 UTC] Server Nations of Unity (Toonu): .turn
+[LOG][2021-8-5 9:5:15 UTC] Turn has been finished by <@319919565079576576>.

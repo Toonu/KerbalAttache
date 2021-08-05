@@ -1,6 +1,6 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
     {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
-    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report} = require("../utils");
+    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log} = require("../utils");
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
@@ -36,7 +36,7 @@ Assets do not need to be written in capital letters, the command is case insensi
 
         //Getting systems tab data if system is being purchased.
         if (['wp', 'systems'].includes(units.units[assetType].type)) {
-            systemData = await getCellArray('A1', cfg.systemsCol, cfg.systems, true)
+            systemData = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
                 .catch(error => {
                     return messageHandler(message, error, true);
                 });
@@ -46,7 +46,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             systemBackup = systemColumn;
         }
 
-        let mainData = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+        let mainData = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
@@ -103,10 +103,10 @@ Assets do not need to be written in capital letters, the command is case insensi
                 if (result === resultOptions.confirm) {
                     if (amount < 0) {
                         messageHandler(message, 'Selling assets. ✅ Do not forget to remove them from your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${unit.desc} for ${formatCurrency(Math.abs(unit.price*amount*0.7))}`, this.name);
+                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${unit.name} for ${formatCurrency(Math.abs(unit.price*amount*0.7))}`, this.name);
                     } else {
                         messageHandler(message, 'Purchasing assets. ✅ Do not forget to place them onto your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${unit.desc} for ${formatCurrency(unit.price*amount)}`, this.name);
+                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${unit.name} for ${formatCurrency(unit.price*amount)}`, this.name);
                     }
                     setCell(`${toColumn(accountColumn)}${nationRow+1}`, account - unit.price * amount * (amount < 0 ? 0.7 : 1), cfg.main);
                     setCell(`${toColumn(systemColumn)}${nationRow+1}`, oldAmount+amount, systemData ? cfg.systems : cfg.main);
@@ -131,8 +131,8 @@ function printAssets(message) {
     message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
         .then(assetMessages => {
             assetMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 30000})
-                .catch(error => console.error(error)));
+                .catch(error => log(error, true)));
         })
-        .catch(error => console.error(error));
-    return message.delete().catch(error => console.error(error));
+        .catch(error => log(error, true));
+    return message.delete().catch(error => log(error, true));
 }

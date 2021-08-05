@@ -1,5 +1,5 @@
-const {perm} = require("../utils"), cfg = require('../config.json'), units = require('../units.json'),
-{findHorizontal, findVertical, report} = require("../game"), {getCellArray, setCellArray} = require("../sheet");
+const {perm, log} = require("../utils"), cfg = require('../config.json'), units = require('../units.json'),
+{getCellArray, setCellArray} = require("../sheet");
 module.exports = {
     name: 'battle',
     description: 'Command for removing units after battle!',
@@ -62,7 +62,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
             end = await findHorizontal('END', 4, 'Stockpiles');
             // noinspection ReuseOfLocalVariableJS
             rows = await findVertical('Data', 'A', 'Stockpiles');
-            let dataWp = await getCellArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(e => console.error(e));
+            let dataWp = await getCellArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(error => log(error, true));
 
             for (let nation = 0; nation < userMap.length; nation++) {
                 for (let row = 0; row < data.length; row++) {
@@ -118,7 +118,7 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
             message.client.channels.cache.get(cfg.servers[message.guild.id].battleid).send(`[${dateTime} UTC]   [Battle results]:
 
 \`\`\`ini
-${reportMsg}\`\`\``).catch(e => console.error(e));
+${reportMsg}\`\`\``).catch(error => log(error, true));
 
             let problems = ''
             if (negativeMsg.length > 0) {

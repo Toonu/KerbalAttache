@@ -17,13 +17,14 @@ module.exports = {
 			for (spamNumber = 1; spamNumber < args[0]; spamNumber++) {
 				//Not using handler to not delete the message.
 				if (!args[1]) {
-					message.channel.send(spamNumber).catch(networkError => console.error(networkError));
+					message.channel.send(spamNumber).catch(networkError => log(networkError, true));
 				} else {
-					message.channel.send(args[1]).catch(networkError => console.error(networkError));
+					message.channel.send(args[1]).catch(networkError => log(networkError, true));
 				}
 			}
-			messageHandler(message, 'Done!', true)
-			log(`Spammed ${spamNumber + 1} of messages.`);
+			message.channel.send('Done!').catch(networkError => log(networkError, true));
+			message.delete().catch(networkError => log(networkError, true));
+			log(`Spammed ${spamNumber} of messages.`);
         }
 	},
 };

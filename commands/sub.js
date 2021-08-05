@@ -1,4 +1,4 @@
-const {ping, messageHandler, formatCurrency} = require("../utils"), {getCellArray} = require("../sheet"),
+const {ping, messageHandler, formatCurrency, log} = require("../utils"), {getCellArray} = require("../sheet"),
     cfg = require('../config.json');
 module.exports = {
     name: 'sub',
@@ -8,10 +8,14 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {
-        let submissionsData = await getCellArray('A1', cfg.submissionsCol, cfg.submissions)
+        let isErroneous = false;
+        let submissionsData = await getCellArray('A1', cfg.submissionsEndCol, cfg.submissions)
             .catch(error => {
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
+
+        if (isErroneous) return;
 
         //Checks if the message has ping to determine searched nation.
         let nation = cfg.users[ping(message, 2).id].nation;
@@ -47,10 +51,10 @@ module.exports = {
             .then(submissionMessages => {
                 if (args.some(r => {if (r === "true") return true})) {
                     submissionMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 32000})
-                        .catch(error => console.error(error)));
+                        .catch(error => log(error, true)));
                 }
             })
-            .catch(error => console.error(error));
-        message.delete().catch(error => console.error(error));
+            .catch(error => log(error, true));
+        message.delete().catch(error => log(error, true));
     },
 };

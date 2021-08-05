@@ -22,7 +22,7 @@ module.exports = {
         module.exports.log(content);
         // noinspection JSUnresolvedVariable,JSUnresolvedFunction
         message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${content}`)
-            .catch(networkError => console.error(networkError));
+            .catch(networkError => log(networkError, true));
     },
 
     /**
@@ -120,6 +120,7 @@ module.exports = {
     /**
      * Function creates new user of id with attributes of nation, color, sheet and map. Returns string message the user was created successfully.
      * @param {string} id           user discord id
+     * @param {string} nameIn       user discord name
      * @param {string} nationIn     nation name
      * @param {string} demonymIn    nation demonym
      * @param {string} colorIn      color hex number
@@ -127,7 +128,7 @@ module.exports = {
      * @return {string}             Returns string response of attributes of created user or throws an error message.
      * @throws {Error}              Throws Exceptions if the user already exists or the specified ID is undefined/NaN.
      */
-    createUser: function createUser(id, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe", map = 'https://discord.com/') {
+    createUser: function createUser(id, nameIn, nationIn = undefined, demonymIn = undefined, colorIn = "fffffe", map = 'https://discord.com/') {
         if (!id || Number.isNaN(id)) {
             throw new Error('InvalidArgumentException: User ID is undefined!') ;
         } else if (cfg.users[id]) {
@@ -136,12 +137,14 @@ module.exports = {
 
         //Adds user to the json file.
         cfg.users[id] = {
+            name: nameIn,
             nation: nationIn,
             demonym: demonymIn,
             color: colorIn,
             cf: 1,
             map: map,
             notes: " ",
+            trades: {}
         }
 
         module.exports.exportFile("config.json", cfg);

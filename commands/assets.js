@@ -13,16 +13,18 @@ module.exports = {
         let user = ping(message).id;
         let nation = cfg.users[user].nation;
 
+        if (!nation) return messageHandler(message, 'InvalidArgumentType: User is not defined', true);
+
         //Making embeds.
         const embedAssets = createEmbed(nation, user);
         const embedSystems = createEmbed(nation, user);
 
         //Gathering data.
-        let dataSystems = await getCellArray('A1', cfg.systemsCol, cfg.systems, true)
+        let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
-        let dataMain = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+        let dataMain = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
@@ -43,7 +45,7 @@ module.exports = {
         }
         for (systemsEndCol; systemsEndCol < dataSystems.length; systemsEndCol++) {
             if (dataSystems[systemsEndCol][cfg.mainAccountingRow] === 'Systems') startSystemCol = systemsEndCol;
-            else if (dataSystems[systemsEndCol][cfg.systemsRow] === '') break;
+            else if (dataSystems[systemsEndCol][cfg.systemsMainRow] === '') break;
         }
 
         //Finishing embeds.
@@ -56,7 +58,7 @@ module.exports = {
         for (let column = startSystemCol; column < systemsEndCol; column++) {
             let item = dataSystems[column][row];
             if (!Number.isNaN(item) && item !== 0) {
-                embedSystems.addField(dataSystems[column][cfg.systemsRow], item, true);
+                embedSystems.addField(dataSystems[column][cfg.systemsMainRow], item, true);
             }
         }
 

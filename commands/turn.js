@@ -9,11 +9,15 @@ module.exports = {
     guildOnly: true,
     execute: async function turn(message) {
         if(!perm(message, 2, true)) return;
+        let isErroneous = false;
 
-        let data = await getCellArray('A1', cfg.mainCol, cfg.main, true)
+        let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
+
+        if(isErroneous) return;
 
         let accountColumn;
         let balanceColumn;
@@ -41,9 +45,8 @@ module.exports = {
 
         //Check
         if (!accountColumn || !balanceColumn || !rpColumn || !rpBudgetColumn || !coefficientColumn
-            || !dataStart || !dataEnd) {
+            || !dataStart || !dataEnd)
             return messageHandler(message, new Error(`NotFoundException: Cancelling turn process. Not all sheet columns were found.`), true);
-        }
 
         //Accounting balance and research.
         for (let row = dataStart; row < dataEnd; row++) {
@@ -100,19 +103,23 @@ module.exports = {
         await setCellArray( `${accountColLetter}1`, [data[accountColumn]], cfg.main, true)
             .catch(error => {
                 log(`Cancelling turn process. Some values has been modified and must be checked.`, true);
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
         await setCellArray(`${rpColLetter}1`, [data[rpColumn], data[rpBudgetColumn], data[coefficientColumn]], cfg.main, true)
             .catch(error => {
                 log(`Cancelling turn process. Some values has been modified and must be checked.`, true);
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
+
+        if(isErroneous) return;
 
         //Logging and announcing.
         report(message, `Turn has been finished by <@${message.author.id}>.`, this.name);
         let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(server.announcements).send(`<@&${server.headofstate}> Turn ${cfg.turn} has been finished!`)
-            .catch(error => console.error(error));
+            .catch(error => log(error, true));
     }
 };

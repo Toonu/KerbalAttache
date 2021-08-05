@@ -1,7 +1,6 @@
-const cfg = require('./../config.json'), {ping, perm, exportFile} = require('../utils'),
+const cfg = require('./../config.json'), {ping, perm, exportFile, log} = require('../utils'),
     tt = require('./../tt.json'), discord = require('discord.js'),
-    {getCell, setCell, getCellArray, toCoordinate, fromCoordinate} = require("../sheet"),
-    {findData, findHorizontal, findVertical, report} = require("../game");
+    {getCell, setCell, getCellArray, toCoordinate, fromCoordinate} = require("../sheet");
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research.',
@@ -175,8 +174,8 @@ function list(category, nation, message) {
 
                 message.channel.send(embed)
                     .then(msg => {
-                        msg.react('✅').catch(err => console.error(err));
-                        msg.react('❌').catch(err => console.error(err));
+                        msg.react('✅').catch(error => log(error, true));
+                        msg.react('❌').catch(error => log(error, true));
                         msg.awaitReactions(filter, { max: 1, time: 32000, errors: ['time'] })
                             .then(collected => {
                                 let react = collected.first();

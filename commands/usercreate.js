@@ -11,6 +11,8 @@ module.exports = {
     -c [color] hex colour int
     -m [map] URL
     -d [demonym] string
+    -cf [coefficient] float
+    -name [name] string, if left empty, Discord username is used.
     -notes [notes] string\`\`\``,
     cooldown: 5,
     guildOnly: true,
@@ -18,10 +20,10 @@ module.exports = {
         if (message.mentions.users.size === 0) {
             return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true);
         }
-        const user = message.mentions.users.first().id;
+        const user = message.mentions.users.first();
         if (perm(message, 2)) {
             try {
-                createUser(user);
+                createUser(user.id, user.username);
             } catch (error) {
                 return messageHandler(message, error, true);
             }
@@ -32,18 +34,12 @@ module.exports = {
                 //Concentrates spaced values
                 let data = '';
                 for (let j = i + 1; j < args.length; j++) {
-                    if (args[j].startsWith('-')) {
-                        break;
-                    }
+                    if (args[j].startsWith('-') || args[j].startsWith('<@')) break;
                     data += ` ${args[j]}`;
                 }
-                if (args[i] === '-notes') {
-                    execute(message, [`-notes`, data.trim()], false);
-                } else if (args[i].startsWith('-')) {
-                    execute(message, [args[i], data.trim()], false);
-                }
+                if (args[i].startsWith('-')) execute(message, [args[i], data.trim()], false);
             }
-            report(message, `Nation ${cfg.users[user].nation} was created for user ${message.mentions.users.first().username} created by <@${message.author.id}>`, 'usercreate');
+            report(message, `Nation ${cfg.users[user.id].nation} was created for user ${message.mentions.users.first().username} created by <@${message.author.id}>`, 'usercreate');
             messageHandler(message, 'User was created.', true);
         }
     }

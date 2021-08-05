@@ -1,6 +1,6 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
     {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
-    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log} = require("../utils");
+    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
@@ -15,58 +15,79 @@ Assets do not need to be written in capital letters, the command is case insensi
         //No arguments lists the categories.
         if(!args[0]) return printAssets(message);
 
+        let user = ping(message);
+
         //Checking input arguments.
         let amount = parseInt(args[0]);
-        if (isNaN(amount)) {
+        if (Number.isNaN(amount)) {
             return messageHandler(message, new Error('InvalidTypeException: Argument is not a number.'), true);
-        } else if (args[1] === undefined) {
+        } else if (!args[1]) {
             return messageHandler(message, new Error('InvalidArgumentException: Missing second argument.'), true);
         }
         let assetType = args[1].toUpperCase();
-        if(!units.units.hasOwnProperty(assetType)) {
+        if(!units.units[assetType]) {
             return messageHandler(message, new Error('Asset not found.'), true);
         }
 
+        let isErroneous = false;
         let accountColumn;
         let nationRow = 0;
         let systemColumn = 0;
-        let nation = cfg.users[message.author.id];
+        let nation = cfg.users[user.id];
         let systemData;
         let systemBackup;
+        let unit = units.units[assetType];
 
         //Getting systems tab data if system is being purchased.
-        if (['wp', 'systems'].includes(units.units[assetType].type)) {
+        if (['wp', 'systems'].includes(unit.type)) {
             systemData = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
                 .catch(error => {
+                    isErroneous = true;
                     return messageHandler(message, error, true);
                 });
+            if (isErroneous) return;
+
+            //Searching for column.
             for (systemColumn; systemColumn < systemData.length; systemColumn++) {
                 if (systemData[systemColumn][cfg.mainRow] === assetType) break;
             }
+            //Used to get systemsColumn back after it is looped through the mainData for loop.
             systemBackup = systemColumn;
+
+            if (!systemColumn) return messageHandler(message, new Error('Could not find asset system column.'), true);
         }
 
         let mainData = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
+        if (isErroneous) return;
 
+        //Searching for row and columns.
         for (nationRow; nationRow < mainData[0].length; nationRow++) {
             if (mainData[0][nationRow] === nation.nation) break;
         }
-
         for (systemColumn = 0; systemColumn < mainData.length; systemColumn++) {
             if (mainData[systemColumn][cfg.mainAccountingRow] === 'Account') accountColumn = systemColumn;
             else if (!systemData && mainData[systemColumn][cfg.mainRow] === assetType) break;
         }
 
-        systemData ? systemColumn = systemBackup : cfg.main;
+        //Validating columns
+        if (!systemColumn || !accountColumn || !nationRow)
+            return messageHandler(message, new Error('Could not find one of columns.'), true);
+
+        //If buying a system, reverting the systemData to old number found before.
+        systemData ? systemColumn = systemBackup : undefined;
 
         let oldAmount = await getCell(toColumn(systemColumn)+(nationRow+1), systemData ? cfg.systems : cfg.main);
         let account = await getCell(toColumn(accountColumn)+(nationRow+1), cfg.main);
-        let unit = units.units[assetType];
 
-        if (oldAmount + amount < 0) {
+        //Validating cells being numbers and checking amounts.
+        if (Number.isNaN(oldAmount) || Number.isNaN(account))
+            return messageHandler(message, new Error('InvalidTypeException: Player account or bought asset is not' +
+                ' number.'), true, 20000);
+        else if (oldAmount + amount < 0) {
             return messageHandler(message, new Error('You cannot go into negative numbers of assets!'), true, 20000);
         }
 

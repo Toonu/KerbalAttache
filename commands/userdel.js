@@ -8,20 +8,19 @@ module.exports = {
     guildOnly: true,
     execute: function userdel(message) {
 
-        if (message.mentions.users.size === 0) {
+        //Validating input arguments.
+        if (message.mentions.users.size === 0)
             return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true)
-        }
         const user = message.mentions.users.first();
 
         //Validation
-        if (!cfg.users[user.id]) {
+        if (!cfg.users[user.id])
             return messageHandler(message, new Error('InvalidArgumentException: User does not exist, please retry.'), true)
-        } else if (perm(message, 2)) {
+        else if (perm(message, 2)) {
             //Deleting the user and exporting the edited file.
             delete cfg.users[user.id];
             exportFile('config.json', cfg);
-            //Logging
-            report(message, `${message.author.nickname} deleted user <@${message.mentions.users.first().username}>!`, this.name);
+            report(message, `${message.author.username} deleted user <@${user.id}>!`, this.name);
             messageHandler(message, 'User deleted.', true);
         }
     }

@@ -9,33 +9,46 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function tiles(message, args) {
-        let user = message.mentions.users.first().id;
-        args[0] = parseFloat(args[0]);
+        //Validating input arguments and clearance.
+        if(!perm(message, 2)) return;
 
-        //Checking arguments and permissions.
-        if (!perm(message, 2)) return message.delete().catch(error => log(error, true));
-        else if (isNaN(args[0])) return messageHandler(message, new Error('InvalidTypeException: Argument is not a number. Canceling operation.'), true);
-        else if (user === undefined) return messageHandler(message, new Error('InvalidArgumentException: No user specified. Canceling operation.'), true);
-
+        let user = message.mentions.users.first();
+        let amount = parseFloat(args[0]);
         let column = 0;
         let row = 0;
         let isErroneous = false;
+
+        if (Number.isNaN(amount))
+            return messageHandler(message, new Error('InvalidTypeException: Argument is not a number. Canceling operation.'), true);
+        else if (!user)
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified. Canceling operation.'), true);
+        user = user.id;
+
+        //Gathering data.
         let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
                 isErroneous = true;
                 return messageHandler(message, error, true);
             });
-
         if (isErroneous) return;
+        else if (!cfg.users[user])
+            return messageHandler(message, new Error('InvalidArgumentException: User not found. Canceling operation.'), true);
 
+
+        //Searching for column and row.
         for (column; column < data.length; column++) {
-            // noinspection JSUnresolvedVariable
             if (data[column][cfg.mainRow].toLowerCase() === 'tiles') break;
         }
         for (row; row < data[0].length; row++) {
             if (data[0][row] === cfg.users[user].nation) break;
         }
-        data[column][row] += args[0];
+
+        if (Number.isNaN(data[column][row]))
+            return messageHandler(message, new Error('InvalidTypeException: Tiles cell does not contain a number.' +
+                ' Canceling operation.'), true);
+
+        //Changing the data.
+        data[column][row] += amount;
         if (data[column][row] > 0) {
             await setCellArray( `${toColumn(column)}1`, [data[column]], cfg.main, true)
                 .catch(error => {

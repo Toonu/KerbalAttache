@@ -10,14 +10,15 @@ module.exports = {
     guildOnly: true,
     execute: async function assets(message) {
         //Getting user.
-        let user = ping(message).id;
-        let nation = cfg.users[user].nation;
+        let user = cfg.users[ping(message).id];
 
-        if (!nation) return messageHandler(message, 'InvalidArgumentType: User is not defined', true);
+        if (!user.nation) {
+            return messageHandler(message, 'InvalidArgumentType: User is not defined', true);
+        }
 
         //Making embeds.
-        const embedAssets = createEmbed(nation, user);
-        const embedSystems = createEmbed(nation, user);
+        const embedAssets = createEmbed(user.map, user.nation);
+        const embedSystems = createEmbed(user.map, user.nation);
 
         //Gathering data.
         let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
@@ -37,7 +38,7 @@ module.exports = {
         let systemsEndCol = 0;
 
         for (row; row < dataMain[0].length; row++) {
-            if (dataMain[0][row] === nation) break;
+            if (dataMain[0][row] === user.nation) break;
         }
         for (technologyCol; technologyCol < dataMain.length; technologyCol++) {
             if (dataMain[technologyCol][cfg.mainAccountingRow] === 'Maintenance') startMainCol = technologyCol;
@@ -46,6 +47,10 @@ module.exports = {
         for (systemsEndCol; systemsEndCol < dataSystems.length; systemsEndCol++) {
             if (dataSystems[systemsEndCol][cfg.mainAccountingRow] === 'Systems') startSystemCol = systemsEndCol;
             else if (dataSystems[systemsEndCol][cfg.systemsMainRow] === '') break;
+        }
+
+        if (!row || !technologyCol || !startMainCol || !systemsEndCol || !startSystemCol) {
+            return messageHandler(message, new Error('Could not find relevant columns!'), true);
         }
 
         //Finishing embeds.
@@ -84,15 +89,15 @@ module.exports = {
 /**
  * Function creates embed header for a nation assets.
  * @private
- * @param {string} nation   nation name.
- * @param {string} user     user name.
+ * @param {string} nation   nation name
+ * @param {string} map      map URL
  * @return {module:"discord.js".MessageEmbed} Returns embed message header.
  */
-function createEmbed(nation, user) {
+function createEmbed(map, nation) {
     return new discord.MessageEmbed()
         .setColor('#065535')
         .setTitle(`National Roster of ${nation}`)
-        .setURL(cfg.users[user].map)
+        .setURL(map)
         .setThumbnail('https://imgur.com/IvUHO31.png')
         .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 }

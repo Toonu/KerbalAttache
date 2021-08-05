@@ -28,7 +28,7 @@ Use underscores or nothing instead of spaces.
         let result = [];
         if (args[0] === 'budget') {
             let amount = parseInt(args[2]);
-            if (['set', 'add'].includes(args[1]) && !isNaN(amount)) {
+            if (['set', 'add'].includes(args[1]) && !Number.isNaN(amount)) {
                 let bool = (args[1] === 'set') ? 0 : 1;
                 result.push(await budget(amount, nation, bool));
                 if (result[0].includes("lower")) {

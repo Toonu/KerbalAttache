@@ -10,17 +10,23 @@ module.exports = {
     guildOnly: true,
     execute: async function balance(message) {
         //Getting user
+        let isErroneous = false;
         let nation = cfg.users[ping(message).id].nation;
         let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
+                isErroneous = true;
                 return messageHandler(message, error, true);
             });
+        if (isErroneous) return;
+        else if (!nation) {
+            return messageHandler(message, new Error('InvalidArgumentEception: User not found!'), true);
+        }
 
         let accountColumn;
         let balanceColumn;
         let rpColumn;
         let rpBudgetColumn;
-        let tilesColumn;
+        let tilesColumn = 0;
         let row = 0;
 
         //Getting rows and columns.
@@ -28,12 +34,16 @@ module.exports = {
             if (data[0][row] === nation) break;
         }
 
-        for (let column = 0; column < data.length; column++) {
-            if (data[column][cfg.mainAccountingRow].startsWith('Account')) accountColumn = column;
-            else if (data[column][cfg.mainAccountingRow].startsWith('Balance')) balanceColumn = column;
-            else if (data[column][cfg.mainRow].startsWith('RP')) rpColumn = column;
-            else if (data[column][cfg.mainRow].startsWith('ResBudget')) rpBudgetColumn = column;
-            else if (data[column][cfg.mainRow].startsWith('Tiles')) tilesColumn = column;
+        for (tilesColumn; tilesColumn < data.length; tilesColumn++) {
+            if (data[tilesColumn][cfg.mainAccountingRow].startsWith('Account')) accountColumn = tilesColumn;
+            else if (data[tilesColumn][cfg.mainAccountingRow].startsWith('Balance')) balanceColumn = tilesColumn;
+            else if (data[tilesColumn][cfg.mainRow].startsWith('RP')) rpColumn = tilesColumn;
+            else if (data[tilesColumn][cfg.mainRow].startsWith('ResBudget')) rpBudgetColumn = tilesColumn;
+            else if (data[tilesColumn][cfg.mainRow].startsWith('Tiles')) break;
+        }
+
+        if (!row || !accountColumn || !balanceColumn || !rpColumn || !rpBudgetColumn || !tilesColumn) {
+            return messageHandler(message, new Error('One of the columns or rows have not been found.'), true);
         }
 
         // noinspection JSCheckFunctionSignatures
@@ -79,16 +89,5 @@ module.exports = {
         await embedSwitcher(message, [embed], ['❌'], emojiFilter, processReactions)
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
-
-        //Sending it in.
-        message.channel.send(embed).then(embedMessage => {
-                embedMessage.react('❌').catch(error => log(error, true));
-                embedMessage.awaitReactions(emojiFilter, {max: 1, time: 32000, errors: ['time']})
-                    .then(collected => {
-                        if (collected.first().emoji.name === '❌') embedMessage.delete();
-                    })
-                    .catch(() => embedMessage.delete());
-            }).catch(error => log(error, true));
-        message.delete().catch(error => log(error, true));
     }
 }

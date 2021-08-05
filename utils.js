@@ -94,7 +94,8 @@ module.exports = {
      * @throws {Error}                                  Throws Error when message or level is undefined.
      */
     perm: function perm(message, level, showMessage = true) {
-        if (!message || !level || isNaN(level)) throw new Error('InvalidArgumentException: Message or level is undefined.');
+        if (!message || !level || Number.isNaN(level)) throw new Error('InvalidArgumentException: Message or level is' +
+            ' undefined.');
         if (message.channel.type === 'dm') return true;
 
         let clearance = false;
@@ -128,7 +129,8 @@ module.exports = {
      * @return {string}             Returns string response of attributes of created user or throws an error message.
      * @throws {Error}              Throws Exceptions if the user already exists or the specified ID is undefined/NaN.
      */
-    createUser: function createUser(id, nameIn, nationIn = undefined, demonymIn = undefined, colorIn = "fffffe", map = 'https://discord.com/') {
+    createUser: function createUser(id, nameIn, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe",
+    map = 'https://discord.com/') {
         if (!id || Number.isNaN(id)) {
             throw new Error('InvalidArgumentException: User ID is undefined!') ;
         } else if (cfg.users[id]) {

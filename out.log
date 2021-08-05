@@ -1,5 +1,5 @@
-[LOG][2021-8-5 9:4:27 UTC] Deployed and ready!
-[LOG][2021-8-5 9:4:31 UTC] Server Nations of Unity (Toonu): .turn
-[LOG][2021-8-5 9:4:33 UTC] Turn has been finished by <@319919565079576576>.
-[LOG][2021-8-5 9:5:14 UTC] Server Nations of Unity (Toonu): .turn
-[LOG][2021-8-5 9:5:15 UTC] Turn has been finished by <@319919565079576576>.
+Debugger listening on ws://127.0.0.1:53892/c950cf1e-3161-463a-8237-d3ecc44a2f58
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger attached.
+[LOG][2021-8-5 15:46:8 UTC] Deployed and ready!
+[LOG][2021-8-5 15:46:10 UTC] Server Nations of Unity (Toonu): .battle <@!591521990972669980> <@!319919565079576576> <@!752676284521250837> -a 2 MBT 4 SRAAM 5 MM -a 4 CC 2 SPAAG -b 4 MBT 2 IFV -r a

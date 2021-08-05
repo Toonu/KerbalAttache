@@ -10,22 +10,25 @@ module.exports = {
 
 Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
 **Assets:** can be listed via empty **${cfg.prefix}buy** command.
-**Trades:** can be listed via empty **${cfg.prefix}trade** [USER] command.`,
+**Trades:** can be listed via empty **${cfg.prefix}trade** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function trade(message, args) {
+        //Showing list of open trades of an user, alternatively validating input arguments.
+        if (!args[1])
+            return showTrades(message);
+        else if (!message.mentions.users.first())
+            return messageHandler(message, new Error('InvalidArgumentException: No user was tagged, please retry.'), true);
+        else if (args.length !== 5 || !args[0] || !args[2])
+            return messageHandler(message, new Error('InvalidArgumentException: Not all arguments needed are present.'), true);
+
         const authorID = message.author.id;
         const cfgAuthor = cfg.users[authorID];
-
-        //Showing list of open trades of an user.
-        if (!args[1] && message.mentions.users.size !== 0) return showTrades(message);
-        else if (!message.mentions.users.first().id) return messageHandler(message, new Error('InvalidArgumentException: No user was tagged, please retry.'));
-
         const recipientID = message.mentions.users.first().id;
         const cfgRecipient = cfg.users[recipientID];
         const money = parseInt(args[3]);
         const amount = parseInt(args[1]);
-        let asset = args[2].toUpperCase();
+        let asset = units.units[args[2].toUpperCase()];
         let isSelling = args[0].toLowerCase();
         let tab = cfg.main;
         let tabEnd = cfg.mainEndCol;
@@ -34,25 +37,35 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         let assetColumn = 0;
         let accountColumn = 0;
 
-        //Checking for input errors.
-        if(!units.units.hasOwnProperty(asset)) return messageHandler(message, new Error('InvalidTypeException: AssetType not found. Please retry.'), true);
-        else if (isNaN(amount) || isNaN(money)) return messageHandler(message, new Error('InvalidTypeException: Argument money or number of assets is not a` number. Canceling operation.'), true);
-        else if (!isSelling.startsWith('sell') && !isSelling.startsWith('buy')) return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
-        else if (cfgAuthor === undefined || cfgRecipient === undefined) return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
-        else if (!amount) return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
+        //Validating input arguments.
+        if(!asset)
+            return messageHandler(message, new Error('InvalidTypeException: AssetType not found. Please retry.'), true);
+        else if (Number.isNaN(amount) || Number.isNaN(money))
+            return messageHandler(message, new Error('InvalidTypeException: Argument money or number of assets is not ' +
+                'a number. Canceling operation.'), true);
+        else if (!isSelling.startsWith('sell') && !isSelling.startsWith('buy'))
+            return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
+        else if (cfgAuthor === undefined || cfgRecipient === undefined)
+            return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
+        else if (!amount)
+            return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
+        else if (asset.price > money)
+            return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
 
+        //Branching tab to systems if a system is traded.
         isSelling = !isSelling.startsWith('buy');
-        if (['wpSurface', 'wpAerial', 'systems'].includes(units.units[asset][1])) {
+        if (['wpSurface', 'wpAerial', 'systems'].includes(asset.type)) {
             tab = cfg.systems;
             tabEnd = cfg.systemsEndCol;
         }
 
-        asset = units.units[asset];
+        //Getting main tab for accounting and system if asset is traded.
         let data = await getCellArray('A1', tabEnd, tab, true)
             .catch(error => {
                 return messageHandler(message, error, true);
             });
 
+        //Searching for rows and columns.
         for (let i = 0; i < data.length; i++) {
             if (data[0][i] === cfgAuthor.nation) authorRow = i;
             else if (data[0][i] === cfgRecipient.nation) recipientRow = i;
@@ -63,12 +76,11 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         }
 
         //last check before transaction
-        if (asset.price > money) return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
-        else if (!recipientRow || !authorRow) return messageHandler(message, new Error('Could not find author or "recipient"!'), true);
+        if (!recipientRow || !authorRow) return messageHandler(message, new Error('Could not find author or recipient!'), true);
         else if (!accountColumn || !assetColumn) return messageHandler(message, new Error('Could not find one of the columns!'), true);
 
-        //await message.mentions.users.first().send
-        await message.author.send(`Transaction was proposed by ${message.author.username}! Information:
+        //DM of a trade to the recipient.
+        message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
 The proposer wants to *${isSelling ? 'sell' : "buy from"}* you \`${amount} ${asset.name}s\` for ***${formatCurrency(money)}***
 
 To accept the transaction, type \`${cfg.prefix}accept\` in your server **state** channel.`)
@@ -76,11 +88,9 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
                 return messageHandler(message, error, true);
             });
 
-        //Getting new trade ID.
+        //Getting new trade ID. If there is at least one trade, assigns trades + 1 number to the new trade.
         let maxID = 1;
-        if (cfgRecipient.trades[1]) {
-            maxID += Object.keys(cfgRecipient.trades).length;
-        }
+        if (cfgRecipient.trades[1]) maxID += Object.keys(cfgRecipient.trades).length;
 
         cfg.users[recipientID].trades[maxID] = {
             "authorID": authorID,
@@ -111,13 +121,14 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         let tradeData = cfg.users[user].trades;
         let id = parseInt(args[0]);
 
-        if (!tradeData) messageHandler(message, new Error('InvalidArgumentException: No trade exists and therefore none can be rejected.'), true);
-        else if (!Number.isNaN(id) && tradeData[id]) {
+        if (Number.isNaN(id))
+            messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
+        else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
             report(message, `Trade ID:${id} of user <@${user}> rejected!`)
             delete tradeData[id];
             exportFile('config.json', cfg);
-        } else messageHandler(message, new Error('No trade with such ID exist!'), true);
+        } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
     },
 
     /**
@@ -130,25 +141,29 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         let id = parseInt(args[0]);
         let recipientID = message.author.id;
         let isErroneous = false;
-        if (Object.keys(recipientID).length === 0) return messageHandler(message, new Error('InvalidArgumentException: No trade exists.'), true);
-        if (Number.isNaN(id)) return messageHandler(message, new Error(`InvalidTypeException: ID is not a number!`), true);
+        let systemData;
+        let accountColumn = 0;
+        let tradeData = cfg.users[recipientID].trades;
 
-        let tradeData = cfg.users[recipientID].trades[id];
-        if (!tradeData) return messageHandler(message, new Error(`InvalidArgumentException: Trade with ID:${id} does not exist!`), true);
+        //Validating input arguments.
+        if (Number.isNaN(id))
+            return messageHandler(message, new Error(`InvalidTypeException: ID is not a number!`), true);
+        else if (!tradeData[id])
+            return messageHandler(message, new Error(`InvalidArgumentException: Trade with ID:${id} does not exist!`), true);
 
+        tradeData = tradeData[id];
         let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
             .catch(error => {
                 isErroneous = true;
                 return messageHandler(message, error, true);
             });
         if (isErroneous) return;
-        let systemData;
-        let accountColumn = 0;
 
+        //Searching columns and rows.
         for (accountColumn; accountColumn < data.length; accountColumn++) {
             if (data[accountColumn][cfg.mainAccountingRow] === 'Account') break;
         }
-
+        //Branching off to systems tab is a system is traded.
         if (tradeData.tab === cfg.systems) {
             systemData = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
                 .catch(error => {
@@ -156,19 +171,45 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
                     return messageHandler(message, error, true);
                 });
         }
-
         if (isErroneous) return;
 
-        //isSelling true marks that the trade author gets his assets removed while the recipient pays money to him.
-        if (data[0][tradeData.authorRow] !== cfg.users[tradeData.authorID].nation || data[0][tradeData.recipientRow] !== cfg.users[tradeData.recipientID].nation || tradeData.recipientID !== message.author.id) return messageHandler(message, new Error(`One of the trade sides encountered an error!`), true);
-        else if (tradeData.isSelling && data[accountColumn][tradeData.isSelling ? tradeData.recipientRow : tradeData.authorRow] < tradeData.money) return messageHandler(message, new Error(`You do not have enough money to ${tradeData.isSelling ? 'buy' : 'sell'}!`), true);
-        else if (tradeData.isSelling && tradeData.tab === cfg.systems ? systemData[tradeData.assetColumn][tradeData.authorRow] : data[tradeData.assetColumn][tradeData.authorRow] < tradeData.amount) return messageHandler(message, new Error(`You do not have enough vehicles to ${tradeData.isSelling ? 'sell' : 'buy'}!`), true);
+        //Checking if numbers.
+        if (!accountColumn)
+            return messageHandler(message, new Error(`InvalidTypeException: Cancelling trade process. Accounting column was not found!`), true);
+        if (Number.isNaN(data[accountColumn][tradeData.authorRow])
+            || Number.isNaN(data[accountColumn][tradeData.recipientRow])
+            || Number.isNaN(data[tradeData.assetColumn][tradeData.authorRow])
+            || Number.isNaN(data[tradeData.assetColumn][tradeData.recipientRow]))
+            return messageHandler(message, new Error(`InvalidTypeException: Cancelling trade process. Not all columns needed contains numbers.`), true);
+
+
+        //Checking if author and recipient rows still apply since the trade was created.
+        if (data[0][tradeData.authorRow] !== cfg.users[tradeData.authorID].nation
+            || data[0][tradeData.recipientRow] !== cfg.users[tradeData.recipientID].nation
+            || tradeData.recipientID !== message.author.id)
+            return messageHandler(message, new Error(`The trade encountered an error due to change in sheet rows!`), true);
+        //Checks if the sides have enough money.
+        else if (tradeData.isSelling
+            && data[accountColumn][tradeData.isSelling ? tradeData.recipientRow
+                : tradeData.authorRow] < tradeData.money)
+            return messageHandler(message, new Error(`You do not have enough money to ${tradeData.isSelling ? 'buy' : 'sell'}!`), true);
+        //Checks if the sides have enough assets.
+        else if (tradeData.isSelling
+        && tradeData.tab === cfg.systems
+            ? systemData[tradeData.assetColumn][tradeData.authorRow]
+            : data[tradeData.assetColumn][tradeData.authorRow] < tradeData.amount)
+            return messageHandler(message, new Error(`You do not have enough vehicles to ${tradeData.isSelling ? 'sell' : 'buy'}!`), true);
+
 
         //Transfer the money and assets between the two sides.
         data[accountColumn][tradeData.isSelling ? tradeData.recipientRow : tradeData.authorRow] -= tradeData.money;
         data[accountColumn][tradeData.isSelling ? tradeData.authorRow : tradeData.recipientRow] += tradeData.money;
-        (tradeData.tab === cfg.systems ? systemData : data)[tradeData.assetColumn][tradeData.isSelling ? tradeData.authorRow : tradeData.recipientRow] -= tradeData.amount;
-        (tradeData.tab === cfg.systems ? systemData : data)[tradeData.assetColumn][tradeData.isSelling ? tradeData.recipientRow : tradeData.authorRow] += tradeData.amount;
+        (tradeData.tab === cfg.systems
+            ? systemData : data)[tradeData.assetColumn][tradeData.isSelling
+            ? tradeData.authorRow : tradeData.recipientRow] -= tradeData.amount;
+        (tradeData.tab === cfg.systems
+            ? systemData : data)[tradeData.assetColumn][tradeData.isSelling
+            ? tradeData.recipientRow : tradeData.authorRow] += tradeData.amount;
 
         await setCellArray(toColumn(accountColumn) + '1', [data[accountColumn]], cfg.main, true).catch(error => {
             log(error, true);
@@ -197,11 +238,12 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
  */
 function showTrades(message) {
     let newMessage = '';
+    //When having clearance and ping user, use him.
+    let user = cfg.users[ping(message).id];
 
-    let user = ping(message).id;
-
-    if (!cfg.users[user]) return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
-    Object.entries(cfg.users[user].trades).forEach((trade) => {
+    if (!user)
+        return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
+    Object.entries(user.trades).forEach((trade) => {
         newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)}\n`;
     });
 

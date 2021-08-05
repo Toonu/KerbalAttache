@@ -31,15 +31,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Fixing negative research budget and 1000+ RPs">
+      <change afterPath="$PROJECT_DIR$/dataStructures/tradeProposal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/accept.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/accept.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/assets.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/assets.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/balance.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/balance.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/battle.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/battle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/prune.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/prune.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/reject.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/reject.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/spam.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/spam.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/sub.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
@@ -47,14 +47,13 @@
       <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/usercreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/usercreate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/userinfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userinfo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" afterPath="$PROJECT_DIR$/out.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/units.json" beforeDir="false" afterPath="$PROJECT_DIR$/units.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +80,7 @@
     </file-type-list>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedIndex" value="3" />
+    <option name="selectedIndex" value="2" />
   </component>
   <component name="ProjectId" id="1jy840idPGugcCW4gnQwCg5dKxF" />
   <component name="ProjectLevelVcsManager">
@@ -101,11 +100,19 @@
     <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.17.7" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="node.js.selected.package.stylelint" value="" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -172,7 +179,8 @@
       <workItem from="1627972421428" duration="5608000" />
       <workItem from="1628016877644" duration="1598000" />
       <workItem from="1628018511592" duration="19267000" />
-      <workItem from="1628147014480" duration="1395000" />
+      <workItem from="1628147014480" duration="13144000" />
+      <workItem from="1628165323965" duration="6291000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -402,17 +410,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/useredit.js</url>
-          <line>30</line>
-          <option name="timeStamp" value="65" />
+          <line>44</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/commands/trade.js</url>
+          <line>17</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/commands/battle.js</url>
+          <line>77</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="NodeJSConfigurationType">
-        <watch expression="data[accountColumn]" language="JavaScript" />
-        <watch expression="toColumn(tradeData.assetColumn) + '1'" language="JavaScript" />
-        <watch expression="tradeData.tab === cfg.systems ? systemData[tradeData.assetColumn] : data[tradeData.assetColumn]" language="JavaScript" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

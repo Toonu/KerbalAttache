@@ -14,10 +14,10 @@ module.exports = {
 	    let user = ping(message);
         let configUser = cfg.users[user.id];
         try {
-            if(!configUser) {
-                //Creating non-existent user
+            //Creating non-existent user
+            if(!configUser)
                 report(message, `${createUser(user.id, user.username)} created by <@${message.author.id}>`, 'userinfo');
-            }
+	            configUser = cfg.users[user.id];
         } catch (error) {
             return messageHandler(message, error, true);
         }

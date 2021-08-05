@@ -106,7 +106,7 @@ exports.setCell = function setCell(coordinate, value, sheetTab) {
 /**
  * Function writes array of values into the sheet tab on specified coordinates.
  * @param {string} coordinate           coordinate/s of write target.
- * @param {Array} values                Array of arrays(rows) of values(cols).
+ * @param {Array} values                Array of arrays(rows) of values(cols). Must be in a [Data] format.
  * @param {string} sheetTab             sheet tab name.
  * @param {boolean} dominantColumn      true if the array is transposed.
  * @return {Promise<String>}            Returns string success message or rejects with an error message.

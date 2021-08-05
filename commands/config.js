@@ -26,11 +26,14 @@ module.exports = {
     guildOnly: true,
     execute: function configBot(message, args) {
         if (perm(message, 2)) {
-            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0]) && isNaN(parseInt(args[1]))) {
+            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0])
+                && Number.isNaN(parseInt(args[1]))) {
                 return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
             } else if (args[0] === 'era') {
                 args[1] = parseInt(args[1]);
-                if (args[1] % 10 !== 0) {
+                if (Number.isNaN(args[1])) {
+                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+                } else if (args[1] % 10 !== 0) {
                     return messageHandler(message, new Error('InvalidFormatException: Era must have zero at the end. Eg. 50, 60...'), true);
                 }
             } else if (args[0] === 'money') {

@@ -89,9 +89,11 @@ client.login(CLIENT_TOKEN).catch(error => log(error, true));
  *
  * YYY
  *
+ * test useredit delete color
  * Test em all!
  * Go through each command possible failure points, extreme cases and possible fails.
  * Function for finding columns?
+ * Submissions .sub delete craftName - with confirmation embed
  *
  * accept
  * assets - sheet

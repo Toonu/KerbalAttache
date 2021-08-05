@@ -9,16 +9,18 @@ module.exports = {
     guildOnly: true,
     execute: async function sub(message, args) {
         let isErroneous = false;
+        let nation = cfg.users[ping(message, 2).id];
+
+        if (!nation)
+            return messageHandler(message, new Error('InvalidArgumentException: User does not exist!'), true);
+        nation = nation.nation;
+
         let submissionsData = await getCellArray('A1', cfg.submissionsEndCol, cfg.submissions)
             .catch(error => {
                 isErroneous = true;
                 return messageHandler(message, error, true);
             });
-
         if (isErroneous) return;
-
-        //Checks if the message has ping to determine searched nation.
-        let nation = cfg.users[ping(message, 2).id].nation;
 
         //Loop filters out nation's submissions and pads them in the future with the longest one up to 18 spaces.
         let nationSubmissions = [];
@@ -49,7 +51,7 @@ module.exports = {
 
         message.channel.send(`\`\`\`ini\n${displayResult}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
             .then(submissionMessages => {
-                if (args.some(r => {if (r === "true") return true})) {
+                if (args.some(r => {if (r === 'true') return true})) {
                     submissionMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 32000})
                         .catch(error => log(error, true)));
                 }

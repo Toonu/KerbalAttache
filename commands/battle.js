@@ -2,6 +2,7 @@
 
 const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'), units = require('../units.json');
 const {getCellArray} = require('../sheet');
+const {setCellArray, toColumn} = require('./../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',
@@ -67,17 +68,19 @@ module.exports = {
                         userMap[userNumber].push(arg);
                     } else if (!arg.startsWith('-')) {
                         if (!Number.isNaN(amount)) {
-                            //Adding amount of assets.
+                            //Adding number of lost assets.
                             assetNumber++;
                             userMap[userNumber][assetNumber] = [amount];
                         } else {
-                            //Adding assets.
                             if (winning && ['a', 'b', 'd'].includes(arg) && !units.units[arg]) {
+                                //Adding winning team.
                                 winningTeam = arg;
                                 winning = false;
                             } else if (name) {
+                                //Adding battle name.
                                 name += `${arg} `;
                             } else if (units.units[arg]) {
+                                //Adding assets.
                                 userMap[userNumber][assetNumber].push(units.units[arg]);
                             }
                         }
@@ -85,6 +88,7 @@ module.exports = {
                         //If results option is used.
                         winning = true;
                     } else if (arg.startsWith('-n')) {
+                        //If name option is used.
                         name = 'Name: '
                     }
                 }
@@ -105,41 +109,83 @@ module.exports = {
 
             let negatives = [];
             let results = [];
+            let isSystemPresent = false;
 
             try {
+                //Loop through sides.
                 for (const user of userMap) {
                     let userRow = dataMain[0].indexOf(user[1].nation);
                     let assetColumn;
 
+                    //Loop through assets of one side.
                     for (let asset = 3; asset < user.length; asset++) {
                         let assetItem = user[asset][1];
-                        let sheet = 'system' === assetItem.type ? dataSystems : dataMain;
-                        let row = 'system' === assetItem.type ? cfg.systemsMainRow : cfg.mainRow;
+                        //Branching to systems if assetItem is a system.
+                        let sheet = dataMain;
+                        let row = cfg.mainRow;
+                        if (assetItem.type === 'system') {
+                            sheet = dataSystems;
+                            row = cfg.systemsMainRow
+                            isSystemPresent = true;
+                        }
                         assetColumn = findArrayData(sheet, [user[asset][1].name], row);
-
-                        let currentAmount = sheet[assetColumn[0].position][userRow];
-                        if (Number.isNaN(currentAmount)) {
+                        
+                        //Getting latest amount data.
+                        if (Number.isNaN(sheet[assetColumn[0].position][userRow])) {
                             throw new Error(`InvalidTypeException: Value in ${assetItem} column is not a number!`);
                         }
-                        currentAmount -= user[asset][0];
-                        if (currentAmount < 0) {
-                            negatives.push(`${user[1].name} is missing ${Math.abs(currentAmount)} ${assetItem.name}\n`);
+                        
+                        //Updating data and reporting.
+                        sheet[assetColumn[0].position][userRow] -= user[asset][0];
+                        if (sheet[assetColumn[0].position][userRow] < 0) {
+                            negatives.push(`${user[1].name} is missing ${Math.abs(sheet[assetColumn[0].position][userRow])} ${assetItem.name}\n`);
                         }
-                        results.push(`${user[1].nation} lost ${Math.abs(currentAmount)} ${assetItem.name}\n`);
+                        results.push(`${user[1].nation} lost ${Math.abs(user[asset][0])} ${assetItem.name}\n`);
                     }
                 }
             } catch (error) {
                 return messageHandler(message, error, true);
             }
-
+            
+            //Applying the modifications to sheets online.
+            if (isSystemPresent) {
+                //removing the first column.
+                dataSystems.splice(0, 1);
+                await setCellArray('B1', dataSystems, cfg.systems, true).catch(error => {
+                    log(error, true);
+                    isErroneous = true;
+                    return messageHandler(message, new Error('Error has occurred in systems tab.'), true);
+                });
+            }
+    
+            let i = 0
+            let start = 0;
+            for (i; i < dataMain.length; i++) {
+                if (dataMain[i][cfg.mainAccountingRow] === 'Expenses') start = i;
+                if (dataMain[i][cfg.mainAccountingRow] === 'Surface') break;
+            }
+            dataMain.splice(i);
+            dataMain.splice(0, start + 1);
+            
+            
+            await setCellArray(toColumn(start + 1) + '1', dataMain, cfg.main, true).catch(error => {
+                log(error, true);
+                isErroneous = true;
+                return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
+            });
+            if (isErroneous) return;
+            
+            
+            //Logging
             message.client.channels.cache.get(cfg.servers[message.guild.id].battleid)
-            .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`ini\n${results}\n\`\`\`
+            .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`\n${results}\n\`\`\`
 ${winningTeam === 'd' ? 'The battle has been a draw!' : `Team ${winningTeam.toUpperCase()} has been victorious.`}
             `).catch(error => log(error));
 
             report(message, `Battle was announced in battle channel by ${message.author.username}. ${negatives.length !== 0 ? `\n\nProblem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
 Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
-For better reference, negative numbers are highlighted with red in the sheet.` : ''}\n\n\`\`\`ini${negatives}\`\`\``, this.name);
+For better reference, negative numbers are highlighted with red in the sheet.` : ''}${negatives.length !== 0 ? `\n\n\`\`\`${negatives}\`\`\`` : ''}`, this.name);
+            message.delete().catch(error => log(error, true));
         }
     }
 };

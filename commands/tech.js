@@ -133,10 +133,12 @@ async function list(nation, message, searchItem) {
             return messageHandler(message, error, true);
         });
         if (isErroneous) return;
-        
+    
+        let nodeColumn;
+        let endRow;
         try {
-            const nodeColumn = findArrayData(data, [searchItem], cfg.techMainRow);
-            const endRow = data[0].indexOf('Data');
+            nodeColumn = findArrayData(data, [searchItem], cfg.techMainRow)[searchItem];
+            endRow = data[0].indexOf('Data');
             if (endRow === -1) {
                 throw new Error('TechTree end Data node not found!');
             }
@@ -151,18 +153,22 @@ async function list(nation, message, searchItem) {
         .setURL('https://discord.js.org/') //URL clickable from the title
         .setThumbnail('https://imgur.com/IvUHO31.png')
         .addFields(
-            {name: 'Unlocks:', value: `\`\`\`\n${data[nodeColumn][endRow]}\`\`\``},
-            {name: 'Cost:', value: `${data[nodeColumn][endRow + 1]}RP`, inline: true},
-            {name: 'Buy?', value: `✅`, inline: true},
+            {name: 'Unlocks:', value: `\`\`\`\n${data[nodeColumn][endRow + 1]}\`\`\``},
+            {name: 'Cost:', value: `${data[nodeColumn][endRow]}RP`, inline: true},
+            {name: 'Buy?', value: `Press ✅`, inline: true},
         )
         .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+    
+        if (node[3].length !== 0) {
+            embed.addField({name: 'Requirements:', value: tt[node][3]});
+        }
         
         function filter(reaction, user) {
-            return ((reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id);
+            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
         
         function processReactions(reaction, embedMessage) {
-            if (reaction.emoji.name === '✅️') {
+            if (reaction.emoji.name === '✅') {
                 return resultOptions.confirm;
             } else if (reaction.emoji.name === '❌') {
                 return resultOptions.delete;
@@ -172,10 +178,12 @@ async function list(nation, message, searchItem) {
         await embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
         .then(result => {
             if (result === resultOptions.confirm) {
-                research(message, node, nation);
+                research(message, searchItem, nation);
             }
         })
         .catch(error => messageHandler(message, error, true));
+        
+        return;
     } else if (tt.categories[searchItem] !== undefined) {
         //Constructs the message.
         newMessage.push(`Operation Finished.\n***Nodes in specified category ${searchItem}:***\n\n\`\`\`ini`);
@@ -184,10 +192,10 @@ async function list(nation, message, searchItem) {
                 newMessage.push(`[${element[0]}] ${element[1][0]}`);
             }
         }
-        
-        newMessage.push('\`\`\`\nIn case of seeing only ini there, the category nor technology node was found.');
+        if (!isErroneous) {
+            newMessage.push('\`\`\`\nIn case of seeing only ini there, the category nor technology node was found.');
+        }
     }
-    
     messageHandler(message, newMessage, true, 60000);
 }
 
@@ -240,6 +248,8 @@ async function research(message, node, nation) {
     let nodeData = tt[node];
     if (!nodeData) {
         return messageHandler(message, 'InvalidArgumentException: Node does not exist!', true);
+    } else if (node.substring(0, 2) > cfg.era || node.startsWith('early')) {
+        return messageHandler(message, 'Node is too futuristic!', true);
     }
     
     let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
@@ -258,13 +268,14 @@ async function research(message, node, nation) {
     let mainNationRow;
     let endRow;
     let nodeColumns;
-    let rpColumn;
+    let mainColumns;
     try {
         mainNationRow = mainData[0].indexOf(nation);
         nationRow = data[0].indexOf(nation);
         endRow = data[0].indexOf('Data');
-            nodeColumns = findArrayData(data, [node].concat(nodeData[3]), cfg.techMainRow);
-        rpColumn = findArrayData(mainData, ['RP'], cfg.mainRow)['RP'];
+        nodeColumns = findArrayData(data, [node].concat(nodeData[3]), cfg.techMainRow);
+        mainColumns = findArrayData(mainData, ['RP', 'Technology'], cfg.mainRow);
+        mainColumns['Technology'] += nodeData[4];
         if (nationRow === -1 || endRow === -1 || mainNationRow === -1) {
             throw new Error( 'Row or column of node has not been found!');
         }
@@ -274,21 +285,29 @@ async function research(message, node, nation) {
     
     if (isDeletion) {
         data[nodeColumns[node]][nationRow] = 0;
-        mainData[rpColumn][mainNationRow] += data[nodeColumns[node]][endRow] * 0.7;
+        mainData[mainColumns['RP']][mainNationRow] += data[nodeColumns[node]][endRow] * 0.7;
+        mainData[mainColumns['Technology']][mainNationRow] -= 0.1;
     } else {
-        for (const nodeColumn of Object.values(nodeColumns)) {
+        for (const nodeColumn of Object.values(nodeColumns).splice(1)) {
             if (data[nodeColumn][nationRow] === 0) {
                 return messageHandler(message, `Prerequisite of ${data[nodeColumn][cfg.techMainRow]} is not fulfilled!`, true);
             }
         }
         data[nodeColumns[node]][nationRow] = 1;
-        mainData[rpColumn][mainNationRow] = mainData[rpColumn][mainNationRow] - data[nodeColumns[node]][endRow];
-        if (mainData[rpColumn][mainNationRow] < 0) {
+        mainData[mainColumns['RP']][mainNationRow] = mainData[mainColumns['RP']][mainNationRow] - data[nodeColumns[node]][endRow];
+        mainData[mainColumns['Technology']][mainNationRow] += 0.1;
+        if (mainData[mainColumns['RP']][mainNationRow] < 0) {
             return messageHandler(message, 'Not enough RP points!', true);
         }
     }
     
-    await setCellArray(toColumn(rpColumn) + '1', [mainData[rpColumn]], cfg.main, true).catch(error => {
+    await setCellArray(toColumn(mainColumns['RP']) + '1', [mainData[mainColumns['RP']]], cfg.main, true).catch(error => {
+        log(error, true);
+        isErroneous = true;
+        return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
+    });
+    if (isErroneous) return;
+    await setCellArray(toColumn(mainColumns['Technology']) + '1', [mainData[mainColumns['Technology']]], cfg.main, true).catch(error => {
         log(error, true);
         isErroneous = true;
         return messageHandler(message, new Error('Error has occurred in assets tab.'), true);

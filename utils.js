@@ -206,7 +206,6 @@ module.exports = {
         })
     },
     findArrayData: function findArrayData(analysedData, searchItems, row) {
-        let failsafe = undefined;
         let result = {};
         
         for (let i = 0; i < searchItems.length; i++) {
@@ -218,7 +217,7 @@ module.exports = {
                     break;
                 }
             }
-            if (!result[searchItems[i]]) throw new Error(`NotFoundException: Item ${failsafe} not found in the array.`);
+            if (!result[searchItems[i]]) throw new Error(`NotFoundException: Item ${searchItems[i]} not found in the array.`);
         }
 
         return result;

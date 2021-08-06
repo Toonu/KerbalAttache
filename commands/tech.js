@@ -233,7 +233,13 @@ async function unlocks(message, nation) {
         newMessage += `[${tt[item[0]][0].padStart(maxLength)}] ${item[1]} |${item[2]}RP\n`;
     });
     
-    messageHandler(message, `Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``, true, 90000);
+    message.channel.send(`Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
+    .then(assetMessages => {
+        assetMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 30000})
+        .catch(error => log(error, true)));
+    })
+    .catch(error => log(error, true));
+    message.delete().catch(error => log(error, true));
 }
 
 async function research(message, node, nation) {
@@ -283,11 +289,11 @@ async function research(message, node, nation) {
         return messageHandler(message, error, true);
     }
     
-    if (isDeletion) {
+    if (isDeletion && data[nodeColumns[node]][nationRow] === 1) {
         data[nodeColumns[node]][nationRow] = 0;
         mainData[mainColumns['RP']][mainNationRow] += data[nodeColumns[node]][endRow] * 0.7;
         mainData[mainColumns['Technology']][mainNationRow] -= 0.1;
-    } else {
+    } else if (data[nodeColumns[node]][nationRow] === 0) {
         for (const nodeColumn of Object.values(nodeColumns).splice(1)) {
             if (data[nodeColumn][nationRow] === 0) {
                 return messageHandler(message, `Prerequisite of ${data[nodeColumn][cfg.techMainRow]} is not fulfilled!`, true);
@@ -299,6 +305,8 @@ async function research(message, node, nation) {
         if (mainData[mainColumns['RP']][mainNationRow] < 0) {
             return messageHandler(message, 'Not enough RP points!', true);
         }
+    } else {
+        return messageHandler(message, 'Node is already in the wanted state!', true);
     }
     
     await setCellArray(toColumn(mainColumns['RP']) + '1', [mainData[mainColumns['RP']]], cfg.main, true).catch(error => {

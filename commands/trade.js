@@ -21,7 +21,10 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: No user was tagged, please retry.'), true);
         else if (args.length !== 5 || !args[0] || !args[2])
             return messageHandler(message, new Error('InvalidArgumentException: Not all arguments needed are present.'), true);
-
+        else if (message.author.id === message.mentions.users.first()) {
+            return messageHandler(message, new Error('InvalidArgumentException: Author and recipient cannot be same'), true);
+        }
+        
         const authorID = message.author.id;
         const cfgAuthor = cfg.users[authorID];
         const recipientID = message.mentions.users.first().id;
@@ -47,7 +50,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
         else if (cfgAuthor === undefined || cfgRecipient === undefined)
             return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
-        else if (!amount)
+        else if (!amount || amount < 0)
             return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
         else if (asset.price > money)
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);

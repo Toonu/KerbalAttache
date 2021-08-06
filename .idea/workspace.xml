@@ -30,7 +30,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Fixing negative research budget and 1000+ RPs">
+    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +161,7 @@
       <workItem from="1628147014480" duration="13144000" />
       <workItem from="1628165323965" duration="20961000" />
       <workItem from="1628230983094" duration="12862000" />
-      <workItem from="1628256475925" duration="289000" />
+      <workItem from="1628256475925" duration="1395000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -343,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627633168993</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Trade author added in trades listing.">
+      <created>1628256812249</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1628256812249</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,7 +391,8 @@
     <MESSAGE value="Bugfix of missing bracket." />
     <MESSAGE value="Reverting TT changes." />
     <MESSAGE value="Fixing negative research budget and 1000+ RPs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing negative research budget and 1000+ RPs" />
+    <MESSAGE value="Trade author added in trades listing." />
+    <option name="LAST_COMMIT_MESSAGE" value="Trade author added in trades listing." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

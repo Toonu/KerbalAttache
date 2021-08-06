@@ -84,21 +84,13 @@ const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
 
 /**
- * battle - sheet
- * tech - sheet
- *
- * YYY
- *
- * test useredit delete color
- * Test em all!
  * Go through each command possible failure points, extreme cases and possible fails.
- * Function for finding columns?
  * Submissions .sub delete craftName - with confirmation embed
- * Tech do not forget to add 0.1 after researching a node.
  *
  * accept
  * assets - sheet
  * balance - sheet
+ * battle - sheet
  * buy - sheet
  * config
  * help
@@ -108,6 +100,7 @@ client.login(CLIENT_TOKEN).catch(error => log(error, true));
  * reject
  * spam
  * sub
+ * tech - sheet
  * tiles - sheet
  * trade - sheet
  * turn - sheet

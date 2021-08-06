@@ -116,8 +116,7 @@ module.exports = {
         report(message, `Turn has been finished by <@${message.author.id}>.`, this.name);
         let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
-        //message.client.channels.cache.get(server.announcements).send(`<@&${server.headofstate}> Turn ${cfg.turn}
-        // has been finished!`)
-        //    .catch(error => log(error, true));
+        message.client.channels.cache.get(server.announcements).send(`<@&${server.headofstate}> Turn ${cfg.turn} has been finished!`)
+            .catch(error => log(error, true));
     }
 };

@@ -4,7 +4,7 @@
     "money": "EUR",
     "moneyLocale": "fr-FR",
     "era": 50,
-    "turn": 0,
+    "turn": 4,
     "submissions": "Database",
     "submissionsMainRow": 3,
     "submissionsEndCol": "AA",
@@ -27,7 +27,8 @@
             "headofstate": "519315646606082052",
             "administrators": [
                 "859820323544367145",
-                "470260541785636865"
+                "470260541785636865",
+                "873189618978283560"
             ],
             "developers": [
                 "767064998207291430"
@@ -40,10 +41,28 @@
             "nation": "Iconia",
             "demonym": "Iconian",
             "color": "0065bd",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
             "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories",
-            "trades": {}
+            "trades": {
+                "1": {
+                    "authorID": "752676284521250837",
+                    "authorRow": 5,
+                    "recipientID": "319919565079576576",
+                    "recipientRow": 4,
+                    "amount": -5,
+                    "money": 100000,
+                    "asset": {
+                        "name": "MBT",
+                        "desc": "Main Battle Tank",
+                        "type": "asset",
+                        "price": 48000
+                    },
+                    "assetColumn": 8,
+                    "isSelling": true,
+                    "tab": "Maintenance"
+                }
+            }
         },
         "768845435455930428": {
             "name": "Attachè",
@@ -78,7 +97,7 @@
             "nation": "EE",
             "demonym": "E&E",
             "color": "700300",
-            "cf": 1,
+            "cf": 1.4000000000000004,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -88,7 +107,7 @@
             "nation": "Kroviska",
             "demonym": "Kroviskan",
             "color": "7f0020",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -98,7 +117,7 @@
             "nation": "Ofeliya",
             "demonym": "Ofeliyan",
             "color": "ff8500",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -108,7 +127,7 @@
             "nation": "Magnella",
             "demonym": "Magnellan",
             "color": "5510ff",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -118,7 +137,7 @@
             "nation": "Commonwealth",
             "demonym": "Commonwealth",
             "color": "2b3990",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -128,7 +147,7 @@
             "nation": "Velka",
             "demonym": "Velkan",
             "color": "94e02d",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -138,35 +157,17 @@
             "nation": "Sharkion",
             "demonym": "Shark",
             "color": "00ff21",
-            "cf": 1.1,
+            "cf": 1.3000000000000003,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " ",
-            "trades": {
-                "2": {
-                    "authorID": "319919565079576576",
-                    "authorRow": 4,
-                    "recipientID": "752676284521250837",
-                    "recipientRow": 5,
-                    "amount": 1,
-                    "money": 100000,
-                    "asset": {
-                        "name": "MBT",
-                        "desc": "Main Battle Tank",
-                        "type": "asset",
-                        "price": 48000
-                    },
-                    "assetColumn": 40,
-                    "isSelling": false,
-                    "tab": "Maintenance"
-                }
-            }
+            "trades": {}
         },
         "211547891276185601": {
             "name": "Luminous",
             "nation": "GL",
             "demonym": "Gaia-Lucian",
             "color": "ffc90e",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -176,7 +177,7 @@
             "nation": "TSR",
             "demonym": "Starks",
             "color": "aa4545",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
             "notes": " ",
             "trades": {}
@@ -186,8 +187,18 @@
             "nation": "Elbe",
             "demonym": "Elbian",
             "color": "3d6395",
-            "cf": 1.1,
+            "cf": 1.5000000000000004,
             "map": "https://drive.google.com/file/d/16OAitE9Ip8iznwAryQFJ2NMpbzDxYRoi/view?usp=sharing",
+            "notes": " ",
+            "trades": {}
+        },
+        "235088799074484224": {
+            "name": "Rythm",
+            "nation": "undefined",
+            "demonym": "undefined",
+            "color": "fffffe",
+            "cf": 1,
+            "map": "https://discord.com/",
             "notes": " ",
             "trades": {}
         }

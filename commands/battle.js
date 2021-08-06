@@ -1,8 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'), units = require('../units.json');
-const {getCellArray} = require('../sheet');
-const {setCellArray, toColumn} = require('./../sheet');
+const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'),
+    units = require('../units.json'), {getCellArray, setCellArray, toColumn} = require('../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',
@@ -116,6 +115,10 @@ module.exports = {
                 for (const user of userMap) {
                     let userRow = dataMain[0].indexOf(user[1].nation);
                     let assetColumn;
+                    
+                    if (userRow === -1) {
+                        return messageHandler(message, `${user[1].nation} not found on the sheet!`)
+                    }
 
                     //Loop through assets of one side.
                     for (let asset = 3; asset < user.length; asset++) {
@@ -128,17 +131,18 @@ module.exports = {
                             row = cfg.systemsMainRow
                             isSystemPresent = true;
                         }
-                        assetColumn = findArrayData(sheet, [user[asset][1].name], row);
+                        //Throws error if not found.
+                        assetColumn = findArrayData(sheet, [user[asset][1].name], row)[[asset][1].name];
                         
                         //Getting latest amount data.
-                        if (Number.isNaN(sheet[assetColumn[0].position][userRow])) {
+                        if (Number.isNaN(sheet[assetColumn][userRow])) {
                             throw new Error(`InvalidTypeException: Value in ${assetItem} column is not a number!`);
                         }
                         
                         //Updating data and reporting.
-                        sheet[assetColumn[0].position][userRow] -= user[asset][0];
-                        if (sheet[assetColumn[0].position][userRow] < 0) {
-                            negatives.push(`${user[1].name} is missing ${Math.abs(sheet[assetColumn[0].position][userRow])} ${assetItem.name}\n`);
+                        sheet[assetColumn][userRow] -= user[asset][0];
+                        if (sheet[assetColumn][userRow] < 0) {
+                            negatives.push(`${user[1].name} is missing ${Math.abs(sheet[assetColumn][userRow])} ${assetItem.name}\n`);
                         }
                         results.push(`${user[1].nation} lost ${Math.abs(user[asset][0])} ${assetItem.name}\n`);
                     }

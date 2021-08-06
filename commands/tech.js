@@ -1,358 +1,306 @@
-const cfg = require('./../config.json'), {ping, perm, exportFile, log} = require('../utils'),
+// noinspection ExceptionCaughtLocallyJS
+
+const cfg = require('./../config.json'), {ping, log, messageHandler, report, findArrayData, embedSwitcher,
+        resultOptions
+    } = require('../utils'),
     tt = require('./../tt.json'), discord = require('discord.js'),
-    {getCell, setCell, getCellArray, toCoordinate, fromCoordinate} = require("../sheet");
+    {getCellArray, setCellArray, toColumn} = require("../sheet");
+const {testing} = require('googleapis/build/src/apis/testing');
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research.',
-    args: true,
-    usage: `[operation] [operation type] [operation data] [M:@user]
+    args: 0,
+    usage: `${cfg.prefix}tech [OPERATION] [OPTION] [DATA] [USER]
     
 Possible operations:
 
 \`\`\`ini\n
-budget        [set | add]               - Sets or adds money to user's research budget (use neg. number to decrease).
-research      [node | -node]            - Researches specified tech tree node. Use minus letter to revert research.
+OPERATION   OPTION      DATA
+budget      [SET | ADD] [AMOUNT]        - Sets or adds money to user's research budget (use neg. number to decrease).
+research                [NODE | -NODE]  - Researches specified tech tree node. Use minus letter to revert research.
 list                                    - Lists all available categories.
-list          [category]                - Lists all technological nodes in category.
-list          [node]                    - Lists all information about technological node.
+list                    [CATEGORY]      - Lists all technological nodes in category.
+list                    [NAME]          - Lists all information about a technological node.
 unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
-change        [node] [type] [data]      - Moderator configuration options.\`\`\`
-Configs types: name, category, reqadd, reqdel
-Use underscores or nothing instead of spaces.
+\`\`\`
 `,
     cooldown: 2,
     guildOnly: true,
     execute: async function tech(message, args) {
-        let del = 1;
-        let nation = cfg.users[(await ping(message)).id].nation;
-        let result = [];
-        if (args[0] === 'budget') {
-            let amount = parseInt(args[2]);
-            if (['set', 'add'].includes(args[1]) && !Number.isNaN(amount)) {
-                let bool = (args[1] === 'set') ? 0 : 1;
-                result.push(await budget(amount, nation, bool));
-                if (result[0].includes("lower")) {
-                    result.push(false);
-                } else {
-                    result.push(true)
-                }
-            } else {
-                result.push('Argument is not a number or operation is not set/add. Canceling operation.');
-                result.push(false);
-            }
-        } else if (args[0] === 'list') {
-            result.push(await list(args[1], nation, message));
-            result[0].startsWith('Operation') ? result.push(false) : result.push(true);
-        } else if (args[0] === 'unlocked') {
-            result.push(await unlocks(nation));
-            result.push(false);
-        } else if (args[0] === 'research') {
-            if (args[1] === undefined) {
-                result.push('Argument empty. Canceling operation.');
-                result.push(false);
-            } else if (parseInt(args[1].substring(0, 2)) >= cfg.era || (args[1].startsWith('Early') && cfg.era === 50)) {
-                result.push('The technology is too futuristic!');
-                result.push(false);
-            } else {
-                if (args[1].startsWith('-') && perm(message, 2)) {
-                    // noinspection ReuseOfLocalVariableJS
-                    del = 0;
-                    args[1] = args[1].substring(1, args[1].length);
-                }
-                try {
-                    let res = await research(args[1].toLowerCase(), nation, del)
-                    result.push(res);
-                    result.push(true);
-                } catch(e) {
-                    result.push(e);
-                    result.push(false);
-                }
-            }
-        } else if (args[0] === 'change') {
-            if (tt[args[1]] === undefined) {
-                result.push('Operation failed.');
-                result.push(false);
-            } else {
-                let ch = change(args)
-                result.push(ch);
-                result.push(true);
-            }
+        let user = ping(message);
+        
+        if (!cfg.users[user.id]) {
+            return messageHandler(message, new Error('User not found. Canceling.'), true);
+        }
+        
+        let nation = cfg.users[user.id].nation;
+        
+        let operation = args[0];
+        let option;
+        let data;
+        if (args[2]) {
+            option = args[1];
+            data = args[2];
         } else {
-            result.push('Wrong operation type.');
-            result.push(false);
+            data = args[1];
         }
-
-        message.channel.send(result[0], {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}}).then(msg => {
-            if (msg.length < 5) {
-                msg.forEach(m => {
-                    m.delete({timeout: 64000})
-                });
-            } else {
-                msg.delete({timeout: 64000});
-            }
-        });
-        if (result[1]) {
-            report(message, `${result[0]} by <@${message.author.id}> for ${nation}!`, `${this.name} ${args[0]}`);
+        
+        switch (operation) {
+            case 'budget':
+                await budget(message, option, data, nation);
+                break;
+            case 'list':
+                await list(nation, message, data);
+                break;
+            case 'unlocked':
+                await unlocks(message, nation);
+                break;
+            case 'research':
+                await research(message, data, nation);
+                break;
+            default:
+                messageHandler(message, new Error('Wrong operation specified! Please retry.'), true);
         }
-        return message.delete();
     },
 };
 
-
-/**
- * Function modifies user's budget in the main sheet.
- * @param amount                    Number amount to add or setCell.
- * @param nation                    String Nation name for budget that is modified.
- * @param add                       If budget is added or setCell to the original one [1 | 0]
- * @return {Promise<String>}        Returns String message about the success of the operation.
- */
-function budget(amount, nation, add) {
-    return new Promise(function (resolve, reject) {
-        findData('ResBudget', nation)
-            .then(data => {
-                if (data[3] === false) data[3] = 0;
-                let budget = data[3]*add + amount;
-                if (budget < 0) {
-                    reject('Budget cannot be set lower than 0!');
-                    return;
-                }
-                setCell(`${data[1]+data[2]}`, budget).then(() => {
-                    resolve(`Research budget modified to ${budget.toLocaleString(`fr-FR`, { style: 'currency', currency: cfg.money })}`);
-                }).catch(err => {
-                    reject(err);
-                });
-            })
-            .catch(err => reject(err));
-    })
-}
-
-
-/**
- * Function lists all nodes in specified category.
- * @param category              String category name. If undefined, prints all categories.
- * @param nation                Modified User's nation name String
- * @param message               Message for embed filtering.
- * @return {Promise<String>}    Returns String message about the success of the operation.
- */
-function list(category, nation, message) {
-    return new Promise(function (resolve) {
-        let newMessage = '';
-
-        if(category === undefined) {
-            Object.keys(tt.categories).forEach(item => {
-                newMessage += `[${item.padStart(20)}] ${tt.categories[item]}\n`;
-            })
-            resolve(`Operation finished. All technology node categories are bellow:
-            ***Note:*** You do not have to write full category name but merely it part is sufficient.
-            \`\`\`ini\n${newMessage}\`\`\``);
-        }
-
-        category = category.toLowerCase();
-
-        if (tt[category] !== undefined) {
-            findData(category, nation, true, 'TechTree').then(data => {
-                let unlocks = data[0][1][0].split(',');
-                unlocks.forEach(r => {
-                    newMessage += `${r.trim()}\n`
-                })
-                // noinspection JSCheckFunctionSignatures
-                const embed = new discord.MessageEmbed()
-                    .setColor('#065535')
-                    .setTitle(`Node ${tt[category][0]}`)
-                    .setURL('https://discord.js.org/') //URL clickable from the title
-                    .setThumbnail('https://imgur.com/IvUHO31.png')
-                    .addFields(
-                        { name: 'Unlocks:', value: `\`\`\`\n${newMessage}\`\`\``},
-                        { name: 'Cost:', value: `${data[0][0]}RP`, inline: true},
-                        { name: 'Buy?', value: `✅`, inline: true},
-                    )
-                    .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
-
-                function filter(reaction, user) {
-                    return ((reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id);
-                }
-
-                message.channel.send(embed)
-                    .then(msg => {
-                        msg.react('✅').catch(error => log(error, true));
-                        msg.react('❌').catch(error => log(error, true));
-                        msg.awaitReactions(filter, { max: 1, time: 32000, errors: ['time'] })
-                            .then(collected => {
-                                let react = collected.first();
-                                if (react.emoji.name === '✅') {
-                                    research(category, nation, 1).then(result => {
-                                        resolve(result);
-                                    })
-                                } else {
-                                    resolve('Operation canceled.');
-                                }
-                                msg.delete();
-                            })
-                            .catch(() => {
-                                msg.delete();
-                                resolve('Operation timed out.');
-                            })
-                    }).catch(err => resolve(err));
-            }).catch(err => resolve(err));
-        } else {
-            let nodes = [];
-            for (const [key, value] of Object.entries(tt)) try {
-                if (value[2].toLowerCase().includes(category)) {
-                    nodes.push(key);
-                }
-            } catch (e) {}
-
-            //If category is not exact, assign user input as category name.
-            let ctg = tt.categories[category];
-            if (ctg === undefined) ctg = category;
-
-            //Edits the node list to print with padding.
-            let l = 0;
-            nodes.forEach(item => {
-                if (item.length > l) l = item.length;
-            });
-
-            //Constructs the message.
-            nodes.forEach(item => newMessage += `[${item.padStart(l)}] ${tt[item][0]}\n`);
-            resolve(`Operation Finished.\n***Nodes in specified category ${ctg}:***\n\n\`\`\`ini\n${newMessage}\`\`\`
-            In case of seeing only ini there, the category nor technology node was found.`);
-        }
-    })
-}
-
-
-/**
- * Function lists all unlocked assets of nodes of specified nation.
- * @param nation                    String nation's name.
- * @return {Promise<String>}       String of all unlocked assets.
- */
-function unlocks(nation) {
-    return new Promise(async function (resolve, reject) {
-        const unlocks = [];
-        let nodes;
-        let data;
-        let names;
-        let newMessage = '';
-        try {
-            let nationRow = await findVertical(nation, 'A');
-            let dataRow = await findVertical('Data', 'A', 'TechTree');
-            nodes = await getCellArray(`A${nationRow}`, `HO${nationRow}`, 0, 0, 'TechTree');
-            data = await getCellArray(`A${dataRow}`, `HO${dataRow}`, 0, 1, 'TechTree');
-            names = await getCellArray('A4', 'HO4', 0, 0, 'TechTree');
-        } catch (e) {
-            reject(e);
-        }
-
-        for(let i = 1; i < nodes[0].length; i++) {
-            if (nodes[0][i] === '1') {
-                unlocks.push([names[0][i], data[1][i]])
-            }
-        }
-        //Edits the unlocks list to print with padding.
-        let l = 0;
-
-        unlocks.forEach(item => {
-            if (tt[item[0]][0].length > l) {
-                l = tt[item[0]][0].length;
-            }
-        });
-        //Constructs the message.
-        unlocks.forEach(item => {
-            newMessage += `[${tt[item[0]][0].padStart(l)}] ${item[1]}\n`;
-        });
-        resolve(`Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``);
-    })
-}
-
-
-/**
- * Function researches or deletes a node.
- * @param node                  String node name.
- * @param nation                Nation to modify.
- * @param del                   If remove or add a node.
- * @return {Promise<String>}    Result String.
- */
-function research(node, nation, del = 1) {
-    return new Promise(async function (resolve, reject) {
-        try {
-            if (del === 1) {
-                for (const r of tt[node][3]) {
-                    await findData(r, nation, true, 'TechTree')
-                        .then(unlocked => {
-                            if (unlocked[0] === 0) throw 'You do not have the prerequisites to unlock the node!';
-                        })
-                }
-            }
-        } catch (err) {
-            if (err instanceof TypeError) {
-                return reject('Operation failed due to non-existent node!');
-            }
-            return reject(err);
-        }
-
-        //Checking node
-        let data = await findData(node, nation, true, 'TechTree').catch(e => {reject(e)});
-        if (del && parseInt(data[3]) === 1) return reject('Node already unlocked!');
-
-        //Checking rp amount
-        let rpCol = await findHorizontal('RP', 4).catch(e => {reject(e)});
-        let rp = parseInt((await getCell(`${rpCol + data[2]}`)).replace(/[,]/g, ''));
-        if (data[0][0] > rp && del !== 0) return reject('Not enough Research Points!');
-
-        //Setting node to 1 and then setting RP
-        let result = await setCell(`${data[1] + data[2]}`, del, 'TechTree').catch(e => {reject(e)});
-        if (result) {
-            if (del === 1) setCell(`${rpCol + data[2]}`, rp - data[0][0]).catch(e => {reject(e)});
-
-            //Tech increments change
-            let increments = await findHorizontal('Technology', 4).catch(e => {reject(e)});
-            let incrementArray = await getCellArray(`${increments}5`, `${increments}5`, 4, data[2] - 5).catch(e => {reject(e)});
-            let from = fromCoordinate(increments);
-            let coordinate = toCoordinate(from[0] + tt[node][4]);
-            if (del === 1) {
-                await setCell(`${coordinate  + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) + 0.1)).catch(e => {reject(e)});
-                return resolve(`${tt[node][0]} was unlocked for ${data[0][0]}RP`)
-            } else {
-                await setCell(`${coordinate + data[2]}`, (parseFloat(incrementArray[0][tt[node][4]]) - 0.1)).catch(e => {reject(e)});
-                return resolve(`${tt[node][0]} was removed from ${nation}`);
-            }
-        }
-        return reject('Operation failed!');
-    });
-}
-
-
-/**
- * Function changes node internal configuration (not on sheet tho).
- * @param data          Args array
- * @return {string}     Result message
- */
-function change(data) {
-    let newData = '';
-    data.forEach(r => {
-        if(r !== data[0] && r !== data[1] && r !== data[2]) {
-            newData += r + ' ';
-        }
-    })
-
-    if (data[2] === 'name') {
-        tt[data[1]][0] = newData.trim();
-    } else if (data[2] === 'category') {
-        tt[data[1]][2] = data[3];
-        newData = data[3];
-    } else if (data[2] === 'reqadd') {
-        tt[data[1]][3].push(data[3]);
-        newData = data[3];
-    } else if (data[2] === 'reqdel') {
-        for (let i = 0; i < tt[data[1]][3].length; i++) {
-            if (tt[data[1]][3][i] === data[3]) {
-                tt[data[1]][3].splice(i, 1);
-            }
-        }
-        newData = undefined;
-    } else {
-        return `Wrong operation specified. Please retry.`;
+async function budget(message, option, amount, nation) {
+    amount = parseInt(amount);
+    if (Number.isNaN(amount)) {
+        return messageHandler(message, new Error('InvalidTypeException: Third argument is not a number!'), true);
+    } else if (!['set', 'add'].includes(option.toLowerCase())) {
+        return messageHandler(message, new Error('InvalidArgumentException: The option is not valid'), true);
     }
-    exportFile("tt.json", tt);
-    return `${data[1]} ${data[2]} was changed to ${newData}`;
+    option = option === 'add';
+    
+    //Getting Research Budget column.
+    let isErroneous = false;
+    let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
+    .catch(error => {
+        isErroneous = true;
+        return messageHandler(message, error, true);
+    });
+    if (isErroneous) return;
+    
+    let rbColumn;
+    let nationRow = data[0].indexOf(nation);
+    try {
+        rbColumn = findArrayData(data, ['ResBudget'], cfg.mainRow)['ResBudget'];
+        if (nationRow === -1) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw new Error('Could not find research or nation cell.');
+        }
+    } catch (error) {
+        return messageHandler(message, error, true);
+    }
+    
+    data[rbColumn][nationRow] = option ? data[rbColumn][nationRow] + amount : amount;
+    if (data[rbColumn][nationRow] < 0) {
+        return messageHandler(message, new Error('InvalidArgumentException: Cannot set budget to negative' +
+            ' number!'), true);
+    }
+
+    await setCellArray( `${toColumn(rbColumn)}1`, [data[rbColumn]], cfg.main, true)
+    .catch(error => {
+        // noinspection ReuseOfLocalVariableJS
+        isErroneous = true;
+        log(`Cancelling tile process due to an error. Consult log for more information.`, true);
+        return messageHandler(message, error, true);
+    });
+    if (isErroneous) return;
+
+    report(message, `${nation}'s budget ${option ? 'modified by' : 'set to'} ${amount}!`, 'techBudget');
+    messageHandler(message, 'Budget set!', true);
+}
+
+async function list(nation, message, searchItem) {
+    let newMessage = [];
+    let isErroneous = false;
+
+    if (searchItem === undefined) {
+        newMessage.push('\`\`\`ini\n')
+        Object.keys(tt.categories).forEach(item => {
+            newMessage.push(`[${item.padStart(20)}] ${tt.categories[item]}`);
+        })
+        newMessage.push(`\`\`\`\n\nOperation finished. All technology node categories are bellow:
+        ***Note:*** You do not have to write full category name but merely it part is sufficient.`);
+    } else if (tt[searchItem] !== undefined) {
+        let node = tt[searchItem];
+        
+        let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
+        .catch(error => {
+            isErroneous = true;
+            return messageHandler(message, error, true);
+        });
+        if (isErroneous) return;
+        
+        try {
+            const nodeColumn = findArrayData(data, [searchItem], cfg.techMainRow);
+            const endRow = data[0].indexOf('Data');
+            if (endRow === -1) {
+                throw new Error('TechTree end Data node not found!');
+            }
+        } catch (error) {
+            return messageHandler(message, error, true);
+        }
+    
+        searchItem = searchItem.toLowerCase();
+        const embed = new discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`Node ${tt[searchItem][0]}`)
+        .setURL('https://discord.js.org/') //URL clickable from the title
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .addFields(
+            {name: 'Unlocks:', value: `\`\`\`\n${data[nodeColumn][endRow]}\`\`\``},
+            {name: 'Cost:', value: `${data[nodeColumn][endRow + 1]}RP`, inline: true},
+            {name: 'Buy?', value: `✅`, inline: true},
+        )
+        .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+        
+        function filter(reaction, user) {
+            return ((reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id);
+        }
+        
+        function processReactions(reaction, embedMessage) {
+            if (reaction.emoji.name === '✅️') {
+                return resultOptions.confirm;
+            } else if (reaction.emoji.name === '❌') {
+                return resultOptions.delete;
+            }
+        }
+    
+        await embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
+        .then(result => {
+            if (result === resultOptions.confirm) {
+                research(message, node, nation);
+            }
+        })
+        .catch(error => messageHandler(message, error, true));
+    } else if (tt.categories[searchItem] !== undefined) {
+        //Constructs the message.
+        newMessage.push(`Operation Finished.\n***Nodes in specified category ${searchItem}:***\n\n\`\`\`ini`);
+        for (const element of Object.entries(tt).slice(1)) {
+            if (element[1][2] && element[1][2].includes(searchItem)) {
+                newMessage.push(`[${element[0]}] ${element[1][0]}`);
+            }
+        }
+        
+        newMessage.push('\`\`\`\nIn case of seeing only ini there, the category nor technology node was found.');
+    }
+    
+    messageHandler(message, newMessage, true, 60000);
+}
+
+async function unlocks(message, nation) {
+    const unlocks = [];
+    let newMessage = '';
+    let isErroneous = false;
+    
+    let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
+    .catch(error => {
+        isErroneous = true;
+        return messageHandler(message, error, true);
+    });
+    if (isErroneous) return;
+    
+    let nationRow = data[0].indexOf(nation);
+    let endRow = data[0].indexOf('Data');
+    
+    if (nationRow === -1 || !endRow) {
+        return messageHandler(message, new Error('One of columns could not be found.'), true);
+    }
+    
+    let maxLength = 0;
+    for (const column of data) {
+        if (column[nationRow] === 1) {
+            unlocks.push([column[cfg.techMainRow], column[endRow + 1], column[endRow]]);
+            if (maxLength < tt[column[cfg.techMainRow]][0].length) {
+                maxLength = tt[column[cfg.techMainRow]][0].length;
+            }
+        }
+    }
+    
+    //Constructs the message.
+    unlocks.forEach(item => {
+        newMessage += `[${tt[item[0]][0].padStart(maxLength)}] ${item[1]} |${item[2]}RP\n`;
+    });
+    
+    messageHandler(message, `Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``, true, 90000);
+}
+
+async function research(message, node, nation) {
+    let isErroneous = false;
+    let isDeletion = false;
+    
+    if (node.startsWith('-')) {
+        isDeletion = true;
+        node = node.substring(1);
+    }
+    
+    let nodeData = tt[node];
+    if (!nodeData) {
+        return messageHandler(message, 'InvalidArgumentException: Node does not exist!', true);
+    }
+    
+    let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
+    .catch(error => {
+        isErroneous = true;
+        return messageHandler(message, error, true);
+    });
+    let mainData = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
+    .catch(error => {
+        isErroneous = true;
+        return messageHandler(message, error, true);
+    });
+    if (isErroneous) return;
+    
+    let nationRow;
+    let mainNationRow;
+    let endRow;
+    let nodeColumns;
+    let rpColumn;
+    try {
+        mainNationRow = mainData[0].indexOf(nation);
+        nationRow = data[0].indexOf(nation);
+        endRow = data[0].indexOf('Data');
+            nodeColumns = findArrayData(data, [node].concat(nodeData[3]), cfg.techMainRow);
+        rpColumn = findArrayData(mainData, ['RP'], cfg.mainRow)['RP'];
+        if (nationRow === -1 || endRow === -1 || mainNationRow === -1) {
+            throw new Error( 'Row or column of node has not been found!');
+        }
+    } catch (error) {
+        return messageHandler(message, error, true);
+    }
+    
+    if (isDeletion) {
+        data[nodeColumns[node]][nationRow] = 0;
+        mainData[rpColumn][mainNationRow] += data[nodeColumns[node]][endRow] * 0.7;
+    } else {
+        for (const nodeColumn of Object.values(nodeColumns)) {
+            if (data[nodeColumn][nationRow] === 0) {
+                return messageHandler(message, `Prerequisite of ${data[nodeColumn][cfg.techMainRow]} is not fulfilled!`, true);
+            }
+        }
+        data[nodeColumns[node]][nationRow] = 1;
+        mainData[rpColumn][mainNationRow] = mainData[rpColumn][mainNationRow] - data[nodeColumns[node]][endRow];
+        if (mainData[rpColumn][mainNationRow] < 0) {
+            return messageHandler(message, 'Not enough RP points!', true);
+        }
+    }
+    
+    await setCellArray(toColumn(rpColumn) + '1', [mainData[rpColumn]], cfg.main, true).catch(error => {
+        log(error, true);
+        isErroneous = true;
+        return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
+    });
+    if (isErroneous) return;
+    await setCellArray(toColumn(nodeColumns[node]) + '1', [data[nodeColumns[node]]], cfg.tech, true).catch(error => {
+        log(error, true);
+        isErroneous = true;
+        return messageHandler(message, new Error('Error has occurred in techTree tab.'), true);
+    });
+    if (isErroneous) return;
+    
+    report(message, `${message.author.username} has ${isDeletion ? 'deleted' : 'unlocked'}   ${tt[node][0]} for ${data[nodeColumns[node]][endRow]}!`, 'techResearch');
+    messageHandler(message, `Node was ${isDeletion ? 'deleted' : 'unlocked'}!`, true);
 }

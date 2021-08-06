@@ -207,25 +207,21 @@ module.exports = {
     },
     findArrayData: function findArrayData(analysedData, searchItems, row) {
         let failsafe = undefined;
-
+        let result = {};
+        
         for (let i = 0; i < searchItems.length; i++) {
+            result[searchItems[i]] = undefined;
             for (let j = 0; j < analysedData.length; j++) {
                 let analysedItem = row ? analysedData[j][row] : analysedData[j];
                 if (searchItems[i] === analysedItem) {
-                    searchItems[i] = {
-                        nation: searchItems[i],
-                        position: j
-                    };
-                    failsafe = undefined;
+                    result[searchItems[i]] = j;
                     break;
-                } else {
-                    failsafe = searchItems[i];
                 }
             }
-            if (failsafe) throw new Error(`NotFoundException: Item ${failsafe} not found in the array.`);
+            if (!result[searchItems[i]]) throw new Error(`NotFoundException: Item ${failsafe} not found in the array.`);
         }
 
-        return searchItems;
+        return result;
     }
 }
 

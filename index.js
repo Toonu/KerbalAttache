@@ -94,6 +94,7 @@ client.login(CLIENT_TOKEN).catch(error => log(error, true));
  * Go through each command possible failure points, extreme cases and possible fails.
  * Function for finding columns?
  * Submissions .sub delete craftName - with confirmation embed
+ * Tech do not forget to add 0.1 after researching a node.
  *
  * accept
  * assets - sheet

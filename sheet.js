@@ -131,6 +131,40 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab, domin
 }
 
 
+exports.deleteRow = async function deleteRow(row, sheetTab) {
+    return new Promise(async function (resolve, reject) {
+        // noinspection JSCheckFunctionSignatures
+    
+        let tabId;
+        let sheet_metadata = await gs.spreadsheets.get({spreadsheetId: cfg.sheet});
+        for (let tab = 0; tab < sheet_metadata.data.sheets.length; tab++) {
+            if (sheet_metadata.data.sheets[tab].properties.title === sheetTab) {
+                tabId = sheet_metadata.data.sheets[tab].properties.sheetId;
+                break;
+            }
+        }
+        
+        gs.spreadsheets.batchUpdate({
+            "spreadsheetId": cfg.sheet,
+            "requestBody": {
+                "requests": [{
+                    "deleteDimension": {
+                        "range": {
+                            "sheetId": tabId,
+                            "dimension": "ROWS",
+                            "startIndex": row - 1,
+                            "endIndex": row
+                        }
+                    }
+                }]
+            }
+        }
+        
+        ).then(() => resolve('Operation successful.'))
+        .catch(error => reject(error.message));
+    });
+}
+
 /**
  * Function checks if the coordinate is in correct format.
  * @param {string} coordinate       Checked coordinate.

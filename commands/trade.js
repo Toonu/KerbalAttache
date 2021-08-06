@@ -50,7 +50,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
         else if (cfgAuthor === undefined || cfgRecipient === undefined)
             return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
-        else if (!amount || amount < 0)
+        else if (amount <= 0)
             return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
         else if (asset.price > money)
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);

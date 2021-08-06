@@ -83,35 +83,5 @@ const {CLIENT_TOKEN} = process.env;
 //const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
 
-/**
- * Go through each command possible failure points, extreme cases and possible fails.
- * Submissions .sub delete craftName - with confirmation embed
- *
- * accept
- * assets - sheet
- * balance - sheet
- * battle - sheet
- * buy - sheet
- * config
- * help
- * map
- * ping
- * prune
- * reject
- * spam
- * sub
- * tech - sheet
- * tiles - sheet
- * trade - sheet
- * turn - sheet
- * usercreate
- * userdel
- * useredit
- * userinfo
- *
- * index
- * sheet
- * utils
-**/
 
 

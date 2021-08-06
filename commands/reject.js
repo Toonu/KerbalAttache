@@ -1,25 +1,12 @@
-const {exportFile} = require("../jsonManagement");
-cfg = require('./../config.json');
+const {reject} = require ('./trade'), cfg = require('./../config.json');
 module.exports = {
     name: 'reject',
     description: 'Command for rejecting trade transaction proposal!',
-    args: false,
-    usage: '',
+    args: 1,
+    usage: `${cfg.prefix}reject [ID [USER]\nRejecting for other users can be done only by the moderators.`,
     cooldown: 5,
     guildOnly: true,
-
-    /**
-     * Function accepts trade proposal.
-     * @param message               Message object.
-     * @return {Promise<void>}      Returns nothing.
-     */
-    execute: async function reject(message) {
-        let data = cfg.trade[message.author.id];
-        if (data === undefined) {
-            message.channel.send('No trade exists and therefore none can be rejected.')
-        } else {
-            delete cfg.trade[message.author.id];
-            exportFile('config.json', cfg);
-        }
+    execute: function transform(message, args) {
+        reject(message, args);
     }
-};
+}

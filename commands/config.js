@@ -1,81 +1,89 @@
-const {report} = require("../game");
+const cfg = require('../config.json'), {messageHandler, report, perm, exportFile} = require("../utils");
 module.exports = {
     name: 'config',
-    description: 'Commands for configuring the bot settings.',
-    args: true,
-    usage: `[M:configuration] [M:newValue]
-Configurations:
-money, sheet, era, sname, smainid, sbattleid, sadminadd, sdevadd, sadmindel, sdevdel`,
+    description: 'Command for configuring the bot settings.',
+    args: 2,
+    usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]\n
+    OPTIONS followed by new value:
+    \`\`\`
+    money           STRING  (Currency code such as EUR/USD string.)
+    moneyLocale     STRING  (Currency formatting such as fr-FR string.)
+    sheet           STRING  (Sheet ID string.)
+    era             INT     (Decimal integer, such as 50.)
+    sname           STRING  (Server internal name string.)
+    smainid         INT     (Server main announcements channel ID integer.)
+    sbattleid       INT     (Server battle announcements channel ID integer.)
+    sadmin          INT DEL (Server administrator roles integer.)
+    sdev            INT DEL (Server developer roles integer.)
+    sheadofstate    STRING  (Server Head of State role string.)
+    main            STRING  (Sheet main tab string.)
+    submissions     STRING  (Sheet submissions tab string.)
+    systems         STRING  (Sheet systems tab string.)
+    \`\`\`
+    Del option works only for role lists.
+    `,
     cooldown: 5,
     guildOnly: true,
     execute: function configBot(message, args) {
-        const cfg = require('./../config.json')
-        const js = require('../jsonManagement');
-        let data;
-
-        if (js.perm(message, 2)) {
-            if (!['money', 'sheet', 'sname'].includes(args[0]) && isNaN(parseInt(args[1]))) {
-                message.channel.send('Not a proper ID/Number.').then(msg => msg.delete({timeout: 9000}));
-                return message.delete({timeout: 50});
+        if (perm(message, 2)) {
+            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0])
+                && Number.isNaN(parseInt(args[1]))) {
+                return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
             } else if (args[0] === 'era') {
-                data = parseInt(args[1]);
-                if (data % 10 !== 0) {
-                    message.channel.send('Era must have zero at the end. Eg. 50, 60...').then(msg => msg.delete({timeout: 9000}));
-                    return message.delete({timeout: 50});
+                args[1] = parseInt(args[1]);
+                if (Number.isNaN(args[1])) {
+                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+                } else if (args[1] % 10 !== 0) {
+                    return messageHandler(message, new Error('InvalidFormatException: Era must have zero at the end. Eg. 50, 60...'), true);
                 }
             } else if (args[0] === 'money') {
-                let regExp = new RegExp(/[A-Z]{3}/g);
-                if (!regExp.test(args[1])) {
-                    message.channel.send('Money must have upper case name, not symbol. Eg. EUR, USD...').then(msg => msg.delete({timeout: 9000}));
-                    return message.delete({timeout: 50});
+                if (!new RegExp(/[A-Z]{3}/g).test(args[1])) {
+                    return messageHandler(message, new Error('InvalidFormatException: Money must be using their abbreviation, not a symbol. Eg. EUR, USD...'), true);
                 }
             }
 
-            if (args[0] === 'money') {
-                cfg.money = args[1];
-            } else if (args[0] === 'sheet') {
-                cfg.sheet = args[1];
-            } else if (args[0] === 'sname') {
-                cfg.servers[message.guild.id].name = args[1];
-            } else if (args[0] === 'smainid') {
-                cfg.servers[message.guild.id].main_channel = args[1];
-            } else if (args[0] === 'sbattleid') {
-                cfg.servers[message.guild.id].battle_channel = args[1];
-            } else if (args[0] === 'sadminadd') {
-                // noinspection JSUnresolvedVariable
-                cfg.servers[message.guild.id].administrators.push(args[1]);
-            } else if (args[0] === 'sdevadd') {
-                // noinspection JSUnresolvedVariable
-                cfg.servers[message.guild.id].developers.push(args[1]);
-            } else if (args[0] === 'sadmindel') {
-                // noinspection JSUnresolvedVariable
-                let adm = cfg.servers[message.guild.id].administrators;
-                for (let i = 0; i < adm.length; i++) {
-                    if (adm[i] === args[1]) {
-                        adm.splice(i);
-                        break;
+            switch (args[0]) {
+                case 'money':
+                case 'sheet':
+                case 'era':
+                case 'moneyLocale':
+                case 'submissions':
+                case 'main':
+                case 'systems':
+                    cfg[args[0]] = args[1];
+                    break;
+                case 'sname':
+                case 'smainid':
+                case 'sbattleid':
+                case 'sheadofstate':
+                    cfg.servers[message.guild.id][args[0].substring(1)] = args[1];
+                    break;
+                case 'sadmin':
+                case 'sdev':
+                    //del is not undefined and is del
+                    let del = (args[2] && args[2].toLowerCase() === 'del');
+                    // noinspection JSUnresolvedVariable
+                    let roles = args[0] === 'sadmin' ? cfg.servers[message.guild.id].administrators
+                        : cfg.servers[message.guild.id].developers;
+
+                    if (del) {
+                        for (let i = 0; i < roles.length; i++) {
+                            if (roles[i] === args[1]) {
+                                roles.splice(i, 1);
+                                break;
+                            }
+                        }
+                    } else {
+                        roles.push(args[1]);
                     }
-                }
-            } else if (args[0] === 'sdevdel') {
-                // noinspection JSUnresolvedVariable
-                let dev = cfg.servers[message.guild.id].developers;
-                for (let i = 0; i < dev.length; i++) {
-                    if (dev[i] === args[1]) {
-                        dev.splice(i);
-                        break;
-                    }
-                }
-            } else if (args[0] === 'era') {
-                cfg.era = data;
-            } else {
-                message.reply('Wrong configuration type argument.').then(msg => msg.delete({timeout: 9000}));
-                return message.delete({timeout: 9000});
+                    break;
+                default:
+                    return messageHandler(message, new Error('InvalidArgumentException: Non-existing configuration option argument.'), true);
             }
 
-            js.exportFile('config.json', cfg);
-            message.channel.send('Operation finished.').then(msg => msg.delete({timeout: 9000}));
-            message.delete({timeout: 9000});
+            exportFile('config.json', cfg);
             report(message, `${message.author.username} changed configuration ${args[0]} to ${args[1]}`, this.name);
+            messageHandler(message, 'Operation finished.', true);
         }
     }
 };

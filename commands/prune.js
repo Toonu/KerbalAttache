@@ -1,34 +1,48 @@
-const {perm} = require("../jsonManagement");
+const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json')
+
 module.exports = {
 	name: 'prune',
-	description: 'Command prunes amount of messages from channel.',
-	usage: '[M:amount] [M:deleteOldMessages [true]]',
+	description: 'Command prunes N messages from channel.',
+	usage: `${prefix}prune [AMOUNT] [OLD]
+	Setting OLD option to true to enables deleting messages older than two weeks.`,
 	guildOnly: true,
-	args: true,
+	args: 1,
 	cooldown: 5,
-	execute: function prune(message, args) {
-		const amount = parseInt(args[0]) + 1;
-		if (isNaN(amount)) {
-			message.channel.send(`That doesn't seem to be a valid number. Canceling operation.`).then(msg => msg.delete({timeout: 9000}));
-
-			return message.delete();
-		} else if (!perm(message, 1, true)) {
-			return message.delete();
+	execute: async function prune(message, args) {
+		//Parse returns NaN if NaN.
+		args[0] = parseInt(args[0]) + 1;
+		if (Number.isNaN(args[0])) {
+			return messageHandler(message, new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
+		} else if (!perm(message, 1)) {
+			return message.delete().catch(error => log(error, true));
 		}
 
+		//Parse oldMessages bool.
 		let bool = false;
-		if (args[1] === "true") {
+		//if is not undefined and is true
+		if (args[1] && args[1].toLowerCase() === "true") {
 			bool = true;
 		}
-		message.channel.bulkDelete(amount, bool)
-			.then(() => {
-				console.log(`Deleted ${amount}`);
-				message.channel.send(`Deleted ${amount}`).then(msg => msg.delete({timeout: 9000}))
-			})
-			.catch(error => {
-				console.error(error);
-				message.channel.send(error.message).then(msg => msg.delete({timeout: 9000}))
-			})
 
+		//Deletion is maxed at 100 by Discord, deleting them by batches and finally by the rest.
+		while (args[0] > 100) {
+			await message.channel.bulkDelete(100, bool)
+				.then(() => args[0] -= 100)
+				.catch(error => {
+					return messageHandler(message, error, true);
+				});
+		}
+
+		if (args[0] > 0) {
+			message.channel.bulkDelete(args[0], bool)
+				.then(() => {
+					//Logs the operation.
+					messageHandler(message, `Deleted ${args[0]} messages.`);
+					log(`Messages deleted: ${args[0]}`);
+				})
+				.catch(error => {
+					messageHandler(message, error);
+			});
+		}
 	}
 };

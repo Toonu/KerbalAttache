@@ -1,17 +1,32 @@
 {
     "prefix": ".",
-    "sheet": "1WywSCoAjYV6ZyCe5J0q4hBoGpPxwizUYCiy29_WyeNU",
+    "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
-    "era": 55,
+    "moneyLocale": "fr-FR",
+    "era": 50,
     "turn": 0,
+    "submissions": "Database",
+    "submissionsMainRow": 3,
+    "submissionsEndCol": "AA",
+    "main": "Maintenance",
+    "mainRow": 3,
+    "mainAccountingRow": 0,
+    "mainEndCol": "AN",
+    "systems": "Stockpiles",
+    "systemsMainRow": 3,
+    "systemsEndCol": "T",
+    "tech": "TechTree",
+    "techEndCol": "EF",
+    "techMainRow": 1,
     "servers": {
         "470258156682084373": {
             "name": "NoU",
-            "main_channel": "770921356111773698",
-            "battle_channel": "572807672055988234",
+            "mainid": "770921356111773698",
+            "battleid": "806528269586530375",
             "announcements": "685907863184474124",
+            "headofstate": "519315646606082052",
             "administrators": [
-                "716608480810631178",
+                "859820323544367145",
                 "470260541785636865"
             ],
             "developers": [
@@ -21,101 +36,160 @@
     },
     "users": {
         "319919565079576576": {
+            "name": "Toonu",
             "nation": "Iconia",
             "demonym": "Iconian",
             "color": "0065bd",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
-            "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
+            "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories",
+            "trades": {}
         },
         "768845435455930428": {
+            "name": "Attachè",
             "nation": "Bot",
             "demonym": "Botish",
             "color": "fffffe",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://discord.com/",
-            "notes": " "
+            "notes": " ",
+            "trades": {
+                "1": {
+                    "authorID": "768845435455930428",
+                    "authorRow": 11,
+                    "recipientID": "319919565079576576",
+                    "recipientRow": 4,
+                    "amount": 2,
+                    "money": 100000,
+                    "asset": {
+                        "name": "MBT",
+                        "desc": "Main Battle Tank",
+                        "type": "asset",
+                        "price": 48000
+                    },
+                    "assetColumn": 8,
+                    "isSelling": true,
+                    "tab": "Maintenance"
+                }
+            }
         },
         "693908421396922480": {
+            "name": "The Bunny",
             "nation": "EE",
             "demonym": "E&E",
             "color": "700300",
             "cf": 1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "312900789947596800": {
+            "name": "Kerbal Nerd 123",
             "nation": "Kroviska",
             "demonym": "Kroviskan",
             "color": "7f0020",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "472210194814730250": {
+            "name": "DunaMoose",
             "nation": "Ofeliya",
             "demonym": "Ofeliyan",
             "color": "ff8500",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "227222314645717002": {
-            "nation": "Magnellan",
+            "name": "RoyalRedBird",
+            "nation": "Magnella",
             "demonym": "Magnellan",
             "color": "5510ff",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "591521990972669980": {
+            "name": "Saturn",
             "nation": "Commonwealth",
             "demonym": "Commonwealth",
             "color": "2b3990",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "715551445742649344": {
+            "name": "Matt 1",
             "nation": "Velka",
             "demonym": "Velkan",
             "color": "94e02d",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "752676284521250837": {
+            "name": "Dion Noe",
             "nation": "Sharkion",
             "demonym": "Shark",
             "color": "00ff21",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {
+                "2": {
+                    "authorID": "319919565079576576",
+                    "authorRow": 4,
+                    "recipientID": "752676284521250837",
+                    "recipientRow": 5,
+                    "amount": 1,
+                    "money": 100000,
+                    "asset": {
+                        "name": "MBT",
+                        "desc": "Main Battle Tank",
+                        "type": "asset",
+                        "price": 48000
+                    },
+                    "assetColumn": 40,
+                    "isSelling": false,
+                    "tab": "Maintenance"
+                }
+            }
         },
         "211547891276185601": {
+            "name": "Luminous",
             "nation": "GL",
             "demonym": "Gaia-Lucian",
             "color": "ffc90e",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "81586294727118848": {
+            "name": "Foran",
             "nation": "TSR",
             "demonym": "Starks",
             "color": "aa4545",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         },
         "591774826834952193": {
+            "name": "Belka_Standard",
             "nation": "Elbe",
             "demonym": "Elbian",
             "color": "3d6395",
-            "cf": 1,
+            "cf": 1.1,
             "map": "https://drive.google.com/file/d/16OAitE9Ip8iznwAryQFJ2NMpbzDxYRoi/view?usp=sharing",
-            "notes": " "
+            "notes": " ",
+            "trades": {}
         }
-    },
-    "trade": {}
+    }
 }

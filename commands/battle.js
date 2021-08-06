@@ -1,12 +1,27 @@
-const {perm} = require("../jsonManagement"), cfg = require('../config.json'), units = require('../units.json'),
-{findHorizontal, findVertical, report} = require("../game"), {getArray, setArray} = require("../sheet");
+// noinspection ExceptionCaughtLocallyJS
+
+const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'),
+    units = require('../units.json'), {getCellArray, setCellArray, toColumn} = require('../sheet');
 module.exports = {
     name: 'battle',
-    description: 'Command for removing units after battle!',
-    args: false,
-    usage: `[@users] -u [number unit] 
-Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
-**Assets:** can be listed via **${cfg.prefix}buy** command.`,
+    description: 'Command for announcing battle results while removing losses!',
+    args: 8,
+    usage: `${cfg.prefix}battle [USERS] [OPTIONS] 
+    OPTIONS followed by new value:
+    \`\`\`
+    -a [AMOUNT] [ASSETS]
+    -b [AMOUNT] [ASSETS]
+    -r [WINNER] letter of winning side [team a/b/d  -d is draw].
+    -n [BATTLE NAME]
+    \`\`\`
+    
+    The first part of command are the head of states participating in the battle.
+    The second part specifies lost assets of nations in same order like the pinged users. The option a or b determines side.
+    The optional third part -r option specifies which team has won.
+    Optional battle name MUST be the last argument of the command!
+    
+    Eg. @user @user2 @user3 -a 2 AFV 1 APC 20 ATGM -b 3 MBT -b 4 L 8 AGM 2 ARM -w a -n Battle of five armies
+    **Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
 
@@ -14,159 +29,167 @@ Eg. @user @user2 @user3 -u 2 AFV 1 APC 20 ATGM -s 3 MBT -s 4 L 8 AGM 2 ARM
      * Battle command prints results of a battle and removes all destroyed assets.
      */
     execute: async function battle(message, args) {
-        if (perm(message, 2, true)) {
-            let userMap = Array.from(message.mentions.users);
-            let counter = -1;
-            let regExp = new RegExp(/[0-9]/);
-            let negative = [];
+        if (perm(message, 2)) {
 
-            for (let i = 0; i < args.length; i++) {
-                if (!args[i].startsWith('<@') || !regExp.test(args[i])) {
-                    if (args[i].startsWith('-')) {
-                        counter++;
-                        try {
-                            userMap[counter].push([]);
-                        } catch (e) {
-                            message.reply(`There are more sides specified than nations or nations than sides!`).then(msg => msg.delete({timeout: 9000}));
-                            return message.delete({timeout: 9000});
+            //Making user map with array for each user.
+            let userMap = [];
+            let isErroneous = false;
+            message.mentions.users.forEach(user => {
+                if (!cfg.users[user.id]) {
+                    return messageHandler(message, new Error('User not found! Canceling operation.'));
+                }
+                userMap.push([user.id, cfg.users[user.id]]);
+            });
+
+            let optionABTest = new RegExp(/-[a|b]+/g);
+            let winning = false;
+            let winningTeam;
+            let name;
+
+            //Parsing input arguments into an user map with their sides and assets.
+            let userNumber = -1;
+            let assetNumber = 2;
+            for (const arg of args) {
+                let amount = parseInt(arg);
+
+                //Skipping the user pings in command's first phase.
+                if (!arg.startsWith('<@')) {
+                    //Option -a or -b iterates to the next user.
+                    if (optionABTest.test(arg)) {
+                        userNumber++;
+                        assetNumber = 2;
+
+                        // Canceling the command in case of adding more options than users.
+                        if (!userMap[userNumber]) {
+                            return messageHandler(message,
+                                new Error('InvalidArgumentException: More options than used users.'), true);
                         }
-                    } else if (!regExp.test(args[i])) {
-                        let num = parseInt(args[i - 1]);
-                        if (isNaN(num)) {
-                            message.reply(`Number ${args[i - 1]} is not a number!`).then(msg => msg.delete({timeout: 9000}));
-                            return message.delete({timeout: 9000});
-                        }
-                        userMap[counter][2].push([args[i].toUpperCase(), num]);
-                    }
-                }
-            }
-            for (let k = 0; k < userMap.length; k++) {
-                let user = userMap[k];
-                if (cfg.users[user[0]].nation === ' ') {
-                    return message.reply(`Non-existent nation linked to the <@${user[0]}> user!`);
-                } else {
-                    userMap[k].push(cfg.users[user[0]].nation);
-                }
-                for (let unit of user[2]) {
-                    if (units[unit[0]] === undefined) {
-                        return message.reply(`Non-existent unit type of ${unit[0]}!`);
-                    }
-                }
-            }
-
-            let end = await findHorizontal('Technology', 4);
-            let rows = await findVertical('Data', 'A');
-            let data = await getArray('A4', `${end + (parseInt(rows) + 1)}`).catch(e => console.error(e));
-
-            // noinspection ReuseOfLocalVariableJS
-            end = await findHorizontal('END', 4, 'Stockpiles');
-            // noinspection ReuseOfLocalVariableJS
-            rows = await findVertical('Data', 'A', 'Stockpiles');
-            let dataWp = await getArray('A4', `${end + (parseInt(rows) + 1)}`, 0, 0, 'Stockpiles').catch(e => console.error(e));
-
-            for (let nation = 0; nation < userMap.length; nation++) {
-                for (let row = 0; row < data.length; row++) {
-                    //Looping through inputted nations vs sheet nations and finding the right one.
-                    if (data[row][0] === userMap[nation][3]) {
-                        //Checking sheet nation name versus inputted name.
-                        for (let asset = 0; asset < userMap[nation][2].length; asset++) {
-                            //Looping through inputted assets of a nation.
-                            let res = loop(data, row, nation, asset, userMap, negative);
-                            if (!res) {
-                                loop(dataWp, row, nation, asset, userMap, negative);
+                        userMap[userNumber].push(arg);
+                    } else if (!arg.startsWith('-')) {
+                        if (!Number.isNaN(amount)) {
+                            //Adding number of lost assets.
+                            assetNumber++;
+                            userMap[userNumber][assetNumber] = [amount];
+                        } else {
+                            if (winning && ['a', 'b', 'd'].includes(arg) && !units.units[arg]) {
+                                //Adding winning team.
+                                winningTeam = arg;
+                                winning = false;
+                            } else if (name) {
+                                //Adding battle name.
+                                name += `${arg} `;
+                            } else if (units.units[arg]) {
+                                //Adding assets.
+                                userMap[userNumber][assetNumber].push(units.units[arg]);
                             }
                         }
+                    } else if (arg.startsWith('-r')) {
+                        //If results option is used.
+                        winning = true;
+                    } else if (arg.startsWith('-n')) {
+                        //If name option is used.
+                        name = 'Name: '
                     }
                 }
             }
 
-            //Removing informative cols. Technology col, top and bottom rows.
-            data.splice(0, 1);
-            data.splice(-1, 1);
-            data.splice(-1, 1);
-            for (let i = 0; i < data.length; i++) {
-                data[i].splice(0, 4);
-                data[i].splice(-1, 1);
-            }
-
-            //Removing weapon informative cols. Name and bottom row.
-            dataWp.splice(0, 1);
-            dataWp.splice(-1, 1);
-            for (let i = 0; i < dataWp.length; i++) {
-                dataWp[i].splice(0, 1);
-            }
-
-            data = zero(data);
-            dataWp = zero(dataWp);
-
-            await setArray('E5', data);
-            await setArray('B5', dataWp, 'Stockpiles');
-
-            let today = new Date();
-            let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-            let reportMsg = ''
-            userMap.forEach(r => {r[2].forEach(g => {
-                    reportMsg += `${r[3]} has lost ${g[1]} of ${g[0]} in this battle!\n`
-                })
+            //Gathering data for modification.
+            let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
+            .catch(error => {
+                isErroneous = true;
+                return messageHandler(message, error, true);
             });
-            let negativeMsg = '';
-            negative.forEach(r => {
-                negativeMsg += `${r}\n`;
-            })
+            let dataMain = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
+            .catch(error => {
+                isErroneous = true;
+                return messageHandler(message, error, true);
+            });
+            if (isErroneous) return;
 
-            message.client.channels.cache.get(cfg.servers[message.guild.id].battle_channel).send(`[${dateTime} UTC]   [Battle results]:
+            let negatives = [];
+            let results = [];
+            let isSystemPresent = false;
 
-\`\`\`ini
-${reportMsg}\`\`\``).catch(e => console.error(e));
+            try {
+                //Loop through sides.
+                for (const user of userMap) {
+                    let userRow = dataMain[0].indexOf(user[1].nation);
+                    let assetColumn;
+                    
+                    if (userRow === -1) {
+                        return messageHandler(message, `${user[1].nation} not found on the sheet!`)
+                    }
 
-            let problems = ''
-            if (negativeMsg.length > 0) {
-                problems = `Battle report details:
-                \`\`\`${negativeMsg}\`\`\`
-
-***Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!***
-Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
-For better reference, negative numbers are highlighted with red in the sheet.`
+                    //Loop through assets of one side.
+                    for (let asset = 3; asset < user.length; asset++) {
+                        let assetItem = user[asset][1];
+                        //Branching to systems if assetItem is a system.
+                        let sheet = dataMain;
+                        let row = cfg.mainRow;
+                        if (assetItem.type === 'system') {
+                            sheet = dataSystems;
+                            row = cfg.systemsMainRow
+                            isSystemPresent = true;
+                        }
+                        //Throws error if not found.
+                        assetColumn = findArrayData(sheet, [user[asset][1].name], row)[[asset][1].name];
+                        
+                        //Getting latest amount data.
+                        if (Number.isNaN(sheet[assetColumn][userRow])) {
+                            throw new Error(`InvalidTypeException: Value in ${assetItem} column is not a number!`);
+                        }
+                        
+                        //Updating data and reporting.
+                        sheet[assetColumn][userRow] -= user[asset][0];
+                        if (sheet[assetColumn][userRow] < 0) {
+                            negatives.push(`${user[1].name} is missing ${Math.abs(sheet[assetColumn][userRow])} ${assetItem.name}\n`);
+                        }
+                        results.push(`${user[1].nation} lost ${Math.abs(user[asset][0])} ${assetItem.name}\n`);
+                    }
+                }
+            } catch (error) {
+                return messageHandler(message, error, true);
             }
-            report(message, `Battle announced in <#${cfg.servers[message.guild.id].battle_channel}> by <@${message.author.id}>
-            ${problems}`, 'Battle');
+            
+            //Applying the modifications to sheets online.
+            if (isSystemPresent) {
+                //removing the first column.
+                dataSystems.splice(0, 1);
+                await setCellArray('B1', dataSystems, cfg.systems, true).catch(error => {
+                    log(error, true);
+                    isErroneous = true;
+                    return messageHandler(message, new Error('Error has occurred in systems tab.'), true);
+                });
+            }
+    
+            let i = 0
+            let start = 0;
+            for (i; i < dataMain.length; i++) {
+                if (dataMain[i][cfg.mainAccountingRow] === 'Expenses') start = i;
+                if (dataMain[i][cfg.mainAccountingRow] === 'Surface') break;
+            }
+            dataMain.splice(i);
+            dataMain.splice(0, start + 1);
+            
+            
+            await setCellArray(toColumn(start + 1) + '1', dataMain, cfg.main, true).catch(error => {
+                log(error, true);
+                isErroneous = true;
+                return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
+            });
+            if (isErroneous) return;
+            
+            
+            //Logging
+            message.client.channels.cache.get(cfg.servers[message.guild.id].battleid)
+            .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`\n${results}\n\`\`\`
+${winningTeam === 'd' ? 'The battle has been a draw!' : `Team ${winningTeam.toUpperCase()} has been victorious.`}
+            `).catch(error => log(error));
 
-            message.delete();
+            report(message, `Battle was announced in battle channel by ${message.author.username}. ${negatives.length !== 0 ? `\n\nProblem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
+Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
+For better reference, negative numbers are highlighted with red in the sheet.` : ''}${negatives.length !== 0 ? `\n\n\`\`\`${negatives}\`\`\`` : ''}`, this.name);
+            message.delete().catch(error => log(error, true));
         }
     }
 };
-
-function loop(data, row, nation, asset, userMap, negative) {
-    let result = false;
-    for (let col = 1; col < data[0].length; col++) {
-        //Looping through sheet cells of a nation.
-        if (data[0][col] === userMap[nation][2][asset][0]) {
-            //Comparing value of cell with inputted asset name.
-            let price = parseInt(data[row][col]);
-            if (data[row][col] === '.') {
-                price = 0;
-            }
-            data[row][col] = price - userMap[nation][2][asset][1];
-            if (data[row][col] < 0) {
-                negative.push(`Nation ${userMap[nation][3]} got into negative numbers with ${userMap[nation][2][asset][0]}s after this battle!`);
-            }
-            result = true;
-            break;
-        }
-    }
-        return result;
-}
-
-function zero(data) {
-    for (let d of data) {
-        for (let i = 0; i < d.length; i++) {
-            if (d[i] === '.') {
-                d[i] = 0;
-            } else {
-                d[i] = parseInt(d[i]);
-            }
-        }
-    }
-    return data;
-}

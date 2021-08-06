@@ -1,98 +1,103 @@
-const {getArray} = require("../sheet"), {findVertical} = require("../game"), {ping} = require("../jsonManagement");
-require("./../config.json");
+const {getCellArray} = require("../sheet"), {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../utils"),
+    cfg = require("./../config.json"), discord = require('discord.js');
+// noinspection JSUnusedLocalSymbols
 module.exports = {
     name: 'assets',
     description: 'Command for getting your current asset list! Do NOT use in public channels.',
-    args: false,
-    usage: '[M:@user]',
+    args: 0,
+    usage: `${cfg.prefix}assets [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: async function assets(message) {
-        const cfg = require('./../config.json')
-        const discord = require('discord.js');
+        //Getting user.
+        let user = cfg.users[ping(message).id];
 
-        let user = ping(message).id;
-        let nation = cfg.users[user].nation;
+        if (!user.nation) {
+            return messageHandler(message, 'InvalidArgumentType: User is not defined', true);
+        }
 
-        const embed = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(cfg.users[user].map)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        //Making embeds.
+        const embedAssets = createEmbed(user.map, user.nation);
+        const embedSystems = createEmbed(user.map, user.nation);
 
-        const embedW = new discord.MessageEmbed()
-            .setColor('#065535')
-            .setTitle(`National Roster of ${nation}`)
-            .setURL(cfg.users[user].map)
-            .setThumbnail('https://imgur.com/IvUHO31.png')
-            .setFooter('Made by the Attaché to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        //Gathering data.
+        let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
+        let dataMain = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
+            .catch(error => {
+                return messageHandler(message, error, true);
+            });
 
+        //Finding relevant data.
+        let row = 0;
+        let startMainCol = 0;
+        let startSystemCol = 0;
+        let technologyCol = 0;
+        let systemsEndCol = 0;
 
-        //Weapons setup
-        let nationRow = await findVertical(nation, 'A', 'Stockpiles')
-            .catch(err => console.error(err));
+        for (row; row < dataMain[0].length; row++) {
+            if (dataMain[0][row] === user.nation) break;
+        }
+        for (technologyCol; technologyCol < dataMain.length; technologyCol++) {
+            if (dataMain[technologyCol][cfg.mainAccountingRow] === 'Maintenance') startMainCol = technologyCol;
+            else if (dataMain[technologyCol][cfg.mainRow] === 'Technology') break;
+        }
+        for (systemsEndCol; systemsEndCol < dataSystems.length; systemsEndCol++) {
+            if (dataSystems[systemsEndCol][cfg.mainAccountingRow] === 'Systems') startSystemCol = systemsEndCol;
+            else if (dataSystems[systemsEndCol][cfg.systemsMainRow] === '') break;
+        }
 
-        let weaponArray = await getArray('A4', `AZ${nationRow}`, 0, 0, 'Stockpiles')
-            .catch(err => console.error(err));
-        let unitArray = await getArray('A4', `BA${nationRow}`)
-            .catch(err => console.error(err));
+        if (!row || !technologyCol || !startMainCol || !systemsEndCol || !startSystemCol) {
+            return messageHandler(message, new Error('Could not find relevant columns!'), true);
+        }
 
-        for (let i = 1; i < weaponArray[0].length; i++) {
-            if (weaponArray[0][i] === 'END') {
-                break;
-            } else if (![',', '0'].includes(weaponArray[weaponArray.length - 1][i])) {
-                embedW.addField(weaponArray[0][i], weaponArray[weaponArray.length - 1][i], true);
+        //Finishing embeds.
+        for (let column = startMainCol; column < technologyCol; column++) {
+            let item = dataMain[column][row];
+            if (!Number.isNaN(item) && item !== 0) {
+                embedAssets.addField(dataMain[column][cfg.mainRow], item, true);
             }
         }
-        for (let i = 4; i < unitArray[unitArray.length - 1].length; i++) {
-            if (unitArray[0][i] === 'Technology') {
-                break;
-            } else if (![',', '0'].includes(unitArray[unitArray.length - 1][i])) {
-                embed.addField(unitArray[0][i], unitArray[unitArray.length - 1][i], true);
+        for (let column = startSystemCol; column < systemsEndCol; column++) {
+            let item = dataSystems[column][row];
+            if (!Number.isNaN(item) && item !== 0) {
+                embedSystems.addField(dataSystems[column][cfg.systemsMainRow], item, true);
             }
         }
 
-        message.delete();
-        //Embed switching mechanism
-        let currentEmbed = embed;
-        let switchEmbeds = await embUnits(currentEmbed, message);
-        //Prints first embed, if its switched, returns Array with true,embed msg.
-        // Then switches to the other embed, then deletes the old and prints new. Then loop again.
-        while(switchEmbeds[0]) {
-            currentEmbed = currentEmbed === embed ? embedW : embed;
-            switchEmbeds[1].delete();
-            switchEmbeds = await embUnits(currentEmbed, message);
-        }
-    }    
-}
-
-function embUnits(embed, message) {
-    return new Promise(function (resolve) {
+        //Embed options
         function emojiFilter(reaction, user) {
             return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
 
-        message.channel.send(embed)
-            .then(msg => {
-                msg.react('❌').catch(err => console.log(err));
-                msg.react('➡️').catch(err => console.log(err));
-                msg.awaitReactions(emojiFilter, { max: 1, time: 60000, errors: ['time'] })
-                    .then(collected => {
-                        let react = collected.first();
-                        if (react.emoji.name === '➡️') {
-                            resolve([true,msg]);
-                        } else if (react.emoji.name === '❌') {
-                            msg.delete();
-                            resolve([false,msg]);
-                        }
-                    })
-                    .catch(() => {
-                        msg.delete();
-                    })
-            })
-            .catch(() => {
-                resolve([false]);
-            })
-    })
+        // noinspection JSUnusedLocalSymbols
+        function processReactions(reaction, embedMessage) {
+            if (reaction.emoji.name === '➡️') {
+                return resultOptions.moveNext;
+            } else if (reaction.emoji.name === '❌') {
+                return resultOptions.delete;
+            }
+        }
+        await embedSwitcher(message, [embedAssets, embedSystems], ['❌', '➡️'], emojiFilter, processReactions)
+            .then(() => message.delete().catch(error => log(error, true)))
+            .catch(error => messageHandler(message, error, true));
+    },
+}
+
+/**
+ * Function creates embed header for a nation assets.
+ * @private
+ * @param {string} nation   nation name
+ * @param {string} map      map URL
+ * @return {module:"discord.js".MessageEmbed} Returns embed message header.
+ */
+function createEmbed(map, nation) {
+    return new discord.MessageEmbed()
+        .setColor('#065535')
+        .setTitle(`National Roster of ${nation}`)
+        .setURL(map)
+        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
 }

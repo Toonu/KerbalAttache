@@ -1,23 +1,27 @@
-const cfg = require('./../config.json'), {exportFile, perm} = require("../jsonManagement"), {report} = require("../game");
+const cfg = require('./../config.json'), {exportFile, perm, messageHandler, report} = require('../utils');
 module.exports = {
     name: 'userdel',
-    description: 'Command for deleting tagged user from database.',
-    args: true,
-    usage: '[M:@user]',
+    description: 'Command for deleting user from the database.',
+    args: 1,
+    usage: `${cfg.prefix}userdel [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: function userdel(message) {
+
+        //Validating input arguments.
+        if (message.mentions.users.size === 0)
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true)
         const user = message.mentions.users.first();
-        if (user === undefined) {
-            message.channel.send('No user specified, please retry.').then(msg => msg.delete({timeout: 9000}));
-        } else if (cfg.users[user.id] === undefined) {
-            message.channel.send('User does not exist, please retry.').then(msg => msg.delete({timeout: 9000}));
-        } else if (perm(message, 2, true)) {
+
+        //Validation
+        if (!cfg.users[user.id])
+            return messageHandler(message, new Error('InvalidArgumentException: User does not exist, please retry.'), true)
+        else if (perm(message, 2)) {
+            //Deleting the user and exporting the edited file.
             delete cfg.users[user.id];
-            exportFile("config.json", cfg);
-            report(message, `<@${message.author.id}> deleted user <@${message.mentions.users.first().id}>!`, this.name);
-            message.channel.send("User deleted.").then(msg => msg.delete({timeout: 9000}));
+            exportFile('config.json', cfg);
+            report(message, `${message.author.username} deleted user <@${user.id}>!`, this.name);
+            messageHandler(message, 'User deleted.', true);
         }
-        return message.delete({timeout: 12000});
     }
 };

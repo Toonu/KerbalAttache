@@ -1,51 +1,280 @@
 {
-    "MBT": ["Main Battle Tank", "surface"], 
-    "AFV": ["Armored Fighting Vehicle", "surface"], 
-    "IFV": ["Infantry Fighting Vehicle", "surface"], 
-    "APC": ["Armored Personnel Carrier", "surface"], 
-    "MLV": ["Missile Launcher Vehicle", "surface"], 
-    "SPAAG": ["Self-propelled Anti-Air gun", "surface"], 
-    "SF": ["Special Operation Force", "surface"],
-    "LM": ["Light Multirole Airframe", "aerial"], 
-    "MM": ["Medium Multirole Airframe", "aerial"], 
-    "HM": ["Heavy Multirole Airframe", "aerial"], 
-    "LA": ["Large Airframe", "aerial"], 
-    "VL": ["Very Large Airframe", "aerial"], 
-    "VTOL": ["Helicopter / VTOL Airframe", "aerial"], 
-    "SAT": ["Orbital Satellite", "orbital"], 
-    "OV": ["Orbital Vehicle", "orbital"],
-    "K": ["Corvette", "naval"], 
-    "FF": ["Frigate", "naval"], 
-    "DD": ["Destroyer", "naval"], 
-    "CC": ["Cruiser", "naval"], 
-    "BC": ["Battlecruiser", "naval"], 
-    "BB": ["Battleship", "naval"], 
-    "CL": ["Light Carrier", "naval"], 
-    "CV": ["Fleet Carrier", "naval"],
-    "CRUISE": ["Cruiser Missile", "wpSurface"], 
-    "BALLISTIC": ["Ballistic Missile", "wpSurface"], 
-    "ASM": ["Anti-Sattelite Missile", "wpSurface"],
-    "ATGM": ["Anti-Tank Guided Missile", "wpSurface"],
-    "ASHM": ["Anti-Ship Missile", "wpAerial"], 
-    "ARM": ["Anti-radiation Missile", "wpAerial"],
-    "SRAAM": ["Short-Range Air-to-Air Missile", "wpAerial"], 
-    "MRAAM": ["Medium-Range Air-to-Air Missile", "wpAerial"], 
-    "LRAAM": ["Long-Range Air-to-Air Missile", "wpAerial"], 
-    "SRSAM": ["Short-Range Surface-to-Air Missile", "wpAerial"],
-    "MRSAM": ["Medium-Range Surface-to-Air Missile", "wpAerial"],
-    "LRSAM": ["Long-Range Surface-to-Air Missile", "wpAerial"], 
-    "BMB": ["Unguided bomb", "wpAerial"], 
-    "GBMB": ["Guided bomb", "wpAerial"],
-    "GPOD": ["Gunpod", "wpAerial"],
-    "RPOD": ["Rocket pod", "wpAerial"],
-    "FUEL": ["Fuel pod", "systems"], 
-    "EW": ["Electronic Warfare suite", "systems"], 
-    "REC": ["Recon suite", "systems"],
-    "AIRPORT": ["Airfield", "aerial"], 
-    "FOB": ["Forward Operating Base", "surface"], 
-    "PORT": ["Naval port", "naval"], 
-    "RADAR": ["Radar site", "surface"],
-    "ResBudget": ["Research", "other"],
-    "Coefficient": ["Research", "other"],
-    "Tiles": ["Tiles", "other"]
+    "units": {
+        "MBT": {
+            "name": "MBT",
+            "desc": "Main Battle Tank",
+            "type": "asset",
+            "price": 48000
+        },
+        "AFV": {
+            "name": "AFV",
+            "desc": "Armored Fighting Vehicle",
+            "type": "asset",
+            "price": 32000
+        },
+        "IFV": {
+            "name": "IFV",
+            "desc": "Infantry Fighting Vehicle",
+            "type": "asset",
+            "price": 20000
+        },
+        "APC": {
+            "name": "APC",
+            "desc": "Armored Personnel Carrier",
+            "type": "asset",
+            "price": 8000
+        },
+        "MLV": {
+            "name": "MLV",
+            "desc": "Missile Launcher Vehicle",
+            "type": "asset",
+            "price": 24000
+        },
+        "SPAAG": {
+            "name": "SPAAG",
+            "desc": "Self-propelled Anti-Air gun",
+            "type": "asset",
+            "price": 16000
+        },
+        "SF": {
+            "name": "SF",
+            "desc": "Special Operation Force",
+            "type": "asset",
+            "price": 80000
+        },
+        "LM": {
+            "name": "LM",
+            "desc": "Light Multirole Airframe",
+            "type": "asset",
+            "price": 24000
+        },
+        "MM": {
+            "name": "MM",
+            "desc": "Medium Multirole Airframe",
+            "type": "asset",
+            "price": 48000
+        },
+        "HM": {
+            "name": "HM",
+            "desc": "Heavy Multirole Airframe",
+            "type": "asset",
+            "price": 80000
+        },
+        "LA": {
+            "name": "LA",
+            "desc": "Large Airframe",
+            "type": "asset",
+            "price": 40000
+        },
+        "VL": {
+            "name": "VL",
+            "desc": "Very Large Airframe",
+            "type": "asset",
+            "price": 104000
+        },
+        "VTOL": {
+            "name": "VTOL",
+            "desc": "Helicopter / VTOL Airframe",
+            "type": "asset",
+            "price": 40000
+        },
+        "SAT": {
+            "name": "SAT",
+            "desc": "Orbital Satellite",
+            "type": "asset",
+            "price": 160000
+        },
+        "OV": {
+            "name": "OV",
+            "desc": "Orbital Vehicle",
+            "type": "asset",
+            "price": 200000
+        },
+        "K": {
+            "name": "K",
+            "desc": "Corvette",
+            "type": "asset",
+            "price": 16000
+        },
+        "FF": {
+            "name": "FF",
+            "desc": "Frigate",
+            "type": "asset",
+            "price": 50000
+        },
+        "DD": {
+            "name": "DD",
+            "desc": "Destroyer",
+            "type": "asset",
+            "price": 80000
+        },
+        "CC": {
+            "name": "CC",
+            "desc": "Cruiser",
+            "type": "asset",
+            "price": 120000
+        },
+        "BC": {
+            "name": "BC",
+            "desc": "Battlecruiser",
+            "type": "asset",
+            "price": 160000
+        },
+        "BB": {
+            "name": "BB",
+            "desc": "Battleship",
+            "type": "asset",
+            "price": 240000
+        },
+        "CL": {
+            "name": "CL",
+            "desc": "Light Carrier",
+            "type": "asset",
+            "price": 300000
+        },
+        "CV": {
+            "name": "CV",
+            "desc": "Fleet Carrier",
+            "type": "asset",
+            "price": 600000
+        },
+        "CRUISE": {
+            "name": "CRUISE",
+            "desc": "Cruise Missile",
+            "type": "system",
+            "price": 5000
+        },
+        "BALLISTIC": {
+            "name": "BALLISTIC",
+            "desc": "Ballistic Missile",
+            "type": "system",
+            "price": 6000
+        },
+        "ASM": {
+            "name": "ASM",
+            "desc": "Anti-Satellite Missile",
+            "type": "system",
+            "price": 20000
+        },
+        "ATGM": {
+            "name": "ATGM",
+            "desc": "Anti-Tank Guided Missile",
+            "type": "system",
+            "price": 3000
+        },
+        "ASHM": {
+            "name": "ASHM",
+            "desc": "Anti-Ship Missile",
+            "type": "system",
+            "price": 8000
+        },
+        "ARM": {
+            "name": "ARM",
+            "desc": "Anti-radiation Missile",
+            "type": "system",
+            "price": 7000
+        },
+        "SRAAM": {
+            "name": "SRAAM",
+            "desc": "Short-Range Air-to-Air Missile",
+            "type": "system",
+            "price": 1000
+        },
+        "MRAAM": {
+            "name": "MRAAM",
+            "desc": "Medium-Range Air-to-Air Missile",
+            "type": "system",
+            "price": 2500
+        },
+        "LRAAM": {
+            "name": "LRAAM",
+            "desc": "Long-Range Air-to-Air Missile",
+            "type": "system",
+            "price": 5000
+        },
+        "SRSAM": {
+            "name": "SRSAM",
+            "desc": "Short-Range Surface-to-Air Missile",
+            "type": "system",
+            "price": 500
+        },
+        "MRSAM": {
+            "name": "MRSAM",
+            "desc": "Medium-Range Surface-to-Air Missile",
+            "type": "system",
+            "price": 3000
+        },
+        "LRSAM": {
+            "name": "LRSAM",
+            "desc": "Long-Range Surface-to-Air Missile",
+            "type": "system",
+            "price": 7000
+        },
+        "BMB": {
+            "name": "BMB",
+            "desc": "Unguided bomb",
+            "type": "system",
+            "price": 500
+        },
+        "GBMB": {
+            "name": "GBMB",
+            "desc": "Guided bomb",
+            "type": "system",
+            "price": 1000
+        },
+        "GPOD": {
+            "name": "GPOD",
+            "desc": "Gunpod",
+            "type": "system",
+            "price": 10000
+        },
+        "RPOD": {
+            "name": "RPOD",
+            "desc": "Rocket pod",
+            "type": "system",
+            "price": 4000
+        },
+        "FUEL": {
+            "name": "FUEL",
+            "desc": "Fuel pod",
+            "type": "system",
+            "price": 2000
+        },
+        "EW": {
+            "name": "EW",
+            "desc": "Electronic Warfare suite",
+            "type": "system",
+            "price": 20000
+        },
+        "REC": {
+            "name": "REC",
+            "desc": "Recon suite",
+            "type": "system",
+            "price": 10000
+        },
+        "AIRPORT": {
+            "name": "AIRPORT",
+            "desc": "Airfield",
+            "type": "asset",
+            "price": 200000
+        },
+        "FOB": {
+            "name": "FOB",
+            "desc": "Forward Operating Base",
+            "type": "asset",
+            "price": 160000
+        },
+        "PORT": {
+            "name": "PORT",
+            "desc": "Naval port",
+            "type": "asset",
+            "price": 100000
+        },
+        "RADAR": {
+            "name": "RADAR",
+            "desc": "Radar site",
+            "type": "asset",
+            "price": 40000
+        }
+    }
 }

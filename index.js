@@ -1,14 +1,12 @@
-const cfg = require('./config.json');
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const fs = require('fs');
-const fn = require("./sheet");
-const js = require("./jsonManagement");
+const {prefix} = require('./config.json'), Discord = require('discord.js'),
+fs = require('fs'), {init} = require("./sheet"), {log, perm, messageHandler} = require("./utils");
+client = new Discord.Client();
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const coolDowns = new Discord.Collection();
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	
@@ -17,49 +15,35 @@ for (const file of commandFiles) {
 
 //Starts the bot
 client.on('ready', () => {
-	console.log('Deployed and ready!');
-	client.user.setActivity("over players.", { type: "WATCHING" }).catch(err => console.log(err));
-	fn.init();
+	log(`Deployed and ready!`);
+	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => log(error, true));
+	init();
 });
 
 client.on('message', message => {
-	if (!message.content.startsWith(cfg.prefix) || message.author.bot) return;
+	//Ignored messages without a prefix.
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
   
-	//Prepares the arguments and command
-	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	//Prepares the arguments.
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
 
-	//If command doesnt exist.
-	if (!client.commands.has(commandName)) {
-		message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-		return message.delete();
-	}
+	//Finds the command.
+	const command = client.commands.get(args.shift().toLowerCase());
 
-	//Else
-	const command = client.commands.get(commandName);
-    if (command === undefined) {
-        message.channel.send('Not a command!').then(msg => msg.delete({timeout: 9000}));
-        return message.delete();
-    }
+	if (!command) return messageHandler(message, 'Not a command!', true);
 
-	//Checking for DMs
+	//Checking for DMs.
 	if (command.guildOnly && message.channel.type === 'dm') {
-		return message.reply('I can\'t execute that command inside DMs!');
+		return messageHandler(message, 'I cannot execute this command inside DMs!', true);
     }
 
-	//Checking for arguments
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${message.author}!`;
-		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${cfg.prefix}${command.name} ${command.usage}\``;
-		}
-		// noinspection JSUnresolvedFunction
-		return message.channel.send(reply).then(() => {
-			message.delete({timeout: 10000}).catch(err => console.log(err));
-		});
+	//Checking for arguments.
+	if (command.args && (!args.length || command.args > args.length)) {
+		return messageHandler(message, `You didn't provide all required arguments, ${message.author.username}!
+The proper usage would be:\n${command.usage}\n\nFor more information, type ${prefix}help ${command.name}.`, true, 20000);
 	}
 
-	//Checking for cool down
+	//Checking for cool down.
 	if (!coolDowns.has(command.name)) {
 		coolDowns.set(command.name, new Discord.Collection());
 	}
@@ -73,34 +57,61 @@ client.on('message', message => {
 
 		if (now < expirationTime && message.author.id !== '319919565079576576') {
 			const timeLeft = (expirationTime - now) / 1000;
-			message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`)
-				.then(() => {
-					message.delete({timeout: 10000}).catch(err => console.log(err));
-				});
+			messageHandler(message, `Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`, true);
 		}
 	}
-	if (!js.perm(message, 1)) {
+	if (!perm(message, 1, false)) {
 		timestamps.set(message.author.id, now);
 	}
 	setTimeout(() => timestamps.delete(message.author.id), coolDownAmount);
-	
+
+	//Executing the actual command.
 	try {
-		let today = new Date();
-		let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 		if (message.channel.type === 'dm') {
-            console.log(`[${dateTime} UTC] DM from ${message.author.username}: ${message.content}`);
+            log(`DM from ${message.author.username}: ${message.content}`);
         } else {
-			console.log(`[${dateTime} UTC] Server ${message.guild.name} (${message.author.username}): ${message.content}`);
+			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);
 	} catch (error) {
-		console.error(error);
-		message.reply('There was an error trying to execute that command!')
-			.then(() => message.delete({timeout: 10000}));
+		messageHandler(message, 'There was an error trying to execute that command!');
+		messageHandler(message, error, true);
 	}
 });
 
-const {CLIENT_TOKEN} = process.env;
-//const {CLIENT_TOKEN} = require('./env.json');
-client.login(CLIENT_TOKEN).catch(err => console.log(err));
+//const {CLIENT_TOKEN} = process.env;
+const {CLIENT_TOKEN} = require('./env.json');
+client.login(CLIENT_TOKEN).catch(error => log(error, true));
+
+/**
+ * Go through each command possible failure points, extreme cases and possible fails.
+ * Submissions .sub delete craftName - with confirmation embed
+ *
+ * accept
+ * assets - sheet
+ * balance - sheet
+ * battle - sheet
+ * buy - sheet
+ * config
+ * help
+ * map
+ * ping
+ * prune
+ * reject
+ * spam
+ * sub
+ * tech - sheet
+ * tiles - sheet
+ * trade - sheet
+ * turn - sheet
+ * usercreate
+ * userdel
+ * useredit
+ * userinfo
+ *
+ * index
+ * sheet
+ * utils
+**/
+
 

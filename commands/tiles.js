@@ -1,58 +1,70 @@
-const cfg = require("./../config.json"), {report, findData} = require("../game"),
-    {set} = require("../sheet"), {perm, ping} = require("../jsonManagement");
+const cfg = require("./../config.json"), {getCellArray, setCellArray, toColumn} = require("../sheet"), {perm, messageHandler, log, report} = require("../utils");
 module.exports = {
     name: 'tiles',
-    description: 'Command for managing tile amount of nation.',
-    args: false,
-    usage: '[M:amount] [M:@user] (use negative amount to remove tiles)',
+    description: 'Command for managing tile amount of a specified nation.',
+    args: 2,
+    usage: `${cfg.prefix}tiles [ADDITION] [USER]
+    
+    Accepts decimal numbers to represent tiny tiles.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function tiles(message, args) {
-        let user = ping(message).id;
+        //Validating input arguments and clearance.
+        if(!perm(message, 2)) return;
 
-        //Checking arguments and permissions.
-        let fail = false;
-        if (!perm(message, 2, true)) {
-            fail = true;
-        } else if (args[0] === undefined) {
-            message.channel.send(`You can get information about amount of your tiles in ${cfg.prefix}balance.`).then(msg => msg.delete({timeout: 9000}));
-            fail = true;
+        let user = message.mentions.users.first();
+        let amount = parseFloat(args[0]);
+        let column = 0;
+        let row = 0;
+        let isErroneous = false;
+
+        if (Number.isNaN(amount))
+            return messageHandler(message, new Error('InvalidTypeException: Argument is not a number. Canceling operation.'), true);
+        else if (!user)
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified. Canceling operation.'), true);
+        user = user.id;
+
+        //Gathering data.
+        let data = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
+            .catch(error => {
+                isErroneous = true;
+                return messageHandler(message, error, true);
+            });
+        if (isErroneous) return;
+        else if (!cfg.users[user])
+            return messageHandler(message, new Error('InvalidArgumentException: User not found. Canceling operation.'), true);
+
+
+        //Searching for column and row.
+        for (column; column < data.length; column++) {
+            if (data[column][cfg.mainRow].toLowerCase() === 'tiles') break;
         }
-        args[0] = parseFloat(args[0]);
-        if (isNaN(args[0])) {
-            message.channel.send('Argument is not a number. Canceling operation.').then(msg => msg.delete({timeout: 9000}));
-            fail = true;
-        } else if (user === undefined) {
-            message.channel.send('No user specified. Canceling operation.').then(msg => msg.delete({timeout: 9000}));
-            fail = true;
+        for (row; row < data[0].length; row++) {
+            if (data[0][row] === cfg.users[user].nation) break;
         }
 
-        if (fail) {
-            message.delete();
-            return;
-        }
+        if (Number.isNaN(data[column][row]))
+            return messageHandler(message, new Error('InvalidTypeException: Tiles cell does not contain a number.' +
+                ' Canceling operation.'), true);
 
-        findData('Tiles', cfg.users[user].nation)
-        .then(tiles => {
-            if (tiles[3] === false) {
-                tiles[3] = 0;
-            } else {
-                tiles[3] = tiles[3];
-            }
-            let newTiles = parseFloat(args[0]) + tiles[3]
-            //Checking whether the number of tiles would go into negative.
-            if (newTiles >= 0) {
-                set(`${tiles[1] + tiles[2]}`, newTiles)
-                    .then(() => {
-                        message.channel.send('Tiles set!').then(msg => msg.delete({timeout: 9000}));
-                        message.delete();
-                        report(message, `Tiles set to ${newTiles} for ${cfg.users[user].nation} by <@${message.author.id}>!`, this.name)
-                    })
-            } else {
-                message.channel.send('Tiles cannot go into negative numbers. Canceling operation.').then(msg => msg.delete({timeout: 9000}));
-                message.delete();
-            }
-        })
-        .catch(err => console.error(err));
+        //Changing the data.
+        data[column][row] += amount;
+        if (data[column][row] > 0) {
+            await setCellArray( `${toColumn(column)}1`, [data[column]], cfg.main, true)
+                .catch(error => {
+                    // noinspection ReuseOfLocalVariableJS
+                    isErroneous = true;
+                    log(`Cancelling tile process due to an error. Consult log for more information.`, true);
+                    return messageHandler(message, error, true);
+                });
+
+            if (isErroneous) return;
+
+            //Logging and announcing.
+            report(message, `Tiles set to ${data[column][row]} for ${cfg.users[user].nation} by <@${message.author.id}>!`, this.name);
+            messageHandler(message, 'Tiles set!', true);
+        } else {
+            messageHandler(message, new Error('Tiles cannot go into negative numbers. Canceling operation.'), true);
+        }
     },
 };

@@ -1,12 +1,12 @@
-const cfg = require('./config.json'), {google} = require('googleapis'), sh = require('./sheet');
+const cfg = require('./config.json'), {google} = require('googleapis');
 let client;
 let gs;
-const {private_key, client_email} = process.env;
-//const {private_key, client_email} = require('./env.json');
+//const {private_key, client_email} = process.env;
+const {private_key, client_email} = require('./env.json');
 
 
 /**
- * Function authorize the bot to manipulate the main sheet.
+ * Function authorizes the bot to manipulate the main sheet.
  */
 exports.init = function init() {
     client = new google.auth.JWT(client_email, null, private_key, ['https://www.googleapis.com/auth/spreadsheets']);
@@ -16,243 +16,149 @@ exports.init = function init() {
 
 
 /**
- * Function returns value of cell at coordinate of the tab in the sheet.
- * @param coordinate            Coordinate of cell.
- * @param tab                   Sheet tab.
+ * Function returns value of cell in the tab of the sheet.
+ * @param {string} cell         coordinate of cell.
+ * @param {string} sheetTab     sheet tab name.
  * @return {Promise<String>}    Returns cell value or rejects with String error message.
  */
-exports.get = function getInternal(coordinate,tab = 'Maintenance') {
+exports.getCell = function getCell(cell, sheetTab) {
     return new Promise(function (resolve, reject) {
-        if (isCoordinate(coordinate)) {
-            const request = {
+        if (isCoordinate(cell)) {
+            gs.spreadsheets.values.get({
                 spreadsheetId: cfg.sheet,
-                range:  `${tab}!${coordinate}`
-            };
-            gs.spreadsheets.values.get(request)
-                .then(data => {
-                    let dataArray = data.data.values;
-
-                    if (dataArray !== undefined) {
-                        resolve(dataArray[0][0]);
-                    } else {
-                        resolve(undefined);
-                    }
-                })
-                .catch(err => {
-                    reject(err.message);
-                });
-        }
-    });
-}
-
-
-/**
- * Function gets array of values from cordX to cordY with extension of col and row Sizes in tab of sheet.
- * @param cordX                 String First coordinate.
- * @param cordY                 String Second coordinate.
- * @param colSize               Number Size extension in columns.
- * @param rowSize               Number Size extension in rows.
- * @param tab                   String tab name.
- * @param full                  If coordinates have to be full (allows A1:A if true).
- * @return {Promise<Array>}     Returns data array or rejects String error message.
- */
-exports.getArray = function getAInternal(cordX, cordY, colSize = 0, rowSize = 0, tab = 'Maintenance', full = false) {
-    return new Promise(function (resolve, reject) {
-        rowSize = parseInt(rowSize);
-        colSize = parseInt(colSize);
-
-        let temporaryCordY;
-        if ((!isCoordinate(cordX) || !isCoordinate(cordY)) && !full) {
-            reject('Coordinates not correct.')
-        } else if (colSize !== 0 || rowSize !== 0) {
-            temporaryCordY = sh.fromCoordinate(cordY);
-            cordY = sh.toCoordinate(temporaryCordY[0] + colSize) + (temporaryCordY[1] + rowSize);
-        }
-
-        const request = {
-            spreadsheetId: cfg.sheet,
-            "range": `${tab}!${cordX}:${cordY}`,
-            "majorDimension": "ROWS"
-        };
-
-        gs.spreadsheets.values.get(request)
-            .then(data => {
-                for(rowSize of data.data.values) {
-                    for(let i = 0; i < rowSize.length; i++) {
-                        if (rowSize[i] === '') {
-                            rowSize.splice(i, 1, '.');
-                        }
-                    }
-                }
-                let l = 0;
-
-                for (let
-                    row of data.data.values) {
-                    if (row.length > l) {
-                        l = row.length;
-                    }
-                }
-
-                for (let i = 0; i < data.data.values.length; i++){
-                    let size = data.data.values[i];
-                    if (size.length < l) {
-                        for (let li = l - size.length; li > 0; li--) {
-                            size.push('.');
-                        }
-                    }
-                }
-
-                resolve(data.data.values);
+                range:  `${sheetTab}!${cell}`,
+                valueRenderOption: "UNFORMATTED_VALUE"
             })
-            .catch(err => {
-                reject(err.message);
-            });
+            .then(data => resolve(data.data.values[0][0]))
+            .catch(error => reject(error.message));
+        }
     });
 }
 
 
 /**
- * Function sets cell on coordinate to new value in tab of the sheet.
- * @param coordinate            Coordinate String of cell.
- * @param value                 Value to set. If undefined, cell becomes empty.
- * @param tab                   Tab of sheet where operation takes place.
- * @return {Promise<Array>}     Returns if successful or rejects with String error message.
+ * Function returns an data array from the sheet tab's specified coordinates.
+ * Additionally, the array is made rectangular by filling shorter rows.
+ * @param {string} X                    array first coordinate.
+ * @param {string} Y                    array end coordinate.
+ * @param {string} sheetTab             sheet tab name.
+ * @param {boolean} dominantColumn      true if the array is returned transposed.
+ * @return {Promise<Array>}             Returns data array or reject error String message.
  */
-exports.set = function setInternal(coordinate, value = '', tab  = 'Maintenance') {
+exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = false) {
+    return new Promise(function (resolve, reject) {
+        if (!isCoordinate(X) || !isCoordinate(Y, true)) {
+            return reject('Coordinate X is not correct.')
+        }
+
+        gs.spreadsheets.values.get({
+            spreadsheetId: cfg.sheet,
+            range: `${sheetTab}!${X}:${Y}`,
+            majorDimension: dominantColumn ? 'COLUMNS' : 'ROWS',
+            valueRenderOption: "UNFORMATTED_VALUE"
+        })
+        .then(data => {
+            let maximalLength = 0;
+
+            for (const row of data.data.values) {
+                if (row.length > maximalLength) maximalLength = row.length;
+            }
+
+            //Second loop fills in the ends if the row is shorter than maximal row to keep the array rectangular.
+            for (let row = 0; row < data.data.values.length; row++) {
+                if (data.data.values[row].length < maximalLength) {
+                    for (let i = maximalLength - data.data.values[row].length; i > 0; i--) {
+                        data.data.values[row].push('');
+                    }
+                }
+            }
+
+            resolve(data.data.values);
+        })
+        .catch(error => reject(error.message));
+    });
+}
+
+
+/**
+ * Function writes value into a cell at the specified coordinate in sheet tab.
+ * @param {string} coordinate   target cell coordinate.
+ * @param {string || number} value        value to write, undefined makes the cell empty.
+ * @param {string} sheetTab     sheet tab name.
+ * @return {Promise<Array>}     Returns string success message or rejects with an error message.
+ */
+exports.setCell = function setCell(coordinate, value, sheetTab) {
     return new Promise(function (resolve, reject) {
         if (isCoordinate(coordinate)) {
-            const pushData = {
+            gs.spreadsheets.values.update({
                 spreadsheetId: cfg.sheet,
-                range: `${tab}!${coordinate}`,
+                range: `${sheetTab}!${coordinate}`,
                 valueInputOption: 'RAW',
                 resource: {values: [[value]]}
-            };
-            gs.spreadsheets.values.update(pushData)
-                .then(() => {
-                    resolve('Operation successful.')
-                })
-                .catch(err => {
-                    reject(err.message)
-                });
+            })
+                .then(() => resolve('Operation successful.'))
+                .catch(error => reject(error.message));
         }
     });
 }
 
 
 /**
- * Function sets array of values into from the coordinate cell in sheet tab.
- * @param coordinate            String coordinate.
- * @param values                Array of arrays(rows) of values(cols).
- * @param tab                   String sheet tab name.
- * @return {Promise<String>}   Returns String.
+ * Function writes array of values into the sheet tab on specified coordinates.
+ * @param {string} coordinate           coordinate/s of write target.
+ * @param {Array} values                Array of arrays(rows) of values(cols). Must be in a [Data] format.
+ * @param {string} sheetTab             sheet tab name.
+ * @param {boolean} dominantColumn      true if the array is transposed.
+ * @return {Promise<String>}            Returns string success message or rejects with an error message.
  */
-exports.setArray = function setAInternal(coordinate, values, tab = 'Maintenance') {
+exports.setCellArray = function setCellArray(coordinate, values, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
-        const pushData = {
+        // noinspection JSCheckFunctionSignatures
+        gs.spreadsheets.values.batchUpdate({
             spreadsheetId: cfg.sheet,
             resource: {
                 valueInputOption: 'RAW',
+                responseValueRenderOption: 'UNFORMATTED_VALUE',
                 data: {
-                    "range": `${tab}!${coordinate}`,
-                    "majorDimension": "ROWS",
+                    "range": `${sheetTab}!${coordinate}`,
+                    "majorDimension": dominantColumn ? 'COLUMNS' : 'ROWS',
                     "values": values,
                 }
             },
-        };
-        gs.spreadsheets.values.batchUpdate(pushData)
-            .then(() => {
-                resolve('Operation successful.')
-            })
-            .catch(err => {
-                reject(err.message);
-            });
+        }).then(() => resolve('Operation successful.'))
+            .catch(error => reject(error.message));
     });
 }
 
 
 /**
  * Function checks if the coordinate is in correct format.
- * @param coordinate    Coordinate to check.
- * @return {boolean}    Returns true/false if correct/wrong.
+ * @param {string} coordinate       Checked coordinate.
+ * @param {boolean} ignoreNumber    Bool allowing ignoring the coordinate number.
+ * @return {boolean}                Returns true for correct format, else false.
+ * @private
  */
-function isCoordinate(coordinate) {
-    let regExp = new RegExp(/[A-Z]+[0-9]+/g);
-    return regExp.test(coordinate.toUpperCase());
+function isCoordinate(coordinate, ignoreNumber = false) {
+    if (ignoreNumber) {
+        return new RegExp(/[A-Z]+/g).test(coordinate);
+    }
+    return new RegExp(/[A-Z]+[0-9]+/g).test(coordinate);
 }
 
 
 /**
- * Function changes column number into sheet coordinate.
- * @param num           Number to convert
- * @return {string}     Sheet coordinate String.
+ * Function converts array number to sheet column letters where 0 marks column A.
+ * @param {number} num  Number to convert.
+ * @return {string}     Returns column letter coordinate string.
  */
-exports.toCoordinate = function toCoordinate(num) {
-    num = parseInt(num);
-
-    if (num > 298) {
-        return 'I'+String.fromCharCode(num - 234);
-    } else if (num > 272) {
-        return 'H'+String.fromCharCode(num - 208);
-    } else if (num > 246) {
-        return 'G'+String.fromCharCode(num - 182);
-    } else if (num > 220) {
-        return 'F'+String.fromCharCode(num - 156);
-    } else if (num > 194) {
-        return 'E'+String.fromCharCode(num - 130);
-    } else if (num > 168) {
-        return 'D'+String.fromCharCode(num - 104);
-    } else if (num > 142) {
-        return 'C'+String.fromCharCode(num - 78);
-    } else if (num > 116) {
-        return 'B'+String.fromCharCode(num - 52);
-    } else if (num > 90) {
-        return 'A'+String.fromCharCode(num - 26);
-    } else {
-        return String.fromCharCode(num);
+exports.toColumn = function toColumn(num) {
+    let column = '';
+    let preceding = 0;
+    while (num > 25) {
+        num -= 26;
+        preceding++;
     }
-}
-
-
-/**
- * Function changes column coordinate into number.
- * @param coordinate    Coordinate to convert.
- * @return {[number, number]|[number, number]}
- */
-exports.fromCoordinate = function fromCoordinate(coordinate) {
-    let letters = 0;
-
-    if (coordinate.charCodeAt(1) > 64) {
-        letters += coordinate.charCodeAt(1);
-    } else {
-        return [coordinate.charCodeAt(0), parseInt(coordinate.substring(1, coordinate.length))];
-    }
-
-    let numbers = '';
-    for (let i = 0; i < coordinate.length; i++) {
-        if (coordinate.charCodeAt(i) < 65) {
-            numbers += coordinate.charAt(i);
-        }
-    }
-
-    if (coordinate.startsWith('I')) {
-        letters += 234;
-    } else if (coordinate.startsWith('H')) {
-        letters += 208;
-    } else if (coordinate.startsWith('G')) {
-        letters += 182;
-    } else if (coordinate.startsWith('F')) {
-        letters += 156;
-    } else if (coordinate.startsWith('E')) {
-        letters += 130;
-    } else if (coordinate.startsWith('D')) {
-        letters += 104;
-    } else if (coordinate.startsWith('C')) {
-        letters += 78;
-    } else if (coordinate.startsWith('B')) {
-        letters += 52;
-    } else if (coordinate.startsWith('A')) {
-        letters += 26;
-    }
-
-    return [letters, parseInt(numbers)];
-}
+    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
+    column += String.fromCharCode(65 + num);
+    return column;
+};

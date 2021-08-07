@@ -6,7 +6,11 @@ module.exports = {
     name: 'sub',
     description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list confirm.',
     args: 0,
-    usage: `${cfg.prefix}sub [PERSIST] [USER]`,
+    usage: `${cfg.prefix}sub [PERSIST] [USER]
+    Persist set to 'true' will make the message persistant and it will never delete.
+    
+    Use ${cfg.prefix}sub del [CRAFT]
+    to delete submission of craft.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function sub(message, args) {
@@ -72,6 +76,7 @@ module.exports = {
                     await embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
                     .then(result => {
                         if (result === resultOptions.confirm) {
+                            report(message, `<@${nation}> has deleted submission ${craft}! Please delete the craft file from the storage manually.`)
                             messageHandler(message, 'Submission was deleted!', true);
                             deleteRow(nationSubmissionsPosition[i], cfg.submissions).catch(error => log(error, true));
                         }

@@ -99,9 +99,9 @@ Assets do not need to be written in capital letters, the command is case insensi
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
                 { name: 'Amount:', value: amount, inline: true},
-                { name: 'Asset', value: unit.desc, inline: true},
-                { name: 'Cost:', value: formatCurrency(unit.price * amount * (amount < 0 ? 0.7 : 1))},
-                { name: 'Do you accept the terms of the supplier agreement?', value: '✅/❌'},
+                { name: 'Asset:', value: unit.desc, inline: true},
+                { name: 'Maitenance | Cost:', value: formatCurrency(unit.price * amount * 0.25) + ' | ' + formatCurrency(unit.price * amount * (amount < 0 ? 0.7 : 1))},
+                { name: 'Do you accept the terms of the supplier agreement?', value: 'Press ✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
             .setFooter('Made by the Attachè to the United Nations', 'https://imgur.com/KLLkY2J.png');

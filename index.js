@@ -22,20 +22,24 @@ client.on('ready', () => {
 
 client.on('message', message => {
 	//Ignored messages without a prefix.
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-  
+	if (!message.content.startsWith(prefix) || message.author.bot) {
+		return;
+	}
+	
 	//Prepares the arguments.
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 
 	//Finds the command.
 	const command = client.commands.get(args.shift().toLowerCase());
 
-	if (!command) return messageHandler(message, 'Not a command!', true);
+	if (!command) {
+		return messageHandler(message, 'Not a command!', true);
+	}
 
 	//Checking for DMs.
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return messageHandler(message, 'I cannot execute this command inside DMs!', true);
-    }
+	}
 
 	//Checking for arguments.
 	if (command.args && (!args.length || command.args > args.length)) {
@@ -68,8 +72,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	//Executing the actual command.
 	try {
 		if (message.channel.type === 'dm') {
-            log(`DM from ${message.author.username}: ${message.content}`);
-        } else {
+			log(`DM from ${message.author.username}: ${message.content}`);
+		} else {
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);

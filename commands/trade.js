@@ -128,7 +128,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
         else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
-            report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject')
+            report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject');
             delete tradeData[id];
             exportFile('config.json', cfg);
         } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);

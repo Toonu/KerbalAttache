@@ -1,6 +1,6 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
     {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
-    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
+    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping, filterYesNo} = require("../utils");
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
@@ -105,13 +105,9 @@ Assets do not need to be written in capital letters, the command is case insensi
                 { name: '\u200B', value: '\u200B'},
             )
             .setFooter('Made by the Attachè to the United Nations', 'https://imgur.com/KLLkY2J.png');
-
-        function filter(reaction, user) {
-            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-        }
-
+        
         // noinspection JSUnusedLocalSymbols
-        function processReactions(reaction, embedMessage) {
+        function processReactions(reaction) {
             if (reaction.emoji.name === '✅') {
                 return resultOptions.confirm;
             } else if (reaction.emoji.name === '❌') {
@@ -119,7 +115,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             }
         }
 
-        embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
+        embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
             .then(result => {
                 if (result === resultOptions.confirm) {
                     if (amount < 0) {
@@ -144,10 +140,10 @@ function printAssets(message) {
 
     Object.keys(units.units).forEach(asset => {
         if (asset.length > l) l = asset.length;
-    })
+    });
     Object.keys(units.units).forEach(asset => {
         newMessage += `[${asset.padStart(l)}] | ${units.units[asset].desc.padEnd(40)} : ${formatCurrency(units.units[asset].price)}\n`;
-    })
+    });
 
     message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
         .then(assetMessages => {

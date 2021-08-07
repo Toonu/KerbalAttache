@@ -29,6 +29,7 @@ module.exports = {
      * Battle command prints results of a battle and removes all destroyed assets.
      */
     execute: async function battle(message, args) {
+        // noinspection JSUnresolvedFunction
         if (perm(message, 2)) {
 
             //Making user map with array for each user.
@@ -66,11 +67,7 @@ module.exports = {
                         }
                         userMap[userNumber].push(arg);
                     } else if (!arg.startsWith('-')) {
-                        if (!Number.isNaN(amount)) {
-                            //Adding number of lost assets.
-                            assetNumber++;
-                            userMap[userNumber][assetNumber] = [amount];
-                        } else {
+                        if (Number.isNaN(amount)) {
                             if (winning && ['a', 'b', 'd'].includes(arg) && !units.units[arg]) {
                                 //Adding winning team.
                                 winningTeam = arg;
@@ -82,6 +79,10 @@ module.exports = {
                                 //Adding assets.
                                 userMap[userNumber][assetNumber].push(units.units[arg]);
                             }
+                        } else {
+                            //Adding number of lost assets.
+                            assetNumber++;
+                            userMap[userNumber][assetNumber] = [amount];
                         }
                     } else if (arg.startsWith('-r')) {
                         //If results option is used.
@@ -94,6 +95,7 @@ module.exports = {
             }
 
             //Gathering data for modification.
+            // noinspection DuplicatedCode
             let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
             .catch(error => {
                 isErroneous = true;
@@ -107,6 +109,7 @@ module.exports = {
             if (isErroneous) return;
 
             let negatives = [];
+            // noinspection JSMismatchedCollectionQueryUpdate
             let results = [];
             let isSystemPresent = false;
 
@@ -128,7 +131,7 @@ module.exports = {
                         let row = cfg.mainRow;
                         if (assetItem.type === 'system') {
                             sheet = dataSystems;
-                            row = cfg.systemsMainRow
+                            row = cfg.systemsMainRow;
                             isSystemPresent = true;
                         }
                         //Throws error if not found.
@@ -162,7 +165,7 @@ module.exports = {
                 });
             }
     
-            let i = 0
+            let i = 0;
             let start = 0;
             for (i; i < dataMain.length; i++) {
                 if (dataMain[i][cfg.mainAccountingRow] === 'Expenses') start = i;
@@ -181,14 +184,15 @@ module.exports = {
             
             
             //Logging
+            // noinspection JSUnresolvedVariable, JSUnresolvedFunction
             message.client.channels.cache.get(cfg.servers[message.guild.id].battleid)
             .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`\n${results}\n\`\`\`
 ${winningTeam === 'd' ? 'The battle has been a draw!' : `Team ${winningTeam.toUpperCase()} has been victorious.`}
             `).catch(error => log(error));
 
-            report(message, `Battle was announced in battle channel by ${message.author.username}. ${negatives.length !== 0 ? `\n\nProblem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
+            report(message, `Battle was announced in battle channel by ${message.author.username}. ${(negatives.length === 0 ? '' : `\n\nProblem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
 Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!
-For better reference, negative numbers are highlighted with red in the sheet.` : ''}${negatives.length !== 0 ? `\n\n\`\`\`${negatives}\`\`\`` : ''}`, this.name);
+For better reference, negative numbers are highlighted with red in the sheet.`)}${(negatives.length === 0 ? '' : `\n\n\`\`\`${negatives}\`\`\``)}`, this.name);
             message.delete().catch(error => log(error, true));
         }
     }

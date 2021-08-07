@@ -1,11 +1,10 @@
-// noinspection ExceptionCaughtLocallyJS
+// noinspection ExceptionCaughtLocallyJS,DuplicatedCode
 
 const cfg = require('./../config.json'), {ping, log, messageHandler, report, findArrayData, embedSwitcher,
-        resultOptions
-    } = require('../utils'),
-    tt = require('./../tt.json'), discord = require('discord.js'),
-    {getCellArray, setCellArray, toColumn} = require("../sheet");
-const {testing} = require('googleapis/build/src/apis/testing');
+        resultOptions, filterYesNo
+    } = require('../utils'), tt = require('./../tt.json'), discord = require('discord.js'),
+        {getCellArray, setCellArray, toColumn} = require("../sheet");
+
 module.exports = {
     name: 'tech',
     description: 'Command for managing your research.',
@@ -71,7 +70,7 @@ async function budget(message, option, amount, nation) {
     } else if (!['set', 'add'].includes(option.toLowerCase())) {
         return messageHandler(message, new Error('InvalidArgumentException: The option is not valid'), true);
     }
-    option = option === 'add';
+    option = (option === 'add');
     
     //Getting Research Budget column.
     let isErroneous = false;
@@ -80,7 +79,9 @@ async function budget(message, option, amount, nation) {
         isErroneous = true;
         return messageHandler(message, error, true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     
     let rbColumn;
     let nationRow = data[0].indexOf(nation);
@@ -102,12 +103,13 @@ async function budget(message, option, amount, nation) {
 
     await setCellArray( `${toColumn(rbColumn)}1`, [data[rbColumn]], cfg.main, true)
     .catch(error => {
-        // noinspection ReuseOfLocalVariableJS
         isErroneous = true;
         log(`Cancelling tile process due to an error. Consult log for more information.`, true);
         return messageHandler(message, error, true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
 
     report(message, `${nation}'s budget ${option ? 'modified by' : 'set to'} ${amount}!`, 'techBudget');
     messageHandler(message, 'Budget set!', true);
@@ -118,10 +120,10 @@ async function list(nation, message, searchItem) {
     let isErroneous = false;
 
     if (searchItem === undefined) {
-        newMessage.push('\`\`\`ini\n')
+        newMessage.push('\`\`\`ini\n');
         Object.keys(tt.categories).forEach(item => {
             newMessage.push(`[${item.padStart(20)}] ${tt.categories[item]}`);
-        })
+        });
         newMessage.push(`\`\`\`\n\nOperation finished. All technology node categories are bellow:
         ***Note:*** You do not have to write full category name but merely it part is sufficient.`);
     } else if (tt[searchItem] !== undefined) {
@@ -132,7 +134,9 @@ async function list(nation, message, searchItem) {
             isErroneous = true;
             return messageHandler(message, error, true);
         });
-        if (isErroneous) return;
+        if (isErroneous) {
+            return;
+        }
     
         let nodeColumn;
         let endRow;
@@ -147,6 +151,7 @@ async function list(nation, message, searchItem) {
         }
     
         searchItem = searchItem.toLowerCase();
+        // noinspection JSCheckFunctionSignatures
         const embed = new discord.MessageEmbed()
         .setColor('#065535')
         .setTitle(`Node ${tt[searchItem][0]}`)
@@ -160,14 +165,10 @@ async function list(nation, message, searchItem) {
         .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
     
         if (node[3].length !== 0) {
-            embed.addField({name: 'Requirements:', value: tt[node][3]});
+            embed.addField( 'Requirements:', tt[node][3]);
         }
         
-        function filter(reaction, user) {
-            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-        }
-        
-        function processReactions(reaction, embedMessage) {
+        function processReactions(reaction) {
             if (reaction.emoji.name === '✅') {
                 return resultOptions.confirm;
             } else if (reaction.emoji.name === '❌') {
@@ -175,7 +176,7 @@ async function list(nation, message, searchItem) {
             }
         }
     
-        await embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
+        await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
         .then(result => {
             if (result === resultOptions.confirm) {
                 research(message, searchItem, nation);
@@ -209,7 +210,9 @@ async function unlocks(message, nation) {
         isErroneous = true;
         return messageHandler(message, error, true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     
     let nationRow = data[0].indexOf(nation);
     let endRow = data[0].indexOf('Data');
@@ -252,11 +255,10 @@ async function research(message, node, nation) {
     }
     
     let nodeData = tt[node];
-    if (!nodeData) {
+    if (!nodeData)
         return messageHandler(message, 'InvalidArgumentException: Node does not exist!', true);
-    } else if (node.substring(0, 2) > cfg.era || node.startsWith('early')) {
+    else if (node.substring(0, 2) > cfg.era || node.startsWith('early'))
         return messageHandler(message, 'Node is too futuristic!', true);
-    }
     
     let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
     .catch(error => {
@@ -268,7 +270,9 @@ async function research(message, node, nation) {
         isErroneous = true;
         return messageHandler(message, error, true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     
     let nationRow;
     let mainNationRow;
@@ -300,7 +304,7 @@ async function research(message, node, nation) {
             }
         }
         data[nodeColumns[node]][nationRow] = 1;
-        mainData[mainColumns['RP']][mainNationRow] = mainData[mainColumns['RP']][mainNationRow] - data[nodeColumns[node]][endRow];
+        mainData[mainColumns['RP']][mainNationRow] -= data[nodeColumns[node]][endRow];
         mainData[mainColumns['Technology']][mainNationRow] += 0.1;
         if (mainData[mainColumns['RP']][mainNationRow] < 0) {
             return messageHandler(message, 'Not enough RP points!', true);
@@ -314,19 +318,25 @@ async function research(message, node, nation) {
         isErroneous = true;
         return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     await setCellArray(toColumn(mainColumns['Technology']) + '1', [mainData[mainColumns['Technology']]], cfg.main, true).catch(error => {
         log(error, true);
         isErroneous = true;
         return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     await setCellArray(toColumn(nodeColumns[node]) + '1', [data[nodeColumns[node]]], cfg.tech, true).catch(error => {
         log(error, true);
         isErroneous = true;
         return messageHandler(message, new Error('Error has occurred in techTree tab.'), true);
     });
-    if (isErroneous) return;
+    if (isErroneous) {
+        return;
+    }
     
     report(message, `${message.author.username} has ${isDeletion ? 'deleted' : 'unlocked'}   ${tt[node][0]} for ${data[nodeColumns[node]][endRow]}!`, 'techResearch');
     messageHandler(message, `Node was ${isDeletion ? 'deleted' : 'unlocked'}!`, true);

@@ -1,7 +1,6 @@
-const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher} = require("../utils"), {getCellArray, deleteRow} = require("../sheet"),
-    cfg = require('../config.json');
+const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, filterYesNo, report} = require("../utils"),
+    {getCellArray, deleteRow} = require("../sheet"), cfg = require('../config.json');
 const discord = require('discord.js');
-const tt = require('./../tt.json');
 module.exports = {
     name: 'sub',
     description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list confirm.',
@@ -61,7 +60,7 @@ module.exports = {
                     .setThumbnail('https://imgur.com/IvUHO31.png')
                     .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
     
-                    function processReactions(reaction, embedMessage) {
+                    function processReactions(reaction) {
                         if (reaction.emoji.name === '✅') {
                             return resultOptions.confirm;
                         } else if (reaction.emoji.name === '❌') {
@@ -69,14 +68,10 @@ module.exports = {
                         }
                     }
     
-                    function filter(reaction, user) {
-                        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-                    }
-    
-                    await embedSwitcher(message, [embed], ['✅', '❌'], filter, processReactions)
+                    await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
                     .then(result => {
                         if (result === resultOptions.confirm) {
-                            report(message, `<@${nation}> has deleted submission ${craft}! Please delete the craft file from the storage manually.`)
+                            report(message, `<@${nation}> has deleted submission ${craft}! Please delete the craft file from the storage manually.`);
                             messageHandler(message, 'Submission was deleted!', true);
                             deleteRow(nationSubmissionsPosition[i], cfg.submissions).catch(error => log(error, true));
                         }

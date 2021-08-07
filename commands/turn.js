@@ -30,8 +30,11 @@ module.exports = {
 
         //Getting amount of states.
         for (dataEnd; dataEnd < data[0].length; dataEnd++) {
-            if (data[0][dataEnd] !== '' && !dataStart) dataStart = dataEnd;
-            else if (data[0][dataEnd] === 'Turn:') break;
+            if (data[0][dataEnd] !== '' && !dataStart) {
+                dataStart = dataEnd;
+            } else if (data[0][dataEnd] === 'Turn:') {
+                break;
+            }
         }
 
         //Getting column integers.

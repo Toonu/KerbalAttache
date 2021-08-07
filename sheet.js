@@ -10,7 +10,6 @@ const {private_key, client_email} = process.env;
  */
 exports.init = function init() {
     client = new google.auth.JWT(client_email, null, private_key, ['https://www.googleapis.com/auth/spreadsheets']);
-    // noinspection JSValidateTypes
     gs = google.sheets({version: 'v4', auth: client});
 };
 
@@ -33,7 +32,7 @@ exports.getCell = function getCell(cell, sheetTab) {
             .catch(error => reject(error.message));
         }
     });
-}
+};
 
 
 /**
@@ -61,7 +60,9 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
             let maximalLength = 0;
 
             for (const row of data.data.values) {
-                if (row.length > maximalLength) maximalLength = row.length;
+                if (row.length > maximalLength) {
+                    maximalLength = row.length;
+                }
             }
 
             //Second loop fills in the ends if the row is shorter than maximal row to keep the array rectangular.
@@ -77,7 +78,7 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
         })
         .catch(error => reject(error.message));
     });
-}
+};
 
 
 /**
@@ -100,7 +101,7 @@ exports.setCell = function setCell(coordinate, value, sheetTab) {
                 .catch(error => reject(error.message));
         }
     });
-}
+};
 
 
 /**
@@ -128,7 +129,7 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab, domin
         }).then(() => resolve('Operation successful.'))
             .catch(error => reject(error.message));
     });
-}
+};
 
 
 exports.deleteRow = async function deleteRow(row, sheetTab) {
@@ -136,10 +137,10 @@ exports.deleteRow = async function deleteRow(row, sheetTab) {
         // noinspection JSCheckFunctionSignatures
     
         let tabId;
-        let sheet_metadata = await gs.spreadsheets.get({spreadsheetId: cfg.sheet});
-        for (let tab = 0; tab < sheet_metadata.data.sheets.length; tab++) {
-            if (sheet_metadata.data.sheets[tab].properties.title === sheetTab) {
-                tabId = sheet_metadata.data.sheets[tab].properties.sheetId;
+        let sheetMetadata = await gs.spreadsheets.get({spreadsheetId: cfg.sheet});
+        for (let tab = 0; tab < sheetMetadata.data.sheets.length; tab++) {
+            if (sheetMetadata.data.sheets[tab].properties.title === sheetTab) {
+                tabId = sheetMetadata.data.sheets[tab].properties.sheetId;
                 break;
             }
         }
@@ -163,7 +164,7 @@ exports.deleteRow = async function deleteRow(row, sheetTab) {
         ).then(() => resolve('Operation successful.'))
         .catch(error => reject(error.message));
     });
-}
+};
 
 /**
  * Function checks if the coordinate is in correct format.
@@ -192,7 +193,9 @@ exports.toColumn = function toColumn(num) {
         num -= 26;
         preceding++;
     }
-    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
+    if (preceding !== 0) {
+        column += String.fromCharCode(64 + preceding);
+    }
     column += String.fromCharCode(65 + num);
     return column;
 };

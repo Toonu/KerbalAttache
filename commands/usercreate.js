@@ -18,7 +18,8 @@ module.exports = {
     guildOnly: true,
     execute: function usercreate(message, args) {
         if (!message.mentions.users.size)
-            return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true);
+            return messageHandler(message,
+                    new Error('InvalidArgumentException: No user specified, please retry.'), true);
 
         const user = message.mentions.users.first();
         if (perm(message, 2)) {
@@ -34,12 +35,17 @@ module.exports = {
                 //Concentrates spaced values
                 let data = '';
                 for (let j = i + 1; j < args.length; j++) {
-                    if (args[j].startsWith('-') || args[j].startsWith('<@')) break;
+                    if (args[j].startsWith('-') || args[j].startsWith('<@')) {
+                        break;
+                    }
                     data += ` ${args[j]}`;
                 }
-                if (args[i].startsWith('-')) execute(message, [args[i], data.trim()], false);
+                if (args[i].startsWith('-')) {
+                    execute(message, [args[i], data.trim()], false);
+                }
             }
-            report(message, `Nation ${cfg.users[user.id].nation} was created for user ${user.username} created by <@${message.author.id}>`, 'usercreate');
+            report(message, `Nation ${cfg.users[user.id].nation} was created for user ${user.username} created` +
+                ` by <@${message.author.id}>`, 'usercreate');
             messageHandler(message, 'User was created.', true);
         }
     }

@@ -30,7 +30,7 @@ module.exports = {
     execute: function useredit(message, args, showMessage = true) {
         let permission;
         let userID = ping(message).id;
-        let user = cfg.users[userID]
+        let user = cfg.users[userID];
 
         //Validating input argument.
         try {
@@ -58,17 +58,23 @@ module.exports = {
         else if (args[0] === '-d' && permission) user.demonym = data;
         else if (args[0] === '-name' && permission) user.name = data;
         else if (args[0] === '-c' && permission) {
-            if (data === 'undefined') user.color = 'fffffe';
-            else if (data.length !== 6) return messageHandler(message, new Error('InvalidArgumentException: Argument is not a color hex number. Modification failed.'), showMessage);
-            else user.color = data.toLowerCase();
+            if (data === 'undefined')
+                user.color = 'fffffe';
+            else if (data.length !== 6)
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a color hex number. Modification failed.'), showMessage);
+            else
+                user.color = data.toLowerCase();
         } else if (args[0] === '-m' && permission) {
-            if (data === 'undefined') user.color = 'https://discord.com/';
-            else if (new RegExp(/https:\/\/drive.google\.com\/file\/d\/.+/).test(args[1])) user.map = data;
-            else return messageHandler(message, new Error('InvalidArgumentException: Argument is not a map URL link. Modification failed.'), showMessage);
+            if (data === 'undefined')
+                user.color = 'https://discord.com/';
+            else if (new RegExp(/https:\/\/drive.google\.com\/file\/d\/.+/).test(args[1]))
+                user.map = data;
+            else
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a map URL link. Modification failed.'), showMessage);
         } else if (args[0] === '-cf' && permission) {
             data = parseInt(data);
-            if (Number.isNaN(data)) return messageHandler(message, new Error('InvalidArgumentException: Argument is' +
-                ' not a number. Modification failed.'), showMessage);
+            if (Number.isNaN(data))
+                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a number. Modification failed.'), showMessage);
             user.cf = data;
         } else return messageHandler(message,
             new Error('InvalidArgumentException: Modification failed due to wrong attribute name'), showMessage);

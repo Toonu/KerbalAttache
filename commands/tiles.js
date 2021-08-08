@@ -43,6 +43,10 @@ module.exports = {
             if (data[0][row] === cfg.users[user].nation) break;
         }
 
+        if (!column || !row) {
+            return messageHandler(message, new error('NotFoundException: One of rows or columns were not found!'), true);
+        }
+
         if (Number.isNaN(data[column][row]))
             return messageHandler(message, new Error('InvalidTypeException: Tiles cell does not contain a number.' +
                 ' Canceling operation.'), true);

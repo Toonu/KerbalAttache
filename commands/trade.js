@@ -135,7 +135,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             let authorUser = await client.users.fetch(tradeData[id].authorID)
             .catch(error => log(error, true));
             
-            authorUser.send(`Trade of ${tradeData[id].amount} ${tradeData[id].asset} rejected!`)
+            authorUser.send(`Your trade of ${tradeData[id].amount} ${tradeData[id].asset.name} rejected by the ${message.author} | ${cfg.users[message.author.id].nation}!`)
             .catch(error => log(error, true));
             
             delete tradeData[id];
@@ -242,7 +242,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         let authorUser = await client.users.fetch(tradeData[id].authorID)
         .catch(error => log(error, true));
     
-        authorUser.send(`Trade of ${tradeData[id].amount} ${tradeData[id].asset} rejected!`)
+        authorUser.send(`Your trade of ${tradeData[id].amount} ${tradeData[id].asset.name} accepted by the ${message.author} | ${cfg.users[message.author.id].nation}!`)
         .catch(error => log(error, true));
         
         delete cfg.users[recipientID].trades[id];

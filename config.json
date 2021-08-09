@@ -124,57 +124,6 @@
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " ",
             "trades": {
-                "1": {
-                    "authorID": "319919565079576576",
-                    "authorRow": 4,
-                    "recipientID": "752676284521250837",
-                    "recipientRow": 5,
-                    "amount": 10,
-                    "money": 100000,
-                    "asset": {
-                        "name": "APC",
-                        "desc": "Armored Personnel Carrier",
-                        "type": "asset",
-                        "price": 8000
-                    },
-                    "assetColumn": 11,
-                    "isSelling": false,
-                    "tab": "Maintenance"
-                },
-                "2": {
-                    "authorID": "319919565079576576",
-                    "authorRow": 4,
-                    "recipientID": "752676284521250837",
-                    "recipientRow": 5,
-                    "amount": 10,
-                    "money": 100000,
-                    "asset": {
-                        "name": "APC",
-                        "desc": "Armored Personnel Carrier",
-                        "type": "asset",
-                        "price": 8000
-                    },
-                    "assetColumn": 11,
-                    "isSelling": false,
-                    "tab": "Maintenance"
-                },
-                "3": {
-                    "authorID": "319919565079576576",
-                    "authorRow": 4,
-                    "recipientID": "752676284521250837",
-                    "recipientRow": 5,
-                    "amount": 10,
-                    "money": 100000,
-                    "asset": {
-                        "name": "APC",
-                        "desc": "Armored Personnel Carrier",
-                        "type": "asset",
-                        "price": 8000
-                    },
-                    "assetColumn": 11,
-                    "isSelling": false,
-                    "tab": "Maintenance"
-                }
             }
         },
         "211547891276185601": {
@@ -193,7 +142,7 @@
             "demonym": "Starks",
             "color": "aa4545",
             "cf": 1,
-            "map": "https://drive.google.com/file/d/10CSYEUiYIefTXCiAvVJSCgKPoASzGXMe/view?usp=sharing",
+            "map": "https://x.com/",
             "notes": " ",
             "trades": {}
         },
@@ -214,6 +163,16 @@
             "color": "fffffe",
             "cf": 1,
             "map": "https://discord.com/",
+            "notes": " ",
+            "trades": {}
+        },
+        "452567898368638996": {
+            "name": "Geo",
+            "nation": "RDG",
+            "demonym": "Gaxinian",
+            "color": "fffffe",
+            "cf": 1,
+            "map": "https://drive.google.com/file/d/1DWUkyGDUP_DzxgJsIbec2AETh_UKAUpq/view?usp=drivesdk",
             "notes": " ",
             "trades": {}
         }

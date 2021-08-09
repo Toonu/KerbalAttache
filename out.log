@@ -1,12 +1,5 @@
-[LOG][2021-8-8 11:20:34 UTC] Deployed and ready!
-[LOG][2021-8-8 11:22:16 UTC] Server Nations of Unity (Toonu): .ping
-[LOG][2021-8-8 11:23:35 UTC] Deployed and ready!
-[LOG][2021-8-8 11:25:9 UTC] Server Nations of Unity (Toonu): .tiles 2 <@!319919565079576576>
-(node:504) UnhandledPromiseRejectionWarning: TypeError: Cannot read property '4' of undefined
-    at Object.tiles [as execute] (/home/runner/KerbalAttache/commands/tiles.js:46:38)
-    at processTicksAndRejections (internal/process/task_queues.js:97:5)
-(node:504) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
-(node:504) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
-[LOG][2021-8-8 11:32:35 UTC] Deployed and ready!
-[LOG][2021-8-8 11:32:46 UTC] Deployed and ready!
-[LOG][2021-8-8 11:38:12 UTC] Deployed and ready!
+Debugger listening on ws://127.0.0.1:51260/c5da79b2-f672-41bb-9061-42ddec2a340f
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger attached.
+[LOG][2021-8-9 14:47:55 UTC] Deployed and ready!
+[LOG][2021-8-9 14:47:56 UTC] Server Nations of Unity (Toonu): .buy 1 apc

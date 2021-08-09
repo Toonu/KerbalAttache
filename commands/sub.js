@@ -1,4 +1,4 @@
-const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, filterYesNo, report} = require("../utils"),
+const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, report} = require("../utils"),
     {getCellArray, deleteRow} = require("../sheet"), cfg = require('../config.json');
 const discord = require('discord.js');
 module.exports = {
@@ -66,6 +66,10 @@ module.exports = {
                         } else if (reaction.emoji.name === '❌') {
                             return resultOptions.delete;
                         }
+                    }
+    
+                    function filterYesNo(reaction, user) {
+                        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
                     }
     
                     await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)

@@ -246,17 +246,7 @@ module.exports = {
         }
 
         return result;
-    },
-    
-    /**
-     * Basic filter for yes and no reaction from the message author.
-     * @param reaction      reaction to check.
-     * @param user          user that reacted.
-     * @return {boolean}    returns true if the user has clearance to react.
-     */
-    filterYesNo: function filterYesNo(reaction, user) {
-    return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === reaction.message.author.id;
-}
+    }
 };
 
 

@@ -1,6 +1,6 @@
 const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
     {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
-    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping, filterYesNo} = require("../utils");
+    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
@@ -114,7 +114,11 @@ Assets do not need to be written in capital letters, the command is case insensi
                 return resultOptions.delete;
             }
         }
-
+    
+        function filterYesNo(reaction, user) {
+            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
+        }
+    
         embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
             .then(result => {
                 if (result === resultOptions.confirm) {

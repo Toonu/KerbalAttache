@@ -1,8 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS,DuplicatedCode
 
 const cfg = require('./../config.json'), {ping, log, messageHandler, report, findArrayData, embedSwitcher,
-        resultOptions, filterYesNo
-    } = require('../utils'), tt = require('./../tt.json'), discord = require('discord.js'),
+        resultOptions} = require('../utils'), tt = require('./../tt.json'), discord = require('discord.js'),
         {getCellArray, setCellArray, toColumn} = require("../sheet");
 
 module.exports = {
@@ -174,6 +173,10 @@ async function list(nation, message, searchItem) {
             } else if (reaction.emoji.name === '❌') {
                 return resultOptions.delete;
             }
+        }
+    
+        function filterYesNo(reaction, user) {
+            return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
     
         await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)

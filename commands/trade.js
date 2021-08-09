@@ -1,6 +1,7 @@
 const cfg = require("./../config.json"), units = require('./../units.json'),
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils"),
     {getCellArray, setCellArray, toColumn} = require("./../sheet");
+let {client} = require('index');
 
 module.exports = {
     name: 'trade',
@@ -129,6 +130,9 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
             report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject');
+            client.users.fetch(tradeData.authorID).then((user) => {
+                user.send(`Trade of ${tradeData.amount} ${tradeData.asset} rejected!`);
+            });
             delete tradeData[id];
             exportFile('config.json', cfg);
         } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
@@ -229,9 +233,20 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 
         report(message, `<@${tradeData.authorID}>'s transaction with ID:${id} of ${tradeData.amount} ${tradeData.asset.name}s for ${formatCurrency(tradeData.money)} was accepted by <@${recipientID}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);
+        client.users.fetch(tradeData.authorID).then((user) => {
+            user.send(`Trade of ${tradeData.amount} ${tradeData.asset} accepted by the recipient!`);
+        });
         delete cfg.users[recipientID].trades[id];
         exportFile('config.json', cfg);
     },
+    
+    /**
+     * Function sets client to cache users from it.
+     * @param newClient Discord client.
+     */
+    setClient: function setClient(newClient) {
+        client = newClient;
+    }
 };
 
 /**
@@ -246,8 +261,16 @@ function showTrades(message) {
 
     if (!user)
         return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
-    Object.entries(user.trades).forEach((trade) => {
-        newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+    //Object.entries(user.trades).forEach((trade) => {
+    //    newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+    //});
+    
+    Object.values(user).forEach(user => {
+        Object.entries(user.trades).forEach((trade) => {
+            if (trade.authorID === message.author.id || trade.recipientID === message.author.id) {
+                newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+            }
+        });
     });
 
     message.channel.send(`Your open trade proposals:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

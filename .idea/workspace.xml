@@ -28,8 +28,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,6 +163,7 @@
       <workItem from="1628262616351" duration="1320000" />
       <workItem from="1628513027003" duration="487000" />
       <workItem from="1628513573475" duration="15000" />
+      <workItem from="1628517020406" duration="991000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -400,11 +403,6 @@
           <url>file://$PROJECT_DIR$/commands/useredit.js</url>
           <line>44</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/trade.js</url>
-          <line>17</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/sub.js</url>

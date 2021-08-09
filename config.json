@@ -123,7 +123,59 @@
             "cf": 1,
             "map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing",
             "notes": " ",
-            "trades": {}
+            "trades": {
+                "1": {
+                    "authorID": "319919565079576576",
+                    "authorRow": 4,
+                    "recipientID": "752676284521250837",
+                    "recipientRow": 5,
+                    "amount": 10,
+                    "money": 100000,
+                    "asset": {
+                        "name": "APC",
+                        "desc": "Armored Personnel Carrier",
+                        "type": "asset",
+                        "price": 8000
+                    },
+                    "assetColumn": 11,
+                    "isSelling": false,
+                    "tab": "Maintenance"
+                },
+                "2": {
+                    "authorID": "319919565079576576",
+                    "authorRow": 4,
+                    "recipientID": "752676284521250837",
+                    "recipientRow": 5,
+                    "amount": 10,
+                    "money": 100000,
+                    "asset": {
+                        "name": "APC",
+                        "desc": "Armored Personnel Carrier",
+                        "type": "asset",
+                        "price": 8000
+                    },
+                    "assetColumn": 11,
+                    "isSelling": false,
+                    "tab": "Maintenance"
+                },
+                "3": {
+                    "authorID": "319919565079576576",
+                    "authorRow": 4,
+                    "recipientID": "752676284521250837",
+                    "recipientRow": 5,
+                    "amount": 10,
+                    "money": 100000,
+                    "asset": {
+                        "name": "APC",
+                        "desc": "Armored Personnel Carrier",
+                        "type": "asset",
+                        "price": 8000
+                    },
+                    "assetColumn": 11,
+                    "isSelling": false,
+                    "tab": "Maintenance"
+                }
+            }
         },
         "211547891276185601": {
             "name": "Luminous",

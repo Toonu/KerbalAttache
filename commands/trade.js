@@ -1,7 +1,7 @@
 const cfg = require("./../config.json"), units = require('./../units.json'),
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils"),
     {getCellArray, setCellArray, toColumn} = require("./../sheet");
-let {client} = require('index');
+let client;
 
 module.exports = {
     name: 'trade',
@@ -257,18 +257,20 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 function showTrades(message) {
     let newMessage = '';
     //When having clearance and ping user, use him.
-    let user = cfg.users[ping(message).id];
+    let user = ping(message).id;
 
-    if (!user)
+    if (!cfg.users[user])
         return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
     //Object.entries(user.trades).forEach((trade) => {
     //    newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
     //});
     
-    Object.values(user).forEach(user => {
-        Object.entries(user.trades).forEach((trade) => {
-            if (trade.authorID === message.author.id || trade.recipientID === message.author.id) {
-                newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+    Object.values(cfg.users).forEach(cfgUser => {
+        Object.entries(cfgUser.trades).forEach((trade) => {
+            if (trade[1].authorID === user) {
+                newMessage += `Export Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+            } else if (trade[1].recipientID === user) {
+                newMessage += `Import Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
             }
         });
     });

@@ -1,5 +1,2 @@
-Debugger listening on ws://127.0.0.1:51260/c5da79b2-f672-41bb-9061-42ddec2a340f
-For help, see: https://nodejs.org/en/docs/inspector
-Debugger attached.
-[LOG][2021-8-9 14:47:55 UTC] Deployed and ready!
-[LOG][2021-8-9 14:47:56 UTC] Server Nations of Unity (Toonu): .buy 1 apc
+[LOG][2021-8-9 16:35:34 UTC] Deployed and ready!
+[LOG][2021-8-9 16:35:35 UTC] Server Nations of Unity (Toonu): .trade

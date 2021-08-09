@@ -1,6 +1,7 @@
 const cfg = require("./../config.json"), units = require('./../units.json'),
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils"),
     {getCellArray, setCellArray, toColumn} = require("./../sheet");
+const {User, UserManager} = require('discord.js');
 let client;
 
 module.exports = {
@@ -119,7 +120,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
      * @param message           Message object.
      * @param {Array} args      args[0] contains number ID.
      */
-    reject: function reject(message, args) {
+    reject: async function reject(message, args) {
         let user = ping(message).id;
 
         let tradeData = cfg.users[user].trades;
@@ -130,9 +131,13 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
             report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject');
-            client.users.fetch(tradeData.authorID).then((user) => {
-                user.send(`Trade of ${tradeData.amount} ${tradeData.asset} rejected!`);
-            });
+    
+            let authorUser = await client.users.fetch(tradeData[id].authorID)
+            .catch(error => log(error, true));
+            
+            authorUser.send(`Trade of ${tradeData[id].amount} ${tradeData[id].asset} rejected!`)
+            .catch(error => log(error, true));
+            
             delete tradeData[id];
             exportFile('config.json', cfg);
         } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
@@ -233,9 +238,13 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 
         report(message, `<@${tradeData.authorID}>'s transaction with ID:${id} of ${tradeData.amount} ${tradeData.asset.name}s for ${formatCurrency(tradeData.money)} was accepted by <@${recipientID}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);
-        client.users.fetch(tradeData.authorID).then((user) => {
-            user.send(`Trade of ${tradeData.amount} ${tradeData.asset} accepted by the recipient!`);
-        });
+    
+        let authorUser = await client.users.fetch(tradeData[id].authorID)
+        .catch(error => log(error, true));
+    
+        authorUser.send(`Trade of ${tradeData[id].amount} ${tradeData[id].asset} rejected!`)
+        .catch(error => log(error, true));
+        
         delete cfg.users[recipientID].trades[id];
         exportFile('config.json', cfg);
     },

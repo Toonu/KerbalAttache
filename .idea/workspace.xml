@@ -167,6 +167,7 @@
       <workItem from="1628513573475" duration="15000" />
       <workItem from="1628517020406" duration="991000" />
       <workItem from="1628518554771" duration="1186000" />
+      <workItem from="1628526987551" duration="3609000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -412,25 +413,13 @@
           <line>43</line>
           <option name="timeStamp" value="54" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/trade.js</url>
-          <line>269</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/trade.js</url>
-          <line>257</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="58" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
-        <watch expression="cfgUser" language="JavaScript" />
-        <watch expression="trade[1].authorID === user" language="JavaScript" />
-        <watch expression="user" language="JavaScript" />
+        <watch expression="client.users.fetch(tradeData.authorID)" language="JavaScript" />
+        <watch expression="message.guild.members" language="JavaScript" />
+        <watch expression="tradeData[1].authorUser" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>

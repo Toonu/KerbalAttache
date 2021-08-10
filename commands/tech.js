@@ -164,7 +164,7 @@ async function list(nation, message, searchItem) {
         .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
     
         if (node[3].length !== 0) {
-            embed.addField( 'Requirements:', tt[node][3]);
+            embed.addField( 'Requirements:', node[3]);
         }
         
         function processReactions(reaction) {

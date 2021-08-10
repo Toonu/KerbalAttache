@@ -270,16 +270,13 @@ function showTrades(message) {
 
     if (!cfg.users[user])
         return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
-    //Object.entries(user.trades).forEach((trade) => {
-    //    newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
-    //});
     
     Object.values(cfg.users).forEach(cfgUser => {
         Object.entries(cfgUser.trades).forEach((trade) => {
             if (trade[1].authorID === user) {
-                newMessage += `Export Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+                newMessage += `Outgoing trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} for ${cfg.users[trade[1].recipientID].nation} | ${cfg.users[trade[1].recipientID].name}\n`;
             } else if (trade[1].recipientID === user) {
-                newMessage += `Import Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+                newMessage += `Incomming trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
             }
         });
     });

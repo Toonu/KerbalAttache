@@ -1,0 +1,4 @@
+#!/bin/bash
+
+node index.js 2>&1 | tee -a ./out.log
+node keep_alive.js

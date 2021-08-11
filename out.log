@@ -13,3 +13,63 @@
 [LOG][2021-8-11 7:18:55 UTC] Server Nations of Unity (Toonu): .sub
 [LOG][2021-8-11 7:19:50 UTC] Deployed and ready!
 [LOG][2021-8-11 7:20:2 UTC] Server Nations of Unity (Toonu): .sub
+[LOG][2021-8-11 7:55:10 UTC] Deployed and ready!
+[LOG][2021-8-11 7:58:31 UTC] Deployed and ready!
+[LOG][2021-8-11 7:58:32 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 7:58:46 UTC] Server Nations of Unity (Toonu): .spam 2
+[LOG][2021-8-11 7:58:46 UTC] Spammed 2 of messages.
+[LOG][2021-8-11 7:59:25 UTC] Deployed and ready!
+[LOG][2021-8-11 7:59:27 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:0:27 UTC] Deployed and ready!
+[LOG][2021-8-11 8:0:29 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:0:33 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:4:18 UTC] Deployed and ready!
+[LOG][2021-8-11 8:5:3 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:5:30 UTC] Deployed and ready!
+[LOG][2021-8-11 8:7:35 UTC] Deployed and ready!
+[LOG][2021-8-11 8:7:47 UTC] Deployed and ready!
+[LOG][2021-8-11 8:8:10 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:9:48 UTC] Deployed and ready!
+(node:101) UnhandledPromiseRejectionWarning: ReferenceError: keep_alive is not defined
+    at Client.<anonymous> (/home/runner/KerbalAttache/index.js:20:5)
+    at Client.emit (events.js:314:20)
+    at WebSocketManager.triggerClientReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:431:17)
+    at WebSocketManager.checkShardsReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:415:10)
+    at WebSocketShard.<anonymous> (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:197:14)
+    at WebSocketShard.emit (events.js:314:20)
+    at WebSocketShard.checkReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:475:12)
+    at WebSocketShard.onPacket (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:447:16)
+    at WebSocketShard.onMessage (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
+    at WebSocket.onMessage (/home/runner/KerbalAttache/node_modules/ws/lib/event-target.js:132:16)
+(node:101) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:101) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+[LOG][2021-8-11 8:10:44 UTC] Deployed and ready!
+(node:241) UnhandledPromiseRejectionWarning: TypeError: startup is not a function
+    at Client.<anonymous> (/home/runner/KerbalAttache/index.js:21:5)
+    at Client.emit (events.js:314:20)
+    at WebSocketManager.triggerClientReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:431:17)
+    at WebSocketManager.checkShardsReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:415:10)
+    at WebSocketShard.<anonymous> (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:197:14)
+    at WebSocketShard.emit (events.js:314:20)
+    at WebSocketShard.checkReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:475:12)
+    at WebSocketShard.onPacket (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:447:16)
+    at WebSocketShard.onMessage (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
+    at WebSocket.onMessage (/home/runner/KerbalAttache/node_modules/ws/lib/event-target.js:132:16)
+(node:241) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:241) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+[LOG][2021-8-11 8:12:15 UTC] Deployed and ready!
+(node:377) UnhandledPromiseRejectionWarning: TypeError: startup is not a function
+    at Client.<anonymous> (/home/runner/KerbalAttache/index.js:21:5)
+    at Client.emit (events.js:314:20)
+    at WebSocketManager.triggerClientReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:431:17)
+    at WebSocketManager.checkShardsReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:415:10)
+    at WebSocketShard.<anonymous> (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:197:14)
+    at WebSocketShard.emit (events.js:314:20)
+    at WebSocketShard.checkReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:475:12)
+    at WebSocketShard.onPacket (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:447:16)
+    at WebSocketShard.onMessage (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
+    at WebSocket.onMessage (/home/runner/KerbalAttache/node_modules/ws/lib/event-target.js:132:16)
+(node:377) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:377) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+[LOG][2021-8-11 8:13:56 UTC] Deployed and ready!
+[LOG][2021-8-11 8:16:2 UTC] Deployed and ready!

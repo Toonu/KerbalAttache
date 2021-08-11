@@ -1,1 +1,1 @@
-run="node index.js >>out.log 2>&1 |node keep_alive.js"
+run="sh script"

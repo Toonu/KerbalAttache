@@ -1,5 +1,6 @@
 const {prefix} = require('./config.json'), Discord = require('discord.js'), fs = require('fs'),
 	{init} = require("./sheet"), {log, perm, messageHandler} = require("./utils"), trade = require('./commands/trade');
+const {startup} = require('./keep_alive');
 client = new Discord.Client();
 
 //Adds commands from the command folder collection.
@@ -17,6 +18,7 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	log(`Deployed and ready!`);
 	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => log(error, true));
+    startup();
 	init();
 });
 
@@ -87,6 +89,7 @@ const {CLIENT_TOKEN} = process.env;
 //const {CLIENT_TOKEN} = require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
 trade.setClient(client);
+
 
 
 

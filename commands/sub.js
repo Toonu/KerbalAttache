@@ -87,15 +87,19 @@ module.exports = {
             return messageHandler(message, 'Submission not found!', true);
         }
 
+        if  (maximalLength < 5) {
+            maximalLength = 5;
+        }
+
         //Header line
-        let displayResult = `${"[Asset]".padEnd(maximalLength)}   Era ${"Class ".padEnd(11)}${"Price".padEnd(16)}${"Notes".padEnd(20)}Range (in RU)\n`;
+        let displayResult = `${"[Asset]".padEnd(maximalLength === 5 ? 0 : maximalLength)}   Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
 
         //Handling money and upgrades
         nationSubmissions.forEach(column => {
             let money = formatCurrency(column[24]);
             //Handles upgrades
             if (column[21] === 'Upgrade') column[21] += ` of ${column[22].substring(0, 18)}`;
-            displayResult += `[${column[2].substring(0, 18).padStart(maximalLength)}] ${column[6]} ${(column[5]).padEnd(10)} ${money.padEnd(16)} ${column[21].padEnd(30)} ${column[26]}\n`;
+            displayResult += `[${column[2].substring(0, 18).padStart(maximalLength)}] ${column[6]} ${(column[5]).padEnd(10)} ${money.padEnd(16)} ${column[21].padEnd(30)} ${Math.trunc(column[26]).toString().padEnd(5)} ${column[25]}\n`;
         });
 
         message.channel.send(`\`\`\`ini\n${displayResult}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

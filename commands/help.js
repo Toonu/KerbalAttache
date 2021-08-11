@@ -35,15 +35,15 @@ module.exports = {
 
 		//Verifying command and printing its help.
 		const command = commands.get(args[0].toLowerCase());
-		if (!command) {
-			messageHandler(message, new Error('InvalidArgumentException: That is not a valid command!'), true);
-		} else {
+		if (command) {
 			data.push(`**Name:** ${command.name}`);
-
+			
 			if (command.description) data.push(`**Description:** ${command.description}`);
 			if (command.usage) data.push(`**Usage:** ${command.usage}`);
-
+			
 			messageHandler(message, data, true, 32000);
+		} else {
+			messageHandler(message, new Error('InvalidArgumentException: That is not a valid command!'), true);
 		}
 	},
 };

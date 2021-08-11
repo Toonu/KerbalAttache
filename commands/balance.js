@@ -1,5 +1,5 @@
-const {ping, messageHandler, formatCurrency, log, embedSwitcher, resultOptions} = require("../utils"), cfg = require('./../config.json'),
-    discord = require('discord.js'), {getCellArray} = require("../sheet");
+const {ping, messageHandler, formatCurrency, log, embedSwitcher, resultOptions} = require("../utils"),
+    cfg = require('./../config.json'), discord = require('discord.js'), {getCellArray} = require("../sheet");
 
 module.exports = {
     name: 'balance',
@@ -69,16 +69,18 @@ module.exports = {
                 },
                 {
                     name: 'Research points:',
-                    value: `${new Intl.NumberFormat(cfg.moneyLocale, { minimumSignificantDigits: 3 }).format(data[rpColumn][row])} RP`,
+                    value: `${new Intl.NumberFormat(cfg.moneyLocale,
+                        { minimumSignificantDigits: 3 }).format(data[rpColumn][row])} RP`,
                     inline: true
                 },
                 {name: 'Tiles:', value: data[tilesColumn][row]},
             )
-            .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32 seconds!', 'https://imgur.com/KLLkY2J.png');
+            .setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32' +
+                ' seconds!', 'https://imgur.com/KLLkY2J.png');
 
 
         // noinspection JSUnusedLocalSymbols
-        function processReactions(reaction, embedMessage) {
+        function processReactions(reaction) {
             if (reaction.emoji.name === '❌') return resultOptions.delete;
         }
 
@@ -90,4 +92,4 @@ module.exports = {
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
     }
-}
+};

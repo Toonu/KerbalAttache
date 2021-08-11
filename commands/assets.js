@@ -1,4 +1,5 @@
-const {getCellArray} = require("../sheet"), {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../utils"),
+const {getCellArray} = require("../sheet"),
+    {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../utils"),
     cfg = require("./../config.json"), discord = require('discord.js');
 // noinspection JSUnusedLocalSymbols
 module.exports = {
@@ -73,7 +74,7 @@ module.exports = {
         }
 
         // noinspection JSUnusedLocalSymbols
-        function processReactions(reaction, embedMessage) {
+        function processReactions(reaction) {
             if (reaction.emoji.name === '➡️') {
                 return resultOptions.moveNext;
             } else if (reaction.emoji.name === '❌') {
@@ -84,7 +85,7 @@ module.exports = {
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
     },
-}
+};
 
 /**
  * Function creates embed header for a nation assets.
@@ -99,5 +100,7 @@ function createEmbed(map, nation) {
         .setTitle(`National Roster of ${nation}`)
         .setURL(map)
         .setThumbnail('https://imgur.com/IvUHO31.png')
-        .setFooter('Made by the Attachè to the United Nations. (Link in header)                                                                              .', 'https://imgur.com/KLLkY2J.png');
+        .setFooter('Made by the Attachè to the United Nations. (Link in header)' +
+            '                                                                               .',
+            'https://imgur.com/KLLkY2J.png');
 }

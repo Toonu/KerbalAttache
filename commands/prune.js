@@ -1,4 +1,4 @@
-const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json')
+const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json');
 
 module.exports = {
 	name: 'prune',
@@ -12,7 +12,8 @@ module.exports = {
 		//Parse returns NaN if NaN.
 		args[0] = parseInt(args[0]) + 1;
 		if (Number.isNaN(args[0])) {
-			return messageHandler(message, new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
+			return messageHandler(message,
+				new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
 		} else if (!perm(message, 1)) {
 			return message.delete().catch(error => log(error, true));
 		}
@@ -37,7 +38,7 @@ module.exports = {
 			message.channel.bulkDelete(args[0], bool)
 				.then(() => {
 					//Logs the operation.
-					messageHandler(message, `Deleted ${args[0]} messages.`);
+					messageHandler(message, `Deleted ${args[0]} messages.`, true, 3000);
 					log(`Messages deleted: ${args[0]}`);
 				})
 				.catch(error => {

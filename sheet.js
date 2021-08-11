@@ -1,8 +1,11 @@
 const cfg = require('./config.json'), {google} = require('googleapis');
 let client;
 let gs;
-//const {private_key, client_email} = process.env;
-const {private_key, client_email} = require('./env.json');
+
+
+const os = require('os');
+const {private_key, client_email} = os.platform() === 'linux' ? process.env : require('./env.json');
+
 
 
 /**
@@ -10,7 +13,6 @@ const {private_key, client_email} = require('./env.json');
  */
 exports.init = function init() {
     client = new google.auth.JWT(client_email, null, private_key, ['https://www.googleapis.com/auth/spreadsheets']);
-    // noinspection JSValidateTypes
     gs = google.sheets({version: 'v4', auth: client});
 };
 
@@ -33,7 +35,7 @@ exports.getCell = function getCell(cell, sheetTab) {
             .catch(error => reject(error.message));
         }
     });
-}
+};
 
 
 /**
@@ -61,7 +63,9 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
             let maximalLength = 0;
 
             for (const row of data.data.values) {
-                if (row.length > maximalLength) maximalLength = row.length;
+                if (row.length > maximalLength) {
+                    maximalLength = row.length;
+                }
             }
 
             //Second loop fills in the ends if the row is shorter than maximal row to keep the array rectangular.
@@ -77,7 +81,7 @@ exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = fa
         })
         .catch(error => reject(error.message));
     });
-}
+};
 
 
 /**
@@ -100,7 +104,7 @@ exports.setCell = function setCell(coordinate, value, sheetTab) {
                 .catch(error => reject(error.message));
         }
     });
-}
+};
 
 
 /**
@@ -128,8 +132,42 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab, domin
         }).then(() => resolve('Operation successful.'))
             .catch(error => reject(error.message));
     });
-}
+};
 
+
+exports.deleteRow = async function deleteRow(row, sheetTab) {
+    return new Promise(async function (resolve, reject) {
+        // noinspection JSCheckFunctionSignatures
+    
+        let tabId;
+        let sheetMetadata = await gs.spreadsheets.get({spreadsheetId: cfg.sheet});
+        for (let tab = 0; tab < sheetMetadata.data.sheets.length; tab++) {
+            if (sheetMetadata.data.sheets[tab].properties.title === sheetTab) {
+                tabId = sheetMetadata.data.sheets[tab].properties.sheetId;
+                break;
+            }
+        }
+        
+        gs.spreadsheets.batchUpdate({
+            "spreadsheetId": cfg.sheet,
+            "requestBody": {
+                "requests": [{
+                    "deleteDimension": {
+                        "range": {
+                            "sheetId": tabId,
+                            "dimension": "ROWS",
+                            "startIndex": row - 1,
+                            "endIndex": row
+                        }
+                    }
+                }]
+            }
+        }
+        
+        ).then(() => resolve('Operation successful.'))
+        .catch(error => reject(error.message));
+    });
+};
 
 /**
  * Function checks if the coordinate is in correct format.
@@ -158,7 +196,9 @@ exports.toColumn = function toColumn(num) {
         num -= 26;
         preceding++;
     }
-    if (preceding !== 0) column += String.fromCharCode(64 + preceding);
+    if (preceding !== 0) {
+        column += String.fromCharCode(64 + preceding);
+    }
     column += String.fromCharCode(65 + num);
     return column;
 };

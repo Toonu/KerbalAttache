@@ -1,5 +1,6 @@
-const {prefix} = require('./config.json'), Discord = require('discord.js'),
-fs = require('fs'), {init} = require("./sheet"), {log, perm, messageHandler} = require("./utils");
+const {prefix} = require('./config.json'), Discord = require('discord.js'), fs = require('fs'),
+	{init} = require("./sheet"), {log, perm, messageHandler} = require("./utils"), trade = require('./commands/trade');
+const {startup} = require('./keep_alive');
 client = new Discord.Client();
 
 //Adds commands from the command folder collection.
@@ -17,25 +18,30 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	log(`Deployed and ready!`);
 	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => log(error, true));
+    startup();
 	init();
 });
 
 client.on('message', message => {
 	//Ignored messages without a prefix.
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-  
+	if (!message.content.startsWith(prefix) || message.author.bot) {
+		return;
+	}
+	
 	//Prepares the arguments.
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 
 	//Finds the command.
 	const command = client.commands.get(args.shift().toLowerCase());
 
-	if (!command) return messageHandler(message, 'Not a command!', true);
+	if (!command) {
+		return messageHandler(message, 'Not a command!', true);
+	}
 
 	//Checking for DMs.
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return messageHandler(message, 'I cannot execute this command inside DMs!', true);
-    }
+	}
 
 	//Checking for arguments.
 	if (command.args && (!args.length || command.args > args.length)) {
@@ -68,8 +74,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	//Executing the actual command.
 	try {
 		if (message.channel.type === 'dm') {
-            log(`DM from ${message.author.username}: ${message.content}`);
-        } else {
+			log(`DM from ${message.author.username}: ${message.content}`);
+		} else {
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		command.execute(message, args);
@@ -79,39 +85,11 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	}
 });
 
-//const {CLIENT_TOKEN} = process.env;
-const {CLIENT_TOKEN} = require('./env.json');
+const os = require('os');
+const {CLIENT_TOKEN} = os.platform() === 'linux' ? process.env : require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
+trade.setClient(client);
 
-/**
- * Go through each command possible failure points, extreme cases and possible fails.
- * Submissions .sub delete craftName - with confirmation embed
- *
- * accept
- * assets - sheet
- * balance - sheet
- * battle - sheet
- * buy - sheet
- * config
- * help
- * map
- * ping
- * prune
- * reject
- * spam
- * sub
- * tech - sheet
- * tiles - sheet
- * trade - sheet
- * turn - sheet
- * usercreate
- * userdel
- * useredit
- * userinfo
- *
- * index
- * sheet
- * utils
-**/
+
 
 

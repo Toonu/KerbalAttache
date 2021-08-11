@@ -34,8 +34,12 @@ module.exports = {
         let today = new Date();
         let dateTime = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
         if (erroneous) {
-            if (content instanceof Error) console.error(`[ERR][${dateTime} UTC] ${content.message}\n${content.stack}`);
-            else console.error(`[ERR][${dateTime} UTC] ${content}`);
+            if (content instanceof Error) {
+                console.error(`[ERR][${dateTime} UTC] ${content.message}\n${content.stack}`);
+            }
+            else {
+                console.error(`[ERR][${dateTime} UTC] ${content}`);
+            }
         } else {
             console.log(`[LOG][${dateTime} UTC] ${content}`);
         }
@@ -58,7 +62,9 @@ module.exports = {
         message.channel.send(content)
             .then(msg => msg.delete({timeout: timer}).catch(error => module.exports.log(error, true)))
             .catch(networkError => module.exports.log(networkError, true));
-        if (deleteMessage) message.delete().catch(error => module.exports.log(error, true));
+        if (deleteMessage) {
+            message.delete().catch(error => module.exports.log(error, true));
+        }
     },
 
     /**
@@ -71,7 +77,9 @@ module.exports = {
      * @throws {Error}                                  Throws Error when the message is undefined.
      */
     ping: function ping(message, level = 2) {
-        if (!message) throw new Error('Invalid Argument Exception: Message is undefined.')
+        if (!message) {
+            throw new Error('Invalid Argument Exception: Message is undefined.')
+        }
 
         let nation = message.author;
 
@@ -94,9 +102,13 @@ module.exports = {
      * @throws {Error}                                  Throws Error when message or level is undefined.
      */
     perm: function perm(message, level, showMessage = true) {
-        if (!message || !level || Number.isNaN(level)) throw new Error('InvalidArgumentException: Message or level is' +
-            ' undefined.');
-        if (message.channel.type === 'dm') return true;
+        if (!message || !level || Number.isNaN(level)) {
+            throw new Error('InvalidArgumentException: Message or level is' +
+                ' undefined.');
+        }
+        if (message.channel.type === 'dm') {
+            return true;
+        }
 
         let clearance = false;
         switch (level) {
@@ -114,7 +126,9 @@ module.exports = {
         }
 
         if (!clearance && showMessage === true)
-            module.exports.messageHandler(message, 'Directorate of Information apologies. Your clearance is not sufficient for this operation. Please contact the moderators if you deem this as an error.');
+            {
+                module.exports.messageHandler(message, 'Directorate of Information apologies. Your clearance is not sufficient for this operation. Please contact the moderators if you deem this as an error.');
+            }
         return clearance;
     },
 
@@ -147,7 +161,7 @@ module.exports = {
             map: map,
             notes: " ",
             trades: {}
-        }
+        };
 
         module.exports.exportFile("config.json", cfg);
         return`Nation ${nationIn} created for user <@${id}>`
@@ -195,7 +209,9 @@ module.exports = {
                     });
 
                 //Closes the embed loop.
-                if (final) return;
+                if (final) {
+                    return;
+                }
 
                 //Ensures infinite closed loop.
                 i++;
@@ -205,6 +221,13 @@ module.exports = {
             }
         })
     },
+    /**
+     * Function finds matching searchItems in analysed data array in specified row.
+     * @param {Array} analysedData
+     * @param {Array<string>} searchItems
+     * @param {number} row
+     * @return {{}} return nothing.
+     */
     findArrayData: function findArrayData(analysedData, searchItems, row) {
         let result = {};
         
@@ -217,12 +240,14 @@ module.exports = {
                     break;
                 }
             }
-            if (!result[searchItems[i]]) throw new Error(`NotFoundException: Item ${searchItems[i]} not found in the array.`);
+            if (!result[searchItems[i]]) {
+                throw new Error(`NotFoundException: Item ${searchItems[i]} not found in the array.`);
+            }
         }
 
         return result;
     }
-}
+};
 
 
 /**

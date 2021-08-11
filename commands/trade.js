@@ -1,6 +1,8 @@
 const cfg = require("./../config.json"), units = require('./../units.json'),
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils"),
     {getCellArray, setCellArray, toColumn} = require("./../sheet");
+const {User, UserManager} = require('discord.js');
+let client;
 
 module.exports = {
     name: 'trade',
@@ -21,7 +23,10 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: No user was tagged, please retry.'), true);
         else if (args.length !== 5 || !args[0] || !args[2])
             return messageHandler(message, new Error('InvalidArgumentException: Not all arguments needed are present.'), true);
-
+        else if (message.author.id === message.mentions.users.first()) {
+            return messageHandler(message, new Error('InvalidArgumentException: Author and recipient cannot be same'), true);
+        }
+        
         const authorID = message.author.id;
         const cfgAuthor = cfg.users[authorID];
         const recipientID = message.mentions.users.first().id;
@@ -47,7 +52,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
         else if (cfgAuthor === undefined || cfgRecipient === undefined)
             return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
-        else if (!amount)
+        else if (amount <= 0)
             return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
         else if (asset.price > money)
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
@@ -115,7 +120,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
      * @param message           Message object.
      * @param {Array} args      args[0] contains number ID.
      */
-    reject: function reject(message, args) {
+    reject: async function reject(message, args) {
         let user = ping(message).id;
 
         let tradeData = cfg.users[user].trades;
@@ -125,7 +130,14 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
         else if (tradeData[id]) {
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
-            report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject')
+            report(message, `Trade ID:${id} of user <@${user}> rejected!`, 'reject');
+    
+            let authorUser = await client.users.fetch(tradeData[id].authorID)
+            .catch(error => log(error, true));
+            
+            authorUser.send(`Your trade of ${tradeData[id].amount} ${tradeData[id].asset.name} rejected by the ${message.author} | ${cfg.users[message.author.id].nation}!`)
+            .catch(error => log(error, true));
+            
             delete tradeData[id];
             exportFile('config.json', cfg);
         } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
@@ -226,9 +238,24 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 
         report(message, `<@${tradeData.authorID}>'s transaction with ID:${id} of ${tradeData.amount} ${tradeData.asset.name}s for ${formatCurrency(tradeData.money)} was accepted by <@${recipientID}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);
+    
+        let authorUser = await client.users.fetch(tradeData[id].authorID)
+        .catch(error => log(error, true));
+    
+        authorUser.send(`Your trade of ${tradeData[id].amount} ${tradeData[id].asset.name} accepted by the ${message.author} | ${cfg.users[message.author.id].nation}!`)
+        .catch(error => log(error, true));
+        
         delete cfg.users[recipientID].trades[id];
         exportFile('config.json', cfg);
     },
+    
+    /**
+     * Function sets client to cache users from it.
+     * @param newClient Discord client.
+     */
+    setClient: function setClient(newClient) {
+        client = newClient;
+    }
 };
 
 /**
@@ -239,12 +266,19 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 function showTrades(message) {
     let newMessage = '';
     //When having clearance and ping user, use him.
-    let user = cfg.users[ping(message).id];
+    let user = ping(message).id;
 
-    if (!user)
+    if (!cfg.users[user])
         return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
-    Object.entries(user.trades).forEach((trade) => {
-        newMessage += `Trade [${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)}\n`;
+    
+    Object.values(cfg.users).forEach(cfgUser => {
+        Object.entries(cfgUser.trades).forEach((trade) => {
+            if (trade[1].authorID === user) {
+                newMessage += `Outgoing trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} for ${cfg.users[trade[1].recipientID].nation} | ${cfg.users[trade[1].recipientID].name}\n`;
+            } else if (trade[1].recipientID === user) {
+                newMessage += `Incomming trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
+            }
+        });
     });
 
     message.channel.send(`Your open trade proposals:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

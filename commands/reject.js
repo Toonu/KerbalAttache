@@ -9,4 +9,4 @@ module.exports = {
     execute: function transform(message, args) {
         reject(message, args);
     }
-}
+};

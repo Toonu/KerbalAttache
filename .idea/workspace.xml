@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="SCOPE_TYPE" value="3" />
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
@@ -30,11 +27,16 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Fixing negative research budget and 1000+ RPs">
+    <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
+      <change afterPath="$PROJECT_DIR$/dataStructures/database.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/loan.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/nationalAssets.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/nationalResearch.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" afterPath="$PROJECT_DIR$/out.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,8 +79,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
-    <property name="javascript.nodejs.core.library.typings.version" value="14.17.7" />
+    <property name="javascript.nodejs.core.library.configured.version" value="15.0.1" />
+    <property name="javascript.nodejs.core.library.typings.version" value="15.0.1" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -162,6 +164,22 @@
       <workItem from="1628147014480" duration="13144000" />
       <workItem from="1628165323965" duration="20961000" />
       <workItem from="1628230983094" duration="12862000" />
+      <workItem from="1628256475925" duration="5165000" />
+      <workItem from="1628262616351" duration="1320000" />
+      <workItem from="1628513027003" duration="487000" />
+      <workItem from="1628513573475" duration="15000" />
+      <workItem from="1628517020406" duration="991000" />
+      <workItem from="1628518554771" duration="1186000" />
+      <workItem from="1628526987551" duration="3609000" />
+      <workItem from="1628533299985" duration="710000" />
+      <workItem from="1628579147746" duration="105000" />
+      <workItem from="1628579263919" duration="16000" />
+      <workItem from="1628666558834" duration="295000" />
+      <workItem from="1628666872558" duration="1518000" />
+      <workItem from="1628669637780" duration="241000" />
+      <workItem from="1628670104684" duration="618000" />
+      <workItem from="1628684102679" duration="358000" />
+      <workItem from="1628686642525" duration="2572000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -345,7 +363,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627633168993</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Trade author added in trades listing.">
+      <created>1628256812249</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1628256812249</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,34 +409,22 @@
     <MESSAGE value="Bugfix of missing bracket." />
     <MESSAGE value="Reverting TT changes." />
     <MESSAGE value="Fixing negative research budget and 1000+ RPs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing negative research budget and 1000+ RPs" />
+    <MESSAGE value="Trade author added in trades listing." />
+    <option name="LAST_COMMIT_MESSAGE" value="Trade author added in trades listing." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/useredit.js</url>
-          <line>44</line>
+          <line>46</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/trade.js</url>
-          <line>17</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/tech.js</url>
-          <line>170</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
-        <watch expression="reaction.emoji.name === '✅'" language="JavaScript" />
-        <watch expression="(reaction.emoji.name === '✅' || reaction.emoji.name === '❌') &amp;&amp; user.id === message.author.id; " language="JavaScript" />
-        <watch expression="user.id === message.author.id;" language="JavaScript" />
+        <watch expression="os.platform === 'linux'" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>

@@ -308,6 +308,13 @@
         [],
         2
     ],
+    "50pumps": [
+        "Naval Pumps",
+        "tech",
+        "engineering",
+        [],
+        2
+    ],
     "70vtol": [
         "VTOL Technology",
         "tech",

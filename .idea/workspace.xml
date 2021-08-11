@@ -28,15 +28,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
-      <change afterPath="$PROJECT_DIR$/dataStructures/database.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/loan.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/nationalAssets.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/nationalResearch.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/state.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/database.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/loan.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/nationalAssets.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/nationalResearch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/state.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +176,7 @@
       <workItem from="1628670104684" duration="618000" />
       <workItem from="1628684102679" duration="358000" />
       <workItem from="1628686642525" duration="2572000" />
+      <workItem from="1628693267552" duration="10000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>

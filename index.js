@@ -85,8 +85,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 	}
 });
 
-const {CLIENT_TOKEN} = process.env;
-//const {CLIENT_TOKEN} = require('./env.json');
+const os = require('os');
+const {CLIENT_TOKEN} = os.platform() === 'linux' ? process.env : require('./env.json');
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
 trade.setClient(client);
 

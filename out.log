@@ -73,3 +73,21 @@
 (node:377) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
 [LOG][2021-8-11 8:13:56 UTC] Deployed and ready!
 [LOG][2021-8-11 8:16:2 UTC] Deployed and ready!
+[LOG][2021-8-11 8:16:46 UTC] Server Nations of Unity (Toonu): .ping
+[LOG][2021-8-11 8:19:54 UTC] Deployed and ready!
+(node:796) UnhandledPromiseRejectionWarning: ReferenceError: os is not defined
+    at Client.<anonymous> (/home/runner/KerbalAttache/index.js:22:9)
+    at Client.emit (events.js:314:20)
+    at WebSocketManager.triggerClientReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:431:17)
+    at WebSocketManager.checkShardsReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:415:10)
+    at WebSocketShard.<anonymous> (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketManager.js:197:14)
+    at WebSocketShard.emit (events.js:314:20)
+    at WebSocketShard.checkReady (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:475:12)
+    at WebSocketShard.onPacket (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:447:16)
+    at WebSocketShard.onMessage (/home/runner/KerbalAttache/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
+    at WebSocket.onMessage (/home/runner/KerbalAttache/node_modules/ws/lib/event-target.js:132:16)
+(node:796) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:796) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+[LOG][2021-8-11 8:21:19 UTC] Deployed and ready!
+[LOG][2021-8-11 8:21:19 UTC] linux
+[LOG][2021-8-11 8:28:24 UTC] Deployed and ready!

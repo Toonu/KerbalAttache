@@ -1,8 +1,11 @@
 const cfg = require('./config.json'), {google} = require('googleapis');
 let client;
 let gs;
-const {private_key, client_email} = process.env;
-//const {private_key, client_email} = require('./env.json');
+
+
+const os = require('os');
+const {private_key, client_email} = os.platform() === 'linux' ? process.env : require('./env.json');
+
 
 
 /**

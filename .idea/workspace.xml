@@ -28,8 +28,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
+      <change afterPath="$PROJECT_DIR$/commands/log.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/sub.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out.log" beforeDir="false" afterPath="$PROJECT_DIR$/out.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -168,6 +169,8 @@
       <workItem from="1628533299985" duration="710000" />
       <workItem from="1628579147746" duration="105000" />
       <workItem from="1628579263919" duration="16000" />
+      <workItem from="1628666558834" duration="295000" />
+      <workItem from="1628666872558" duration="1518000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -408,19 +411,7 @@
           <line>46</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/sub.js</url>
-          <line>98</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="NodeJSConfigurationType">
-        <watch expression="client.users.fetch(tradeData.authorID)" language="JavaScript" />
-        <watch expression="message.guild.members" language="JavaScript" />
-        <watch expression="tradeData[1].authorUser" language="JavaScript" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

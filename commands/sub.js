@@ -39,7 +39,6 @@ module.exports = {
                     maximalLength = submissionsData[row][2].length;
                     if (maximalLength > 18) {
                         maximalLength = 18;
-                        break;
                     }
                 }
             }
@@ -92,7 +91,7 @@ module.exports = {
         }
 
         //Header line
-        let displayResult = `${"[Asset".padEnd(maximalLength === 5 ? 0 : maximalLength + 1)}] Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
+        let displayResult = `[${"Asset".padStart(maximalLength === 5 ? 0 : maximalLength)}] Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
 
         //Handling money and upgrades
         nationSubmissions.forEach(column => {

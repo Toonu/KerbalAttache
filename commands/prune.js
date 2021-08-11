@@ -38,7 +38,7 @@ module.exports = {
 			message.channel.bulkDelete(args[0], bool)
 				.then(() => {
 					//Logs the operation.
-					messageHandler(message, `Deleted ${args[0]} messages.`);
+					messageHandler(message, `Deleted ${args[0]} messages.`, true, 3000);
 					log(`Messages deleted: ${args[0]}`);
 				})
 				.catch(error => {

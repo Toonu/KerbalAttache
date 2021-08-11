@@ -92,7 +92,7 @@ module.exports = {
         }
 
         //Header line
-        let displayResult = `${"[Asset]".padEnd(maximalLength === 5 ? 0 : maximalLength)}   Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
+        let displayResult = `${"[Asset".padEnd(maximalLength === 5 ? 0 : maximalLength + 1)}] Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
 
         //Handling money and upgrades
         nationSubmissions.forEach(column => {

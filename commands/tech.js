@@ -1,7 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS,DuplicatedCode
 
 const cfg = require('./../config.json'), {ping, log, messageHandler, report, findArrayData, embedSwitcher,
-        resultOptions} = require('../utils'), tt = require('./../tt.json'), discord = require('discord.js'),
+        resultOptions} = require('../utils'), tt = require('../dataImports/tt.json'), discord = require('discord.js'),
         {getCellArray, setCellArray, toColumn} = require("../sheet");
 
 module.exports = {

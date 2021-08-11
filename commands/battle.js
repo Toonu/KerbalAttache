@@ -1,7 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS
 
 const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'),
-    units = require('../units.json'), {getCellArray, setCellArray, toColumn} = require('../sheet');
+    units = require('../dataImports/assets.json'), {getCellArray, setCellArray, toColumn} = require('../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',
@@ -68,16 +68,16 @@ module.exports = {
                         userMap[userNumber].push(arg);
                     } else if (!arg.startsWith('-')) {
                         if (Number.isNaN(amount)) {
-                            if (winning && ['a', 'b', 'd'].includes(arg) && !units.units[arg]) {
+                            if (winning && ['a', 'b', 'd'].includes(arg) && !units.assets[arg]) {
                                 //Adding winning team.
                                 winningTeam = arg;
                                 winning = false;
                             } else if (name) {
                                 //Adding battle name.
                                 name += `${arg} `;
-                            } else if (units.units[arg]) {
+                            } else if (units.assets[arg]) {
                                 //Adding assets.
-                                userMap[userNumber][assetNumber].push(units.units[arg]);
+                                userMap[userNumber][assetNumber].push(units.assets[arg]);
                             }
                         } else {
                             //Adding number of lost assets.

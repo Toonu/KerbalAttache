@@ -1,4 +1,4 @@
-const cfg = require('./../config.json'), units = require('./../units.json'), discord = require('discord.js'),
+const cfg = require('./../config.json'), units = require('../dataImports/assets.json'), discord = require('discord.js'),
     {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
     {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
 // noinspection JSCheckFunctionSignatures
@@ -25,7 +25,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             return messageHandler(message, new Error('InvalidArgumentException: Missing second argument.'), true);
         }
         let assetType = args[1].toUpperCase();
-        if(!units.units[assetType]) {
+        if(!units.assets[assetType]) {
             return messageHandler(message, new Error('Asset not found.'), true);
         }
 
@@ -36,7 +36,7 @@ Assets do not need to be written in capital letters, the command is case insensi
         let nation = cfg.users[user.id];
         let systemData;
         let systemBackup;
-        let unit = units.units[assetType];
+        let unit = units.assets[assetType];
 
         //Getting systems tab data if system is being purchased.
         if ('system' === unit.type) {
@@ -142,11 +142,11 @@ Assets do not need to be written in capital letters, the command is case insensi
 function printAssets(message) {
     let newMessage = ``, l = 0;
 
-    Object.keys(units.units).forEach(asset => {
+    Object.keys(units.assets).forEach(asset => {
         if (asset.length > l) l = asset.length;
     });
-    Object.keys(units.units).forEach(asset => {
-        newMessage += `[${asset.padStart(l)}] | ${units.units[asset].desc.padEnd(40)} : ${formatCurrency(units.units[asset].price)}\n`;
+    Object.keys(units.assets).forEach(asset => {
+        newMessage += `[${asset.padStart(l)}] | ${units.assets[asset].desc.padEnd(40)} : ${formatCurrency(units.assets[asset].price)}\n`;
     });
 
     message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

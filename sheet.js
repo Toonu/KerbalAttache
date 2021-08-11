@@ -41,21 +41,21 @@ exports.getCell = function getCell(cell, sheetTab) {
 /**
  * Function returns an data array from the sheet tab's specified coordinates.
  * Additionally, the array is made rectangular by filling shorter rows.
- * @param {string} X                    array first coordinate.
- * @param {string} Y                    array end coordinate.
+ * @param {string} x                    array first coordinate.
+ * @param {string} y                    array end coordinate.
  * @param {string} sheetTab             sheet tab name.
  * @param {boolean} dominantColumn      true if the array is returned transposed.
  * @return {Promise<Array>}             Returns data array or reject error String message.
  */
-exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = false) {
+exports.getCellArray = function getCellArray(x, y, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
-        if (!isCoordinate(X) || !isCoordinate(Y, true)) {
-            return reject('Coordinate X is not correct.')
+        if (!isCoordinate(x) || !isCoordinate(y, true)) {
+            return reject('Coordinate x is not correct.')
         }
 
         gs.spreadsheets.values.get({
             spreadsheetId: cfg.sheet,
-            range: `${sheetTab}!${X}:${Y}`,
+            range: `${sheetTab}!${x}:${y}`,
             majorDimension: dominantColumn ? 'COLUMNS' : 'ROWS',
             valueRenderOption: "UNFORMATTED_VALUE"
         })

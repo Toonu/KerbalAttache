@@ -1,7 +1,6 @@
-const cfg = require("./../config.json"), units = require('./../units.json'),
+const cfg = require("./../config.json"), units = require('../dataImports/assets.json'),
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils"),
     {getCellArray, setCellArray, toColumn} = require("./../sheet");
-const {User, UserManager} = require('discord.js');
 let client;
 
 module.exports = {
@@ -33,7 +32,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         const cfgRecipient = cfg.users[recipientID];
         const money = parseInt(args[3]);
         const amount = parseInt(args[1]);
-        let asset = units.units[args[2].toUpperCase()];
+        let asset = units.assets[args[2].toUpperCase()];
         let isSelling = args[0].toLowerCase();
         let tab = cfg.main;
         let tabEnd = cfg.mainEndCol;

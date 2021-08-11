@@ -18,6 +18,7 @@
     "tech": "TechTree",
     "techEndCol": "EF",
     "techMainRow": 1,
+    "assetsFile": "assets.json",
     "servers": {
         "470258156682084373": {
             "name": "NoU",

@@ -2,6 +2,7 @@ const cfg = require("./../config.json"), {assets} = require('../dataImports/asse
     {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils");
 const {Trade} = require('../dataStructures/Trade');
 const {Asset} = require('../dataStructures/Asset');
+const {System} = require('../dataStructures/System');
 let client;
 
 module.exports = {
@@ -41,6 +42,11 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
                 asset = new Asset(name, assetData.desc, assetData.theatre, assetData.cost);
             }
         }
+        for (const [name, assetData] of Object.entries(assets.systems)) {
+            if (name === asset) {
+                asset = new System(name, assetData.desc, assetData.cost);
+            }
+        }
     
         for (const i of db.users) {
             if (i.isEqual(discordAuthor)) {
@@ -65,7 +71,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         else if (asset.price > money)
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
         
-        let trade = new Trade(author, recipient, amount, money, asset, isSelling === 'sell');
+        let trade = new Trade(discordAuthor.id, discordRecipient.id, amount, money, asset, isSelling === 'sell');
         db.addTrade(trade);
         
         //DM of a trade to the recipient.
@@ -79,7 +85,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         exportFile('config.json', cfg);
 
         report(message, `<@${discordAuthor}> has proposed to ${args[0].toLowerCase()} <@${discordRecipient}> ${trade.amount} ${args[2].toUpperCase()}s for ${formatCurrency(trade.money)}!`, this.name);
-        messageHandler(message, `Proposition of transaction with ${trade.recipient.user.username} [${trade.recipient.state.name}] was delivered to the recipient!`, true);
+        messageHandler(message, `Proposition of transaction with ${discordRecipient.username} [${recipient.state.name}] was delivered to the recipient!`, true);
     },
 
     /**
@@ -128,7 +134,8 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         else if (!trade)
             return messageHandler(message, new Error(`InvalidArgumentException: Trade with ID:${id} does not exist!`), true);
 
-        trade.finishTrade();
+        trade.finishTrade(db);
+        db.remove(trade);
 
         report(message, `<@${trade.author.user.id}>'s transaction with ID:${id} of ${trade.amount} ${trade.asset.name}s for ${formatCurrency(trade.money)} was accepted by <@${discordUser}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);

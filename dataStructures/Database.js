@@ -6,6 +6,7 @@ const {Trade} = require('./Trade');
 const {State} = require('./State');
 const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
+const {System} = require('./System');
 Discord = require('discord.js');
 
 exports.Database = class Database {
@@ -24,7 +25,12 @@ exports.Database = class Database {
 		for (const trade of databaseImport.trades) {
 			trade.author = this.parseUser(client, trade.author);
 			trade.recipient = this.parseUser(client, trade.recipient);
-			trade.asset = Object.assign(new Asset(), trade.asset);
+			if (trade.asset.theatre === undefined) {
+				trade.asset = Object.assign(new System(), trade.asset);
+			} else {
+				trade.asset = Object.assign(new Asset(), trade.asset);
+			}
+			
 			this.addTrade(Object.assign(
 				new Trade(undefined, undefined, undefined, undefined, undefined, undefined), trade));
 		}

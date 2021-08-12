@@ -1,12 +1,12 @@
-const {database} = require('./database');
-
+const {System} = require('./System');
+const {Asset} = require('./Asset');
 exports.Trade = class Trade {
 	/**
-	* @param {exports.DatabaseUser} author
-	* @param {exports.DatabaseUser} recipient
+	* @param author
+	* @param recipient
 	* @param {number} amount
 	* @param {number} money
-	* @param {exports.Asset} asset
+	* @param {exports.Asset | exports.System} asset
 	* @param {boolean} isSelling
 	*/
 	constructor(author, recipient, amount, money, asset, isSelling) {
@@ -28,13 +28,24 @@ exports.Trade = class Trade {
 		return trade.id === this.id;
 	}
 	
-	finishTrade() {
-		this.isSelling ? this.author.state.account : this.recipient.state.account += this.money;
-		this.isSelling ? this.recipient.state.account : this.author.state.account -= this.money;
+	finishTrade(db) {
+		let author = db.getState(this.author);
+		let recipient = db.getState(this.recipient);
 		
-		this.isSelling ? this.author.state.assets[asset.theatre][asset.name] : this.recipient.state.account[asset.theatre][asset.name] -= this.amount;
-		this.isSelling ? this.recipient.state.assets[asset.theatre][asset.name] : this.author.state.account[asset.theatre][asset.name] += this.amount;
+		if (this.isSelling) {
+			author.account += this.money;
+			recipient.account -= this.money;
+		} else {
+			recipient.account += this.money;
+			author.account -= this.money;
+		}
 		
-		database.removeTrade(this.id);
+		if (this.asset instanceof Asset) {
+			author.assets.assets[this.asset.theatre][this.asset.name] -= this.amount;
+			recipient.assets.assets[this.asset.theatre][this.asset.name] += this.amount;
+		} else {
+			author.assets.systems[this.asset.name] -= this.amount;
+			recipient.assets.systems[this.asset.name] += this.amount;
+		}
 	}
 };

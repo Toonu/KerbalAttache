@@ -29,17 +29,12 @@
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/accept.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/accept.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/reject.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/reject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/map.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/usercreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/usercreate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Asset.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Asset.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/System.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/System.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Trade.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,6 +188,7 @@
       <workItem from="1628693008330" duration="237000" />
       <workItem from="1628693304992" duration="24920000" />
       <workItem from="1628745356718" duration="29782000" />
+      <workItem from="1628777441904" duration="1434000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -430,7 +426,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/useredit.js</url>
-          <line>47</line>
+          <line>48</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -440,8 +436,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dataStructures/Database.js</url>
-          <line>38</line>
-          <properties lambdaOrdinal="-1" />
+          <line>44</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
       </breakpoints>

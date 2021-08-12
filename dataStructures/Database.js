@@ -9,7 +9,7 @@ const {StateResearch} = require('./StateResearch');
 Discord = require('discord.js');
 
 exports.Database = class Database {
-	constructor() {
+	constructor(client) {
 		const databaseImport = require('../database.json');
 		this.turn = -1;
 		this.loans = [];
@@ -17,27 +17,64 @@ exports.Database = class Database {
 		this.users = [];
 		
 		for (const loan of databaseImport.loans) {
-			loan.creditor = Object.assign(new DatabaseUser(undefined, undefined), loan.creditor);
-			loan.debtor = Object.assign(new DatabaseUser(undefined, undefined), loan.debtor);
+			loan.creditor = this.parseUser(client, loan.creditor);
+			loan.debtor = this.parseUser(client, loan.debtor);
 			this.loans.push(Object.assign(new Loan(), loan));
 		}
 		for (const trade of databaseImport.trades) {
-			trade.author = Object.assign(new DatabaseUser(undefined, undefined), trade.author);
-			trade.recipient = Object.assign(new DatabaseUser(undefined, undefined), trade.recipient);
+			trade.author = this.parseUser(client, trade.author);
+			trade.recipient = this.parseUser(client, trade.recipient);
 			trade.asset = Object.assign(new Asset(), trade.asset);
 			this.addTrade(Object.assign(
 				new Trade(undefined, undefined, undefined, undefined, undefined, undefined), trade));
 		}
 		for (let user of databaseImport.users) {
-			let assets = Object.assign(new StateAssets(), user.state.assets);
-			let research = Object.assign(new StateResearch(), user.state.research)
+			this.users.push(this.parseUser(client, user));
+		}
+		
+		this.export();
+	}
+	
+	parseUser(client, user) {
+		let assets;
+		let research;
+		let state;
+		
+		if (user.state) {
+			assets = Object.assign(new StateAssets(), user.state.assets);
+			research = Object.assign(new StateResearch(), user.state.research);
+			state = Object.assign(new State(), user.state);
 			
-			let state = Object.assign(new State(), user.state);
 			state.assets = assets;
 			state.research = research;
-			let protoUser = new DatabaseUser(user.user, state, user.notes);
-			
-			this.users.push(protoUser);
+		}
+		
+		let userUser = Object.assign(new Discord.User(client, user.user));
+		return new DatabaseUser(userUser, state, user.notes);
+	}
+	
+	getTrade(id) {
+		let trade;
+		for (trade of this.trades) {
+			if (trade.id === id) break;
+		}
+		return trade;
+	}
+	
+	/**
+	 * Method returns state object from user ID or nation name.
+	 * @param {string, number} name
+	 */
+	getState(name) {
+		let nation;
+		if (isNaN(parseInt(name))) {
+			for (nation of this.users) {
+				if (nation.id === name) break;
+			}
+		} else {
+			for (nation of this.users) {
+				if (nation.state.name === name) break;
+			}
 		}
 	}
 	
@@ -48,7 +85,6 @@ exports.Database = class Database {
 	addTrade(trade) {
 		trade.id = this.trades.length;
 		this.trades.push(trade);
-		this.export();
 	}
 	
 	/**
@@ -56,9 +92,10 @@ exports.Database = class Database {
 	*/
 	removeTrade(id) {
 		let isFailure = true;
+		let trade;
 		for (let i = 0; i < this.trades.length; i++) {
 			if (this.trades[i].id === id) {
-				this.trades.splice(i, 1);
+				trade = this.trades.splice(i, 1);
 				isFailure = false;
 				break;
 			}
@@ -66,13 +103,12 @@ exports.Database = class Database {
 		if (isFailure) {
 			throw new Error('Trade does not exist.')
 		}
-		this.export();
+		return trade[0];
 	}
 	
 	
 	addUser(discordUser) {
 		this.users.push(discordUser);
-		this.export();
 	}
 	
 	
@@ -96,7 +132,6 @@ exports.Database = class Database {
 				this.loans.splice(i, 1);
 			}
 		}
-		this.export();
 	}
 	
 	export() {

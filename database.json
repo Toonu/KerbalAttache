@@ -6,14 +6,14 @@
         {
             "user": {
                 "id": "319919565079576576",
-                "system": null,
+                "system": false,
                 "locale": null,
-                "flags": 0,
+                "flags": null,
                 "username": "Toonu",
                 "bot": false,
                 "discriminator": "2892",
                 "avatar": "617eeab96cabc1e28b6512637dd9f33c",
-                "lastMessageChannelID": "846482105190056026",
+                "lastMessageChannelID": null,
                 "createdTimestamp": 1496345168133,
                 "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/2.png",
                 "tag": "Toonu#2892",
@@ -22,7 +22,7 @@
             },
             "state": {
                 "name": "Iconia",
-                "demonym": "Iconian",
+                "demonym": "Ico",
                 "account": 2000000,
                 "balance": 0,
                 "assets": {

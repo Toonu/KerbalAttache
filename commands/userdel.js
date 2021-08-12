@@ -18,6 +18,7 @@ module.exports = {
         
         //Deleting and reporting.
         db.removeUser(discordUser);
+        db.export();
         report(message, `${message.author.username} deleted user <@${discordUser.id}>!`, this.name);
         return messageHandler(message, 'User deleted.', true);
     }

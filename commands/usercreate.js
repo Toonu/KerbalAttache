@@ -74,6 +74,7 @@ module.exports = {
             //Export and reporting.
             dbUser.state = state ? state : undefined;
             db.addUser(dbUser);
+            db.export();
             
             report(message, `User ${discordUser.username} was created by <@${message.author.id}>`, this.name);
             messageHandler(message, 'User was created.', true);

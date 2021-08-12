@@ -1,4 +1,3 @@
-const cfg = require('./../config.json');
 const {database} = require('./database');
 
 exports.Trade = class Trade {

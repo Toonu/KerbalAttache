@@ -1,5 +1,4 @@
-const cfg = require('./../config.json'), {setCellArray, getCellArray, toColumn} = require("../sheet"),
-    {messageHandler, log, report, perm, exportFile} = require("../utils");
+const cfg = require('./../config.json'), {log, report, perm} = require("../utils");
 module.exports = {
     name: 'turn',
     description: 'Command for finishing turn and updating the sheet data!',
@@ -15,7 +14,6 @@ module.exports = {
                 user.state.turn(db, user);
             }
         }
-        
         //Point of no return. Modifying real online data bellow.
         db.turn += 1;
         db.export();

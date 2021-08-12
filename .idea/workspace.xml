@@ -28,30 +28,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
-      <change afterPath="$PROJECT_DIR$/dataImports/tt.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/enums.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/node.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/tradeObject.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/unit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dataStructures/user.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/start.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.breakpoints" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/commands/state.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/DatabaseUser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/StateAssets.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataStructures/System.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/battle.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/battle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/assets.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/balance.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/usercreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/usercreate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/userinfo.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/loan.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/nationalAssets.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/nationalAssets.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/nationalResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/nationalResearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/state.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataImports/assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/dataImports/assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Loan.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/nationalAssets.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/nationalResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateResearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/node.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/TechNode.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/state.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/tradeObject.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Trade.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Asset.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/user.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keep_alive.js" beforeDir="false" afterPath="$PROJECT_DIR$/keep_alive.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tt.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/units.json" beforeDir="false" afterPath="$PROJECT_DIR$/dataImports/assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +116,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.TypeScript" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -204,6 +211,7 @@
       <workItem from="1628686642525" duration="2840000" />
       <workItem from="1628693008330" duration="237000" />
       <workItem from="1628693304992" duration="24920000" />
+      <workItem from="1628745356718" duration="25887000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -441,18 +449,15 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/useredit.js</url>
-          <line>46</line>
+          <line>47</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
-        <watch expression="assets[type]" language="JavaScript" />
-        <watch expression="this._budget === this.previousBudget" language="JavaScript" />
-        <watch expression="0.975 + this.research.technologicalLevels[theatre] / 4" language="JavaScript" />
-        <watch expression="(assets[type].cost / 4)" language="JavaScript" />
-        <watch expression="this.research.technologicalLevels" language="JavaScript" />
+        <watch expression="assets[name]" language="JavaScript" />
+        <watch expression="parseInt(theatre)" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>

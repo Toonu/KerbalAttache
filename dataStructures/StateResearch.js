@@ -1,8 +1,7 @@
 const {theatres} = require('./enums');
-const tt = require('../dataImports/tt.json');
 
-exports.NationalResearch = class NationalResearch {
-	constructor() {
+exports.StateResearch = class StateResearch {
+	constructor(state) {
 		this.RP = 0;
 		this.CF = 1;
 		this._budget = 0;
@@ -14,7 +13,7 @@ exports.NationalResearch = class NationalResearch {
 		this.AEWRange = 0;
 		this.ballisticRange = 0;
 		this.armour = 200;
-		
+
 		for (const theatre of Object.values(theatres)) {
 			this.technologicalLevels[theatre] = 0.1;
 		}
@@ -49,7 +48,7 @@ exports.NationalResearch = class NationalResearch {
 	/**
 	* Method adds node to the researched technologies of the state after checking the prerequistes and amount of RP.
 	* @param {string|number} name
-	* @param {Node} node
+	* @param {TechNode} node
 	*/
 	unlockNode(name, node) {
 		if (this.RP - node.cost < 0) {

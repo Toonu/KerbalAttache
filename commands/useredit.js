@@ -1,6 +1,6 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const cfg = require('./../config.json'), {exportFile, perm, ping, report, messageHandler} = require('../utils');
+const cfg = require('./../config.json'), {perm, report, messageHandler} = require('../utils');
 
 module.exports = {
     name: 'useredit',
@@ -15,30 +15,31 @@ module.exports = {
     -c [color] hex colour int
     -m [map] URL
     -d [demonym] string
-    -cf [coefficient] float
     -name [name] string
     -notes [notes] string\`\`\``,
     cooldown: 5,
     guildOnly: true,
-    /**
-     * Function edits user data in the configuration.
-     * @param message to gather information from.
-     * @param {Array} args command arguments.
-     * @param showMessage if reply messages should be shown.
-     * @return {void|*}
-     */
-    execute: function useredit(message, args, showMessage = true) {
-        let permission;
-        let userID = ping(message).id;
-        let user = cfg.users[userID];
-
-        //Validating input argument.
-        try {
-            permission = perm(message, 2, showMessage);
-            if (!user) throw new Error('User does not exist! Please create user first!');
-        } catch (error) {
-            return messageHandler(message, error, true);
+    execute: function useredit(message, args, db) {
+        const discordUser = message.mentions.users.first();
+    
+        //Validating input arguments.
+        if (!discordUser) {
+            return messageHandler(message,
+                new Error('InvalidArgumentException: No user specified, please retry.'), true);
         }
+        
+        let dbUser;
+        for (dbUser of db.users) {
+            if (dbUser.isEqual(discordUser)) {
+                break;
+            }
+        }
+        
+        if (!dbUser) {
+            return messageHandler(message,
+                new Error('InvalidArgumentException: User does not exists.'), true);
+        }
+
 
         //Collects all data arguments and merges them together.
         let data = args[1];
@@ -51,38 +52,50 @@ module.exports = {
                 }
             }
         }
-
-        //Determining operation option and executing it.
-        if (args[0] === '-notes') user.notes = data;
-        else if (args[0] === '-n' && permission) user.nation = data;
-        else if (args[0] === '-d' && permission) user.demonym = data;
-        else if (args[0] === '-name' && permission) user.name = data;
-        else if (args[0] === '-c' && permission) {
-            if (data === 'undefined')
-                user.color = 'fffffe';
-            else if (data.length !== 6)
-                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a color hex number. Modification failed.'), showMessage);
-            else
-                user.color = data.toLowerCase();
-        } else if (args[0] === '-m' && permission) {
-            if (data === 'undefined')
-                user.color = 'https://discord.com/';
-            else if (new RegExp(/https:\/\/drive.google\.com\/file\/d\/.+/).test(args[1]))
-                user.map = data;
-            else
-                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a map URL link. Modification failed.'), showMessage);
-        } else if (args[0] === '-cf' && permission) {
-            data = parseInt(data);
-            if (Number.isNaN(data))
-                return messageHandler(message, new Error('InvalidArgumentException: Argument is not a number. Modification failed.'), showMessage);
-            user.cf = data;
-        } else return messageHandler(message,
-            new Error('InvalidArgumentException: Modification failed due to wrong attribute name'), showMessage);
-
-        exportFile('config.json', cfg);
-        if (showMessage) {
-            report(message, `<@${message.author.id}> modified <@${userID}>'s ${args[0].substring(1)} to ${data}.`, this.name);
-            messageHandler(message, 'User property modified.', showMessage);
+        
+        if (args[0] !== '-notes') {
+            if (!dbUser.state) {
+                return messageHandler(message, new Error('User does not have assigned any state.'), true);
+            } else if (!perm(message, 2, true)) {
+                return messageHandler(message, ' ', true);
+            }
         }
+        try {
+            switch (args[0]) {
+                case '-notes':
+                    dbUser.notes = data;
+                    break;
+                case '-n':
+                    dbUser.state.name = data;
+                    break;
+                case '-d':
+                    dbUser.state.demonym = data;
+                    break;
+                case '-c':
+                    if (data === 'undefined') {
+                        data = 'fffffe';
+                    }
+                    dbUser.state.colour = data;
+                    break;
+                case '-m':
+                    if (data === 'undefined') {
+                        data = 'https://x.com/';
+                    }
+                    dbUser.state.map = data;
+                    break;
+                case '-cf':
+                    dbUser.state.research.CF = data;
+                    break;
+                default:
+                    return messageHandler(message,
+                        new Error(`InvalidOperationException: Option ${args[0]} is not a valid option!`), true);
+            }
+        } catch (error) {
+            return messageHandler(message, error, true);
+        }
+        
+        db.export();
+        report(message, `<@${message.author.id}> modified <@${discordUser}>'s ${args[0].substring(1)} to ${data}.`, this.name);
+        messageHandler(message, 'User property modified.', true);
     }
 };

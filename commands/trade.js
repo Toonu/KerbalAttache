@@ -262,22 +262,17 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
  * @param message               Message to analyse.
  * @return {Promise<any>|void}  Returns nothing.
  */
-function showTrades(message) {
+function showTrades(message, args, db) {
     let newMessage = '';
     //When having clearance and ping user, use him.
-    let user = ping(message).id;
-
-    if (!cfg.users[user])
-        return messageHandler(message, new Error('InvalidArgumentException: No trade exists. Canceling operation'), true);
+    let discordUser = ping(message).id;
     
-    Object.values(cfg.users).forEach(cfgUser => {
-        Object.entries(cfgUser.trades).forEach((trade) => {
-            if (trade[1].authorID === user) {
-                newMessage += `Outgoing trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} for ${cfg.users[trade[1].recipientID].nation} | ${cfg.users[trade[1].recipientID].name}\n`;
-            } else if (trade[1].recipientID === user) {
-                newMessage += `Incomming trade ID[${trade[0]}] | ${trade[1].isSelling ? '+' : '-'}${trade[1].amount.toString().padEnd(3)} ${trade[1].asset.name.padEnd(10)} for ${trade[1].isSelling ? '-' : '+'}${formatCurrency(trade[1].money)} from ${cfg.users[trade[1].authorID].nation} | ${cfg.users[trade[1].authorID].name}\n`;
-            }
-        });
+    db.trades.forEach(trade => {
+        if (trade.author.isEqual(discordUser)) {
+            newMessage += `Outgoing trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for ${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} for ${trade.recipient.state.name} | ${trade.recipient.username}\n`;
+        } else if (trade.recipient.isEqual(discordUser)) {
+            newMessage += `Incomming trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for ${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} from ${trade.author.state.name} | ${trade.author.username}\n`;
+        }
     });
 
     message.channel.send(`Your open trade proposals:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})

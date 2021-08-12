@@ -1,4 +1,4 @@
-class Node {
+class TechNode {
 	/**
 	* Blank class to support JSON import missing variables errors.
 	*/

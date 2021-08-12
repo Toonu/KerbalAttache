@@ -5,8 +5,8 @@ const {prefix} = require('./config.json'),
 	{log, perm, messageHandler} = require("./utils"),
 	trade = require('./commands/trade'),
 	{startup} = require('./keep_alive'),
-	os = require('os'),
-	{start} = require('./start');
+	os = require('os');
+const {Database} = require('./dataStructures/Database');
 
 let client = new Discord.Client();
 
@@ -85,7 +85,7 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 		} else {
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
-		command.execute(message, args);
+		command.execute(message, args, db);
 	} catch (error) {
 		messageHandler(message, 'There was an error trying to execute that command!');
 		messageHandler(message, error, true);
@@ -93,8 +93,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 });
 
 const {CLIENT_TOKEN} = os.platform() === 'linux' ? process.env : require('./env.json');
-start().then(r => console.log(r));
-//client.login(CLIENT_TOKEN).catch(error => log(error, true));
+const db = new Database(client);
+client.login(CLIENT_TOKEN).catch(error => log(error, true));
 trade.setClient(client);
 
 

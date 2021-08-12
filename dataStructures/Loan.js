@@ -1,6 +1,6 @@
 const {database} = require('./database.js');
 
-class Loan {
+exports.Loan = class Loan {
 	constructor(creditor, debtor, debt, percentage, turns) {
 		this.creditor = creditor;
 		this.debtor = debtor;
@@ -19,4 +19,4 @@ class Loan {
 			database.removeLoan(this);
 		}
 	}
-}
+};

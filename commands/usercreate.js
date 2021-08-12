@@ -1,5 +1,6 @@
-const cfg = require('../config.json'), {report, createUser, perm, messageHandler} = require('../utils'),
-    {execute} = require('../commands/useredit');
+const cfg = require('../config.json'), {report, perm, messageHandler} = require('../utils');
+const {DatabaseUser} = require('../dataStructures/DatabaseUser.js');
+const {State} = require('../dataStructures/State');
 module.exports = {
     name: 'usercreate',
     description: 'Command for creating new user in the database.',
@@ -11,43 +12,71 @@ module.exports = {
     -c [color] hex colour int
     -m [map] URL
     -d [demonym] string
-    -cf [coefficient] float
-    -name [name] string, if left empty, Discord username is used.
-    -notes [notes] string\`\`\``,
+    -notes [notes] string\`\`\`\nSet no option to create state-less user. Notes can be used for state-less users.`,
     cooldown: 5,
     guildOnly: true,
-    execute: function usercreate(message, args) {
-        if (!message.mentions.users.size)
-            return messageHandler(message,
-                    new Error('InvalidArgumentException: No user specified, please retry.'), true);
-
-        const user = message.mentions.users.first();
+    execute: async function usercreate(message, args, db) {
         if (perm(message, 2)) {
-            try {
-                createUser(user.id, user.username);
-            } catch (error) {
-                return messageHandler(message, error, true);
+            const discordUser = message.mentions.users.first();
+            const state = new State(undefined, undefined);
+            
+            //Validating input arguments.
+            if (!discordUser)
+                return messageHandler(message,
+                    new Error('InvalidArgumentException: No user specified, please retry.'), true);
+            else if (db.users.some(user => user.isEqual(discordUser))) {
+                return messageHandler(message,
+                    new Error('InvalidArgumentException: User already exists.'), true);
             }
-
-            //Uses useredit command to assign the values.
+    
+            let dbUser = new DatabaseUser(discordUser);
+            let option = undefined;
+            let data = '';
+            //Loops arguments and assigning values. Error in any of them cancels the whole operation.
             for (let i = 0; i < args.length; i++) {
-
-                //Concentrates spaced values
-                let data = '';
-                for (let j = i + 1; j < args.length; j++) {
-                    if (args[j].startsWith('-') || args[j].startsWith('<@')) {
-                        break;
+                if ((args[i].startsWith('-') || args[i].startsWith('<@')) && option) {
+                    try {
+                        data = data.trim();
+                        switch (option) {
+                            case '-n':
+                                state.name = data;
+                                break;
+                            case '-d':
+                                state.demonym = data;
+                                break;
+                            case '-m':
+                                state.map = data;
+                                break;
+                            case '-c':
+                                state.colour = data;
+                                break;
+                            case '-notes':
+                                dbUser.notes = data;
+                                break;
+                            default:
+                                return messageHandler(message,
+                                    new Error(`InvalidOperationException: Option ${option} is not a valid option!`), true);
+                        }
+                    } catch (error) {
+                        return messageHandler(message, error, true);
                     }
-                    data += ` ${args[j]}`;
-                }
-                if (args[i].startsWith('-')) {
-                    execute(message, [args[i], data.trim()], false);
+                    if (args[i]) {
+                        option = args[i];
+                        data = '';
+                    }
+                } else if (args[i].startsWith('-')) {
+                    option = args[i];
+                } else if (!args[i].startsWith('<@')) {
+                    data += `${args[i]} `;
                 }
             }
-            report(message, `Nation ${cfg.users[user.id].nation} was created for user ${user.username} created` +
-                ` by <@${message.author.id}>`, 'usercreate');
+            
+            //Export and reporting.
+            dbUser.state = state ? state : undefined;
+            db.addUser(dbUser);
+            
+            report(message, `User ${discordUser.username} was created by <@${message.author.id}>`, this.name);
             messageHandler(message, 'User was created.', true);
         }
     }
 };
-

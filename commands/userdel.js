@@ -1,4 +1,4 @@
-const cfg = require('./../config.json'), {exportFile, perm, messageHandler, report} = require('../utils');
+const cfg = require('./../config.json'), {perm, messageHandler, report} = require('../utils');
 module.exports = {
     name: 'userdel',
     description: 'Command for deleting user from the database.',
@@ -6,26 +6,19 @@ module.exports = {
     usage: `${cfg.prefix}userdel [USER]`,
     cooldown: 5,
     guildOnly: true,
-    execute: function userdel(message) {
-
+    execute: function userdel(message, args, db) {
+        const discordUser = message.mentions.users.first();
+        
         //Validating input arguments.
-        if (message.mentions.users.size === 0)
-            {
-                return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true)
-            }
-        const user = message.mentions.users.first();
-
-        //Validation
-        if (cfg.users[user.id]) {
-            if (perm(message, 2)) {
-                //Deleting the user and exporting the edited file.
-                delete cfg.users[user.id];
-                exportFile('config.json', cfg);
-                report(message, `${message.author.username} deleted user <@${user.id}>!`, this.name);
-                messageHandler(message, 'User deleted.', true);
-            }
-        } else {
-            return messageHandler(message, new Error('InvalidArgumentException: User does not exist, please retry.'), true)
+        if (!discordUser) {
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true)
+        } else if (!perm(message, 2)) {
+            return messageHandler(message, ' ', true);
         }
+        
+        //Deleting and reporting.
+        db.removeUser(discordUser);
+        report(message, `${message.author.username} deleted user <@${discordUser.id}>!`, this.name);
+        return messageHandler(message, 'User deleted.', true);
     }
 };

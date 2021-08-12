@@ -1,12 +1,7 @@
 {
     "assets": {
-        "MBT": {
-            "desc": "Main Battle Tank",
-            "theatre": 1,
-            "cost": 48000
-        },
-        "HT": {
-            "desc": "Heavy Tank",
+        "LT": {
+            "desc": "Light Tank",
             "theatre": 1,
             "cost": 48000
         },
@@ -15,8 +10,13 @@
             "theatre": 1,
             "cost": 48000
         },
-        "LT": {
-            "desc": "Light Tank",
+        "HT": {
+            "desc": "Heavy Tank",
+            "theatre": 1,
+            "cost": 48000
+        },
+        "MBT": {
+            "desc": "Main Battle Tank",
             "theatre": 1,
             "cost": 48000
         },
@@ -44,6 +44,16 @@
             "desc": "Self-propelled Anti-Air gun",
             "theatre": 1,
             "cost": 16000
+        },
+        "FOB": {
+            "desc": "Forward Operating Base",
+            "theatre": 1,
+            "cost": 160000
+        },
+        "RADAR": {
+            "desc": "Radar site",
+            "theatre": 1,
+            "cost": 40000
         },
         "SF": {
             "desc": "Special Operation Force",
@@ -80,14 +90,9 @@
             "theatre": 0,
             "cost": 40000
         },
-        "SAT": {
-            "desc": "Orbital Satellite",
-            "theatre": 3,
-            "cost": 160000
-        },
-        "OV": {
-            "desc": "Orbital Vehicle",
-            "theatre": 3,
+        "AIRPORT": {
+            "desc": "Airfield",
+            "theatre": 0,
             "cost": 200000
         },
         "K": {
@@ -130,52 +135,28 @@
             "theatre": 2,
             "cost": 600000
         },
-        "AIRPORT": {
-            "desc": "Airfield",
-            "theatre": 0,
-            "cost": 200000
-        },
-        "FOB": {
-            "desc": "Forward Operating Base",
-            "theatre": 1,
-            "cost": 160000
-        },
         "PORT": {
             "desc": "Naval port",
             "theatre": 2,
             "cost": 100000
         },
-        "RADAR": {
-            "desc": "Radar site",
-            "theatre": 1,
-            "cost": 40000
+        "GPS": {
+            "desc": "GPS Satellite",
+            "theatre": 3,
+            "cost": 120000
+        },
+        "SAT": {
+            "desc": "Orbital Satellite",
+            "theatre": 3,
+            "cost": 160000
+        },
+        "OV": {
+            "desc": "Orbital Vehicle",
+            "theatre": 3,
+            "cost": 200000
         }
     },
     "systems": {
-        "CRUISE": {
-            "desc": "Cruise Missile",
-            "cost": 5000
-        },
-        "BALLISTIC": {
-            "desc": "Ballistic Missile",
-            "cost": 6000
-        },
-        "ASM": {
-            "desc": "Anti-Satellite Missile",
-            "cost": 20000
-        },
-        "ATGM": {
-            "desc": "Anti-Tank Guided Missile",
-            "cost": 3000
-        },
-        "ASHM": {
-            "desc": "Anti-Ship Missile",
-            "cost": 8000
-        },
-        "ARM": {
-            "desc": "Anti-radiation Missile",
-            "cost": 7000
-        },
         "SRAAM": {
             "desc": "Short-Range Air-to-Air Missile",
             "cost": 1000
@@ -200,6 +181,30 @@
             "desc": "Long-Range Surface-to-Air Missile",
             "cost": 7000
         },
+        "ASM": {
+            "desc": "Anti-Satellite Missile",
+            "cost": 20000
+        },
+        "ATGM": {
+            "desc": "Anti-Tank Guided Missile",
+            "cost": 3000
+        },
+        "ASHM": {
+            "desc": "Anti-Ship Missile",
+            "cost": 8000
+        },
+        "ARM": {
+            "desc": "Anti-radiation Missile",
+            "cost": 7000
+        },
+        "CRUISE": {
+            "desc": "Cruise Missile",
+            "cost": 5000
+        },
+        "BALLISTIC": {
+            "desc": "Ballistic Missile",
+            "cost": 6000
+        },
         "BMB": {
             "desc": "Unguided bomb",
             "cost": 500
@@ -216,6 +221,10 @@
             "desc": "Rocket pod",
             "cost": 4000
         },
+        "REC": {
+            "desc": "Recon suite",
+            "cost": 10000
+        },
         "FUEL": {
             "desc": "Fuel pod",
             "cost": 2000
@@ -223,10 +232,6 @@
         "EW": {
             "desc": "Electronic Warfare suite",
             "cost": 20000
-        },
-        "REC": {
-            "desc": "Recon suite",
-            "cost": 10000
         }
     }
 }

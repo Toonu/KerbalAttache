@@ -114,6 +114,118 @@
                 "_map": "https://x.com/"
             },
             "notes": " "
+        },
+        {
+            "user": {
+                "id": "752676284521250837",
+                "system": false,
+                "locale": null,
+                "flags": null,
+                "username": "Dion Noe",
+                "bot": false,
+                "discriminator": "0881",
+                "avatar": "a_b6cd1d4d78cf5b1bf874a6542662df2c",
+                "lastMessageChannelID": null,
+                "createdTimestamp": 1599522410279,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/1.png",
+                "tag": "Dion Noe#0881",
+                "avatarURL": "https://cdn.discordapp.com/avatars/752676284521250837/a_b6cd1d4d78cf5b1bf874a6542662df2c.webp",
+                "displayAvatarURL": "https://cdn.discordapp.com/avatars/752676284521250837/a_b6cd1d4d78cf5b1bf874a6542662df2c.webp"
+            },
+            "state": {
+                "name": "Sha",
+                "demonym": "Sha",
+                "account": 2000000,
+                "balance": 0,
+                "assets": {
+                    "systems": {
+                        "SRAAM": 1,
+                        "MRAAM": 1,
+                        "LRAAM": 1,
+                        "SRSAM": 1,
+                        "MRSAM": 1,
+                        "LRSAM": 1,
+                        "ASM": 1,
+                        "ATGM": 1,
+                        "ASHM": 1,
+                        "ARM": 1,
+                        "CRUISE": 1,
+                        "BALLISTIC": 1,
+                        "BMB": 1,
+                        "GBMB": 1,
+                        "GPOD": 1,
+                        "RPOD": 1,
+                        "REC": 1,
+                        "FUEL": 1,
+                        "EW": 1
+                    },
+                    "assets": {
+                        "0": {
+                            "LM": 1,
+                            "MM": 1,
+                            "HM": 1,
+                            "LA": 1,
+                            "VL": 1,
+                            "VTOL": 1,
+                            "AIRPORT": 1
+                        },
+                        "1": {
+                            "LT": 1,
+                            "MT": 1,
+                            "HT": 1,
+                            "MBT": 1,
+                            "AFV": 1,
+                            "IFV": 1,
+                            "APC": 1,
+                            "MLV": 1,
+                            "SPAAG": 1,
+                            "FOB": 1,
+                            "RADAR": 1,
+                            "SF": 1
+                        },
+                        "2": {
+                            "K": 1,
+                            "FF": 1,
+                            "DD": 1,
+                            "CC": 1,
+                            "BC": 1,
+                            "BB": 1,
+                            "CL": 1,
+                            "CV": 1,
+                            "PORT": 1
+                        },
+                        "3": {
+                            "GPS": 1,
+                            "SAT": 1,
+                            "OV": 1
+                        },
+                        "4": {}
+                    }
+                },
+                "incomePenaltyCoefficient": 1,
+                "research": {
+                    "RP": 0,
+                    "CF": 1,
+                    "_budget": 0,
+                    "previousBudget": 0,
+                    "unlockedNodesList": {},
+                    "technologicalLevels": {
+                        "0": 0.1,
+                        "1": 0.1,
+                        "2": 0.1,
+                        "3": 0.1,
+                        "4": 0.1
+                    },
+                    "searchRange": 100,
+                    "AEWRange": 0,
+                    "ballisticRange": 0,
+                    "armour": 200
+                },
+                "_tiles": 5,
+                "_colour": "fffffe",
+                "_map": "https://x.com/"
+            },
+            "notes": " "
         }
     ]
 }

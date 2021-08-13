@@ -23,8 +23,6 @@ exports.Database = class Database {
 			this.loans.push(Object.assign(new Loan(), loan));
 		}
 		for (const trade of databaseImport.trades) {
-			trade.author = this.parseUser(client, trade.author);
-			trade.recipient = this.parseUser(client, trade.recipient);
 			if (trade.asset.theatre === undefined) {
 				trade.asset = Object.assign(new System(), trade.asset);
 			} else {
@@ -82,6 +80,7 @@ exports.Database = class Database {
 				if (nation.state.name === name) break;
 			}
 		}
+		return nation.state;
 	}
 	
 	

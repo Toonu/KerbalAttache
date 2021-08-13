@@ -141,7 +141,7 @@ module.exports = {
         fs.writeFileSync(file, JSON.stringify(data, null, 4));
     },
 
-    resultOptions: Object.freeze({"delete":1, "confirm":2, "moveNext":3}),
+    resultOptions: Object.freeze({"delete":1, "confirm":2, "moveRight":3, "moveLeft":4}),
 
     /**
      * Method switches between embeds.
@@ -166,6 +166,19 @@ module.exports = {
                                 final = true;
                                 resolve(result);
                                 break;
+                            case module.exports.resultOptions.moveLeft:
+                                i--;
+                                if (i === -1) {
+                                    i += embeds.length;
+                                }
+                                break;
+                            case module.exports.resultOptions.moveRight:
+                                i++;
+                                //Ensures infinite closed loop.
+                                if (i === embeds.length) {
+                                    i = 0;
+                                }
+                                break;
                             default:
                         }
                     })
@@ -176,12 +189,6 @@ module.exports = {
                 //Closes the embed loop.
                 if (final) {
                     return;
-                }
-
-                //Ensures infinite closed loop.
-                i++;
-                if (i === embeds.length) {
-                    i = 0;
                 }
             }
         })
@@ -243,14 +250,8 @@ async function awaitEmbedReaction(message, reactions, embed, emojiFilter, proces
                 embedMessage.awaitReactions(emojiFilter, {max: 1, time: 60000, errors: ['time']})
                     .then(async collectedReactions => {
                         let result = processReactions(collectedReactions.first(), embedMessage);
-                        // noinspection FallThroughInSwitchStatementJS
-                        switch (result) {
-                            case module.exports.resultOptions.delete:
-                            case module.exports.resultOptions.moveNext:
-                            case module.exports.resultOptions.confirm:
-                                await embedMessage.delete().catch(error => module.exports.log(error, true));
-                                return resolve(result);
-                        }
+                        await embedMessage.delete().catch(error => module.exports.log(error, true));
+                        return resolve(result);
                     })
                     .catch(() => {
                         embedMessage.delete().catch(error => module.exports.log(error, true));

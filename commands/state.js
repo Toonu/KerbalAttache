@@ -29,18 +29,20 @@ module.exports = {
 
         //Embed options
         function emojiFilter(reaction, user) {
-            return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌') && user.id === message.author.id;
+            return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌' || reaction.emoji.name === '⬅️') && user.id === message.author.id;
         }
 
         // noinspection JSUnusedLocalSymbols
         function processReactions(reaction) {
             if (reaction.emoji.name === '➡️') {
-                return resultOptions.moveNext;
+                return resultOptions.moveRight;
             } else if (reaction.emoji.name === '❌') {
                 return resultOptions.delete;
+            } else if (reaction.emoji.name === '⬅️') {
+                return resultOptions.moveLeft;
             }
         }
-        await embedSwitcher(message, embeds, ['❌', '➡️'], emojiFilter, processReactions)
+        await embedSwitcher(message, embeds, ['⬅️', '❌', '➡️'], emojiFilter, processReactions)
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
     },

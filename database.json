@@ -4,15 +4,29 @@
     "trades": [
         {
             "id": 0,
-            "author": "319919565079576576",
-            "recipient": "752676284521250837",
+            "author": "752676284521250837",
+            "recipient": "319919565079576576",
             "amount": 1,
-            "money": 100000,
+            "money": 1,
             "asset": {
                 "name": "MBT",
                 "desc": "Main Battle Tank",
                 "theatre": 1,
                 "cost": 48000
+            },
+            "isSelling": true
+        },
+        {
+            "id": 1,
+            "author": "752676284521250837",
+            "recipient": "319919565079576576",
+            "amount": 1,
+            "money": 1,
+            "asset": {
+                "name": "APC",
+                "desc": "Armored Personnel Carrier",
+                "theatre": 1,
+                "cost": 8000
             },
             "isSelling": true
         }
@@ -38,8 +52,8 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Ico",
-                "account": 2000000,
-                "balance": 0,
+                "account": 2300000,
+                "balance": -1654303.9243524033,
                 "assets": {
                     "systems": {
                         "SRAAM": 1,
@@ -76,7 +90,7 @@
                             "LT": 0,
                             "MT": 0,
                             "HT": 0,
-                            "MBT": 1,
+                            "MBT": 3,
                             "AFV": 1,
                             "IFV": 1,
                             "APC": 1,
@@ -107,13 +121,16 @@
                 },
                 "incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 0,
+                    "RP": 9200,
                     "CF": 1,
-                    "_budget": 0,
+                    "_budget": 5250,
                     "previousBudget": 0,
-                    "unlockedNodesList": {},
+                    "unlockedNodesList": {
+                        "50jet": "50jet",
+                        "50turboprops": "50turboprops"
+                    },
                     "technologicalLevels": {
-                        "0": 0.1,
+                        "0": 0.3,
                         "1": 0.1,
                         "2": 0.1,
                         "3": 0.1,
@@ -148,10 +165,10 @@
                 "displayAvatarURL": "https://cdn.discordapp.com/avatars/752676284521250837/a_b6cd1d4d78cf5b1bf874a6542662df2c.webp"
             },
             "state": {
-                "name": "Sha",
+                "name": "Sharikon",
                 "demonym": "Sha",
-                "account": 2000000,
-                "balance": 0,
+                "account": 1700000,
+                "balance": 212160.4395338404,
                 "assets": {
                     "systems": {
                         "SRAAM": 1,
@@ -188,7 +205,7 @@
                             "LT": 1,
                             "MT": 1,
                             "HT": 1,
-                            "MBT": 1,
+                            "MBT": 4,
                             "AFV": 1,
                             "IFV": 1,
                             "APC": 1,
@@ -219,7 +236,7 @@
                 },
                 "incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 0,
+                    "RP": 5000,
                     "CF": 1,
                     "_budget": 0,
                     "previousBudget": 0,
@@ -239,6 +256,25 @@
                 "_tiles": 5,
                 "_colour": "fffffe",
                 "_map": "https://x.com/"
+            },
+            "notes": " "
+        },
+        {
+            "user": {
+                "id": "356065937318871041",
+                "system": false,
+                "locale": null,
+                "flags": null,
+                "username": "Aki",
+                "bot": true,
+                "discriminator": "9694",
+                "avatar": "bcbfc8d951e3c75b6f453eec0f978a38",
+                "lastMessageChannelID": null,
+                "createdTimestamp": 1504963134842,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/4.png",
+                "tag": "Aki#9694",
+                "avatarURL": "https://cdn.discordapp.com/avatars/356065937318871041/bcbfc8d951e3c75b6f453eec0f978a38.webp",
+                "displayAvatarURL": "https://cdn.discordapp.com/avatars/356065937318871041/bcbfc8d951e3c75b6f453eec0f978a38.webp"
             },
             "notes": " "
         }

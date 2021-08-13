@@ -29,18 +29,23 @@
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/map.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/state.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/reject.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/reject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/sub.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/tiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tiles.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/usercreate.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/usercreate.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/Loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Loan.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/State.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateAssets.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateAssets.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateResearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/TechNode.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/TechNode.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/Trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -99,7 +104,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="project.scopes" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -199,6 +204,7 @@
       <workItem from="1628835438170" duration="3167000" />
       <workItem from="1628840957039" duration="4480000" />
       <workItem from="1628845487576" duration="1874000" />
+      <workItem from="1628848131351" duration="16690000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -435,16 +441,16 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/dataStructures/Trade.js</url>
-          <line>31</line>
+          <url>file://$PROJECT_DIR$/commands/usercreate.js</url>
+          <line>32</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="73" />
+          <option name="timeStamp" value="92" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
-        <watch expression="parseInt(name)" language="JavaScript" />
+        <watch expression="state" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>

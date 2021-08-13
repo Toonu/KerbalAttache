@@ -14,12 +14,16 @@ module.exports = {
                 user.state.turn(db, user);
             }
         }
+        for (const loan of db.loans) {
+            loan.turn();
+        }
+        
         //Point of no return. Modifying real online data bellow.
         db.turn += 1;
         db.export();
         
         //Logging and announcing.
-        report(message, `Turn ${cfg.turn} has been finished by <@${message.author.id}>.`, this.name);
+        report(message, `Turn ${cfg.turn} has been finished by ${message.author}.`, this.name);
         let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(server.announcements)

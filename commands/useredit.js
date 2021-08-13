@@ -28,18 +28,11 @@ module.exports = {
                 new Error('InvalidArgumentException: No user specified, please retry.'), true);
         }
         
-        let dbUser;
-        for (dbUser of db.users) {
-            if (dbUser.isEqual(discordUser)) {
-                break;
-            }
-        }
-        
+        let dbUser = db.getUser(discordUser);
         if (!dbUser) {
             return messageHandler(message,
-                new Error('InvalidArgumentException: User does not exists.'), true);
+                new Error('InvalidArgumentException: User does not exist.'), true);
         }
-
 
         //Collects all data arguments and merges them together.
         let data = args[1];
@@ -95,7 +88,7 @@ module.exports = {
         }
         
         db.export();
-        report(message, `<@${message.author.id}> modified <@${discordUser}>'s ${args[0].substring(1)} to ${data}.`, this.name);
+        report(message, `${message.author} modified ${discordUser}'s ${args[0].substring(1)} to ${data}.`, this.name);
         messageHandler(message, 'User property modified.', true);
     }
 };

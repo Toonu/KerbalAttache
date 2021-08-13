@@ -59,6 +59,13 @@ exports.StateAssets = class StateAssets {
 				embeds[theatre].addField(name, amount, true);
 			}
 		}
+
+		
+		for (let i = 0; i < embeds.length; i++) {
+			if (embeds[i].fields.length === 1) {
+				embeds.slice(i, 1);
+			}
+		}
 		
 		return embeds;
 	}

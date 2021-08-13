@@ -19,6 +19,7 @@ module.exports = {
         if (perm(message, 2)) {
             const discordUser = message.mentions.users.first();
             const state = new State(undefined, undefined);
+            let hasState = false;
             
             //Validating input arguments.
             if (!discordUser) {
@@ -40,22 +41,26 @@ module.exports = {
                         switch (option) {
                             case '-n':
                                 state.name = data;
+                                hasState = true;
                                 break;
                             case '-d':
                                 state.demonym = data;
+                                hasState = true;
                                 break;
                             case '-m':
                                 state.map = data;
+                                hasState = true;
                                 break;
                             case '-c':
                                 state.colour = data;
+                                hasState = true;
                                 break;
                             case '-notes':
                                 dbUser.notes = data;
                                 break;
                             default:
-                                return messageHandler(message,
-                                    new Error(`InvalidOperationException: Option ${option} is not a valid option!`), true);
+                                return messageHandler(message, new Error(`InvalidOperationException: Option ${option}`
+                                    + ` is not a valid option! Canceling creation.`), true);
                         }
                     } catch (error) {
                         return messageHandler(message, error, true);
@@ -72,11 +77,11 @@ module.exports = {
             }
             
             //Export and reporting.
-            dbUser.state = state ? state : undefined;
+            dbUser.state = hasState ? state : undefined;
             db.addUser(dbUser);
             db.export();
             
-            report(message, `User ${discordUser.username} was created by <@${message.author.id}>`, this.name);
+            report(message, `User ${discordUser.username} was created by ${message.author}`, this.name);
             messageHandler(message, 'User was created.', true);
         }
     }

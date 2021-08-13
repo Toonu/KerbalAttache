@@ -39,6 +39,12 @@ exports.Database = class Database {
 		this.export();
 	}
 	
+	/**
+	 * Method parses user Objects into class instances.
+	 * @param client                        Discord client.
+	 * @param {exports.DatabaseUser} user   Discord user to parse.
+	 * @return {exports.DatabaseUser}       returns DatabaseUser.
+	 */
 	parseUser(client, user) {
 		let assets;
 		let research;
@@ -57,74 +63,103 @@ exports.Database = class Database {
 		return new DatabaseUser(userUser, state, user.notes);
 	}
 	
+	/**
+	 * Method finds and returns trade with specified id.
+	 * @param id searched trade ID.
+	 * @return {undefined, exports.Trade} returns undefined if trade is not found.
+	 */
 	getTrade(id) {
-		let trade;
-		for (trade of this.trades) {
-			if (trade.id === id) break;
+		let result;
+		let isFound = false;
+		for (result of this.trades) {
+			if (result.id === id) {
+				isFound = true;
+				break;
+			}
 		}
-		return trade;
-	}
-	
-	getUser(id) {
-		let user;
-		for (user of this.users) {
-			if (user.user.id === id) break;
-		}
-		return user;
+		return isFound ? result : undefined;
 	}
 	
 	/**
-	 * Method returns state object from user ID or nation name.
-	 * @param {string, number} name
+	 * Method finds and returns user based on his id or his state name.
+	 * @param {string, number, module:"discord.js".User} nameId   User's nation name or discord id.
+	 * @return {exports.DatabaseUser, undefined}   returns DatabaseUser object or undefined if not found.
 	 */
-	getState(name) {
-		let nation;
-		if (!isNaN(parseInt(name))) {
-			for (nation of this.users) {
-				if (nation.user.id === name) break;
+	getUser(nameId) {
+		let result;
+		let isFound = false;
+		if (nameId instanceof Discord.User) {
+			for (result of this.users) {
+				if (result.isEqual(nameId)) {
+					isFound = true;
+					break;
+				}
+			}
+		} else if (!isNaN(parseInt(nameId))) {
+			for (result of this.users) {
+				if (result.user.id === nameId) {
+					isFound = true;
+					break;
+				}
 			}
 		} else {
-			for (nation of this.users) {
-				if (nation.state.name === name) break;
+			for (result of this.users) {
+				if (result.state && result.state.name === nameId) {
+					isFound = true;
+					break;
+				}
 			}
 		}
-		return nation.state;
+		return isFound ? result : undefined;
 	}
 	
 	/**
-	* @param {exports.Trade} trade
-	*/
+	 * Method finds and returns State object from user ID or user's state name.
+	 * @param {string, number, module:"discord.js".User} nameId Discord user ID or State name.
+	 * @returns {undefined, exports.State} returns State object or undefined if not found.
+	 */
+	getState(nameId) {
+		let result = this.getUser(nameId);
+		return result.state ? result.state : undefined;
+	}
+	
+	/**
+	 * Method adds trade to the database.
+	 * @param {exports.Trade} trade trade to add.
+	 */
 	addTrade(trade) {
 		trade.id = this.trades.length;
 		this.trades.push(trade);
 	}
 	
 	/**
-	* @param {number} id
-	*/
+	 * Method deletes trade with specified ID.
+	 * @param id trade ID to delete.
+	 * @returns {boolean} returns true if successful.
+	 */
 	removeTrade(id) {
-		let isFailure = true;
-		let trade;
+		let isFound = false;
 		for (let i = 0; i < this.trades.length; i++) {
 			if (this.trades[i].id === id) {
-				trade = this.trades.splice(i, 1);
-				isFailure = false;
+				this.trades.splice(i, 1);
+				isFound = true;
 				break;
 			}
 		}
-		if (isFailure) {
-			throw new Error('Trade does not exist.')
-		}
-		return trade[0];
+		return isFound;
 	}
 	
-	addUser(discordUser) {
-		this.users.push(discordUser);
+	/**
+	 * Method adds user to the database.
+	 * @param {exports.DatabaseUser} databaseUser user to add.
+	 */
+	addUser(databaseUser) {
+		this.users.push(databaseUser);
 	}
 	
 	/**
 	 * Method removes user and all his loans and trades.
-	 * @param {module:"discord.js".User} discordUser Discord user
+	 * @param {module:"discord.js".User} discordUser Discord user to remove.
 	 * @return {boolean} returns true if user was found and removed. Else false.
 	 */
 	removeUser(discordUser) {
@@ -147,6 +182,23 @@ exports.Database = class Database {
 		for (let i = 0; i < this.loans.length; i++) {
 			if (this.loans[i].creditor === discordUser.id || this.loans[i].debtor === discordUser.id) {
 				this.loans.splice(i, 1);
+			}
+		}
+		return isFound;
+	}
+	
+	/**
+	 * Method removes loan from the database.
+	 * @param {exports.Loan} loan loan to remove.
+	 * @returns {boolean} returns true if successful.
+	 */
+	removeLoan(loan) {
+		let isFound = false;
+		for (let i = 0; i < this.loans.length; i++) {
+			if (this.loans[i] === loan) {
+				this.trades.splice(i, 1);
+				isFound = true;
+				break;
 			}
 		}
 		return isFound;

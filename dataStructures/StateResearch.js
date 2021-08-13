@@ -1,7 +1,9 @@
 const {theatres} = require('./enums');
+const cfg = require('./../config.json');
+const tt = require('../dataImports/tt.json');
 
 exports.StateResearch = class StateResearch {
-	constructor(state) {
+	constructor() {
 		this.RP = 0;
 		this.CF = 1;
 		this._budget = 0;
@@ -34,9 +36,6 @@ exports.StateResearch = class StateResearch {
 		this.previousBudget = this._budget;
 	}
 	
-	/**
-	* @param {number} value
-	*/
 	set budget(value) {
 		if (value >= 0) {
 			this._budget = value;
@@ -50,13 +49,19 @@ exports.StateResearch = class StateResearch {
 	}
 	
 	/**
-	* Method adds node to the researched technologies of the state after checking the prerequistes and amount of RP.
-	* @param {string|number} name
-	* @param {TechNode} node
-	*/
-	unlockNode(name, node) {
-		if (this.RP - node.cost < 0) {
+	 * Method adds node to the researched technologies of the state after checking the prerequistes.
+	 * @param {exports.TechNode} node node to unlock.
+	 */
+	unlockNode(node) {
+		//Validating input data.
+		if (node.name.substring(0, 2) > cfg.era || (node.name.startsWith('early') && 50 > cfg.era)) {
+			throw new Error('Node is too futuristic!');
+		} else if (this.RP - node.cost < 0) {
 			throw new Error('ArgumentOutOfRangeException: Not enough Research Points to unlock the node.');
+		}
+
+		if (this.unlockedNodesList[node.name] !== undefined) {
+			throw new Error('Node is already unlocked!');
 		}
 		
 		for (const prerequisite of node.prereq) {
@@ -66,6 +71,7 @@ exports.StateResearch = class StateResearch {
 		}
 		
 		this.technologicalLevels[node.theatre] += 0.1;
+		this.technologicalLevels[node.theatre] = parseFloat(this.technologicalLevels[node.theatre].toFixed(1));
 		this.RP -= node.cost;
 		
 		//Checking for range nodes.
@@ -90,27 +96,27 @@ exports.StateResearch = class StateResearch {
 			}
 		}
 		
-		this.unlockedNodesList[name] = node;
+		this.unlockedNodesList[node.name] = node.name;
 	}
 	
+	/**
+	 * Method turns the unlocked nodes into array or arrays containing unlocked technologies of the state.
+	 * @returns {string[Array][string]} returns array with each unlocked item on a new line.
+	 */
 	toArray() {
+		let tt = require('../dataImports/tt.json');
+		
 		let finalArray = [
-			[`Maximal armour thickness: ${this.armour}mm.`], [`Maximal indirect fire range: ${this.ballisticRange}RU`],
-			[`Maximal radar range: ${this.searchRange}RU`], [`Maximal airborne radar range: ${this.AEWRange}RU`]
+			[`Maximal armour thickness:     ${`[${this.armour}]`.padStart(5)}mm`],
+			[`Maximal indirect fire range:  ${`[${this.ballisticRange}]`.padStart(5)}RU`],
+			[`Maximal radar range:          ${`[${this.searchRange}]`.padStart(5)}RU`],
+			[`Maximal airborne radar range: ${`[${this.AEWRange}]`.padStart(5)}RU`],
+			[`\n\n[Unlocked Nodes and their technologies]\n`]
 		];
-		let maximalNodeName = 0;
 		
-		for (const key of Object.keys(this.unlockedNodesList)) {
-			if (key.length > maximalNodeName) {
-				maximalNodeName = key.length;
-			}
-		}
-		
-		for (const [name, node] of Object.entries(this.unlockedNodesList)) {
-			finalArray.push([`[${name.padStart(maximalNodeName)}] Unlocks:`]);
-			for (const unlock of node.unlocks) {
-				finalArray.push(unlock);
-			}
+		for (const name of Object.values(this.unlockedNodesList)) {
+			finalArray.push([`\n[${name}] Unlocks:`]);
+			tt.nodes[name].unlocks.forEach(unlock => finalArray.push(unlock));
 		}
 		
 		return finalArray;

@@ -12,13 +12,13 @@ module.exports = {
     to delete submission of craft.`,
     cooldown: 5,
     guildOnly: true,
-    execute: async function sub(message, args) {
+    execute: async function sub(message, args, db) {
         let isErroneous = false;
-        let nation = cfg.users[ping(message, 2).id];
+        let state = db.getState(ping(message, 2).id);
 
-        if (!nation)
-            return messageHandler(message, new Error('InvalidArgumentException: User does not exist!'), true);
-        nation = nation.nation;
+        if (!state)
+            return messageHandler(message,
+                new Error('InvalidArgumentException: User or his state does not exist!'), true);
 
         let submissionsData = await getCellArray('A1', cfg.submissionsEndCol, cfg.submissions)
             .catch(error => {
@@ -32,7 +32,7 @@ module.exports = {
         let nationSubmissionsPosition = [];
         let maximalLength = 0;
         for (let row = 0; row < submissionsData.length; row++) {
-            if (submissionsData[row][1] === nation) {
+            if (submissionsData[row][1] === state.name) {
                 nationSubmissions.push(submissionsData[row]);
                 nationSubmissionsPosition.push(row + 1);
                 if (submissionsData[row][2].length > maximalLength) {
@@ -43,47 +43,9 @@ module.exports = {
                 }
             }
         }
-        
+    
         if (args[0] === 'del' && args[1]) {
-            let craft = args[1];
-            await args.shift();
-            await args.shift();
-            args.forEach(arg => craft += ` ${arg}`);
-            
-            for (let i = 0; i < nationSubmissions.length; i++) {
-                if (nationSubmissions[i][2].toLowerCase() === craft.toLowerCase()) {
-                    const embed = new discord.MessageEmbed()
-                    .setColor('#065535')
-                    .setTitle(`Confirm deleting the submission of ${craft}`)
-                    .setURL('https://discord.js.org/') //URL clickable from the title
-                    .setThumbnail('https://imgur.com/IvUHO31.png')
-                    .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
-    
-                    function processReactions(reaction) {
-                        if (reaction.emoji.name === '✅') {
-                            return resultOptions.confirm;
-                        } else if (reaction.emoji.name === '❌') {
-                            return resultOptions.delete;
-                        }
-                    }
-    
-                    function filterYesNo(reaction, user) {
-                        return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
-                    }
-    
-                    await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
-                    .then(result => {
-                        if (result === resultOptions.confirm) {
-                            report(message, `<@${nation}> has deleted submission ${craft}! Please delete the craft file from the storage manually.`);
-                            messageHandler(message, 'Submission was deleted!', true);
-                            deleteRow(nationSubmissionsPosition[i], cfg.submissions).catch(error => log(error, true));
-                        }
-                    })
-                    .catch(error => messageHandler(message, error, true));
-                    return;
-                }
-            }
-            return messageHandler(message, 'Submission not found!', true);
+            return await deleteSubmission(message, args, nationSubmissions, nationSubmissionsPosition, state);
         }
 
         if  (maximalLength < 5) {
@@ -112,3 +74,46 @@ module.exports = {
         message.delete().catch(error => log(error, true));
     },
 };
+
+
+async function deleteSubmission(message, args, submissions, craftPosition, state) {
+    let craft = args[1];
+    await args.shift();
+    await args.shift();
+    args.forEach(arg => craft += ` ${arg}`);
+    
+    for (let i = 0; i < submissions.length; i++) {
+        if (submissions[i][2].toLowerCase() === craft.toLowerCase()) {
+            const embed = new discord.MessageEmbed()
+            .setColor('#065535')
+            .setTitle(`Confirm deleting the submission of ${craft}`)
+            .setURL('https://discord.js.org/') //URL clickable from the title
+            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
+            
+            function processReactions(reaction) {
+                if (reaction.emoji.name === '✅') {
+                    return resultOptions.confirm;
+                } else if (reaction.emoji.name === '❌') {
+                    return resultOptions.delete;
+                }
+            }
+            
+            function filterYesNo(reaction, user) {
+                return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
+            }
+            
+            await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
+            .then(result => {
+                if (result === resultOptions.confirm) {
+                    report(message, `${state.name} | ${message.author} has deleted submission ${craft}! Please delete the craft file from the storage manually.`, 'subDeletion');
+                    messageHandler(message, 'Submission was deleted!', true);
+                    deleteRow(craftPosition[i], cfg.submissions).catch(error => log(error, true));
+                }
+            })
+            .catch(error => messageHandler(message, error, true));
+            return;
+        }
+    }
+    return messageHandler(message, 'Submission not found!', true);
+}

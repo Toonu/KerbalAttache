@@ -1,5 +1,5 @@
 const cfg = require("./../config.json"), assets = require('../dataImports/assets.json'),
-    {exportFile, messageHandler, report, formatCurrency, ping, log} = require("../utils");
+    {messageHandler, report, formatCurrency, ping, log} = require("../utils");
 const {Trade} = require('../dataStructures/Trade');
 const {Asset} = require('../dataStructures/Asset');
 const {System} = require('../dataStructures/System');
@@ -24,10 +24,9 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('InvalidArgumentException: No user was tagged, please retry.'), true);
         else if (args.length !== 5 || !args[0] || !args[2])
             return messageHandler(message, new Error('InvalidArgumentException: Not all arguments needed are present.'), true);
-        else if (message.author.id === message.mentions.users.first().id) {
+        else if (message.author.id === message.mentions.users.first().id)
             return messageHandler(message, new Error('InvalidArgumentException: Author and recipient cannot be same'), true);
-        }
-        
+
         const discordAuthor = message.author;
         const discordRecipient = message.mentions.users.first();
         const money = parseInt(args[3]);
@@ -55,13 +54,8 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         }
     
         //Getting users from the database.
-        for (const dbUser of db.users) {
-            if (dbUser.isEqual(discordAuthor)) {
-                author = dbUser;
-            } else if (dbUser.isEqual(discordRecipient)) {
-                recipient = dbUser;
-            }
-        }
+        author = db.getUser(discordAuthor);
+        recipient = db.getUser(discordRecipient);
 
         //Validating input arguments.
         if(!asset)
@@ -72,11 +66,20 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         else if (!isSelling.startsWith('sell') && !isSelling.startsWith('buy'))
             return messageHandler(message, new Error('InvalidArgumentException: First argument is not sell or buy.'), true);
         else if (!author || !recipient)
-            return messageHandler(message, new Error('Nation does not exist in our database. Contact moderator or retry.'), true);
+            return messageHandler(message,
+                new Error('User does not exist in our database. Contact moderator or retry.'), true);
+        else if (!author.state || !recipient.state)
+            return messageHandler(message,
+                new Error('State of the user does not exist in our database. Contact moderator or retry.'), true);
         else if (amount <= 0)
             return messageHandler(message, new Error('You cannot send just the assets kiddo.'), true);
-        else if (asset.price > money)
+        else if (money < 0)
+            return messageHandler(message, new Error('Good try. No negative amount trades.'), true);
+        else if (asset.cost * amount > money)
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
+        else if (money > asset.price * amount * 4)
+            //Cheesy trade with overpriced units detection.
+            report(message, `${discordAuthor} has proposed a cheesy trade with more than 4x the price of the sold items!`, this.name);
         
         let trade = new Trade(discordAuthor.id, discordRecipient.id, amount, money, asset, isSelling === 'sell');
         db.addTrade(trade);
@@ -106,13 +109,14 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         let id = parseInt(args[0]);
         let trade = db.getTrade(id);
 
-        if (Number.isNaN(id))
+        //Checks if trade exists and id NaN.
+        if (Number.isNaN(id)) {
             messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
-        //Allows canceling or rejecting trade for both author and recipient.
-        else if (trade && trade.author === message.author.id || trade.recipient === message.author.id) {
-            let trade = db.removeTrade(id);
+        } else if (!trade && trade.author === message.author.id || trade.recipient === message.author.id) {
+            //Allows canceling or rejecting trade for both author and recipient.
+            db.removeTrade(id);
             db.export();
-            
+
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
             report(message, `Trade ID:${id} of user ${discordUser} rejected!`, 'reject');
             //DMing author.
@@ -120,7 +124,9 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             .catch(error => log(error, true));
             authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} rejected by the ${message.author} | ${db.getState(trade.recipient).name}!`)
             .catch(error => log(error, true));
-        } else messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
+        } else {
+            messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
+        }
     },
 
     /**
@@ -143,16 +149,21 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         else if (!trade)
             return messageHandler(message, new Error(`InvalidArgumentException: Trade with ID:${id} does not exist!`), true);
 
-        trade.finishTrade(db);
-        db.remove(trade);
+        try {
+            trade.finishTrade(db);
+        } catch (error) {
+            return messageHandler(message, error, true);
+        }
+        
+        db.removeTrade(trade.id);
         db.export();
 
-        report(message, `<@${trade.author.user.id}>'s transaction with ID:${id} of ${trade.amount} ${trade.asset.name}s for ${formatCurrency(trade.money)} was accepted by <@${discordUser}>!`, 'accept');
+        report(message, `<@${trade.author}>'s transaction with ID:${id} of ${trade.amount} ${trade.asset.name}s for ${formatCurrency(trade.money)} was accepted by <@${discordUser}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);
         //DMing author.
-        let authorUser = await client.users.fetch(trade.author.user.id)
+        let authorUser = await client.users.fetch(trade.author)
         .catch(error => log(error, true));
-        authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} accepted by the ${message.author} | ${trade.author.state.name}!`)
+        authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} accepted by the ${message.author} | ${db.getState(trade.author).name}!`)
         .catch(error => log(error, true));
     },
     
@@ -179,11 +190,11 @@ function showTrades(message, args, db) {
     
     db.trades.forEach(trade => {
         if (trade.author === discordUser.id) {
-            newMessage += `Outgoing trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}`
+            newMessage += `Outgoing trade ID[${trade.id}] | ${trade.isSelling ? '-' : '+'}`
                 +`${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for `
-                +`${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} for `
+                +`${trade.isSelling ? '+' : '-'}${formatCurrency(trade.money)} for `
                 +`${db.getState(trade.recipient).name} | ${db.getUser(trade.recipient).user.username} \n`;
-        } else if (trade  === discordUser.id) {
+        } else if (trade.recipient === discordUser.id) {
             newMessage += `Incomming trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}`
                 +`${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for `
                 +`${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} from ${db.getState(trade.author).name} `
@@ -191,11 +202,15 @@ function showTrades(message, args, db) {
         }
     });
 
-    message.channel.send(`Your open trade proposals:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
+    if (newMessage.length > 20) {
+        message.channel.send(`Your open trade proposals:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
         .then(assetMessages => {
             assetMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 30000})
-                .catch(error => log(error, true)));
+            .catch(error => log(error, true)));
         })
         .catch(error => log(error, true));
-    return message.delete().catch(error => log(error, true));
+        return message.delete().catch(error => log(error, true));
+    } else {
+        messageHandler(message, 'No trade to show.', true);
+    }
 }

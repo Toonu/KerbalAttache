@@ -19,7 +19,7 @@ module.exports = {
         //Deleting and reporting if user exists.
         if (db.removeUser(discordUser)) {
             db.export();
-            report(message, `${message.author.username} deleted user <@${discordUser.id}>!`, this.name);
+            report(message, `${message.author} deleted user ${discordUser}!`, this.name);
             messageHandler(message, 'User deleted.', true);
         } else {
             return messageHandler(message, new Error('NullReferenceException: User does not exist, please retry.'), true)

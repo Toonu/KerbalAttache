@@ -51,12 +51,14 @@ exports.State = class State {
 		// noinspection OverlyComplexArithmeticExpressionJS
 		income += (1 + Math.log10(this._tiles) * 100 + this._tiles / 3) * 14300 * this.incomePenaltyCoefficient;
 		
+		let user = db.getState(this.name);
+		
 		//Loans
 		for (const loan of db.loans) {
-			if (loan.creditor.isEqual(this)) {
-				income += loan.k;
-			} else if (loan.debtor.isEqual(this)) {
-				expenses -= loan.k;
+			if (loan.creditor.isEqual(user)) {
+				income += loan.payment;
+			} else if (loan.debtor.isEqual(user)) {
+				expenses -= loan.payment;
 			}
 		}
 		
@@ -65,7 +67,7 @@ exports.State = class State {
 	
 	/**
 	 * Method converts state information into an embed.
-	 * @param {exports.database} db Database used in calculating balance.
+	 * @param {exports.Database} db Database used in calculating balance.
 	 * @return {module:"discord.js".MessageEmbed}   returns Discord.MessageEmbed.
 	 */
 	toEmbed(db) {
@@ -107,7 +109,7 @@ exports.State = class State {
 		if (value >= 0) {
 			this._tiles = value;
 		} else {
-			throw new Error('ArgumentOutOfRangeException: Tiles cannot be set bellow 0.');
+			throw new Error('ArgumentOutOfRangeException: Tiles cannot go into negative numbers. Canceling operation.');
 		}
 	}
 	

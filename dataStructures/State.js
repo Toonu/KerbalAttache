@@ -19,23 +19,22 @@ exports.State = class State {
 		this._colour = colour;
 		this._map = map;
 	}
-
-	/**
-	 *
-	 * @param {exports.State} state
-	 * @return {boolean} if equal.
-	 */
-	isEqual(state) {
-		return state.name === this.name;
-	}
 	
-	turn(db, user) {
+	/**
+	 * Method calculates new account balance based on balance and updates research turn.
+	 * @param {exports.Database} db Database to use.
+	 */
+	turn(db) {
 		this.research.turn();
-		this.updateBalance(db, user);
+		this.updateBalance(db);
 		this.account += this.balance;
 	}
 	
-	updateBalance(db, user) {
+	/**
+	 * Method recalculates balance. Used when printing state information or calculating turn.
+	 * @param {exports.Database} db Database used in calculating loans into the balance.
+	 */
+	updateBalance(db) {
 		let expenses = 0;
 		let income = 0;
 		for (const [theatre, item] of Object.entries(this.assets.assets)) {
@@ -54,9 +53,9 @@ exports.State = class State {
 		
 		//Loans
 		for (const loan of db.loans) {
-			if (loan.creditor.isEqual(user)) {
+			if (loan.creditor.isEqual(this)) {
 				income += loan.k;
-			} else if (loan.debtor.isEqual(user)) {
+			} else if (loan.debtor.isEqual(this)) {
 				expenses -= loan.k;
 			}
 		}
@@ -64,11 +63,18 @@ exports.State = class State {
 		this.balance = income + expenses;
 	}
 	
-	toEmbed() {
+	/**
+	 * Method converts state information into an embed.
+	 * @param {exports.database} db Database used in calculating balance.
+	 * @return {module:"discord.js".MessageEmbed}   returns Discord.MessageEmbed.
+	 */
+	toEmbed(db) {
+		this.updateBalance(db);
+		
 		return new discord.MessageEmbed()
 		.setColor(this._colour)
 		.setTitle(`National Bank of ${this.name}`)
-		.setURL('https://discord.js.org/') //URL clickable from the title
+		.setURL(this.map) //URL clickable from the title
 		.setThumbnail('https://imgur.com/IvUHO31.png')
 		.addField('Account:', formatCurrency(this.account))
 		.addField('Balance:', formatCurrency(this.balance))
@@ -82,6 +88,19 @@ exports.State = class State {
 	};
 	
 	/**
+	 * Method compares two states based on their name.
+	 * @param {exports.State} state state to compare this with.
+	 * @return {boolean} true if equal.
+	 */
+	isEqual(state) {
+		return state.name === this.name;
+	}
+	
+	//Getters and setters.
+	
+	/**
+	 * Method sets new number of tiles for state.
+	 * @throws {Error} when trying to set negative amount of tiles.
 	 * @param {number} value new tiles value to set.
 	 **/
 	set tiles(value) {
@@ -92,15 +111,27 @@ exports.State = class State {
 		}
 	}
 	
+	/**
+	 * Tiles getter.
+	 * @return {number} amount of tiles.
+	 */
 	get tiles() {
 		return this._tiles;
 	}
 	
-	
+	/**
+	 * Colour getter.
+	 * @return {string} colour hex code 6 characters long and without the #.
+	 */
 	get colour() {
 		return this._colour;
 	}
 	
+	/**
+	 * Method sets new state colour. Use without the beggining #.
+	 * @throws {Error} when the value is not hex colour six-character code.
+	 * @param value colour hex value to set.
+	 */
 	set colour(value) {
 		if (value.length === 6) {
 			this._colour = value;
@@ -109,10 +140,19 @@ exports.State = class State {
 		}
 	}
 	
+	/**
+	 * Method returns state map URL link.
+	 * @return {string} map URL link.
+	 */
 	get map() {
 		return this._map;
 	};
 	
+	/**
+	 * Method sets state map URL link.
+	 * @throws {Error} when the set URL link is not in proper format.
+	 * @param value URL link to set the map to.
+	 */
 	set map(value) {
 		if (new RegExp(/https:\/\/drive.google\.com\/file\/d\/.+/).test(value)) {
 			this._map = value;

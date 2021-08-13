@@ -21,10 +21,10 @@ module.exports = {
             const state = new State(undefined, undefined);
             
             //Validating input arguments.
-            if (!discordUser)
+            if (!discordUser) {
                 return messageHandler(message,
                     new Error('InvalidArgumentException: No user specified, please retry.'), true);
-            else if (db.users.some(user => user.isEqual(discordUser))) {
+            } else if (db.users.some(user => user.isEqual(discordUser))) {
                 return messageHandler(message,
                     new Error('InvalidArgumentException: User already exists.'), true);
             }

@@ -65,15 +65,23 @@ exports.Database = class Database {
 		return trade;
 	}
 	
+	getUser(id) {
+		let user;
+		for (user of this.users) {
+			if (user.user.id === id) break;
+		}
+		return user;
+	}
+	
 	/**
 	 * Method returns state object from user ID or nation name.
 	 * @param {string, number} name
 	 */
 	getState(name) {
 		let nation;
-		if (isNaN(parseInt(name))) {
+		if (!isNaN(parseInt(name))) {
 			for (nation of this.users) {
-				if (nation.id === name) break;
+				if (nation.user.id === name) break;
 			}
 		} else {
 			for (nation of this.users) {
@@ -82,7 +90,6 @@ exports.Database = class Database {
 		}
 		return nation.state;
 	}
-	
 	
 	/**
 	* @param {exports.Trade} trade
@@ -111,34 +118,43 @@ exports.Database = class Database {
 		return trade[0];
 	}
 	
-	
 	addUser(discordUser) {
 		this.users.push(discordUser);
 	}
 	
-	
+	/**
+	 * Method removes user and all his loans and trades.
+	 * @param {module:"discord.js".User} discordUser Discord user
+	 * @return {boolean} returns true if user was found and removed. Else false.
+	 */
 	removeUser(discordUser) {
+		let isFound = false;
 		//Deletion
 		for (let i = 0; i < this.users.length; i++) {
 			if (this.users[i].isEqual(discordUser)) {
 				this.users.splice(i, 1);
+				isFound = true;
 				break;
 			}
 		}
-		//Trades
+		//Removing user trades
 		for (let i = 0; i < this.trades.length; i++) {
-			if (this.trades[i].author.isEqual(discordUser) || this.trades[i].recipient.isEqual(discordUser)) {
+			if (this.trades[i].author === discordUser.id || this.trades[i].recipient === discordUser.id) {
 				this.trades.splice(i, 1);
 			}
 		}
-		//Loans
+		//Removing user loans
 		for (let i = 0; i < this.loans.length; i++) {
-			if (this.loans[i].creditor.isEqual(discordUser) || this.loans[i].debtor.isEqual(discordUser)) {
+			if (this.loans[i].creditor === discordUser.id || this.loans[i].debtor === discordUser.id) {
 				this.loans.splice(i, 1);
 			}
 		}
+		return isFound;
 	}
 	
+	/**
+	 * Method exports database into database.json.
+	 */
 	export() {
 		exportFile('database.json', this);
 	}

@@ -7,7 +7,7 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message, args, db) {
-        if(!perm(message, 2)) return;
+        if(!perm(message, 2)) return message.delete().catch(error => log(error, true));
     
         for (const user of db.users) {
             if (user.state) {

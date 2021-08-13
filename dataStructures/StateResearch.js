@@ -19,6 +19,10 @@ exports.StateResearch = class StateResearch {
 		}
 	}
 	
+	/**
+	 * Method calculates new RP based on researchBudget and new CF based on previousBudget. Finally it saves new
+	 * budget as previous Budget.
+	 */
 	turn() {
 		this.RP += (this._budget / 20000) * this.CF;
 		//Increases CF only if budget is not 0 and is under 2.

@@ -38,6 +38,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         let recipient;
         let asset;
     
+        //Getting asset data.
         for (const [name, assetData] of Object.entries(assets.assets)) {
             if (name === assetName) {
                 asset = new Asset(name, assetData.desc, assetData.theatre, assetData.cost);
@@ -53,6 +54,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
             }
         }
     
+        //Getting users from the database.
         for (const dbUser of db.users) {
             if (dbUser.isEqual(discordAuthor)) {
                 author = dbUser;
@@ -113,7 +115,7 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             
             messageHandler(message, `Trade with ID:${id} rejected!`, true);
             report(message, `Trade ID:${id} of user ${discordUser} rejected!`, 'reject');
-            
+            //DMing author.
             let authorUser = await client.users.fetch(trade.author)
             .catch(error => log(error, true));
             authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} rejected by the ${message.author} | ${db.getState(trade.recipient).name}!`)
@@ -130,7 +132,9 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
      */
     accept: async function accept(message, args, db) {
         let id = parseInt(args[0]);
-        let discordUser = message.author;
+        //let discordUser = message.author;
+    
+        let discordUser = ping(message);
         let trade = db.getTrade(id);
 
         //Validating input arguments.
@@ -141,18 +145,15 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 
         trade.finishTrade(db);
         db.remove(trade);
+        db.export();
 
         report(message, `<@${trade.author.user.id}>'s transaction with ID:${id} of ${trade.amount} ${trade.asset.name}s for ${formatCurrency(trade.money)} was accepted by <@${discordUser}>!`, 'accept');
         messageHandler(message, 'Transaction was accepted and delivered!', true);
-    
+        //DMing author.
         let authorUser = await client.users.fetch(trade.author.user.id)
         .catch(error => log(error, true));
-    
         authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} accepted by the ${message.author} | ${trade.author.state.name}!`)
         .catch(error => log(error, true));
-        
-        delete cfg.users[discordUser].trades[id];
-        exportFile('config.json', cfg);
     },
     
     /**
@@ -177,10 +178,16 @@ function showTrades(message, args, db) {
     let discordUser = ping(message);
     
     db.trades.forEach(trade => {
-        if (trade.author.isEqual(discordUser)) {
-            newMessage += `Outgoing trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}${trade.amount.padEnd(3)} ${trade.asset.name.padEnd(10)} for ${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} for ${trade.recipient.state.name} | ${trade.recipient.user.username}\n`;
-        } else if (trade.recipient.isEqual(discordUser)) {
-            newMessage += `Incomming trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}${trade.amount.padEnd(3)} ${trade.asset.name.padEnd(10)} for ${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} from ${trade.author.state.name} | ${trade.author.user.username}\n`;
+        if (trade.author === discordUser.id) {
+            newMessage += `Outgoing trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}`
+                +`${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for `
+                +`${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} for `
+                +`${db.getState(trade.recipient).name} | ${db.getUser(trade.recipient).user.username} \n`;
+        } else if (trade  === discordUser.id) {
+            newMessage += `Incomming trade ID[${trade.id}] | ${trade.isSelling ? '+' : '-'}`
+                +`${trade.amount.toString().padEnd(3)} ${trade.asset.name.padEnd(10)} for `
+                +`${trade.isSelling ? '-' : '+'}${formatCurrency(trade.money)} from ${db.getState(trade.author).name} `
+                +`| ${db.getUser(trade.author).user.username} \n`;
         }
     });
 

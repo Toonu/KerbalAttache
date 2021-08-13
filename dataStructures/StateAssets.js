@@ -21,11 +21,11 @@ exports.StateAssets = class StateAssets {
 	
 	
 	/**
-	* Method adds or removes amount of assets.
-	* @param {number} theatre
-	* @param {string} assetName
-	* @param {number} amount
-	*/
+	 * Method adds or removes amount of assets.
+	 * @param {number} theatre
+	 * @param {string} assetName
+	 * @param {number} amount
+	 */
 	modifyAssets(theatre, assetName, amount) {
 		this.assets[theatre][assetName] += amount;
 	}

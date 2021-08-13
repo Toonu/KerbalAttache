@@ -259,9 +259,9 @@ async function research(message, node, nation) {
     
     let nodeData = tt[node];
     if (!nodeData)
-        return messageHandler(message, 'InvalidArgumentException: TechNode does not exist!', true);
+        return messageHandler(message, 'InvalidArgumentException: Node does not exist!', true);
     else if (node.substring(0, 2) > cfg.era || node.startsWith('early'))
-        return messageHandler(message, 'TechNode is too futuristic!', true);
+        return messageHandler(message, 'Node is too futuristic!', true);
     
     let data = await getCellArray('A1', cfg.techEndCol, cfg.tech, true)
     .catch(error => {
@@ -313,7 +313,7 @@ async function research(message, node, nation) {
             return messageHandler(message, 'Not enough RP points!', true);
         }
     } else {
-        return messageHandler(message, 'TechNode is already in the wanted state!', true);
+        return messageHandler(message, 'Node is already in the wanted state!', true);
     }
     
     await setCellArray(toColumn(mainColumns['RP']) + '1', [mainData[mainColumns['RP']]], cfg.main, true).catch(error => {

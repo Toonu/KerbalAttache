@@ -1,6 +1,6 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const cfg = require('./../config.json'), {perm, report, messageHandler} = require('../utils');
+const cfg = require('./../config.json'), {perm, report, messageHandler, log} = require('../utils');
 
 module.exports = {
     name: 'useredit',
@@ -43,21 +43,19 @@ module.exports = {
 
         //Collects all data arguments and merges them together.
         let data = args[1];
-        if (data === 'del') {
-            data = 'undefined';
-        } else {
+        if (data !== 'del') {
             for (let i = 2; i < args.length; i++) {
                 if (!args[i].startsWith('<@')) {
                     data += ` ${args[i]}`;
                 }
             }
         }
-        
+    
         if (args[0] !== '-notes') {
             if (!dbUser.state) {
                 return messageHandler(message, new Error('User does not have assigned any state.'), true);
-            } else if (!perm(message, 2, true)) {
-                return messageHandler(message, ' ', true);
+            } else if (!perm(message, 2)) {
+                return message.delete().catch(error => log(error, true));
             }
         }
         try {
@@ -72,13 +70,15 @@ module.exports = {
                     dbUser.state.demonym = data;
                     break;
                 case '-c':
-                    if (data === 'undefined') {
+                    //deleting
+                    if (data === 'del') {
                         data = 'fffffe';
                     }
                     dbUser.state.colour = data;
                     break;
                 case '-m':
-                    if (data === 'undefined') {
+                    //deleting
+                    if (data === 'del') {
                         data = 'https://x.com/';
                     }
                     dbUser.state.map = data;

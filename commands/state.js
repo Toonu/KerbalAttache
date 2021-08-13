@@ -25,7 +25,7 @@ module.exports = {
             return messageHandler(message, 'InvalidArgumentType: User state is not defined', true);
         }
         
-        let embeds = [databaseUser.state.toEmbed()].concat(databaseUser.state.assets.toEmbeds(databaseUser.state));
+        let embeds = [databaseUser.state.toEmbed(db)].concat(databaseUser.state.assets.toEmbeds(databaseUser.state));
 
         //Embed options
         function emojiFilter(reaction, user) {

@@ -33,18 +33,20 @@ exports.StateAssets = class StateAssets {
 		if (asset instanceof System) {
 			this.systems[asset.name] += amount;
 			if (this.systems[asset.name] < 0) {
+				this.systems[asset.name] -= amount;
 				throw new Error(`InvalidOperationException: You cannot go into ${this.systems[asset.name]} of systems`);
 			}
 		} else {
 			this.assets[asset.theatre][asset.name] += amount;
 			if (this.assets[asset.theatre][asset.name] < 0) {
+				this.assets[asset.theatre][asset.name] -= amount;
 				throw new Error(`InvalidOperationException: You cannot go into ${this.assets[asset.theatre][asset.name]} of systems`);
 			}
 		}
 		if (!ignorePrice) {
 			state.account -= asset.cost * amount * (amount < 0 ? 0.7 : 1);
 			if (state.account < 0) {
-				throw new Error('InvalidOperationException: You cannot go bancrupt with your money!');
+				throw new Error('Warning: You went bancrupt with your money!');
 			}
 		}
 	}

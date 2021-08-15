@@ -49,7 +49,7 @@ exports.State = class State {
 		}
 		expenses -= this.research.budget;
 		if (this.account < 0) {
-			this.incomePenaltyCoefficient = 1 + this.account / 1000000
+			this.incomePenaltyCoefficient = 1 + (this.account / 1000000)
 		} else {
 			this.incomePenaltyCoefficient = 1;
 		}
@@ -96,7 +96,7 @@ exports.State = class State {
 			' seconds!', 'https://imgur.com/KLLkY2J.png');
 		
 		if (this.incomePenaltyCoefficient < 1) {
-			embed.addField('Penalty:', 1 - this.incomePenaltyCoefficient, true);
+			embed.addField('Penalty:', this.incomePenaltyCoefficient, true);
 		}
 		return embed;
 	};

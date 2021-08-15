@@ -14,12 +14,12 @@ Possible operations:
 
 \`\`\`ini\n
 OPERATION   OPTION      DATA
-b | budget      [SET | ADD] [AMOUNT]        - Sets or adds money to user's research budget (use neg. number to decrease).
-r | research                [NODE]          - Researches specified tech tree node.
+b | budget  [SET | ADD] [AMOUNT]        - Sets or adds money to user's research budget (use neg. number to decrease).
+r | research            [NODE]          - Researches specified tech tree node.
 list                                    - Lists all available categories.
 list                    [CATEGORY]      - Lists all technological nodes in category.
 list                    [NAME]          - Lists all information about a technological node.
-u | unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
+u | unlocked                            - Shows information about everything you have unlocked. For specific node, use list.
 \`\`\`
 `,
     cooldown: 2,

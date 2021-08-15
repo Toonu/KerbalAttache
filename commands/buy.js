@@ -71,15 +71,21 @@ Assets do not need to be written in capital letters, the command is case insensi
         embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
             .then(result => {
                 if (result === resultOptions.confirm) {
-                    messageHandler(message, `${amount < 0 ? 'Selling' : 'Buying'} assets. ✅ Do not forget to ${amount < 0 ? 'remove them from' : 'place them to'} your map!` , true, 20000);
-                    report(message, `${state.name} has ${amount < 0 ? 'sold' : 'bought'} ${Math.abs(amount)} ${asset.name} for ${formatCurrency(Math.abs(asset.cost * amount * (amount < 0 ? 0.7 : 1)))}`, this.name);
-    
+                    let result = false;
                     try {
                         //Throws error on negative assets or money.
                         state.assets.modify(asset, amount, state);
-                        db.export();
                     } catch (error) {
+                        if (error.message.startsWith('Warn')) {
+                            result = true;
+                        }
                         messageHandler(message, error, true, 20000);
+                    }
+                    
+                    if (result) {
+                        db.export();
+                        messageHandler(message, `${amount < 0 ? 'Selling' : 'Buying'} assets. ✅ Do not forget to ${amount < 0 ? 'remove them from' : 'place them to'} your map!` , true, 20000);
+                        report(message, `${state.name} has ${amount < 0 ? 'sold' : 'bought'} ${Math.abs(amount)} ${asset.name} for ${formatCurrency(Math.abs(asset.cost * amount * (amount < 0 ? 0.7 : 1)))}`, this.name);
                     }
                 } else {
                     messageHandler(message, 'Operation was canceled or timed out. ❌', true);

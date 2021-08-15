@@ -1,5 +1,5 @@
 {
-    "turn": 4,
+    "turn": -1,
     "loans": [],
     "trades": [],
     "users": [
@@ -22,35 +22,35 @@
             },
             "state": {
                 "name": "Iconia",
-                "demonym": "Ico",
-                "account": 187400,
-                "balance": -22850,
+                "demonym": "Iconian",
+                "account": 1376800,
+                "balance": 0,
                 "assets": {
                     "systems": {
-                        "SRAAM": 2,
+                        "SRAAM": 0,
                         "MRAAM": 0,
-                        "LRAAM": 1,
-                        "SRSAM": 1,
-                        "MRSAM": 10,
-                        "LRSAM": 1,
-                        "ASM": 1,
-                        "ATGM": 1,
-                        "ASHM": 1,
-                        "ARM": 1,
-                        "CRUISE": 1,
-                        "BALLISTIC": 1,
-                        "BMB": 1,
-                        "GBMB": 1,
-                        "GPOD": 1,
-                        "RPOD": 1,
-                        "REC": 1,
-                        "FUEL": 1,
-                        "EW": 1
+                        "LRAAM": 0,
+                        "SRSAM": 0,
+                        "MRSAM": 0,
+                        "LRSAM": 0,
+                        "ASM": 0,
+                        "ATGM": 0,
+                        "ASHM": 0,
+                        "ARM": 0,
+                        "CRUISE": 0,
+                        "BALLISTIC": 0,
+                        "BMB": 0,
+                        "GBMB": 0,
+                        "GPOD": 0,
+                        "RPOD": 0,
+                        "REC": 0,
+                        "FUEL": 0,
+                        "EW": 0
                     },
                     "assets": {
                         "0": {
                             "LM": 0,
-                            "MM": 1,
+                            "MM": 0,
                             "HM": 0,
                             "LA": 0,
                             "VL": 0,
@@ -64,15 +64,15 @@
                             "MBT": 0,
                             "AFV": 0,
                             "IFV": 0,
-                            "APC": 1,
+                            "APC": 10,
                             "MLV": 0,
                             "SPAAG": 0,
-                            "FOB": 0,
+                            "FOB": 2,
                             "RADAR": 0,
                             "SF": 0
                         },
                         "2": {
-                            "K": 0,
+                            "K": 5,
                             "FF": 0,
                             "DD": 0,
                             "CC": 0,
@@ -80,7 +80,7 @@
                             "BB": 0,
                             "CL": 0,
                             "CV": 0,
-                            "PORT": 0
+                            "PORT": 1
                         },
                         "3": {
                             "GPS": 0,
@@ -92,56 +92,53 @@
                 },
                 "incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 50,
-                    "_CF": 1.2,
-                    "_budget": 1037660,
-                    "previousBudget": 1037660,
+                    "RP": 0,
+                    "_CF": 1,
+                    "_budget": 400000,
+                    "previousBudget": 0,
                     "unlockedNodesList": [
-                        "50jet",
-                        "50turboprops",
-                        "50jetlate",
                         "40search",
-                        "50search"
+                        "50armour"
                     ],
                     "technologicalLevels": {
-                        "0": 0.3,
-                        "1": 0.2,
-                        "2": 0.2,
+                        "0": 0.1,
+                        "1": 0.1,
+                        "2": 0.1,
                         "3": 0.1,
                         "4": 0.1
                     },
-                    "searchRange": 150,
-                    "AEWRange": 125,
+                    "searchRange": 100,
+                    "AEWRange": 0,
                     "ballisticRange": 0,
                     "armour": 200
                 },
                 "_tiles": 5,
-                "_colour": "fffffe",
-                "_map": "https://x.com/"
+                "_colour": "0065bd",
+                "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
-            "notes": " "
+            "notes": "His Imperial Majesty The Emperor of Iconia and its Sovereign territories"
         },
         {
             "user": {
-                "id": "752676284521250837",
-                "system": false,
+                "id": "693908421396922480",
+                "system": null,
                 "locale": null,
-                "flags": null,
-                "username": "Dion Noe",
+                "flags": 0,
+                "username": "The Bunny",
                 "bot": false,
-                "discriminator": "0881",
-                "avatar": "29f0be70fa982c63057997d7ac6707df",
+                "discriminator": "1567",
+                "avatar": "bbe67dbf20e779078ca696c5d9761541",
                 "lastMessageChannelID": null,
-                "createdTimestamp": 1599522410279,
-                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/1.png",
-                "tag": "Dion Noe#0881",
-                "avatarURL": "https://cdn.discordapp.com/avatars/752676284521250837/29f0be70fa982c63057997d7ac6707df.webp",
-                "displayAvatarURL": "https://cdn.discordapp.com/avatars/752676284521250837/29f0be70fa982c63057997d7ac6707df.webp"
+                "createdTimestamp": 1585511059856,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/2.png",
+                "tag": "The Bunny#1567",
+                "avatarURL": "https://cdn.discordapp.com/avatars/693908421396922480/bbe67dbf20e779078ca696c5d9761541.webp",
+                "displayAvatarURL": "https://cdn.discordapp.com/avatars/693908421396922480/bbe67dbf20e779078ca696c5d9761541.webp"
             },
             "state": {
-                "name": "Sharkion",
-                "demonym": "Sharks",
-                "account": 150000,
+                "name": "EE",
+                "demonym": "Ebronian",
+                "account": 2000000,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -210,11 +207,14 @@
                 },
                 "incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 160.83,
-                    "_CF": 1.2,
-                    "_budget": 1037660,
-                    "previousBudget": 1037660,
-                    "unlockedNodesList": [],
+                    "RP": 0,
+                    "_CF": 1,
+                    "_budget": 0,
+                    "previousBudget": 0,
+                    "unlockedNodesList": [
+                        "40search",
+                        "50armour"
+                    ],
                     "technologicalLevels": {
                         "0": 0.1,
                         "1": 0.1,
@@ -228,8 +228,123 @@
                     "armour": 200
                 },
                 "_tiles": 5,
-                "_colour": "fffffe",
-                "_map": "https://x.com/"
+                "_colour": "700300",
+                "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
+            },
+            "notes": " "
+        },
+        {
+            "user": {
+                "id": "312900789947596800",
+                "system": null,
+                "locale": null,
+                "flags": 128,
+                "username": "Kerbal Nerd 123",
+                "bot": false,
+                "discriminator": "3122",
+                "avatar": "44dff35795c00c330993d6010aba16be",
+                "lastMessageChannelID": null,
+                "createdTimestamp": 1494671761739,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/2.png",
+                "tag": "Kerbal Nerd 123#3122",
+                "avatarURL": "https://cdn.discordapp.com/avatars/312900789947596800/44dff35795c00c330993d6010aba16be.webp",
+                "displayAvatarURL": "https://cdn.discordapp.com/avatars/312900789947596800/44dff35795c00c330993d6010aba16be.webp"
+            },
+            "state": {
+                "name": "Kroviska",
+                "demonym": "Kroviskan",
+                "account": 1800000,
+                "balance": 0,
+                "assets": {
+                    "systems": {
+                        "SRAAM": 0,
+                        "MRAAM": 0,
+                        "LRAAM": 0,
+                        "SRSAM": 0,
+                        "MRSAM": 0,
+                        "LRSAM": 0,
+                        "ASM": 0,
+                        "ATGM": 0,
+                        "ASHM": 0,
+                        "ARM": 0,
+                        "CRUISE": 0,
+                        "BALLISTIC": 0,
+                        "BMB": 0,
+                        "GBMB": 0,
+                        "GPOD": 0,
+                        "RPOD": 0,
+                        "REC": 0,
+                        "FUEL": 0,
+                        "EW": 0
+                    },
+                    "assets": {
+                        "0": {
+                            "LM": 0,
+                            "MM": 0,
+                            "HM": 0,
+                            "LA": 0,
+                            "VL": 0,
+                            "VTOL": 0,
+                            "AIRPORT": 0
+                        },
+                        "1": {
+                            "LT": 0,
+                            "MT": 0,
+                            "HT": 0,
+                            "MBT": 0,
+                            "AFV": 0,
+                            "IFV": 0,
+                            "APC": 0,
+                            "MLV": 0,
+                            "SPAAG": 0,
+                            "FOB": 0,
+                            "RADAR": 0,
+                            "SF": 0
+                        },
+                        "2": {
+                            "K": 0,
+                            "FF": 0,
+                            "DD": 0,
+                            "CC": 0,
+                            "BC": 0,
+                            "BB": 0,
+                            "CL": 0,
+                            "CV": 0,
+                            "PORT": 0
+                        },
+                        "3": {
+                            "GPS": 0,
+                            "SAT": 0,
+                            "OV": 0
+                        },
+                        "4": {}
+                    }
+                },
+                "incomePenaltyCoefficient": 1,
+                "research": {
+                    "RP": 0,
+                    "_CF": 1,
+                    "_budget": 0,
+                    "previousBudget": 0,
+                    "unlockedNodesList": [
+                        "40search",
+                        "50armour"
+                    ],
+                    "technologicalLevels": {
+                        "0": 0.1,
+                        "1": 0.1,
+                        "2": 0.1,
+                        "3": 0.1,
+                        "4": 0.1
+                    },
+                    "searchRange": 100,
+                    "AEWRange": 0,
+                    "ballisticRange": 0,
+                    "armour": 200
+                },
+                "_tiles": 5,
+                "_colour": "7f0020",
+                "_map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing"
             },
             "notes": " "
         }

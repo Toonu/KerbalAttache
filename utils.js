@@ -1,4 +1,5 @@
 const fs = require('fs'), cfg = require('./config.json');
+const {resultOptions} = require('./utils');
 
 module.exports = {
     /**
@@ -218,6 +219,13 @@ module.exports = {
         }
 
         return result;
+    },
+    processYesNo: function processYesNo(reaction) {
+        if (reaction.emoji.name === '✅') {
+            return resultOptions.confirm;
+        } else if (reaction.emoji.name === '❌') {
+            return resultOptions.delete;
+        }
     }
 };
 

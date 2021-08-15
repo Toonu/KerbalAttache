@@ -32,7 +32,9 @@
       <change beforePath="$PROJECT_DIR$/commands/battle.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/battle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/help.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/help.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/log.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/log.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/ping.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/ping.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/prune.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/prune.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/state.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/state.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/sub.js" afterDir="false" />
@@ -44,13 +46,14 @@
       <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/Asset.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Asset.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/State.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateAssets.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateAssets.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateResearch.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/TechNode.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/TechNode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,6 +214,8 @@
       <workItem from="1628848131351" duration="16690000" />
       <workItem from="1628923933006" duration="17931000" />
       <workItem from="1629021634462" duration="6394000" />
+      <workItem from="1629033996342" duration="4000000" />
+      <workItem from="1629038205591" duration="10491000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -454,11 +459,28 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/battle.js</url>
           <line>101</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/commands/trade.js</url>
+          <line>97</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dataStructures/Trade.js</url>
+          <line>50</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="112" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="NodeJSConfigurationType">
+        <watch expression="(this._budget / 20000) * this.CF" language="JavaScript" />
+        <watch expression="this.CF" language="JavaScript" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

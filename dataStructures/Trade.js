@@ -48,10 +48,10 @@ exports.Trade = class Trade {
 		let author = db.getState(this.author);
 		let recipient = db.getState(this.recipient);
 		
-		author.assets.modify(this.asset, this.isSelling ? -this.amount : this.amount, author, true);
-		recipient.assets.modify(this.asset, this.isSelling ? this.amount : -this.amount, recipient, true);
-		author.account += this.isSelling ? this.money : -this.money;
-		recipient.account -= this.money ? -this.money : this.money;
+		author.assets.modify(this.asset, this.isSelling ? 0-this.amount : this.amount, author, true);
+		recipient.assets.modify(this.asset, this.isSelling ? this.amount : 0-this.amount, recipient, true);
+		author.account += this.isSelling ? this.money : 0-this.money;
+		recipient.account -= this.money ? 0-this.money : this.money;
 		
 		if (this.isSelling && recipient.account < 0) {
 			throw new Error('InvalidOperationException: Recipient has not enough money!');

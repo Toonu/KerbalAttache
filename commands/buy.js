@@ -27,7 +27,13 @@ Assets do not need to be written in capital letters, the command is case insensi
         }
         
         //Getting asset or system.
-        let asset = findAsset(args[1]);
+        let asset;
+        try {
+            asset = findAsset(args[1]);
+        } catch (error) {
+            return messageHandler(message, error, true);
+        }
+        
         
         //Validating asset or system and user assets status.
         if (!asset) {
@@ -95,6 +101,7 @@ function printAssets(message) {
     });
     
     for (const type of Object.values(assets)) {
+        // noinspection JSCheckFunctionSignatures
         for (const [name, asset] of Object.entries(type)) {
             newMessage += `[${name.padStart(l)}] | ${asset.desc.padEnd(40)} : [${formatCurrency(asset.cost)}]\n`;
         }

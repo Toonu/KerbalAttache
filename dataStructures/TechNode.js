@@ -21,12 +21,18 @@ exports.TechNode = class TechNode {
 	}
 	
 	toEmbed() {
+		let unlocks = [];
+		
+		for (const unlock of this.unlocks) {
+			unlocks.push(`\n${unlock}`);
+		}
+		
 		let embed = new discord.MessageEmbed()
 		.setColor('#065535')
 		.setTitle(`Node: ${this.name}`)
 		.setURL('https://discord.js.org/') //URL clickable from the title
 		.setThumbnail('https://imgur.com/IvUHO31.png')
-		.addField('Unlocks:', `\`\`\`\n${this.unlocks}\`\`\``)
+		.addField('Unlocks:', `\`\`\`\n${unlocks}\`\`\``)
 		.addField('Cost:', `${this.cost}RP`, true)
 		.addField('Buy?', 'Press ✅', true)
 		.setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');

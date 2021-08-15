@@ -10,7 +10,7 @@ module.exports = {
         const discordUser = message.mentions.users.first();
         
         //Validating input arguments.
-        if (!perm(message, 2)) {
+        if (!perm(message, 1)) {
             return message.delete().catch(error => log(error, true));
         } else if (!discordUser) {
             return messageHandler(message, new Error('InvalidArgumentException: No user specified, canceling operation.'), true)

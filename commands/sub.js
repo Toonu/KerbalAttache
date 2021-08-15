@@ -1,12 +1,12 @@
-const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, report} = require("../utils"),
+const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, report, processYesNo} = require("../utils"),
     {getCellArray, deleteRow} = require("../sheet"), cfg = require('../config.json');
 const discord = require('discord.js');
 module.exports = {
     name: 'sub',
-    description: 'Command for getting information about user subscriptions. Persistent option set to true makes the list confirm.',
+    description: 'Command for getting information about user subscriptions.',
     args: 0,
     usage: `${cfg.prefix}sub [PERSIST] [USER]
-    Persist set to 'true' will make the message persistant and it will never delete.
+    Persist set to 'true' will make the message persistant and it will never dissapaear.
     
     Use ${cfg.prefix}sub del [CRAFT]
     to delete submission of craft.`,
@@ -93,19 +93,11 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
             
-            function processReactions(reaction) {
-                if (reaction.emoji.name === '✅') {
-                    return resultOptions.confirm;
-                } else if (reaction.emoji.name === '❌') {
-                    return resultOptions.delete;
-                }
-            }
-            
             function filterYesNo(reaction, user) {
                 return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
             }
             
-            return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
+            return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processYesNo)
             .then(result => {
                 if (result === resultOptions.confirm) {
                     report(message, `${state.name} | ${message.author} has deleted submission ${craft}! Please delete the craft file from the storage manually.`, 'subDeletion');

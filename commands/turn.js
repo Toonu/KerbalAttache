@@ -1,7 +1,7 @@
 const cfg = require('./../config.json'), {log, report, perm} = require("../utils");
 module.exports = {
     name: 'turn',
-    description: 'Command for finishing turn and updating the sheet data!',
+    description: 'Command for finishing turn and updating the states data!',
     args: 0,
     usage: `${cfg.prefix}turn`,
     cooldown: 5,
@@ -16,6 +16,7 @@ module.exports = {
         
         //Exporting and reporting. Point of no return.
         db.export();
+        db.exportSheet();
         report(message, `Turn ${db.turn} has been finished by ${message.author}.`, this.name);
         let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable

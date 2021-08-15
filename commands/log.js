@@ -1,8 +1,8 @@
-const {prefix} = require('../config.json'), {messageHandler, perm, log} = require("../utils"), fs = require("fs");
+const {prefix} = require('../config.json'), {messageHandler, perm} = require("../utils"), fs = require("fs");
 
 module.exports = {
 	name: 'log',
-	description: 'Log',
+	description: 'Command for getting and manipulating log information.',
 	usage: `${prefix}log [OPERATION]
 	
 	Operations:

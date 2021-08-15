@@ -6,7 +6,7 @@ let client;
 
 module.exports = {
     name: 'trade',
-    description: 'Command for making trade transactions between nations. Note that you can have only one pending transaction at time!',
+    description: 'Command for making trade transactions between nations.',
     args: 0,
     usage: `${cfg.prefix}trade [sell | buy] [AMOUNT] [ASSET] [PRICE] [USER]
 
@@ -34,7 +34,13 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         let isSelling = args[0].toLowerCase();
         let author;
         let recipient;
-        let asset = findAsset(args[2]);
+        let asset;
+        try {
+            asset = findAsset(args[2]);
+        } catch (error) {
+            return messageHandler(message, error, true)
+        }
+        
     
         //Getting users from the database.
         author = db.getUser(message.author);
@@ -96,7 +102,9 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
         //Validating input arguments and trade ID.
         if (Number.isNaN(id)) {
             messageHandler(message, new Error('InvalidTypeException: Trade ID is not a number!'), true);
-        } else if (trade && trade.author === discordUser.id || trade.recipient === discordUser.id) {
+        } else if (!trade) {
+            messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
+        } else if (trade.author === discordUser.id || trade.recipient === discordUser.id) {
             //Allows canceling or rejecting trade for both author and recipient of the specified trade.
             db.removeTrade(id);
             db.export();
@@ -109,8 +117,6 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
             .catch(error => log(error, true));
             authorUser.send(`Your trade of ${trade.amount} ${trade.asset.name} rejected by the ${message.author} for ${db.getState(trade.recipient).name} state!`)
             .catch(error => log(error, true));
-        } else {
-            messageHandler(message, new Error('InvalidArgumentException: No trade with such ID exist!'), true);
         }
     },
 
@@ -133,7 +139,12 @@ To accept the transaction, type \`${cfg.prefix}accept\` in your server **state**
 
         //Finishing trade and exporting.
         try {
-            trade.finishTrade(db);
+            if (trade.recipient === message.author.id) {
+                trade.finishTrade(db);
+            } else {
+                return messageHandler(message,
+                    new Error('InvalidOperationException: You cannot accept trade of someone else.'), true);
+            }
         } catch (error) {
             return messageHandler(message, error, true);
         }

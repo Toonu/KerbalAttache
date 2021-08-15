@@ -1,7 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'),
-    assets = require('../dataImports/assets.json'), {setCellArray, toColumn, findAsset} = require('../sheet');
+const {perm, messageHandler, log, report} = require("../utils"), cfg = require('../config.json'),
+    assets = require('../dataImports/assets.json'), {findAsset} = require('../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',

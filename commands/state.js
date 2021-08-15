@@ -3,7 +3,7 @@ const {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../ut
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: 'state',
-    description: 'Command for getting your current asset list! Do NOT use in public channels.',
+    description: 'Command for getting your current state information. Do NOT use in public channels.',
     args: 0,
     usage: `${cfg.prefix}state [USER]`,
     cooldown: 5,

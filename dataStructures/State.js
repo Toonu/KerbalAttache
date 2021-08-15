@@ -27,7 +27,9 @@ exports.State = class State {
 	turn(db) {
 		this.research.turn();
 		this.updateBalance(db);
+		
 		this.account += this.balance;
+		this.account = Math.round(this.account);
 	}
 	
 	/**
@@ -46,6 +48,11 @@ exports.State = class State {
 			}
 		}
 		expenses -= this.research.budget;
+		if (this.account < 0) {
+			this.incomePenaltyCoefficient = 1 + this.account / 1000000
+		} else {
+			this.incomePenaltyCoefficient = 1;
+		}
 		
 		//Tiles income
 		// noinspection OverlyComplexArithmeticExpressionJS
@@ -62,7 +69,7 @@ exports.State = class State {
 			}
 		}
 		
-		this.balance = income + expenses;
+		this.balance = Math.round(income + expenses);
 	}
 	
 	/**
@@ -84,7 +91,7 @@ exports.State = class State {
 		.addField('Research Points:', `${new Intl.NumberFormat(cfg.moneyLocale,
 			{minimumSignificantDigits: 3}).format(this.research.RP)} RP`, true)
 		.addField('CF', this.research.CF, true)
-		.addField('Tiles:', this.tiles)
+		.addField('Tiles:', this.tiles, true)
 		.setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32' +
 			' seconds!', 'https://imgur.com/KLLkY2J.png');
 		
@@ -143,7 +150,7 @@ exports.State = class State {
 		if (value.length === 6) {
 			this._colour = value;
 		} else {
-			throw new Error('ArgumentOutOfRangeException: Not a colour hex code!');
+			throw new Error('ArgumentOutOfRangeException: Not a colour hex code! Write hex code without a #.');
 		}
 	}
 	

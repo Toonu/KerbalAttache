@@ -9,7 +9,7 @@ exports.StateResearch = class StateResearch {
 		this._budget = 0;
 		this.previousBudget = 0;
 		
-		this.unlockedNodesList = {};
+		this.unlockedNodesList = ['40search', '50armour'];
 		this.technologicalLevels = {};
 		this.searchRange = 100;
 		this.AEWRange = 0;
@@ -26,10 +26,10 @@ exports.StateResearch = class StateResearch {
 	 * budget as previous Budget.
 	 */
 	turn() {
-		this.RP += (this._budget / 20000) * this.CF;
+		this.RP = parseFloat((this.RP + ((this._budget / 20000) * this.CF)).toFixed(2));
 		//Increases CF only if budget is not 0 and is under 2.
 		if (this._budget === this.previousBudget && this._budget && this.CF < 2) {
-			this.CF += 0.1;
+			this.CF = parseFloat((this.CF + 0.1).toFixed(1));
 		} else if (this._budget !== this.previousBudget) {
 			this.CF = 1;
 		}
@@ -53,7 +53,7 @@ exports.StateResearch = class StateResearch {
 	}
 	
 	set CF(value) {
-		if (isNaN(parseInt(value))) {
+		if (!isNaN(parseInt(value))) {
 			this._CF = value;
 		}
 	}
@@ -68,12 +68,12 @@ exports.StateResearch = class StateResearch {
 			throw new Error('Node is too futuristic!');
 		} else if (this.RP - node.cost < 0) {
 			throw new Error('ArgumentOutOfRangeException: Not enough Research Points to unlock the node.');
-		} else if (this.unlockedNodesList[node.name] !== undefined) {
+		} else if (this.unlockedNodesList.includes(node.name)) {
 			throw new Error('Node is already unlocked!');
 		}
 		
 		for (const prerequisite of node.prereq) {
-			if (!this.unlockedNodesList[prerequisite]) {
+			if (!this.unlockedNodesList.includes(prerequisite)) {
 				throw new Error('Prerequisites for the node are not met!');
 			}
 		}
@@ -104,7 +104,7 @@ exports.StateResearch = class StateResearch {
 			}
 		}
 		
-		this.unlockedNodesList[node.name] = node.name;
+		this.unlockedNodesList.push(node.name);
 	}
 	
 	/**
@@ -122,7 +122,7 @@ exports.StateResearch = class StateResearch {
 			[`\n\n[Unlocked Nodes and their technologies]\n`]
 		];
 		
-		for (const name of Object.values(this.unlockedNodesList)) {
+		for (const name of this.unlockedNodesList) {
 			finalArray.push([`\n[${name}] Unlocks:`]);
 			tt.nodes[name].unlocks.forEach(unlock => finalArray.push(unlock));
 		}

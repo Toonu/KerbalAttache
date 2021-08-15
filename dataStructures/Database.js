@@ -1,4 +1,4 @@
-const {exportFile} = require('../utils');
+const {exportFile, log} = require('../utils');
 const {Loan} = require('./Loan');
 const {Asset} = require('./Asset');
 const {DatabaseUser} = require('./DatabaseUser');
@@ -7,12 +7,13 @@ const {State} = require('./State');
 const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
 const {System} = require('./System');
+const {setCellArray} = require('../sheet');
 Discord = require('discord.js');
 
 exports.Database = class Database {
 	constructor(client) {
 		const databaseImport = require('../database.json');
-		this.turn = -1;
+		this.turn = databaseImport.turn;
 		this.loans = [];
 		this.trades = [];
 		this.users = [];
@@ -120,6 +121,7 @@ exports.Database = class Database {
 	 */
 	getState(nameId) {
 		let result = this.getUser(nameId);
+		if (!result) return undefined;
 		return result.state ? result.state : undefined;
 	}
 	
@@ -172,16 +174,19 @@ exports.Database = class Database {
 				break;
 			}
 		}
+
 		//Removing user trades
 		for (let i = 0; i < this.trades.length; i++) {
 			if (this.trades[i].author === discordUser.id || this.trades[i].recipient === discordUser.id) {
 				this.trades.splice(i, 1);
+				i--;
 			}
 		}
 		//Removing user loans
 		for (let i = 0; i < this.loans.length; i++) {
 			if (this.loans[i].creditor === discordUser.id || this.loans[i].debtor === discordUser.id) {
 				this.loans.splice(i, 1);
+				i--;
 			}
 		}
 		return isFound;
@@ -209,5 +214,53 @@ exports.Database = class Database {
 	 */
 	export() {
 		exportFile('database.json', this);
+	}
+	
+	exportSheet() {
+		let headerRow = [];
+		let array = [];
+		let firstCycle = true;
+		for (const user of this.users) {
+			if (!user.state) {
+				continue;
+			}
+			
+			let userRow = [];
+			userRow.push(user.state.name, user.state.account, user.state.balance);
+			if (firstCycle)
+				headerRow.push('Nation', 'Account', 'Balance');
+			for (const theatre of Object.values(user.state.assets.assets)) {
+				// noinspection JSCheckFunctionSignatures
+				for (const [name, item] of Object.entries(theatre)) {
+					userRow.push(item);
+					if (firstCycle)
+						headerRow.push(name);
+				}
+			}
+			for (const [name, item] of Object.entries(user.state.assets.systems)) {
+				userRow.push(item);
+				if (firstCycle)
+					headerRow.push(name);
+			}
+			if (firstCycle)
+				headerRow.push('AerialCF', 'GroundCF', 'NavalCF', 'SpaceCF', 'IndustrialCF');
+			for (const value of Object.values(user.state.research.technologicalLevels)) {
+				userRow.push(value);
+			}
+			
+			if (firstCycle)
+				headerRow.push('Penalty', 'RP', 'Budget', 'OldBudget', 'Tiles');
+			
+			userRow.push(user.state.incomePenaltyCoefficient, user.state.research.RP, user.state.research.budget,
+				user.state.research.previousBudget, user.state.tiles);
+			
+			if (firstCycle)
+				array.push(headerRow);
+			array.push(userRow);
+			
+			firstCycle = false;
+		}
+		
+		setCellArray('A1', array, 'Test').catch(r => log(r));
 	}
 };

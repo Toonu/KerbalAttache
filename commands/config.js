@@ -1,7 +1,7 @@
 const cfg = require('../config.json'), {messageHandler, report, perm, exportFile} = require("../utils");
 module.exports = {
     name: 'config',
-    description: 'Command for configuring the bot settings.',
+    description: 'Command for configuring the settings.',
     args: 2,
     usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]\n
     OPTIONS followed by new value:

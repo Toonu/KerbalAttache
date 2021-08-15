@@ -1,14 +1,16 @@
 // noinspection ExceptionCaughtLocallyJS
 
 const cfg = require('./../config.json'), {perm, report, messageHandler, log} = require('../utils');
+const {State} = require('../dataStructures/State');
 
 module.exports = {
     name: 'useredit',
-    description: 'Command for editing user data. Your notes are always editable even without clearance. ' +
-        'Write del instead of data to remove the data.',
+    description: 'Command for editing user data.',
     args: 2,
     usage: `${cfg.prefix}useredit [OPTION] [DATA / DEL] [USER]\n
     You can use only one option at a time!
+    Write del instead of data to remove the data.
+    Your notes are always editable even without clearance.
     
     OPTIONS followed by new value:
     \`\`\`
@@ -17,7 +19,8 @@ module.exports = {
     -m [map] URL
     -d [demonym] string
     -cf [CF] int
-    -notes [notes] string\`\`\``,
+    -notes [notes] string
+    -state creates undefined state\`\`\``,
     cooldown: 5,
     guildOnly: true,
     execute: function useredit(message, args, db) {
@@ -46,9 +49,16 @@ module.exports = {
         //Validating user input since everything but notes need permissions.
         if (args[0] !== '-notes' ) {
             if (!dbUser.state) {
-                return messageHandler(message,
-                    new Error('NullReferenceException: User does not have assigned any state, canceling operation.'), true);
-            } else if (!perm(message, 2)) {
+                if (args[0] === '-state') {
+                    dbUser.state = new State(undefined, undefined);
+                    return messageHandler(message, 'State created, please edit the user state with name and other' +
+                        ' properities', true);
+                } else {
+                    return messageHandler(message,
+                        new Error(`NullReferenceException: User does not have assigned any state, please create`
+                            + 'a new state first. Canceling operation.'), true);
+                }
+            } else if (!perm(message, 1)) {
                 return message.delete().catch(error => log(error, true));
             }
         }
@@ -57,7 +67,6 @@ module.exports = {
         try {
             switch (args[0]) {
                 case '-notes':
-                case '-note':
                     if (dbUser.isEqual(message.author)) {
                         dbUser.notes = data;
                     } else {

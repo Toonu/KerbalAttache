@@ -12,11 +12,12 @@ module.exports = {
     -c [color] hex colour int
     -m [map] URL
     -d [demonym] string
-    -notes [notes] string\`\`\`\nSet no option to create state-less user. Notes can be used for state-less users.`,
+    -notes [notes] string\`\`\`\nSet no option to create state-less user. Notes can be used for state-less users.
+    Example: ${cfg.prefix}usercreate -n Russia -d Russian -m URL -c b34ce -notes ha ha ha @ping`,
     cooldown: 5,
     guildOnly: true,
     execute: async function usercreate(message, args, db) {
-        if (perm(message, 2)) {
+        if (perm(message, 1)) {
             const discordUser = message.mentions.users.first();
             const state = new State(undefined, undefined);
             let hasState = false;

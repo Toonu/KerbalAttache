@@ -13,10 +13,10 @@ exports.StateAssets = class StateAssets {
 			this.assets[theatre] = {};
 		}
 		for (const [name, asset] of Object.entries(assets)) {
-			this.assets[asset.theatre][name] = 1;
+			this.assets[asset.theatre][name] = 0;
 		}
 		for (const name of Object.keys(systems)) {
-			this.systems[name] = 1;
+			this.systems[name] = 0;
 		}
 	}
 	

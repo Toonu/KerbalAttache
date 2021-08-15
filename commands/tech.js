@@ -1,13 +1,12 @@
 // noinspection ExceptionCaughtLocallyJS,DuplicatedCode
 
-const cfg = require('./../config.json'),
-    {ping, log, messageHandler, report, embedSwitcher, resultOptions} = require('../utils'),
-    tt = require('../dataImports/tt.json'), discord = require('discord.js'),
+const cfg = require('./../config.json'), tt = require('../dataImports/tt.json'),
+    {ping, log, messageHandler, report, embedSwitcher, resultOptions, processYesNo} = require('../utils'),
     {TechNode} = require('../dataStructures/TechNode');
 
 module.exports = {
     name: 'tech',
-    description: 'Command for managing your research.',
+    description: 'Command for managing state research.',
     args: 0,
     usage: `${cfg.prefix}tech [OPERATION] [OPTION] [DATA] [USER]
     
@@ -15,12 +14,12 @@ Possible operations:
 
 \`\`\`ini\n
 OPERATION   OPTION      DATA
-budget      [SET | ADD] [AMOUNT]        - Sets or adds money to user's research budget (use neg. number to decrease).
-research                [NODE]          - Researches specified tech tree node.
+b | budget      [SET | ADD] [AMOUNT]        - Sets or adds money to user's research budget (use neg. number to decrease).
+r | research                [NODE]          - Researches specified tech tree node.
 list                                    - Lists all available categories.
 list                    [CATEGORY]      - Lists all technological nodes in category.
 list                    [NAME]          - Lists all information about a technological node.
-unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
+u | unlocked                                - Shows information about everything you have unlocked. For specific node, use list.
 \`\`\`
 `,
     cooldown: 2,
@@ -115,7 +114,7 @@ async function research(message, db, state, nodeName) {
         return messageHandler(message, new Error('NullReferenceException: Node does not exist!'), true) ;
     }
     
-    node = new TechNode(nodeName, node.desc, node.cost, node.category, node.theatre, node.unlocks, node.research);
+    node = new TechNode(nodeName, node.desc, node.cost, node.category, node.theatre, node.unlocks, node.prereq);
     
     try {
         state.research.unlockNode(node);
@@ -148,20 +147,12 @@ async function list(message, db, state, searchItem) {
         
         // noinspection JSCheckFunctionSignatures
         const embed = node.toEmbed();
-        
-        function processReactions(reaction) {
-            if (reaction.emoji.name === '✅') {
-                return resultOptions.confirm;
-            } else if (reaction.emoji.name === '❌') {
-                return resultOptions.delete;
-            }
-        }
     
         function filterYesNo(reaction, user) {
             return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
     
-        return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
+        return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processYesNo)
         .then(result => {
             if (result === resultOptions.confirm) {
                 state.research.unlockNode(node);

@@ -2,7 +2,7 @@ const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../
 
 module.exports = {
 	name: 'prune',
-	description: 'Command prunes N messages from channel.',
+	description: 'Command prunes messages from the same channel.',
 	usage: `${prefix}prune [AMOUNT] [OLD]
 	Setting OLD option to true to enables deleting messages older than two weeks.`,
 	guildOnly: true,

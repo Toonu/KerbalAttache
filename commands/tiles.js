@@ -1,7 +1,7 @@
 const cfg = require("./../config.json"), {perm, messageHandler, report, log} = require("../utils");
 module.exports = {
     name: 'tiles',
-    description: 'Command for managing tile amount of a specified nation.',
+    description: 'Command for managing tile amount of a states.',
     args: 2,
     usage: `${cfg.prefix}tiles [ADDITION] [USER]
     

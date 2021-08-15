@@ -1,6 +1,6 @@
-const cfg = require('./../config.json'), units = require('../dataImports/assets.json'), discord = require('discord.js'),
-    {getCellArray, setCell, toColumn, getCell} = require("../sheet"),
+const cfg = require('./../config.json'), assets = require('../dataImports/assets.json'), discord = require('discord.js'),
     {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
+const {findAsset} = require('../sheet');
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
@@ -11,96 +11,39 @@ Assets do not need to be written in capital letters, the command is case insensi
 **Assets:** can be listed via **${cfg.prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
-    execute: async function buy(message, args) {
-        //No arguments lists the categories.
+    execute: async function buy(message, args, db) {
+        //No arguments will switch to listing the assets and systems in the game.
         if(!args[0]) return printAssets(message);
-
-        let user = ping(message);
-
-        //Checking input arguments.
+        let state = db.getState(ping(message));
         let amount = parseInt(args[0]);
+        
+        //Validating input arguments.
         if (Number.isNaN(amount)) {
             return messageHandler(message, new Error('InvalidTypeException: Argument is not a number.'), true);
         } else if (!args[1]) {
-            return messageHandler(message, new Error('InvalidArgumentException: Missing second argument.'), true);
+            return messageHandler(message, new Error('InvalidArgumentException: Missing second asset type argument.'), true);
+        } else if (!state) {
+            return messageHandler(message, new Error('NullReferenceException: State not found!!'));
         }
-        let assetType = args[1].toUpperCase();
-        if(!units.assets[assetType]) {
-            return messageHandler(message, new Error('Asset not found.'), true);
+        
+        //Getting asset or system.
+        let asset = findAsset(args[1]);
+        
+        //Validating asset or system and user assets status.
+        if (!asset) {
+            return messageHandler(message, new Error('NullReferenceException: Asset not found!'));
         }
-
-        let isErroneous = false;
-        let accountColumn;
-        let nationRow = 0;
-        let systemColumn = 0;
-        let nation = cfg.users[user.id];
-        let systemData;
-        let systemBackup;
-        let unit = units.assets[assetType];
-
-        //Getting systems tab data if system is being purchased.
-        if ('system' === unit.type) {
-            systemData = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
-                .catch(error => {
-                    isErroneous = true;
-                    return messageHandler(message, error, true);
-                });
-            if (isErroneous) return;
-
-            //Searching for column.
-            for (systemColumn; systemColumn < systemData.length; systemColumn++) {
-                if (systemData[systemColumn][cfg.mainRow] === assetType) break;
-            }
-            //Used to get systemsColumn back after it is looped through the mainData for loop.
-            systemBackup = systemColumn;
-
-            if (!systemColumn) return messageHandler(message, new Error('Could not find asset system column.'), true);
-        }
-
-        let mainData = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
-            .catch(error => {
-                isErroneous = true;
-                return messageHandler(message, error, true);
-            });
-        if (isErroneous) return;
-
-        //Searching for row and columns.
-        for (nationRow; nationRow < mainData[0].length; nationRow++) {
-            if (mainData[0][nationRow] === nation.nation) break;
-        }
-        for (systemColumn = 0; systemColumn < mainData.length; systemColumn++) {
-            if (mainData[systemColumn][cfg.mainAccountingRow] === 'Account') accountColumn = systemColumn;
-            else if (!systemData && mainData[systemColumn][cfg.mainRow] === assetType) break;
-        }
-
-        //Validating columns
-        if (!systemColumn || !accountColumn || !nationRow)
-            return messageHandler(message, new Error('Could not find one of columns.'), true);
-
-        //If buying a system, reverting the systemData to old number found before.
-        systemData ? systemColumn = systemBackup : undefined;
-
-        let oldAmount = await getCell(toColumn(systemColumn)+(nationRow+1), systemData ? cfg.systems : cfg.main);
-        let account = await getCell(toColumn(accountColumn)+(nationRow+1), cfg.main);
-
-        //Validating cells being numbers and checking amounts.
-        if (Number.isNaN(oldAmount) || Number.isNaN(account))
-            return messageHandler(message, new Error('InvalidTypeException: Player account or bought asset is not' +
-                ' number.'), true, 20000);
-        else if (oldAmount + amount < 0) {
-            return messageHandler(message, new Error('You cannot go into negative numbers of assets!'), true, 20000);
-        }
-
+        
         // noinspection JSCheckFunctionSignatures
         const embed = new discord.MessageEmbed()
-            .setColor(nation.color)
-            .setTitle(`${nation.demonym}'s Office of Acquisitions`)
+            .setColor(state.colour)
+            .setTitle(`${state.demonym}'s Office of Acquisitions`)
             .setURL('https://discord.js.org/')
             .setThumbnail('https://imgur.com/IvUHO31.png')
             .addFields(
                 { name: 'Amount:', value: amount, inline: true},
-                { name: 'Asset:', value: unit.desc, inline: true},
-                { name: 'Maitenance | Cost:', value: formatCurrency(unit.price * amount * 0.25) + ' | ' + formatCurrency(unit.price * amount * (amount < 0 ? 0.7 : 1))},
+                { name: 'Asset:', value: asset.desc, inline: true},
+                { name: 'Maitenance | Cost:', value: `${formatCurrency(asset.cost * amount * 0.25)} | ${formatCurrency(asset.cost * amount * (amount < 0 ? 0.7 : 1))}`},
                 { name: 'Do you accept the terms of the supplier agreement?', value: 'Press ✅/❌'},
                 { name: '\u200B', value: '\u200B'},
             )
@@ -122,15 +65,16 @@ Assets do not need to be written in capital letters, the command is case insensi
         embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
             .then(result => {
                 if (result === resultOptions.confirm) {
-                    if (amount < 0) {
-                        messageHandler(message, 'Selling assets. ✅ Do not forget to remove them from your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has sold ${Math.abs(amount)} ${unit.name} for ${formatCurrency(Math.abs(unit.price*amount*0.7))}`, this.name);
-                    } else {
-                        messageHandler(message, 'Purchasing assets. ✅ Do not forget to place them onto your map!' , true, 20000);
-                        report(message, `${cfg.users[message.author.id].nation} has bought ${amount} ${unit.name} for ${formatCurrency(unit.price*amount)}`, this.name);
+                    messageHandler(message, `${amount < 0 ? 'Selling' : 'Buying'} assets. ✅ Do not forget to ${amount < 0 ? 'remove them from' : 'place them to'} your map!` , true, 20000);
+                    report(message, `${state.name} has ${amount < 0 ? 'sold' : 'bought'} ${Math.abs(amount)} ${asset.name} for ${formatCurrency(Math.abs(asset.cost * amount * (amount < 0 ? 0.7 : 1)))}`, this.name);
+    
+                    try {
+                        //Throws error on negative assets or money.
+                        state.assets.modify(asset, amount, state);
+                        db.export();
+                    } catch (error) {
+                        messageHandler(message, error, true, 20000);
                     }
-                    setCell(`${toColumn(accountColumn)}${nationRow+1}`, account - unit.price * amount * (amount < 0 ? 0.7 : 1), cfg.main);
-                    setCell(`${toColumn(systemColumn)}${nationRow+1}`, oldAmount+amount, systemData ? cfg.systems : cfg.main);
                 } else {
                     messageHandler(message, 'Operation was canceled or timed out. ❌', true);
                 }
@@ -141,14 +85,21 @@ Assets do not need to be written in capital letters, the command is case insensi
 
 function printAssets(message) {
     let newMessage = ``, l = 0;
-
-    Object.keys(units.assets).forEach(asset => {
-        if (asset.length > l) l = asset.length;
+    
+    Object.values(assets).forEach(type => {
+        Object.keys(type).forEach(name => {
+            if (name.length > l) {
+                l = name.length;
+            }
+        })
     });
-    Object.keys(units.assets).forEach(asset => {
-        newMessage += `[${asset.padStart(l)}] | ${units.assets[asset].desc.padEnd(40)} : ${formatCurrency(units.assets[asset].price)}\n`;
-    });
-
+    
+    for (const type of Object.values(assets)) {
+        for (const [name, asset] of Object.entries(type)) {
+            newMessage += `[${name.padStart(l)}] | ${asset.desc.padEnd(40)} : [${formatCurrency(asset.cost)}]\n`;
+        }
+    }
+    
     message.channel.send(`Available weapons:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
         .then(assetMessages => {
             assetMessages.forEach(submissionMessage => submissionMessage.delete({timeout: 30000})

@@ -10,10 +10,10 @@ module.exports = {
         const discordUser = message.mentions.users.first();
         
         //Validating input arguments.
-        if (!discordUser) {
-            return messageHandler(message, new Error('InvalidArgumentException: No user specified, please retry.'), true)
-        } else if (!perm(message, 2)) {
+        if (!perm(message, 2)) {
             return message.delete().catch(error => log(error, true));
+        } else if (!discordUser) {
+            return messageHandler(message, new Error('InvalidArgumentException: No user specified, canceling operation.'), true)
         }
         
         //Deleting and reporting if user exists.
@@ -22,7 +22,7 @@ module.exports = {
             report(message, `${message.author} deleted user ${discordUser}!`, this.name);
             messageHandler(message, 'User deleted.', true);
         } else {
-            return messageHandler(message, new Error('NullReferenceException: User does not exist, please retry.'), true)
+            return messageHandler(message, new Error('NullReferenceException: User does not exist, canceling operation.'), true)
         }
     }
 };

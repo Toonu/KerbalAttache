@@ -1,11 +1,11 @@
-const cfg = require('../config.json'), {report, perm, messageHandler} = require('../utils');
+const cfg = require('../config.json'), {report, perm, messageHandler, log} = require('../utils');
 const {DatabaseUser} = require('../dataStructures/DatabaseUser.js');
 const {State} = require('../dataStructures/State');
 module.exports = {
     name: 'usercreate',
     description: 'Command for creating new user in the database.',
     args: 0,
-    usage: `${cfg.prefix}usercreate OPTIONS... [USER]...\n
+    usage: `${cfg.prefix}usercreate OPTIONS... [USER]\n
     OPTIONS followed by new value:
     \`\`\`
     -n [nation] string
@@ -83,6 +83,8 @@ module.exports = {
             
             report(message, `User ${discordUser.username} was created by ${message.author}`, this.name);
             messageHandler(message, 'User was created.', true);
+        } else {
+            message.delete().catch(error => log(error, true));
         }
     }
 };

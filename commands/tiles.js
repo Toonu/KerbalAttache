@@ -1,4 +1,4 @@
-const cfg = require("./../config.json"), {perm, messageHandler, report} = require("../utils");
+const cfg = require("./../config.json"), {perm, messageHandler, report, log} = require("../utils");
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount of a specified nation.',
@@ -10,7 +10,8 @@ module.exports = {
     guildOnly: true,
     execute: async function tiles(message, args, db) {
         //Validating input arguments and clearance.
-        if(!perm(message, 2)) return;
+        if(!perm(message, 2))
+            return message.delete().catch(error => log(error, true));
 
         let discordUser = message.mentions.users.first();
         let amount = parseFloat(args[0]);

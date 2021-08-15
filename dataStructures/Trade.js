@@ -1,5 +1,4 @@
-const {System} = require('./System');
-const {Asset} = require('./Asset');
+const {formatCurrency} = require('../utils');
 exports.Trade = class Trade {
 	/**
 	* @param author
@@ -20,12 +19,24 @@ exports.Trade = class Trade {
 	}
 	
 	/**
-	 *
+	 * Method compares two trades to find if they are identical based on their ID.
 	 * @param {exports.Trade} trade
 	 * @return {boolean}
 	 */
 	isEqual(trade) {
 		return trade.id === this.id;
+	}
+	
+	/**
+	 * Method creates string representation of a trade.
+	 * @param {exports.Database} db database to use.
+	 * @return {string} representation of a trade.
+	 */
+	toString(db) {
+		let authorUser = db.getUser(this.author);
+		let recipientUser = db.getUser(this.recipient);
+		return `ID[${this.id}] ${authorUser.state.name} | ${authorUser.user.username} ${this.isSelling ? '-' : `+`}[${this.amount} ${this.asset.name}] > ${recipientUser.state.name} | `
+			+ `${recipientUser.user.username} ${this.isSelling ? '+' : `-`}[${this.amount} ${this.asset.name}] for ${formatCurrency(this.money)} paid to ${this.isSelling ? authorUser.state.name : recipientUser.state.name}.`
 	}
 	
 	/**
@@ -36,40 +47,18 @@ exports.Trade = class Trade {
 	finishTrade(db) {
 		let author = db.getState(this.author);
 		let recipient = db.getState(this.recipient);
-		let authorData;
-		let recipientData;
 		
-		//Setting up modified assets or systems data.
-		if (this.asset instanceof Asset) {
-			authorData = author.assets.assets[this.asset.theatre][this.asset.name];
-			recipientData = recipient.assets.assets[this.asset.theatre][this.asset.name];
-		} else {
-			authorData = author.assets.systems[this.asset.name];
-			recipientData = recipient.assets.systems[this.asset.name];
+		author.assets.modify(this.asset, this.isSelling ? -this.amount : this.amount, author, true);
+		recipient.assets.modify(this.asset, this.isSelling ? this.amount : -this.amount, recipient, true);
+		author.account += this.isSelling ? this.money : -this.money;
+		recipient.account -= this.money ? -this.money : this.money;
+		
+		if (this.isSelling && recipient.account < 0) {
+			throw new Error('InvalidOperationException: Recipient has not enough money!');
+		} else if (author.account < 0) {
+			throw new Error('InvalidOperationException: Author has not enough money!');
 		}
 		
-		if (this.isSelling) {
-			if (recipient.account - this.money < 0) {
-				throw new Error(`${recipient.name} has not enough money!`);
-			} else if (authorData - this.amount < 0) {
-				throw new Error(`${author.name} has not enough assets!`);
-			} else {
-				author.account += this.money;
-				author.assets.assets[this.asset.theatre][this.asset.name] -= this.amount;
-				
-				recipient.account -= this.money;
-				recipient.assets.assets[this.asset.theatre][this.asset.name] += this.amount;
-			}
-		} else if (author.account - this.money < 0) {
-			throw new Error(`${author.name} has not enough money!`);
-		} else if (recipientData - this.amount < 0) {
-			throw new Error(`${recipient.name} has not enough assets!`);
-		} else {
-			author.account -= this.money;
-			author.assets.systems[this.asset.name] += this.amount;
-			
-			recipient.account += this.money;
-			recipient.assets.systems[this.asset.name] -= this.amount;
-		}
+		db.export();
 	}
 };

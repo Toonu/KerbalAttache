@@ -4,7 +4,10 @@ module.exports = {
 	name: 'log',
 	description: 'Log',
 	usage: `${prefix}log [OPERATION]
-	Valid operations are get and del.`,
+	
+	Operations:
+	get - replies with a log file.
+	set - erases the log file.`,
 	args: 0,
 	guildOnly: true,
 	execute(message, args) {
@@ -14,8 +17,7 @@ module.exports = {
 					message.channel.send("Here you have:", { files: ['./out.log'] });
 					break;
 				case 'del':
-					fs.writeFile('out.log', '', function(){
-					});
+					fs.writeFile('out.log', '', function(){});
 					break;
 				default:
 					return messageHandler(message, 'Invalid operation. Please retry.', true);

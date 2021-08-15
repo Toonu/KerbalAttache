@@ -5,7 +5,7 @@ const tt = require('../dataImports/tt.json');
 exports.StateResearch = class StateResearch {
 	constructor() {
 		this.RP = 0;
-		this.CF = 1;
+		this._CF = 1;
 		this._budget = 0;
 		this.previousBudget = 0;
 		
@@ -48,6 +48,16 @@ exports.StateResearch = class StateResearch {
 		return this._budget;
 	}
 	
+	get CF() {
+		return this._CF;
+	}
+	
+	set CF(value) {
+		if (isNaN(parseInt(value))) {
+			this._CF = value;
+		}
+	}
+	
 	/**
 	 * Method adds node to the researched technologies of the state after checking the prerequistes.
 	 * @param {exports.TechNode} node node to unlock.
@@ -58,9 +68,7 @@ exports.StateResearch = class StateResearch {
 			throw new Error('Node is too futuristic!');
 		} else if (this.RP - node.cost < 0) {
 			throw new Error('ArgumentOutOfRangeException: Not enough Research Points to unlock the node.');
-		}
-
-		if (this.unlockedNodesList[node.name] !== undefined) {
+		} else if (this.unlockedNodesList[node.name] !== undefined) {
 			throw new Error('Node is already unlocked!');
 		}
 		

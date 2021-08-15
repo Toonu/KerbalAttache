@@ -73,7 +73,7 @@ exports.State = class State {
 	toEmbed(db) {
 		this.updateBalance(db);
 		
-		return new discord.MessageEmbed()
+		let embed = new discord.MessageEmbed()
 		.setColor(this._colour)
 		.setTitle(`National Bank of ${this.name}`)
 		.setURL(this.map) //URL clickable from the title
@@ -87,6 +87,11 @@ exports.State = class State {
 		.addField('Tiles:', this.tiles)
 		.setFooter('Made by the Attachè to the United Nations\nThis message will be auto-destructed in 32' +
 			' seconds!', 'https://imgur.com/KLLkY2J.png');
+		
+		if (this.incomePenaltyCoefficient < 1) {
+			embed.addField('Penalty:', 1 - this.incomePenaltyCoefficient, true);
+		}
+		return embed;
 	};
 	
 	/**

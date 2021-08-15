@@ -7,26 +7,19 @@ module.exports = {
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message, args, db) {
-        if(!perm(message, 2)) return message.delete().catch(error => log(error, true));
-    
-        for (const user of db.users) {
-            if (user.state) {
-                user.state.turn(db, user);
-            }
-        }
-        for (const loan of db.loans) {
-            loan.turn();
-        }
+        if(!perm(message, 2)) 
+            return message.delete().catch(error => log(error, true));
         
-        //Point of no return. Modifying real online data bellow.
+        db.users.forEach(user => user.state ? user.state.turn(db, user) : undefined);
+        db.loans.forEach(loan => loan.turn());
         db.turn += 1;
-        db.export();
         
-        //Logging and announcing.
-        report(message, `Turn ${cfg.turn} has been finished by ${message.author}.`, this.name);
+        //Exporting and reporting. Point of no return.
+        db.export();
+        report(message, `Turn ${db.turn} has been finished by ${message.author}.`, this.name);
         let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(server.announcements)
-        .send(`<@&${server.headofstate}> Turn ${cfg.turn} has been finished!`).catch(error => log(error, true));
+        .send(`<@&${server.headofstate}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
     }
 };

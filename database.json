@@ -7,28 +7,26 @@
             "author": "752676284521250837",
             "recipient": "319919565079576576",
             "amount": 1,
-            "money": 1,
+            "money": 1523565,
             "asset": {
-                "name": "MBT",
-                "desc": "Main Battle Tank",
-                "theatre": 1,
-                "cost": 48000
+                "name": "MRAAM",
+                "desc": "Medium-Range Air-to-Air Missile",
+                "cost": 2500
             },
             "isSelling": true
         },
         {
             "id": 1,
-            "author": "752676284521250837",
-            "recipient": "319919565079576576",
+            "author": "319919565079576576",
+            "recipient": "752676284521250837",
             "amount": 1,
-            "money": 1,
+            "money": 100000000000,
             "asset": {
-                "name": "APC",
-                "desc": "Armored Personnel Carrier",
-                "theatre": 1,
-                "cost": 8000
+                "name": "MRAAM",
+                "desc": "Medium-Range Air-to-Air Missile",
+                "cost": 2500
             },
-            "isSelling": true
+            "isSelling": false
         }
     ],
     "users": [
@@ -52,15 +50,15 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Ico",
-                "account": 2300000,
-                "balance": -1654303.9243524033,
+                "account": 4543842,
+                "balance": 266210.4395338404,
                 "assets": {
                     "systems": {
                         "SRAAM": 1,
-                        "MRAAM": 1,
+                        "MRAAM": 0,
                         "LRAAM": 1,
                         "SRSAM": 1,
-                        "MRSAM": 1,
+                        "MRSAM": 10,
                         "LRSAM": 1,
                         "ASM": 1,
                         "ATGM": 1,
@@ -79,7 +77,7 @@
                     "assets": {
                         "0": {
                             "LM": 1,
-                            "MM": 1,
+                            "MM": -15,
                             "HM": 1,
                             "LA": 1,
                             "VL": 1,
@@ -90,31 +88,31 @@
                             "LT": 0,
                             "MT": 0,
                             "HT": 0,
-                            "MBT": 3,
+                            "MBT": -3,
                             "AFV": 1,
                             "IFV": 1,
                             "APC": 1,
                             "MLV": 1,
-                            "SPAAG": 1,
+                            "SPAAG": 3,
                             "FOB": 1,
                             "RADAR": 1,
                             "SF": 1
                         },
                         "2": {
-                            "K": 1,
-                            "FF": 1,
-                            "DD": 1,
-                            "CC": 1,
-                            "BC": 1,
-                            "BB": 1,
-                            "CL": 1,
-                            "CV": 1,
-                            "PORT": 1
+                            "K": 0,
+                            "FF": 0,
+                            "DD": 0,
+                            "CC": 0,
+                            "BC": 0,
+                            "BB": 0,
+                            "CL": 0,
+                            "CV": 0,
+                            "PORT": 0
                         },
                         "3": {
                             "GPS": 0,
-                            "SAT": 1,
-                            "OV": 1
+                            "SAT": 0,
+                            "OV": 0
                         },
                         "4": {}
                     }
@@ -122,7 +120,7 @@
                 "incomePenaltyCoefficient": 1,
                 "research": {
                     "RP": 9200,
-                    "CF": 1,
+                    "_CF": 1,
                     "_budget": 5250,
                     "previousBudget": 0,
                     "unlockedNodesList": {
@@ -167,12 +165,12 @@
             "state": {
                 "name": "Sharikon",
                 "demonym": "Sha",
-                "account": 1700000,
-                "balance": 212160.4395338404,
+                "account": 3490842,
+                "balance": 176160.4395338404,
                 "assets": {
                     "systems": {
-                        "SRAAM": 1,
-                        "MRAAM": 1,
+                        "SRAAM": -4,
+                        "MRAAM": 114,
                         "LRAAM": 1,
                         "SRSAM": 1,
                         "MRSAM": 1,
@@ -193,19 +191,19 @@
                     },
                     "assets": {
                         "0": {
-                            "LM": 1,
-                            "MM": 1,
-                            "HM": 1,
-                            "LA": 1,
-                            "VL": 1,
-                            "VTOL": 1,
-                            "AIRPORT": 1
+                            "LM": 0,
+                            "MM": 5,
+                            "HM": 0,
+                            "LA": 0,
+                            "VL": 0,
+                            "VTOL": 0,
+                            "AIRPORT": 0
                         },
                         "1": {
-                            "LT": 1,
-                            "MT": 1,
-                            "HT": 1,
-                            "MBT": 4,
+                            "LT": 0,
+                            "MT": 0,
+                            "HT": 0,
+                            "MBT": -5,
                             "AFV": 1,
                             "IFV": 1,
                             "APC": 1,
@@ -213,23 +211,23 @@
                             "SPAAG": 1,
                             "FOB": 1,
                             "RADAR": 1,
-                            "SF": 1
+                            "SF": 0
                         },
                         "2": {
-                            "K": 1,
-                            "FF": 1,
-                            "DD": 1,
-                            "CC": 1,
-                            "BC": 1,
-                            "BB": 1,
-                            "CL": 1,
-                            "CV": 1,
-                            "PORT": 1
+                            "K": 0,
+                            "FF": 0,
+                            "DD": 0,
+                            "CC": 0,
+                            "BC": 0,
+                            "BB": 0,
+                            "CL": 0,
+                            "CV": 0,
+                            "PORT": 0
                         },
                         "3": {
-                            "GPS": 1,
-                            "SAT": 1,
-                            "OV": 1
+                            "GPS": 0,
+                            "SAT": 0,
+                            "OV": 0
                         },
                         "4": {}
                     }
@@ -237,7 +235,7 @@
                 "incomePenaltyCoefficient": 1,
                 "research": {
                     "RP": 5000,
-                    "CF": 1,
+                    "_CF": 1,
                     "_budget": 0,
                     "previousBudget": 0,
                     "unlockedNodesList": {},

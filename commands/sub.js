@@ -14,11 +14,11 @@ module.exports = {
     guildOnly: true,
     execute: async function sub(message, args, db) {
         let isErroneous = false;
-        let state = db.getState(ping(message, 2).id);
+        let state = db.getState(ping(message, 2));
 
         if (!state)
             return messageHandler(message,
-                new Error('InvalidArgumentException: User or his state does not exist!'), true);
+                new Error('NullReferenceException: User or his state does not exist!'), true);
 
         let submissionsData = await getCellArray('A1', cfg.submissionsEndCol, cfg.submissions)
             .catch(error => {
@@ -27,7 +27,7 @@ module.exports = {
             });
         if (isErroneous) return;
 
-        //Loop filters out nation's submissions and pads them in the future with the longest one up to 18 spaces.
+        //Loop through all submission to find nation's submissions and trimming them to maximally 18 spaces.
         let nationSubmissions = [];
         let nationSubmissionsPosition = [];
         let maximalLength = 0;
@@ -43,18 +43,19 @@ module.exports = {
                 }
             }
         }
-    
+        
+        //Deleting submission switch.
         if (args[0] === 'del' && args[1]) {
             return await deleteSubmission(message, args, nationSubmissions, nationSubmissionsPosition, state);
         }
 
-        if  (maximalLength < 5) {
+        //Parsing padding in case none of the submission crafts are longer than the header row padding.
+        if (maximalLength < 5) {
             maximalLength = 5;
         }
 
         //Header line
         let displayResult = `[${"Asset".padStart(maximalLength === 5 ? 0 : maximalLength)}] Era ${"Class ".padEnd(11)}${"Price".padEnd(17)}${"Type".padEnd(31)}RU    Notes\n`;
-
         //Handling money and upgrades
         nationSubmissions.forEach(column => {
             let money = formatCurrency(column[24]);
@@ -77,6 +78,7 @@ module.exports = {
 
 
 async function deleteSubmission(message, args, submissions, craftPosition, state) {
+    //Parsing craft name if it contains spaces and shifting from first unneccessary arguments.
     let craft = args[1];
     await args.shift();
     await args.shift();
@@ -103,7 +105,7 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
                 return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
             }
             
-            await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
+            return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
             .then(result => {
                 if (result === resultOptions.confirm) {
                     report(message, `${state.name} | ${message.author} has deleted submission ${craft}! Please delete the craft file from the storage manually.`, 'subDeletion');
@@ -112,8 +114,7 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
                 }
             })
             .catch(error => messageHandler(message, error, true));
-            return;
         }
     }
-    return messageHandler(message, 'Submission not found!', true);
+    return messageHandler(message, 'NullReferenceException: Submission not found!', true);
 }

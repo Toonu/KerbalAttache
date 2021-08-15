@@ -11,27 +11,20 @@ module.exports = {
     execute: async function state(message, args, db) {
         //Getting user.
         let discordUser = ping(message);
-        let databaseUser;
-    
-        for (databaseUser of db.users) {
-            if (databaseUser.isEqual(discordUser)) {
-                break;
-            }
-        }
+        let dbUser = db.getUser(discordUser);
         
-        if (!databaseUser) {
+        //Validating user.
+        if (!dbUser) {
             return messageHandler(message, 'InvalidArgumentType: User is not defined', true);
-        } else if (!databaseUser.state) {
-            return messageHandler(message, 'InvalidArgumentType: User state is not defined', true);
+        } else if (!dbUser.state) {
+            return messageHandler(message, 'NullReferenceException: User state is not defined', true);
         }
         
-        let embeds = [databaseUser.state.toEmbed(db)].concat(databaseUser.state.assets.toEmbeds(databaseUser.state));
-
-        //Embed options
+        //Getting state embeds.
+        let embeds = [dbUser.state.toEmbed(db)].concat(dbUser.state.assets.toEmbeds(dbUser.state));
         function emojiFilter(reaction, user) {
             return (reaction.emoji.name === '➡️' || reaction.emoji.name === '❌' || reaction.emoji.name === '⬅️') && user.id === message.author.id;
         }
-
         // noinspection JSUnusedLocalSymbols
         function processReactions(reaction) {
             if (reaction.emoji.name === '➡️') {

@@ -2,6 +2,7 @@ const {theatres} = require('./enums');
 const {assetsFile} = require('../config.json');
 const {assets, systems} = require(`../dataImports/${assetsFile}`);
 const discord = require('discord.js');
+const {System} = require('./System');
 
 exports.StateAssets = class StateAssets {
 	constructor() {
@@ -21,22 +22,31 @@ exports.StateAssets = class StateAssets {
 	
 	
 	/**
-	 * Method adds or removes amount of assets.
-	 * @param {number} theatre
-	 * @param {string} assetName
+	 * Method adds or removes amount of assets or systems and accounts their price onto the state account.
+	 * @param {exports.Asset, exports.System} asset
 	 * @param {number} amount
+	 * @param {exports.State} state
+	 * @param {boolean} ignorePrice true if price is ignored and not accounted.
+	 * @throws {Error} if nation assets, systems or account money go into negative numbers.
 	 */
-	modifyAssets(theatre, assetName, amount) {
-		this.assets[theatre][assetName] += amount;
-	}
-	
-	/**
-	* Method adds or removes amount of systems.
-	* @param {number} systemName
-	* @param {number} amount
-	*/
-	modifySystems(systemName, amount) {
-		this.systems[systemName] += amount;
+	modify(asset, amount, state, ignorePrice = false) {
+		if (asset instanceof System) {
+			this.systems[asset.name] += amount;
+			if (this.systems[asset.name] < 0) {
+				throw new Error(`InvalidOperationException: You cannot go into ${this.systems[asset.name]} of systems`);
+			}
+		} else {
+			this.assets[asset.theatre][asset.name] += amount;
+			if (this.assets[asset.theatre][asset.name] < 0) {
+				throw new Error(`InvalidOperationException: You cannot go into ${this.assets[asset.theatre][asset.name]} of systems`);
+			}
+		}
+		if (!ignorePrice) {
+			state.account -= asset.cost * amount * (amount < 0 ? 0.7 : 1);
+			if (state.account < 0) {
+				throw new Error('InvalidOperationException: You cannot go bancrupt with your money!');
+			}
+		}
 	}
 	
 	toEmbeds(state) {
@@ -50,24 +60,29 @@ exports.StateAssets = class StateAssets {
 		}
 		//Systems and assets
 		for (const [name, amount] of Object.entries(this.systems)) {
-			embeds[4].addField(name, amount, true);
+			if (amount !== 0) {
+				embeds[4].addField(name, amount, true);
+			}
 		}
 		for (let [theatre, units] of Object.entries(this.assets)) {
 			theatre = parseFloat(theatre);
 			// noinspection JSCheckFunctionSignatures
 			for (const [name, amount] of Object.entries(units)) {
-				embeds[theatre].addField(name, amount, true);
+				if (amount !== 0) {
+					embeds[theatre].addField(name, amount, true);
+				}
 			}
 		}
 
+		let embedExport = [];
 		
 		for (let i = 0; i < embeds.length; i++) {
-			if (embeds[i].fields.length === 1) {
-				embeds.slice(i, 1);
+			if (embeds[i].fields.length !== 1) {
+				embedExport.push(embeds[i]);
 			}
 		}
 		
-		return embeds;
+		return embedExport;
 	}
 };
 

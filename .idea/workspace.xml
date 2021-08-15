@@ -29,7 +29,12 @@
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/reject.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/reject.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/battle.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/battle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/buy.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/buy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/log.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/log.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/prune.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/prune.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/state.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/state.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/sub.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/tiles.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tiles.js" afterDir="false" />
@@ -39,14 +44,13 @@
       <change beforePath="$PROJECT_DIR$/commands/userdel.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/userdel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commands/useredit.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/useredit.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/Loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Loan.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataStructures/Asset.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Asset.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/State.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateAssets.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateAssets.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/StateResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateResearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/TechNode.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/TechNode.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataStructures/Trade.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Trade.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,8 +93,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="15.0.1" />
-    <property name="javascript.nodejs.core.library.typings.version" value="15.0.1" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
+    <property name="javascript.nodejs.core.library.typings.version" value="14.17.9" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -205,6 +209,8 @@
       <workItem from="1628840957039" duration="4480000" />
       <workItem from="1628845487576" duration="1874000" />
       <workItem from="1628848131351" duration="16690000" />
+      <workItem from="1628923933006" duration="17931000" />
+      <workItem from="1629021634462" duration="6394000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -441,18 +447,18 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/commands/usercreate.js</url>
-          <line>32</line>
+          <url>file://$PROJECT_DIR$/commands/config.js</url>
+          <line>29</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/commands/battle.js</url>
+          <line>101</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="92" />
+          <option name="timeStamp" value="96" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="NodeJSConfigurationType">
-        <watch expression="state" language="JavaScript" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

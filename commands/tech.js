@@ -30,7 +30,7 @@ unlocked                                - Shows information about everything you
         let state = db.getState(user);
         
         if (!state) {
-            return messageHandler(message, new Error('User state not found. Canceling.'), true);
+            return messageHandler(message, new Error('NullReferenceException: User\'s state not found. Canceling.'), true);
         }
         
         //Parsing arguments depending on the operation.
@@ -46,14 +46,17 @@ unlocked                                - Shows information about everything you
         
         switch (operation) {
             case 'budget':
+            case 'b':
                 await budget(message, db, state, option, data);
                 break;
+            case 'r':
             case 'research':
                 await research(message, db, state, data);
                 break;
             case 'unlocked':
             case 'unlocks':
             case 'unlock':
+            case 'u':
                 await unlocks(message, state);
                 break;
             case 'list':
@@ -95,9 +98,8 @@ async function budget(message, db, state, option, amount) {
     messageHandler(message, 'Budget set!', true);
 }
 async function unlocks(message, state) {
-    const unlocks = state.research.toArray();
     let newMessage = '';
-    unlocks.forEach(r => newMessage += `${r}\n`);
+    state.research.toArray().forEach(r => newMessage += `${r}\n`);
     
     message.channel.send(`Unlocked nodes and their parts:\n\`\`\`ini\n${newMessage}\`\`\``, {split: {prepend: `\`\`\`ini\n`, append: `\`\`\``}})
     .then(assetMessages => {
@@ -110,7 +112,7 @@ async function unlocks(message, state) {
 async function research(message, db, state, nodeName) {
     let node = tt.nodes[nodeName.toLowerCase()];
     if (!node) {
-        return messageHandler(message, new Error('InvalidArgumentException: Node does not exist!'), true) ;
+        return messageHandler(message, new Error('NullReferenceException: Node does not exist!'), true) ;
     }
     
     node = new TechNode(nodeName, node.desc, node.cost, node.category, node.theatre, node.unlocks, node.research);
@@ -141,8 +143,8 @@ async function list(message, db, state, searchItem) {
         //Listing node.
         let node = tt.nodes[searchItem];
         node = new TechNode(searchItem, node.desc, node.cost, node.category, node.theatre, node.unlocks, node.prereq);
-        let unlocks = [];
-        node.unlocks.forEach(item => unlocks.push(`\n${item}`));
+        let nodeList = [];
+        node.unlocks.forEach(item => nodeList.push(`\n${item}`));
         
         // noinspection JSCheckFunctionSignatures
         const embed = node.toEmbed();
@@ -159,7 +161,7 @@ async function list(message, db, state, searchItem) {
             return (reaction.emoji.name === '✅' || reaction.emoji.name === '❌') && user.id === message.author.id;
         }
     
-        await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
+        return await embedSwitcher(message, [embed], ['✅', '❌'], filterYesNo, processReactions)
         .then(result => {
             if (result === resultOptions.confirm) {
                 state.research.unlockNode(node);
@@ -167,8 +169,6 @@ async function list(message, db, state, searchItem) {
             }
         })
         .catch(error => messageHandler(message, error, true));
-        
-        return;
     } else if (Object.keys(tt.categories).some(item => item.toLowerCase().includes(searchItem))) {
         //Lists nodes in a category.
 

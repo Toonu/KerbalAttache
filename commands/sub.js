@@ -20,7 +20,7 @@ module.exports = {
             return messageHandler(message,
                 new Error('NullReferenceException: User or his state does not exist!'), true);
 
-        let submissionsData = await getCellArray('A1', cfg.submissionsEndCol, cfg.submissions)
+        let submissionsData = await getCellArray('A1', cfg.tabSubmissionsEndCol, cfg.tabSubmissions)
             .catch(error => {
                 isErroneous = true;
                 return messageHandler(message, error, true);
@@ -102,7 +102,7 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
                 if (result === resultOptions.confirm) {
                     report(message, `${state.name} | ${message.author} has deleted submission ${craft}! Please delete the craft file from the storage manually.`, 'subDeletion');
                     messageHandler(message, 'Submission was deleted!', true);
-                    deleteRow(craftPosition[i], cfg.submissions).catch(error => log(error, true));
+                    deleteRow(craftPosition[i], cfg.tabSubmissions).catch(error => log(error, true));
                 }
             })
             .catch(error => messageHandler(message, error, true));

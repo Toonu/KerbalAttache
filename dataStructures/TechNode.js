@@ -20,8 +20,10 @@ exports.TechNode = class TechNode {
 		}
 	}
 	
+	
 	toEmbed() {
-		let unlocks = [];
+		// noinspection JSMismatchedCollectionQueryUpdate
+		const unlocks = [];
 		
 		for (const unlock of this.unlocks) {
 			unlocks.push(`\n${unlock}`);

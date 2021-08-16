@@ -8,6 +8,7 @@ const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
 const {System} = require('./System');
 const {setCellArray} = require('../sheet');
+const cfg = require('../config.json');
 Discord = require('discord.js');
 
 exports.Database = class Database {
@@ -261,6 +262,6 @@ exports.Database = class Database {
 			firstCycle = false;
 		}
 		
-		setCellArray('A1', array, 'Test').catch(r => log(r));
+		setCellArray('A1', array, cfg.tabMain).catch(r => log(r));
 	}
 };

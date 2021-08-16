@@ -194,32 +194,6 @@ module.exports = {
             }
         })
     },
-    /**
-     * Function finds matching searchItems in analysed data array in specified row.
-     * @param {Array} analysedData
-     * @param {Array<string>} searchItems
-     * @param {number} row
-     * @return {{}} return nothing.
-     */
-    findArrayData: function findArrayData(analysedData, searchItems, row) {
-        let result = {};
-        
-        for (let i = 0; i < searchItems.length; i++) {
-            result[searchItems[i]] = undefined;
-            for (let j = 0; j < analysedData.length; j++) {
-                let analysedItem = row ? analysedData[j][row] : analysedData[j];
-                if (searchItems[i] === analysedItem) {
-                    result[searchItems[i]] = j;
-                    break;
-                }
-            }
-            if (!result[searchItems[i]]) {
-                throw new Error(`NotFoundException: Item ${searchItems[i]} not found in the array.`);
-            }
-        }
-
-        return result;
-    },
     processYesNo: function processYesNo(reaction) {
         if (reaction.emoji.name === '✅') {
             return resultOptions.confirm;

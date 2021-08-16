@@ -1,4 +1,4 @@
-const {prefix} = require('../config.json'), {messageHandler, log} = require("../utils");
+const {prefix} = require('../config.json'), {log} = require("../utils");
 
 module.exports = {
 	name: 'ping',

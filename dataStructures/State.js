@@ -10,10 +10,10 @@ exports.State = class State {
 	constructor(name, denomym, colour = 'fffffe', map = 'https://x.com/') {
 		this.name = name;
 		this.demonym = denomym;
-		this.account = 2000000;
+		this._account = 2000000;
 		this.balance = 0;
 		this.assets = new StateAssets(this);
-		this.incomePenaltyCoefficient = 1;
+		this._incomePenaltyCoefficient = 1;
 		this.research = new StateResearch(this);
 		this._tiles = 5;
 		this._colour = colour;
@@ -111,6 +111,32 @@ exports.State = class State {
 	}
 	
 	//Getters and setters.
+	
+	get account() {
+		return this._account;
+	}
+	
+	set account(value) {
+		value = parseInt(value);
+		if (isNaN(value)) {
+			throw new Error('InvalidTypeException: Value is not a number!');
+		} else {
+			this._account = value;
+		}
+	}
+	
+	get incomePenaltyCoefficient() {
+		return this._incomePenaltyCoefficient;
+	}
+	
+	set incomePenaltyCoefficient(value) {
+		value = parseInt(value);
+		if (isNaN(value)) {
+			throw new Error('InvalidTypeException: Value is not a number!');
+		} else {
+			this._incomePenaltyCoefficient = value;
+		}
+	}
 	
 	/**
 	 * Method sets new number of tiles for state.

@@ -1,9 +1,10 @@
 const {theatres} = require('./enums');
 const {era} = require('../database.json');
+const tt = require('../dataImports/tt.json');
 
 exports.StateResearch = class StateResearch {
 	constructor() {
-		this.RP = 0;
+		this._RP = 0;
 		this._CF = 1;
 		this._budget = 0;
 		this.previousBudget = 0;
@@ -33,28 +34,6 @@ exports.StateResearch = class StateResearch {
 			this.CF = 1;
 		}
 		this.previousBudget = this._budget;
-	}
-	
-	set budget(value) {
-		if (value >= 0) {
-			this._budget = value;
-		} else {
-			throw new Error('ArgumentOutOfRangeException: Budget cannot be set bellow 0.');
-		}
-	}
-	
-	get budget() {
-		return this._budget;
-	}
-	
-	get CF() {
-		return this._CF;
-	}
-	
-	set CF(value) {
-		if (!isNaN(parseInt(value))) {
-			this._CF = value;
-		}
 	}
 	
 	/**
@@ -128,4 +107,43 @@ exports.StateResearch = class StateResearch {
 		
 		return finalArray;
 	}
+	
+	//Getters and setters
+	
+	get RP() {
+		return this._RP;
+	}
+	
+	set RP(value) {
+		value = parseInt(value);
+		if (isNaN(value)) {
+			throw new Error('InvalidTypeException: Value is not a number!');
+		} else {
+			this._RP = value;
+		}
+	}
+	
+	set budget(value) {
+		if (value >= 0) {
+			this._budget = value;
+		} else {
+			throw new Error('ArgumentOutOfRangeException: Budget cannot be set bellow 0.');
+		}
+	}
+	
+	get budget() {
+		return this._budget;
+	}
+	
+	get CF() {
+		return this._CF;
+	}
+	
+	set CF(value) {
+		if (!isNaN(parseInt(value))) {
+			this._CF = value;
+		}
+	}
+	
+
 };

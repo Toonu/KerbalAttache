@@ -38,8 +38,7 @@ module.exports = {
                 if (role) {
                     args[1] = role.id;
                 } else {
-                    args[1] = parseInt(args[1]);
-                    if (Number.isNaN(args[1])) {
+                    if (Number.isNaN(parseInt(args[1]))) {
                         return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
                     }
                 }
@@ -51,7 +50,9 @@ module.exports = {
                     return messageHandler(message, new Error('InvalidFormatException: Era must have zero at the end. Eg. 50, 60...'), true);
                 }
             } else if (['turn', 'channelReporting', 'channelBattles', 'channelAnnounce'].includes(args[0])) {
-                args[1] = parseInt(args[1]);
+                if (args[0] === 'turn') {
+                    args[1] = parseInt(args[1]);
+                }
                 if (Number.isNaN(parseInt(args[1]))) {
                     return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
                 }
@@ -69,17 +70,14 @@ module.exports = {
             for (let [name, entry] of Object.entries(db)) {
                 if (entry instanceof Array && name.toLowerCase() === args[0].toLowerCase()) {
                     if (args[2] && args[2] === 'del') {
-                        for (let i = 0; i < entry.length; i++) {
-                            if (args[1] === entry[i]){
-                                db[name].splice(i, 1);
-                                success = true;
-                                break;
-                            }
+                        let deletionIndex = db[name].indexOf(args[1]);
+                        if (deletionIndex !== -1) {
+                            db[name].splice(deletionIndex, 1);
+                            success = true;
                         }
                     } else {
                         db[name].push(args[1]);
                         success = true;
-                        break;
                     }
                     break;
                 } else if (name.toLowerCase() === args[0].toLowerCase()) {

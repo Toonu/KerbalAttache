@@ -42,8 +42,8 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Iconian",
-                "account": 1869460,
-                "balance": 492660,
+                "_account": -60000,
+                "balance": 1346957,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -86,7 +86,7 @@
                             "APC": 10,
                             "MLV": 0,
                             "SPAAG": 0,
-                            "FOB": 2,
+                            "FOB": 3,
                             "RADAR": 0,
                             "SF": 0
                         },
@@ -109,29 +109,29 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 20,
-                    "_CF": 1,
-                    "_budget": 400000,
+                    "_RP": 200,
+                    "_CF": "10",
+                    "_budget": "10",
                     "previousBudget": 400000,
                     "unlockedNodesList": [
                         "40search",
                         "50armour"
                     ],
                     "technologicalLevels": {
-                        "0": 0.1,
+                        "0": 1,
                         "1": 0.1,
                         "2": 0.1,
                         "3": 0.1,
-                        "4": 0.1
+                        "4": 1
                     },
                     "searchRange": 100,
                     "AEWRange": 0,
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": "10",
                 "_colour": "0065bd",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -157,7 +157,7 @@
             "state": {
                 "name": "Gaia-Lucia",
                 "demonym": "Gaia-Lucian",
-                "account": 2487660,
+                "_account": 2487660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -224,9 +224,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 5,
+                    "_RP": 5,
                     "_CF": 1,
                     "_budget": 100000,
                     "previousBudget": 100000,
@@ -272,7 +272,7 @@
             "state": {
                 "name": "Sharkion",
                 "demonym": "Sharks",
-                "account": 783396,
+                "_account": 783396,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -339,9 +339,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 5,
+                    "_RP": 5,
                     "_CF": 1,
                     "_budget": 100000,
                     "previousBudget": 100000,
@@ -387,7 +387,7 @@
             "state": {
                 "name": "Velka",
                 "demonym": "Velkan",
-                "account": 1887660,
+                "_account": 1887660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -454,9 +454,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 5,
+                    "_RP": 5,
                     "_CF": 1,
                     "_budget": 100000,
                     "previousBudget": 100000,
@@ -502,7 +502,7 @@
             "state": {
                 "name": "Ehplar-Ebron",
                 "demonym": "Ehplar-Ebronian",
-                "account": 3037660,
+                "_account": 3037660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -569,9 +569,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 0,
+                    "_RP": 0,
                     "_CF": 1,
                     "_budget": 0,
                     "previousBudget": 0,
@@ -617,7 +617,7 @@
             "state": {
                 "name": "Commonwealth",
                 "demonym": "Commonwealth",
-                "account": 1686165,
+                "_account": 1686165,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -684,9 +684,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 35.72475,
+                    "_RP": 35,
                     "_CF": 1,
                     "_budget": 714495,
                     "previousBudget": 0,
@@ -732,7 +732,7 @@
             "state": {
                 "name": "Ofeliya",
                 "demonym": "Ofeliyan",
-                "account": 3037660,
+                "_account": 3037660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -799,9 +799,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 0,
+                    "_RP": 0,
                     "_CF": 1,
                     "_budget": 0,
                     "previousBudget": 0,
@@ -847,7 +847,7 @@
             "state": {
                 "name": "Magnella",
                 "demonym": "Magnellan",
-                "account": 292625,
+                "_account": 292625,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -914,9 +914,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 20,
+                    "_RP": 20,
                     "_CF": 1,
                     "_budget": 400000,
                     "previousBudget": 400000,
@@ -962,7 +962,7 @@
             "state": {
                 "name": "Kroviska",
                 "demonym": "Kroviskan",
-                "account": 2037660,
+                "_account": 2037660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -1029,9 +1029,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 37.5,
+                    "_RP": 37,
                     "_CF": 1,
                     "_budget": 750000,
                     "previousBudget": 750000,
@@ -1077,7 +1077,7 @@
             "state": {
                 "name": "Elbe",
                 "demonym": "Elban",
-                "account": 3037660,
+                "_account": 3037660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -1144,9 +1144,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 0,
+                    "_RP": 0,
                     "_CF": 1,
                     "_budget": 0,
                     "previousBudget": 0,
@@ -1192,7 +1192,7 @@
             "state": {
                 "name": "Gaxinia",
                 "demonym": "Gaxinian",
-                "account": 2000000,
+                "_account": 2000000,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -1259,9 +1259,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 51.883,
+                    "_RP": 51,
                     "_CF": 1,
                     "_budget": 1037660,
                     "previousBudget": 1037660,
@@ -1307,7 +1307,7 @@
             "state": {
                 "name": "Ilishira",
                 "demonym": "Ilishíran",
-                "account": 1812660,
+                "_account": 1812660,
                 "balance": 0,
                 "assets": {
                     "systems": {
@@ -1374,9 +1374,9 @@
                         "4": {}
                     }
                 },
-                "incomePenaltyCoefficient": 1,
+                "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "RP": 10,
+                    "_RP": 10,
                     "_CF": 1,
                     "_budget": 200000,
                     "previousBudget": 200000,

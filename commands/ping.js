@@ -1,4 +1,5 @@
-const {prefix} = require('../config.json'), {log} = require("../utils");
+const {log} = require("../utils");
+const {prefix} = require('../database.json');
 
 module.exports = {
 	name: 'ping',
@@ -12,5 +13,5 @@ module.exports = {
 			message.channel.send(`Pong. ${msg.createdTimestamp - message.createdTimestamp}ms.`)
 			.then(msg => msg.delete({timeout: 10000}).catch(error => log(error, true)));
 		});
-	},
+	}
 };

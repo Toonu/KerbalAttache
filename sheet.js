@@ -1,13 +1,12 @@
-const cfg = require('./config.json'), {google} = require('googleapis'), assets = require('./dataImports/assets.json');
 let client;
 let gs;
-
-
+const {google} = require('googleapis');
+const assets = require(`./dataImports/assets.json`);
+const {db} = require('./database.json');
 const os = require('os');
 const {Asset} = require('./dataStructures/Asset');
 const {System} = require('./dataStructures/System');
 const {private_key, client_email} = os.platform() === 'linux' ? process.env : require('./env.json');
-
 
 
 /**
@@ -29,7 +28,7 @@ exports.getCell = function getCell(cell, sheetTab) {
     return new Promise(function (resolve, reject) {
         if (isCoordinate(cell)) {
             gs.spreadsheets.values.get({
-                spreadsheetId: cfg.sheet,
+                spreadsheetId: db.sheet,
                 range:  `${sheetTab}!${cell}`,
                 valueRenderOption: "UNFORMATTED_VALUE"
             })
@@ -56,7 +55,7 @@ exports.getCellArray = function getCellArray(x, y, sheetTab, dominantColumn = fa
         }
 
         gs.spreadsheets.values.get({
-            spreadsheetId: cfg.sheet,
+            spreadsheetId: db.sheet,
             range: `${sheetTab}!${x}:${y}`,
             majorDimension: dominantColumn ? 'COLUMNS' : 'ROWS',
             valueRenderOption: "UNFORMATTED_VALUE"
@@ -97,7 +96,7 @@ exports.setCell = function setCell(coordinate, value, sheetTab) {
     return new Promise(function (resolve, reject) {
         if (isCoordinate(coordinate)) {
             gs.spreadsheets.values.update({
-                spreadsheetId: cfg.sheet,
+                spreadsheetId: db.sheet,
                 range: `${sheetTab}!${coordinate}`,
                 valueInputOption: 'RAW',
                 resource: {values: [[value]]}
@@ -121,7 +120,7 @@ exports.setCellArray = function setCellArray(coordinate, values, sheetTab, domin
     return new Promise(function (resolve, reject) {
         // noinspection JSCheckFunctionSignatures
         gs.spreadsheets.values.batchUpdate({
-            spreadsheetId: cfg.sheet,
+            spreadsheetId: db.sheet,
             resource: {
                 valueInputOption: 'RAW',
                 responseValueRenderOption: 'UNFORMATTED_VALUE',
@@ -142,7 +141,7 @@ exports.deleteRow = async function deleteRow(row, sheetTab) {
         // noinspection JSCheckFunctionSignatures
     
         let tabId;
-        let sheetMetadata = await gs.spreadsheets.get({spreadsheetId: cfg.sheet});
+        let sheetMetadata = await gs.spreadsheets.get({spreadsheetId: db.sheet});
         for (let tab = 0; tab < sheetMetadata.data.sheets.length; tab++) {
             if (sheetMetadata.data.sheets[tab].properties.title === sheetTab) {
                 tabId = sheetMetadata.data.sheets[tab].properties.sheetId;
@@ -151,7 +150,7 @@ exports.deleteRow = async function deleteRow(row, sheetTab) {
         }
         
         gs.spreadsheets.batchUpdate({
-            "spreadsheetId": cfg.sheet,
+            "spreadsheetId": db.sheet,
             "requestBody": {
                 "requests": [{
                     "deleteDimension": {

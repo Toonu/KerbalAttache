@@ -8,13 +8,29 @@ const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
 const {System} = require('./System');
 const {setCellArray} = require('../sheet');
-const cfg = require('../config.json');
 Discord = require('discord.js');
 
 exports.Database = class Database {
 	constructor(client) {
-		const databaseImport = require('../database.json');
+		const databaseImport = require(`../database.json`);
 		this.turn = databaseImport.turn;
+		this.prefix = databaseImport.prefix;
+		this.sheet = databaseImport.sheet;
+		this.money = databaseImport.money;
+		this.moneyLocale = databaseImport.moneyLocale;
+		this.era = databaseImport.era;
+		this.tabMain = databaseImport.tabMain;
+		this.tabSubmissions = databaseImport.tabSubmissions;
+		this.tabSubmissionsEnd = databaseImport.tabSubmissionsEnd;
+		this.assetsFile = databaseImport.assetsFile;
+		this.channelReporting = databaseImport.channelReporting;
+		this.channelBattles = databaseImport.channelBattles;
+		this.channelAnnounce = databaseImport.channelAnnounce;
+		this.roleHeadOfState = databaseImport.roleHeadOfState;
+		this.administrators = databaseImport.administrators;
+		this.developers = databaseImport.developers;
+		
+		
 		this.loans = [];
 		this.trades = [];
 		this.users = [];
@@ -262,6 +278,6 @@ exports.Database = class Database {
 			firstCycle = false;
 		}
 		
-		setCellArray('A1', array, cfg.tabMain).catch(r => log(r));
+		setCellArray('A1', array, this.tabMain).catch(r => log(r));
 	}
 };

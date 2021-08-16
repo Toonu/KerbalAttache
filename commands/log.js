@@ -1,4 +1,5 @@
-const {prefix} = require('../config.json'), {messageHandler, perm} = require("../utils"), fs = require("fs");
+const {messageHandler, perm} = require("../utils"), fs = require("fs");
+const {prefix} = require('../database.json');
 
 module.exports = {
 	name: 'log',
@@ -23,5 +24,5 @@ module.exports = {
 					return messageHandler(message, 'Invalid operation. Please retry.', true);
 			}
 		}
-	},
+	}
 };

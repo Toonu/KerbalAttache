@@ -1,18 +1,18 @@
-const cfg = require("./../config.json"),
-    {messageHandler, report, formatCurrency, ping, log} = require("../utils");
+const {messageHandler, report, formatCurrency, ping, log} = require("../utils");
 const {Trade} = require('../dataStructures/Trade');
 const {findAsset} = require('../sheet');
+const {prefix} = require('../database.json');
 let client;
 
 module.exports = {
     name: 'trade',
     description: 'Command for making trade transactions between nations.',
     args: 0,
-    usage: `${cfg.prefix}trade [sell | buy] [AMOUNT] [ASSET] [PRICE] [USER]
+    usage: `${prefix}trade [sell | buy] [AMOUNT] [ASSET] [PRICE] [USER]
 
-Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
-**Assets:** can be listed via empty **${cfg.prefix}buy** command.
-**Trades:** can be listed via empty **${cfg.prefix}trade** command.`,
+Eg. ${prefix}trade sell 2 IFV 20000 @User
+**Assets:** can be listed via empty **${prefix}buy** command.
+**Trades:** can be listed via empty **${prefix}trade** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function trade(message, args, db) {
@@ -79,7 +79,7 @@ Eg. ${cfg.prefix}trade sell 2 IFV 20000 @User
         message.mentions.users.first().send(`Transaction was proposed by ${message.author.username}! Information:
 The proposer wants to *${isSelling ? 'sell' : "buy from"}* you \`${amount} ${asset.name}s\` for ***${formatCurrency(money)}***
 
-To accept the transaction, type \`${cfg.prefix}accept\` in your server **state** channel.`)
+To accept the transaction, type \`${prefix}accept ID\` in your server **state** channel.`)
             .catch(error => {
                 return messageHandler(message, error, true);
             });

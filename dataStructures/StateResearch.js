@@ -1,5 +1,5 @@
 const {theatres} = require('./enums');
-const cfg = require('./../config.json');
+const {era} = require('../database.json');
 
 exports.StateResearch = class StateResearch {
 	constructor() {
@@ -63,7 +63,7 @@ exports.StateResearch = class StateResearch {
 	 */
 	unlockNode(node) {
 		//Validating input data.
-		if (node.name.substring(0, 2) > cfg.era || (node.name.startsWith('early') && 50 > cfg.era)) {
+		if (node.name.substring(0, 2) > era || (node.name.startsWith('early') && 50 > era)) {
 			throw new Error('Node is too futuristic!');
 		} else if (this.RP - node.cost < 0) {
 			throw new Error('ArgumentOutOfRangeException: Not enough Research Points to unlock the node.');

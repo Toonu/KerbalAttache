@@ -1,5 +1,6 @@
-const fs = require('fs'), cfg = require('./config.json');
+const fs = require('fs');
 const {resultOptions} = require('./utils');
+const db = require('./database.json');
 
 module.exports = {
     /**
@@ -8,7 +9,7 @@ module.exports = {
      * @return {string}     returns formatted number string.
      */
     formatCurrency: function formatCurrency(num) {
-        return num.toLocaleString(cfg.moneyLocale, {style: 'currency', currency: cfg.money});
+        return num.toLocaleString(db.moneyLocale, {style: 'currency', currency: db.money});
     },
 
     /**
@@ -22,7 +23,7 @@ module.exports = {
         let dateTime = `${today.getUTCFullYear()}.${(today.getUTCMonth() < 10 ? '0' : '') + (today.getUTCMonth() + 1)}.${(today.getUTCDate() < 10 ? '0' : '') + today.getUTCDate()} ${today.getUTCHours()}:${(today.getUTCMinutes() < 10 ? '0' : '') + today.getUTCMinutes()}:${(today.getUTCSeconds() < 10 ? '0' : '') + today.getUTCSeconds()}`;
         module.exports.log(content);
         // noinspection JSUnresolvedVariable,JSUnresolvedFunction
-        message.client.channels.cache.get(cfg.servers[message.guild.id].mainid).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${content}`)
+        message.client.channels.cache.get(db.channelReporting).send(`[${dateTime.padEnd(21)}UTC] [${command}]: ${content}`)
             .catch(networkError => log(networkError, true));
     },
 
@@ -115,12 +116,12 @@ module.exports = {
         switch (level) {
             case 1:
                 // noinspection JSUnresolvedVariable
-                clearance = (cfg.servers[message.guild.id].developers.some(r => message.member.roles.cache.has(r))
-                    || cfg.servers[message.guild.id].administrators.some(r => message.member.roles.cache.has(r)));
+                clearance = (db.developers.some(r => message.member.roles.cache.has(r))
+                    || db.administrators.some(r => message.member.roles.cache.has(r)));
                 break;
             case 2:
                 // noinspection JSUnresolvedVariable
-                clearance = (cfg.servers[message.guild.id].administrators.some(r => message.member.roles.cache.has(r)));
+                clearance = (db.administrators.some(r => message.member.roles.cache.has(r)));
                 break;
             default:
                 break;

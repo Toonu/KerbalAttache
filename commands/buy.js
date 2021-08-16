@@ -1,14 +1,18 @@
-const cfg = require('./../config.json'), assets = require('../dataImports/assets.json'), discord = require('discord.js'),
-    {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
+const {prefix} = require('../database.json');
+const assets = require(`../dataImports/assets.json`);
+const discord = require('discord.js');
+const {messageHandler, formatCurrency, embedSwitcher, resultOptions, report, log, ping} = require("../utils");
 const {findAsset} = require('../sheet');
+
+
 // noinspection JSCheckFunctionSignatures
 module.exports = {
     name: 'buy',
     description: 'Command for buying new assets. Do NOT use in public channels.',
     args: 0,
-    usage: `${cfg.prefix}buy [AMOUNT] [ASSET]
+    usage: `${prefix}buy [AMOUNT] [ASSET]
 Assets do not need to be written in capital letters, the command is case insensitive.
-**Assets:** can be listed via **${cfg.prefix}buy** command.`,
+**Assets:** can be listed via **${prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function buy(message, args, db) {

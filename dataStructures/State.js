@@ -1,9 +1,9 @@
 const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
-const {assets} = require('../dataImports/assets.json');
+const {assets} = require(`../dataImports/assets.json`);
 const discord = require('discord.js');
 const {formatCurrency} = require('../utils');
-const cfg = require('./../config.json');
+
 
 
 exports.State = class State {
@@ -88,7 +88,7 @@ exports.State = class State {
 		.addField('Account:', formatCurrency(this.account))
 		.addField('Balance:', formatCurrency(this.balance))
 		.addField('Research budget:', formatCurrency(this.research.budget), true)
-		.addField('Research Points:', `${new Intl.NumberFormat(cfg.moneyLocale,
+		.addField('Research Points:', `${new Intl.NumberFormat(db.moneyLocale,
 			{minimumSignificantDigits: 3}).format(this.research.RP)} RP`, true)
 		.addField('CF', this.research.CF, true)
 		.addField('Tiles:', this.tiles, true)

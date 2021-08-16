@@ -1,14 +1,16 @@
-const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, report, processYesNo} = require("../utils"),
-    {getCellArray, deleteRow} = require("../sheet"), cfg = require('../config.json');
+const {ping, messageHandler, formatCurrency, log, resultOptions, embedSwitcher, report, processYesNo} = require("../utils");
+const {getCellArray, deleteRow} = require("../sheet");
+const {prefix, tabSubmissions} = require('../database.json');
 const discord = require('discord.js');
+
 module.exports = {
     name: 'sub',
     description: 'Command for getting information about user subscriptions.',
     args: 0,
-    usage: `${cfg.prefix}sub [PERSIST] [USER]
+    usage: `${prefix}sub [PERSIST] [USER]
     Persist set to 'true' will make the message persistant and it will never dissapaear.
     
-    Use ${cfg.prefix}sub del [CRAFT]
+    Use ${prefix}sub del [CRAFT]
     to delete submission of craft.`,
     cooldown: 5,
     guildOnly: true,
@@ -20,7 +22,7 @@ module.exports = {
             return messageHandler(message,
                 new Error('NullReferenceException: User or his state does not exist!'), true);
 
-        let submissionsData = await getCellArray('A1', cfg.tabSubmissionsEndCol, cfg.tabSubmissions)
+        let submissionsData = await getCellArray('A1', db.tabSubmissionsEnd, db.tabSubmissions)
             .catch(error => {
                 isErroneous = true;
                 return messageHandler(message, error, true);
@@ -73,7 +75,7 @@ module.exports = {
             })
             .catch(error => log(error, true));
         message.delete().catch(error => log(error, true));
-    },
+    }
 };
 
 
@@ -102,7 +104,7 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
                 if (result === resultOptions.confirm) {
                     report(message, `${state.name} | ${message.author} has deleted submission ${craft}! Please delete the craft file from the storage manually.`, 'subDeletion');
                     messageHandler(message, 'Submission was deleted!', true);
-                    deleteRow(craftPosition[i], cfg.tabSubmissions).catch(error => log(error, true));
+                    deleteRow(craftPosition[i], tabSubmissions).catch(error => log(error, true));
                 }
             })
             .catch(error => messageHandler(message, error, true));

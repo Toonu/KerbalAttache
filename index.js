@@ -1,11 +1,12 @@
-const {prefix} = require('./config.json'),
-	Discord = require('discord.js'),
-	fs = require('fs'),
-	{init} = require("./sheet"),
-	{log, perm, messageHandler} = require("./utils"),
-	trade = require('./commands/trade'),
-	{startup} = require('./keep_alive'),
-	os = require('os');
+const Discord = require('discord.js');
+const fs = require('fs');
+const os = require('os');
+const {init} = require("./sheet");
+const {log, perm, messageHandler} = require("./utils");
+const trade = require('./commands/trade');
+const {startup} = require('./keep_alive');
+
+
 const {Database} = require('./dataStructures/Database');
 
 let client = new Discord.Client();
@@ -14,6 +15,8 @@ let client = new Discord.Client();
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const coolDowns = new Discord.Collection();
+const db = new Database(client);
+trade.setClient(client);
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -31,12 +34,12 @@ client.on('ready', () => {
 
 client.on('message', message => {
 	//Ignored messages without a prefix.
-	if (!message.content.startsWith(prefix) || message.author.bot) {
+	if (!message.content.startsWith(db.prefix) || message.author.bot) {
 		return;
 	}
 	
 	//Prepares the arguments.
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const args = message.content.slice(db.prefix.length).trim().split(/ +/);
 
 	//Finds the command.
 	const command = client.commands.get(args.shift().toLowerCase());
@@ -53,7 +56,7 @@ client.on('message', message => {
 	//Checking for arguments.
 	if (command.args && (!args.length || command.args > args.length)) {
 		return messageHandler(message, `You didn't provide all required arguments, ${message.author.username}!
-The proper usage would be:\n${command.usage}\n\nFor more information, type ${prefix}help ${command.name}.`, true, 20000);
+The proper usage would be:\n${command.usage}\n\nFor more information, type ${db.prefix}help ${command.name}.`, true, 20000);
 	}
 
 	//Checking for cool down.
@@ -93,9 +96,8 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 });
 
 const {CLIENT_TOKEN} = os.platform() === 'linux' ? process.env : require('./env.json');
-const db = new Database(client);
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
-trade.setClient(client);
+
 
 
 

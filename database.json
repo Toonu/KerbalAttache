@@ -1,5 +1,24 @@
 {
     "turn": 0,
+    "prefix": ",",
+    "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
+    "money": "EUR",
+    "moneyLocale": "fr-FR",
+    "era": 50,
+    "tabMain": "States",
+    "tabSubmissions": "Database",
+    "tabSubmissionsEnd": "AA",
+    "channelReporting": "846482105190056026",
+    "channelBattles": "846482105190056026",
+    "channelAnnounce": "846482105190056026",
+    "roleHeadOfState": "519315646606082052",
+    "administrators": [
+        "859820323544367145",
+        "470260541785636865"
+    ],
+    "developers": [
+        "767064998207291430"
+    ],
     "loans": [],
     "trades": [],
     "users": [
@@ -24,7 +43,7 @@
                 "name": "Iconia",
                 "demonym": "Iconian",
                 "account": 1869460,
-                "balance": 0,
+                "balance": 492660,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1271,9 +1290,9 @@
         {
             "user": {
                 "id": "751153005931528334",
-                "system": null,
+                "system": false,
                 "locale": null,
-                "flags": 0,
+                "flags": null,
                 "username": "The_Stinky_Broccoli",
                 "bot": false,
                 "discriminator": "2015",

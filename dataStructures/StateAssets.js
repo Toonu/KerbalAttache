@@ -1,6 +1,5 @@
 const {theatres} = require('./enums');
-const {assetsFile} = require('../config.json');
-const {assets, systems} = require(`../dataImports/${assetsFile}`);
+const {assets, systems} = require(`../dataImports/assets.json`);
 const discord = require('discord.js');
 const {System} = require('./System');
 

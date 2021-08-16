@@ -1,42 +1,47 @@
-const cfg = require('../config.json'), {messageHandler, report, perm, exportFile} = require("../utils");
+const {messageHandler, report, perm, log} = require("../utils");
+const {prefix} = require('../database.json');
+
 module.exports = {
     name: 'config',
     description: 'Command for configuring the settings.',
     args: 2,
-    usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]\n
+    usage: `${prefix}config [OPTION] [VALUE] [DEL]\n
     OPTIONS followed by new value:
     \`\`\`
+    prefix          CHAR    (Single character.)
     money           STRING  (Currency code such as EUR/USD string.)
     moneyLocale     STRING  (Currency formatting such as fr-FR string.)
     sheet           STRING  (Sheet ID string.)
-    era             INT     (Decimal integer, such as 50.)
-    sname           STRING  (Server internal name string.)
-    smainid         INT     (Server main announcements channel ID integer.)
-    sbattleid       INT     (Server battle announcements channel ID integer.)
-    sadmin          INT DEL (Server administrator roles integer.)
-    sdev            INT DEL (Server developer roles integer.)
-    sheadofstate    STRING  (Server Head of State role string.)
-    main            STRING  (Sheet main tab string.)
-    submissions     STRING  (Sheet submissions tab string.)
-    systems         STRING  (Sheet systems tab string.)
+    tabMain         STRING  (Main tab name of the main sheet.)
+    tabSubmissions  STRING  (Submissions tab name of main sheet.)
+    tabSubmissionsEnd STRING (Ending column name).
+    
     turn            INT     (Changing turn number to new number.)
+    era             INT     (Decimal integer, such as 50.)
+    administrators  INT DEL (Server administrator role or integer.)
+    developers      INT DEL (Server developer role or integer.)
+    channelReporting INT    (Server internal reporting channel.)
+    channelBattles  INT     (Server battle reporting channel.)
+    channelAnnounce INT     (Server announcements channel.)
+    roleHeadOfState INT     (Server Head of State role.)
+    
     \`\`\`
     Del option works only for role lists.
     `,
     cooldown: 5,
     guildOnly: true,
-    execute: function configBot(message, args, db) {
+    execute: function config(message, args, db) {
         //Validating input arguments and checking permissions.
         if (perm(message, 2)) {
-            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate', 'sdev', 'sadmin'].includes(args[0])
-                && Number.isNaN(parseInt(args[1]))) {
-                return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
-            } else if (['sdev', 'sadmin'].includes(args[0])) {
-                args[1] = message.mentions.roles.first();
-                if (args[1]) {
-                    args[1] = args[1].id;
-                } else if (Number.isNaN(parseInt(args[1]))) {
-                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+            if (['developers', 'administrators', 'roleHeadOfState'].includes(args[0])) {
+                let role = message.mentions.roles.first();
+                if (role) {
+                    args[1] = role.id;
+                } else {
+                    args[1] = parseInt(args[1]);
+                    if (Number.isNaN(args[1])) {
+                        return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+                    }
                 }
             } else if (args[0] === 'era') {
                 args[1] = parseInt(args[1]);
@@ -45,59 +50,56 @@ module.exports = {
                 } else if (args[1] % 10 !== 0) {
                     return messageHandler(message, new Error('InvalidFormatException: Era must have zero at the end. Eg. 50, 60...'), true);
                 }
+            } else if (['turn', 'channelReporting', 'channelBattles', 'channelAnnounce'].includes(args[0])) {
+                args[1] = parseInt(args[1]);
+                if (Number.isNaN(parseInt(args[1]))) {
+                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+                }
             } else if (args[0] === 'money') {
                 if (!new RegExp(/[A-Z]{3}/g).test(args[1])) {
                     return messageHandler(message, new Error('InvalidFormatException: Money must be using their abbreviation, not a symbol. Eg. EUR, USD...'), true);
                 }
+            } else if (args[0] === 'prefix' && args[1].length !== 1) {
+                return messageHandler(message,
+                    new Error('InvalidFormatException: Prefix can be only one character long'), true);
             }
-
-            switch (args[0]) {
-                case 'turn':
-                    db.turn = args[1];
-                    db.export();
-                    break;
-                case 'money':
-                case 'sheet':
-                case 'era':
-                case 'moneyLocale':
-                case 'submissions':
-                case 'main':
-                case 'systems':
-                    cfg[args[0]] = args[1];
-                    break;
-                case 'sname':
-                case 'smainid':
-                case 'sbattleid':
-                case 'sheadofstate':
-                    cfg.servers[message.guild.id][args[0].substring(1)] = args[1];
-                    break;
-                case 'sadmin':
-                case 'sdev':
-                    //del is not undefined and is del
-                    let del = (args[2] && args[2].toLowerCase() === 'del');
-                    
-                    // noinspection JSUnresolvedVariable
-                    let roles = args[0] === 'sadmin' ? cfg.servers[message.guild.id].administrators
-                        : cfg.servers[message.guild.id].developers;
-                    
-                    if (del) {
-                        for (let i = 0; i < roles.length; i++) {
-                            if (roles[i] === args[1]) {
-                                roles.splice(i, 1);
+            
+            let oldValue;
+            let success = false;
+            for (let [name, entry] of Object.entries(db)) {
+                if (entry instanceof Array && name.toLowerCase() === args[0].toLowerCase()) {
+                    if (args[2] && args[2] === 'del') {
+                        for (let i = 0; i < entry.length; i++) {
+                            if (args[1] === entry[i]){
+                                db[name].splice(i, 1);
+                                success = true;
                                 break;
                             }
                         }
                     } else {
-                        roles.push(args[1]);
+                        db[name].push(args[1]);
+                        success = true;
+                        break;
                     }
                     break;
-                default:
-                    return messageHandler(message, new Error('InvalidArgumentException: Non-existing configuration option argument.'), true);
+                } else if (name.toLowerCase() === args[0].toLowerCase()) {
+                    db[name] = args[1];
+                    oldValue = entry;
+                    success = true;
+                    break;
+                }
             }
-
-            exportFile('config.json', cfg);
-            report(message, `${message.author.username} changed configuration ${args[0]} to ${args[1]}`, this.name);
+            
+            if (!success)
+                return messageHandler(message,
+                    new Error('InvalidArgumentException: Non-existing configuration option argument.'), true);
+    
+            db.export();
+            report(message, `${message.author.username} changed configuration${(oldValue === undefined ? '' : ` from ${oldValue}`)} ${args[0]} to ${args[2] ? 'nothing'
+             : args[1]}`, this.name);
             messageHandler(message, 'Operation finished.', true);
+        } else {
+            return message.delete().catch(error => log(error, true));
         }
     }
 };

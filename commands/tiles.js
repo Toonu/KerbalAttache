@@ -1,9 +1,11 @@
-const cfg = require("./../config.json"), {perm, messageHandler, report, log} = require("../utils");
+const {perm, messageHandler, report, log} = require("../utils");
+const {prefix} = require('../database.json');
+
 module.exports = {
     name: 'tiles',
     description: 'Command for managing tile amount of a states.',
     args: 2,
-    usage: `${cfg.prefix}tiles [ADDITION] [USER]
+    usage: `${prefix}tiles [ADDITION] [USER]
     
     Accepts decimal numbers to represent tiny tiles.`,
     cooldown: 5,
@@ -41,5 +43,5 @@ module.exports = {
         //Reporting.
         report(message, `Tiles set to ${dbUser.state.tiles} for ${dbUser.state.name} | <@${dbUser.user.id}> by ${discordUser}!`, this.name);
         messageHandler(message, 'Tiles set!', true);
-    },
+    }
 };

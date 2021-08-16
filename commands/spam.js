@@ -1,4 +1,5 @@
-const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json');
+const {perm, messageHandler, log} = require("../utils");
+const {prefix} = require('../database.json');
 
 module.exports = {
 	name: 'spam',
@@ -30,5 +31,5 @@ module.exports = {
 			message.delete().catch(networkError => log(networkError, true));
 			log(`Spammed ${spamNumber} of messages.`);
 		}
-	},
+	}
 };

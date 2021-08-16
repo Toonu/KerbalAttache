@@ -1,11 +1,13 @@
-const cfg = require('../config.json'), {report, perm, messageHandler, log} = require('../utils');
+const {report, perm, messageHandler, log} = require('../utils');
 const {DatabaseUser} = require('../dataStructures/DatabaseUser.js');
 const {State} = require('../dataStructures/State');
+const {prefix} = require('../database.json');
+
 module.exports = {
     name: 'usercreate',
     description: 'Command for creating new user in the database.',
     args: 0,
-    usage: `${cfg.prefix}usercreate OPTIONS... [USER]\n
+    usage: `${prefix}usercreate OPTIONS... [USER]\n
     OPTIONS followed by new value:
     \`\`\`
     -n [nation] string
@@ -13,7 +15,7 @@ module.exports = {
     -m [map] URL
     -d [demonym] string
     -notes [notes] string\`\`\`\nSet no option to create state-less user. Notes can be used for state-less users.
-    Example: ${cfg.prefix}usercreate -n Russia -d Russian -m URL -c b34ce -notes ha ha ha @ping`,
+    Example: ${prefix}usercreate -n Russia -d Russian -m URL -c b34ce -notes ha ha ha @ping`,
     cooldown: 5,
     guildOnly: true,
     execute: async function usercreate(message, args, db) {
@@ -87,5 +89,5 @@ module.exports = {
         } else {
             message.delete().catch(error => log(error, true));
         }
-    }
+    },
 };

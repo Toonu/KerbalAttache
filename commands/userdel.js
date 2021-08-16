@@ -1,9 +1,11 @@
-const cfg = require('./../config.json'), {perm, messageHandler, report, log} = require('../utils');
+const {perm, messageHandler, report, log} = require('../utils');
+const {prefix} = require('../database.json');
+
 module.exports = {
     name: 'userdel',
     description: 'Command for deleting user from the database.',
     args: 1,
-    usage: `${cfg.prefix}userdel [USER]`,
+    usage: `${prefix}userdel [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: function userdel(message, args, db) {
@@ -24,5 +26,5 @@ module.exports = {
         } else {
             return messageHandler(message, new Error('NullReferenceException: User does not exist, canceling operation.'), true)
         }
-    }
+    },
 };

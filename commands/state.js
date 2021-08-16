@@ -1,11 +1,12 @@
-const {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../utils"),
-    cfg = require("./../config.json");
+const {ping, messageHandler, log, embedSwitcher, resultOptions} = require("../utils");
+const {prefix} = require('../database.json');
+
 // noinspection JSUnusedLocalSymbols
 module.exports = {
     name: 'state',
     description: 'Command for getting your current state information. Do NOT use in public channels.',
     args: 0,
-    usage: `${cfg.prefix}state [USER]`,
+    usage: `${prefix}state [USER]`,
     cooldown: 5,
     guildOnly: true,
     execute: async function state(message, args, db) {
@@ -38,5 +39,5 @@ module.exports = {
         await embedSwitcher(message, embeds, ['⬅️', '❌', '➡️'], emojiFilter, processReactions)
             .then(() => message.delete().catch(error => log(error, true)))
             .catch(error => messageHandler(message, error, true));
-    },
+    }
 };

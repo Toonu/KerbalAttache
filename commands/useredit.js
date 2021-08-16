@@ -1,13 +1,14 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const cfg = require('./../config.json'), {perm, report, messageHandler, log} = require('../utils');
+const {perm, report, messageHandler, log} = require('../utils');
 const {State} = require('../dataStructures/State');
+const {prefix} = require('../database.json');
 
 module.exports = {
     name: 'useredit',
     description: 'Command for editing user data.',
     args: 2,
-    usage: `${cfg.prefix}useredit [OPTION] [DATA / DEL] [USER]\n
+    usage: `${prefix}useredit [OPTION] [DATA / DEL] [USER]\n
     You can use only one option at a time!
     Write del instead of data to remove the data.
     Your notes are always editable even without clearance.
@@ -110,5 +111,5 @@ module.exports = {
         db.export();
         report(message, `${message.author} modified ${discordUser}'s ${args[0].substring(1)} to ${data}.`, this.name);
         messageHandler(message, 'User property modified.', true);
-    }
+    },
 };

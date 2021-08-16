@@ -1,6 +1,6 @@
 // noinspection ReuseOfLocalVariableJS
 
-const { prefix } = require('../config.json');
+const {prefix} = require('../database.json');
 const {messageHandler, log} = require("../utils");
 
 module.exports = {
@@ -45,5 +45,5 @@ module.exports = {
 		} else {
 			messageHandler(message, new Error('InvalidArgumentException: That is not a valid command!'), true);
 		}
-	},
+	}
 };

@@ -1,12 +1,13 @@
 // noinspection ExceptionCaughtLocallyJS
-
-const {perm, messageHandler, log, report} = require("../utils"), cfg = require('../config.json'),
-    assets = require('../dataImports/assets.json'), {findAsset} = require('../sheet');
+const {prefix} = require('../database.json');
+const {perm, messageHandler, log, report} = require("../utils");
+const assets = require(`../dataImports/assets.json`);
+const {findAsset} = require('../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',
     args: 8,
-    usage: `${cfg.prefix}battle [USERS] [OPTIONS] 
+    usage: `${prefix}battle [USERS] [OPTIONS]
     OPTIONS followed by new value:
     \`\`\`
     -a [AMOUNT] [ASSETS]
@@ -21,7 +22,7 @@ module.exports = {
     Optional battle name MUST be the last argument of the command!
     
     Eg. @user @user2 @user3 -a 2 AFV 1 APC 20 ATGM -b 3 MBT -b 4 L 8 AGM 2 ARM -w a -n Battle of five armies
-    **Assets:** can be listed via **${cfg.prefix}buy** command.`,
+    **Assets:** can be listed via **${prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
 
@@ -128,7 +129,7 @@ module.exports = {
             
             //Logging
             // noinspection JSUnresolvedVariable, JSUnresolvedFunction
-            message.client.channels.cache.get(cfg.servers[message.guild.id].battleid)
+            message.client.channels.cache.get(db.channelBattles)
             .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`\n${results}\n\`\`\`
 ${winningTeam === 'd' ? 'The battle has been a draw!' : `Team ${winningTeam.toUpperCase()} has been victorious.`}
             `).catch(error => log(error));

@@ -1,9 +1,11 @@
-const cfg = require('./../config.json'), {log, report, perm} = require("../utils");
+const {log, report, perm} = require("../utils");
+const {prefix} = require('../database.json');
+
 module.exports = {
     name: 'turn',
     description: 'Command for finishing turn and updating the states data!',
     args: 0,
-    usage: `${cfg.prefix}turn`,
+    usage: `${prefix}turn`,
     cooldown: 5,
     guildOnly: true,
     execute: async function turn(message, args, db) {
@@ -18,9 +20,8 @@ module.exports = {
         db.export();
         db.exportSheet();
         report(message, `Turn ${db.turn} has been finished by ${message.author}.`, this.name);
-        let server = cfg.servers[message.guild.id];
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
-        message.client.channels.cache.get(server.announcements)
+        message.client.channels.cache.get(db.channelAnnounce)
         .send(`<@&${server.headofstate}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
     }
 };

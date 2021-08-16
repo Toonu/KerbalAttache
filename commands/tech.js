@@ -1,14 +1,15 @@
 // noinspection ExceptionCaughtLocallyJS,DuplicatedCode
 
-const cfg = require('./../config.json'), tt = require('../dataImports/tt.json'),
+const tt = require('../dataImports/tt.json'),
     {ping, log, messageHandler, report, embedSwitcher, resultOptions, processYesNo} = require('../utils'),
     {TechNode} = require('../dataStructures/TechNode');
+const {prefix} = require('../database.json');
 
 module.exports = {
     name: 'tech',
     description: 'Command for managing state research.',
     args: 0,
-    usage: `${cfg.prefix}tech [OPERATION] [OPTION] [DATA] [USER]
+    usage: `${prefix}tech [OPERATION] [OPTION] [DATA] [USER]
     
 Possible operations:
 
@@ -62,7 +63,7 @@ u | unlocked                            - Shows information about everything you
             default:
                 await list(message, db, state, data);
         }
-    },
+    }
 };
 
 
@@ -166,7 +167,7 @@ async function list(message, db, state, searchItem) {
         newMessage.push(`Operation Finished.\n***Nodes in specified category ${searchItem}:***\n\n\`\`\`ini`);
         for (const [name, element] of Object.entries(tt.nodes).slice(1)) {
             if (element.category.includes(searchItem)) {
-                newMessage.push(`[${name}] ${element.desc} ! ${element.cost}RP`);
+                newMessage.push(`[${name}] ${element.desc} | ${element.cost}RP`);
             }
         }
         newMessage.push(`\`\`\``);

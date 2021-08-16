@@ -1,4 +1,5 @@
-const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../config.json');
+const {perm, messageHandler, log} = require("../utils");
+const {prefix} = require('../database.json');
 
 module.exports = {
 	name: 'prune',

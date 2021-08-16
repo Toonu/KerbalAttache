@@ -1,4 +1,5 @@
 const fs = require('fs'), cfg = require('./config.json');
+const {resultOptions} = require('./utils');
 
 module.exports = {
     /**
@@ -133,41 +134,6 @@ module.exports = {
     },
 
     /**
-     * Function creates new user of id with attributes of nation, color, sheet and map. Returns string message the user was created successfully.
-     * @param {string} id           user discord id
-     * @param {string} nameIn       user discord name
-     * @param {string} nationIn     nation name
-     * @param {string} demonymIn    nation demonym
-     * @param {string} colorIn      color hex number
-     * @param {string} map          map URL
-     * @return {string}             Returns string response of attributes of created user or throws an error message.
-     * @throws {Error}              Throws Exceptions if the user already exists or the specified ID is undefined/NaN.
-     */
-    createUser: function createUser(id, nameIn, nationIn = 'undefined', demonymIn = 'undefined', colorIn = "fffffe",
-    map = 'https://discord.com/') {
-        if (!id || Number.isNaN(id)) {
-            throw new Error('InvalidArgumentException: User ID is undefined!') ;
-        } else if (cfg.users[id]) {
-            throw new Error('InvalidOperationException: User already exists!');
-        }
-
-        //Adds user to the json file.
-        cfg.users[id] = {
-            name: nameIn,
-            nation: nationIn,
-            demonym: demonymIn,
-            color: colorIn,
-            cf: 1,
-            map: map,
-            notes: " ",
-            trades: {}
-        };
-
-        module.exports.exportFile("config.json", cfg);
-        return`Nation ${nationIn} created for user <@${id}>`
-    },
-
-    /**
      * Function exports json file from JSON object.
      * @param file  Filename to export.
      * @param data  JSON Object to write in.
@@ -176,7 +142,7 @@ module.exports = {
         fs.writeFileSync(file, JSON.stringify(data, null, 4));
     },
 
-    resultOptions: Object.freeze({"delete":1, "confirm":2, "moveNext":3}),
+    resultOptions: Object.freeze({"delete":1, "confirm":2, "moveRight":3, "moveLeft":4}),
 
     /**
      * Method switches between embeds.
@@ -201,6 +167,19 @@ module.exports = {
                                 final = true;
                                 resolve(result);
                                 break;
+                            case module.exports.resultOptions.moveLeft:
+                                i--;
+                                if (i === -1) {
+                                    i += embeds.length;
+                                }
+                                break;
+                            case module.exports.resultOptions.moveRight:
+                                i++;
+                                //Ensures infinite closed loop.
+                                if (i === embeds.length) {
+                                    i = 0;
+                                }
+                                break;
                             default:
                         }
                     })
@@ -212,40 +191,15 @@ module.exports = {
                 if (final) {
                     return;
                 }
-
-                //Ensures infinite closed loop.
-                i++;
-                if (i === embeds.length) {
-                    i = 0;
-                }
             }
         })
     },
-    /**
-     * Function finds matching searchItems in analysed data array in specified row.
-     * @param {Array} analysedData
-     * @param {Array<string>} searchItems
-     * @param {number} row
-     * @return {{}} return nothing.
-     */
-    findArrayData: function findArrayData(analysedData, searchItems, row) {
-        let result = {};
-        
-        for (let i = 0; i < searchItems.length; i++) {
-            result[searchItems[i]] = undefined;
-            for (let j = 0; j < analysedData.length; j++) {
-                let analysedItem = row ? analysedData[j][row] : analysedData[j];
-                if (searchItems[i] === analysedItem) {
-                    result[searchItems[i]] = j;
-                    break;
-                }
-            }
-            if (!result[searchItems[i]]) {
-                throw new Error(`NotFoundException: Item ${searchItems[i]} not found in the array.`);
-            }
+    processYesNo: function processYesNo(reaction) {
+        if (reaction.emoji.name === '✅') {
+            return resultOptions.confirm;
+        } else if (reaction.emoji.name === '❌') {
+            return resultOptions.delete;
         }
-
-        return result;
     }
 };
 
@@ -278,14 +232,8 @@ async function awaitEmbedReaction(message, reactions, embed, emojiFilter, proces
                 embedMessage.awaitReactions(emojiFilter, {max: 1, time: 60000, errors: ['time']})
                     .then(async collectedReactions => {
                         let result = processReactions(collectedReactions.first(), embedMessage);
-                        // noinspection FallThroughInSwitchStatementJS
-                        switch (result) {
-                            case module.exports.resultOptions.delete:
-                            case module.exports.resultOptions.moveNext:
-                            case module.exports.resultOptions.confirm:
-                                await embedMessage.delete().catch(error => module.exports.log(error, true));
-                                return resolve(result);
-                        }
+                        await embedMessage.delete().catch(error => module.exports.log(error, true));
+                        return resolve(result);
                     })
                     .catch(() => {
                         embedMessage.delete().catch(error => module.exports.log(error, true));

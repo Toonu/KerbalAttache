@@ -1,0 +1,1290 @@
+{
+    "categories": {
+        "gun": "Gun Weapon Systems",
+        "gunNaval": "Naval Weapon Systems",
+        "radarAEW": "AWACS",
+        "radarA2A": "Aerial radars",
+        "radarSurfaceSearch": "Surface search radars",
+        "radarSurfaceTarget": "Surface targeting radars",
+        "satellites": "Satellite and orbital technologies",
+        "drones": "Drone technologies",
+        "armour": "Reactive and composite armour",
+        "engines": "Aerial Engines",
+        "ecm": "ECM Equipment",
+        "missiles": "Missiles",
+        "engineering": "Various technologies",
+        "targeting": "Guidance and targeting systems"
+    },
+    "nodes": {
+        "50trg": {
+            "desc": "50' Aerial targeting radars",
+            "cost": 160,
+            "category": "radarA2A",
+            "prereq": [
+                "40search"
+            ],
+            "theatre": 0,
+            "unlocks": ["AI.17", "AN/APQ-51", "RP-2U Izumrud-2"]
+        },
+        "60trg": {
+            "desc": "60' Aerial targeting radars",
+            "cost": 160,
+            "category": "radarA2A",
+            "prereq": [
+                "50trg"
+            ],
+            "theatre": 0,
+            "unlocks": ["AI.23 AIRPASS", "AN/APQ-100", "RP-21 Sapfir"]
+        },
+        "70trg": {
+            "desc": "70' Aerial targeting radars",
+            "cost": 160,
+            "category": "radarA2A",
+            "prereq": [
+                "60trg"
+            ],
+            "theatre": 0,
+            "unlocks": ["AESA Radar", "AN/APG-63"]
+        },
+        "50ground": {
+            "desc": "50' Surface Surveillance radars",
+            "cost": 150,
+            "category": "radarSurfaceTarget",
+            "prereq": [
+                "40search"
+            ],
+            "theatre": 1,
+            "unlocks": ["AN/FPS-71"," 1RL13M P-15 Tropa"]
+        },
+        "60ground": {
+            "desc": "60' Surface Surveillance radars",
+            "cost": 150,
+            "category": "radarSurfaceTarget",
+            "prereq": [
+                "50ground"
+            ],
+            "theatre": 2,
+            "unlocks": ["AN/FPS-27", "AN/MPQ-34", "1S12 P-40 Armour"]
+        },
+        "70ground": {
+            "desc": "70' Surface Surveillance radars",
+            "cost": 150,
+            "category": "radarSurfaceTarget",
+            "prereq": [
+                "60ground"
+            ],
+            "theatre": 1,
+            "unlocks": ["STIR"]
+        },
+        "50aew": {
+            "desc": "50' Airborne Early Warning radars",
+            "cost": 170,
+            "category": "radarAEW",
+            "prereq": [
+                "50search"
+            ],
+            "theatre": 0,
+            "unlocks": ["AN/APS-33", "125RU AEW Range"]
+        },
+        "60aew": {
+            "desc": "60' Airborne Early Warning radars",
+            "cost": 170,
+            "category": "radarAEW",
+            "prereq": [
+                "50aew"
+            ],
+            "theatre": 0,
+            "unlocks": ["AN/APS-95", "Liana", "180RU AEW Range"]
+        },
+        "70aew": {
+            "desc": "70' Airborne Early Warning radars",
+            "cost": 170,
+            "category": "radarAEW",
+            "prereq": [
+                "60aew"
+            ],
+            "theatre": 0,
+            "unlocks": ["AN/APY-1", "220RU AEW Range"]
+        },
+        "40search": {
+            "desc": "40' Surface Search or Early Warning radars",
+            "cost": 150,
+            "category": "radarSurfaceSearch",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Type 281", "Type 2 Mark 2 Kai-2", "FuMO 61", "Mark 25", "WW2 Antenna", "100RU Radar Search Range"]
+        },
+        "50search": {
+            "desc": "60' Surface Search or Early Warning radars",
+            "cost": 150,
+            "category": "radarSurfaceSearch",
+            "prereq": [
+                "40search"
+            ],
+            "theatre": 2,
+            "unlocks": ["AN/FPS-8", "AMES Type 80", "P-12 Yenisei", "150RU Radar Search Range"]
+        },
+        "60search": {
+            "desc": "60' Surface Search or Early Warning radars",
+            "cost": 150,
+            "category": "radarSurfaceSearch",
+            "prereq": [
+                "50search"
+            ],
+            "theatre": 1,
+            "unlocks": ["AN/FPS-27", "AMES Type 85", "P-70 Lena-M", "200RU Radar Search Range"]
+        },
+        "70search": {
+            "desc": "70' Surface Search or Early Warning radars",
+            "cost": 150,
+            "category": "radarSurfaceSearch",
+            "prereq": [
+                "60search"
+            ],
+            "theatre": 2,
+            "unlocks": ["AN/TPS-43E", "P-18 Terek", "300RU Radar Search Range"]
+        },
+        "50turboprops": {
+            "desc": "Turboprop engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["O-235", "T56", "PT6A-42A", "NK-12"]
+        },
+        "50jet": {
+            "desc": "Early 50' jet engines.",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["J33-A-354 (F-80C)", "J48-P6A (F9F-5)", "Goblin 2 (Saab 21R)", "Goblin 3 (Vampire FB.6)",
+                "Nene 104B (Ouragan)", "AM-3M-500 (Tu-16)"]
+        },
+        "50jetlate": {
+            "desc": "Late 50' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "50jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["Derwent 8 (Meteor F.8)", "J47-GE13/GE17 (F-86)", "VK-1/A/F (MiG-15/17)", "Avon 207 (Hunter)",
+                "RM5 (Saab 32)", "RB.44 Tay (Mystere IV)", "Orpheus 803 (G.91R)", "Olympus Mk. 101 (Avro Vulcan)",
+                "J71-A-11 (B-66)"]
+        },
+        "60jet": {
+            "desc": "Early 60' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "50jetlate",
+                "60heat"
+            ],
+            "theatre": 0,
+            "unlocks": ["J57-P-20A/21 (F-8/100)", "J85-GE-13A (G.91Y)", "RD-9B (MiG-19)", "TF33-P-3 (B-52H)",
+                "Olympus Mk. 320 (TSR)", "RD-7M-2 (Tu-22R)"]
+        },
+        "60jetlate": {
+            "desc": "Late 60' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "60jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["J79-GE-11A/17 (F-104/4)", "TF30-PW-100 (F-111)", "RM6B/8B (Draken/Viggen)",
+                "Avon RB.146 Mk.302 (Electric Lightning)", "Atar 09K-50 (Mirage 5)", "R-25-300 (MiG-21)",
+                "YJ93-GE-3 (XB-70)"]
+        },
+        "70jet": {
+            "desc": "70' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "60jetlate"
+            ],
+            "theatre": 0,
+            "unlocks": ["R-15BD-300 / R-29-300 (Mig-23/25/27)", "RD-33 (MiG-29)", "TF30-P-414 (F-14A)",
+                "F-100-PW-100 (F-15)", "F404-GE-402 (F/A-18)", "RB.199-34R Mk. 101 (Tornado)", "Pegasus 103 (Harrier)",
+                "Adour Mk. 102 (Jaguard)", "RD-36-41 (T-4)", "AL-21F-3A (Su-24)", "NK-25 (Tu-22M)"]
+        },
+        "80jet": {
+            "desc": "80' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "70jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["Pegasus 107 (Harrier II)", "RM12 (Grippen)", "M53-P2 (Mirage)", "M88-2 (Rafale)",
+                "D-30F6 (MiG-31)", "R-13 (Su-25)", "AL-31F (Su-27)", "F100-PW-220 (F-15)", "F110-GE-400 (F-14)",
+                "F101-GE-102 (B-1)", "NK-321 (Tu-160)"]
+        },
+        "90jet": {
+            "desc": "90' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "80jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["F100-PW-229 (F-15)", "F110-GE-129 (F-16)", "F119-PW-100 (F-22)", "F414-GE-400 (F/A-18)",
+                "RB199-34R Mk. 105 (Tornado)", "EJ200 Mk. 100 (Typhoon)"]
+        },
+        "00jet": {
+            "desc": "00' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "90jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["AL-31FP (Su-30)", "RD-33MK (MiG-35)", "F110-GE-132 (F-16)", "F135-PW-600/601 (F-35)",
+                "F414G / F414-GE-39E (Gripen)", "F7 (P-1)"]
+        },
+        "10jet": {
+            "desc": "10' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "00jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["AL-41F1", "Izdeliye-30 (Su-57)", "Xian WS-15(J-20)"]
+        },
+        "20jet": {
+            "desc": "20' Jet Engines",
+            "cost": 200,
+            "category": "engines",
+            "prereq": [
+                "10jet"
+            ],
+            "theatre": 0,
+            "unlocks": ["F142-PW-100", "F605-RR401 (Tempest)", "EJ260 (Eurofighter)", "WS-13E (J-31/J-35/J-17)",
+                "F135-PW-1000 (B-21)", "NK-65 (Tu-PAK-DA)"]
+        },
+        "50amphibious": {
+            "desc": "Amphibious Vehicles",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["Amphibious Vehicles"]
+        },
+        "50catapult": {
+            "desc": "Steam Catapults",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["Steam catapults"]
+        },
+        "50airlift": {
+            "desc": "Airlift Rigging",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Air dropped vehicles"]
+        },
+        "50selfsealing": {
+            "desc": "Self Sealing Fuel Tanks",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Self-sealing fuel tanks"]
+        },
+        "50smoke": {
+            "desc": "Smoke Grenades",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Smoke grenades"]
+        },
+        "60heat": {
+            "desc": "Heat-Resistant Materials",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Heat-Resistant advanced materials"]
+        },
+        "60wings": {
+            "desc": "Variable Sweep Wings",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Variable Sweep Wings"]
+        },
+        "60refuel": {
+            "desc": "In-Flight Refueling",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["In-Flight Refueling"]
+        },
+        "70spaced": {
+            "desc": "Spaced Armor",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Spaced Armor"]
+        },
+        "70supercarrier": {
+            "desc": "Supercarrier Engineering",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["Aircraft carriers"]
+        },
+        "50pumps": {
+            "desc": "Naval Pumps",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["Naval pumps"]
+        },
+        "70vtol": {
+            "desc": "VTOL Technology",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["VTOL/STOVL Aircraft"]
+        },
+        "70fps": {
+            "desc": "Fire protection Systems",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [
+                "50selfsealing"
+            ],
+            "theatre": 0,
+            "unlocks": ["Fire Protection System bottles"]
+        },
+        "80stealth": {
+            "desc": "1st Generation Stealth",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [
+                "60heat"
+            ],
+            "theatre": 0,
+            "unlocks": ["1st Generation Stealth"]
+        },
+        "90stealth": {
+            "desc": "2nd Generation Stealth",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [
+                "80stealth"
+            ],
+            "theatre": 0,
+            "unlocks": ["2nd Generation Stealth"]
+        },
+        "20stealth": {
+            "desc": "3rd Generation Stealth",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [
+                "90stealth"
+            ],
+            "theatre": 0,
+            "unlocks": ["3rd Generation Stealth"]
+        },
+        "50guidance": {
+            "desc": "50' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["50' optical - Radar Beam / MCLOS Guidance"]
+        },
+        "60guidance": {
+            "desc": "60' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "50guidance"
+            ],
+            "theatre": 1,
+            "unlocks": ["60' optical - Early Laser Guidance"]
+        },
+        "70guidance": {
+            "desc": "70' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "60guidance"
+            ],
+            "theatre": 2,
+            "unlocks": ["70' optical - Laser optical guidance"]
+        },
+        "80guidance": {
+            "desc": "80' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "70guidance"
+            ],
+            "theatre": 0,
+            "unlocks": ["80' optical - Modern Laser Guidance"]
+        },
+        "90guidance": {
+            "desc": "90' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "80guidance"
+            ],
+            "theatre": 1,
+            "unlocks": ["90' optical - Atmosphere Throughput"]
+        },
+        "00guidance": {
+            "desc": "00' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "90guidance"
+            ],
+            "theatre": 2,
+            "unlocks": ["00' optical - Interferrence filtering"]
+        },
+        "10guidance": {
+            "desc": "10' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "00guidance"
+            ],
+            "theatre": 3,
+            "unlocks": ["10' optical - IRS Targetting"]
+        },
+        "20guidance": {
+            "desc": "20' Guidance Systems",
+            "cost": 130,
+            "category": "targeting",
+            "prereq": [
+                "10guidance"
+            ],
+            "theatre": 3,
+            "unlocks": ["20' optical - Modern IRS Targetting"]
+        },
+        "50ecm": {
+            "desc": "Electronic jamming research",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["AN/ALQ-28", "Flares"]
+        },
+        "60ecm": {
+            "desc": "60' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "50ecm"
+            ],
+            "theatre": 1,
+            "unlocks": ["AN/ALT-34", "Chaff", "Smalta-V", "SPS-141 Siren"]
+        },
+        "70ecm": {
+            "desc": "70' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "60ecm"
+            ],
+            "theatre": 2,
+            "unlocks": ["AN/ALQ-135", "AN/ALQ-99", "ARI.23246/1 Sky Shadow", "SPS-161 Geran"]
+        },
+        "80ecm": {
+            "desc": "80' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "70ecm"
+            ],
+            "theatre": 0,
+            "unlocks": ["L-175V Khibiny ECM"]
+        },
+        "90ecm": {
+            "desc": "90' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "80ecm"
+            ],
+            "theatre": 1,
+            "unlocks": ["Thales Spectra", "AN/APQ-181"]
+        },
+        "00ecm": {
+            "desc": "00' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "90ecm"
+            ],
+            "theatre": 2,
+            "unlocks": ["AN/ALQ-218"]
+        },
+        "20ecm": {
+            "desc": "20' ECM Systems",
+           "cost": 200,
+            "category": "ecm",
+            "prereq": [
+                "00ecm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AN/ALQ-318 Next Generation Jammer"]
+        },
+        "50armour": {
+            "desc": "Armour Development",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["200mm - RHA"]
+        },
+        "60armour": {
+            "desc": "Composite Armour Development",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "50armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["330mm - Combination K"]
+        },
+        "70armour": {
+            "desc": "Composite Armor",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "60armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["520mm - Chobham Armor"]
+        },
+        "80armour": {
+            "desc": "Composite Armor+",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "70armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["530mm - Kanchan Armor"]
+        },
+        "90armour": {
+            "desc": "External Composite Armor",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "80armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["980mm - MEXAS Armor"]
+        },
+        "00armour": {
+            "desc": "Advanced Composite Armor",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "90armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["1000mm - AMAP Armor"]
+        },
+        "10armour": {
+            "desc": "Modern Composite Armor",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "00armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["1100mm - "]
+        },
+        "70era": {
+            "desc": "Initial ERA Research",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "60armour"
+            ],
+            "theatre": 1,
+            "unlocks": ["Blazer ERA"]
+        },
+        "80era": {
+            "desc": "ERA Research",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "70era"
+            ],
+            "theatre": 1,
+            "unlocks": ["Kontakt-5 ERA"]
+        },
+        "00era": {
+            "desc": "Advanced ERA Research",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "80era"
+            ],
+            "theatre": 1,
+            "unlocks": ["Relikt ERA, TUSK ERA"]
+        },
+        "10era": {
+            "desc": "NxRA Research",
+            "cost": 130,
+            "category": "armour",
+            "prereq": [
+                "00era"
+            ],
+            "theatre": 1,
+            "unlocks": ["Malachit ERA"]
+        },
+        "00iads": {
+            "desc": "IADS Framework",
+            "cost": 150,
+            "category": "radarSurfaceTarget",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Networked battlefield - Allows interconnecting units via radar recievers."]
+        },
+        "earlycomputing": {
+            "desc": "Computing",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [],
+            "theatre": 3,
+            "unlocks": ["Prerequirement for drones and satellites."]
+        },
+        "60drone": {
+            "desc": "Disposable Reconnaissance Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "earlycomputing"
+            ],
+            "theatre": 0,
+            "unlocks": ["Disposable Recon drones"]
+        },
+        "70drone": {
+            "desc": "Early Reusable Reconnaissance Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "60drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Early Reusable Recon Drones"]
+        },
+        "80drone": {
+            "desc": "Modern Reusable Reconnaissance Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "70drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Modern Recon Drones"]
+        },
+        "90drone": {
+            "desc": "Early Combat Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "60drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Early Combat Drones"]
+        },
+        "00drone": {
+            "desc": "Modern Combat Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "90drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Modern Combat Drones"]
+        },
+        "10drone": {
+            "desc": "Advanced Combat Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "00drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Advanced Combat Drones"]
+        },
+        "20drone": {
+            "desc": "Future Autonomous Combat Drone",
+            "cost": 140,
+            "category": "drones",
+            "prereq": [
+                "10drone"
+            ],
+            "theatre": 0,
+            "unlocks": ["Future Combat Drones"]
+        },
+        "60sat": {
+            "desc": "Early Reconnaisance Satellites",
+            "cost": 190,
+            "category": "satellites",
+            "prereq": [
+                "earlycomputing"
+            ],
+            "theatre": 3,
+            "unlocks": ["Early Reconnaisance Satellites"]
+        },
+        "70sat": {
+            "desc": "Adv. Reconnaisance Satellites",
+            "cost": 190,
+            "category": "satellites",
+            "prereq": [
+                "60sat"
+            ],
+            "theatre": 3,
+            "unlocks": ["Adv. Reconnaisance Satellites, Increase spotting by 10RU"]
+        },
+        "80sat": {
+            "desc": "GPS Reconnaisance Satellites",
+            "cost": 190,
+            "category": "satellites",
+            "prereq": [
+                "60sat"
+            ],
+            "theatre": 3,
+            "unlocks": ["GPS Satellites"]
+        },
+        "10sat": {
+            "desc": "Block III Reconnaissance Satellites",
+            "cost": 190,
+            "category": "satellites",
+            "prereq": [
+                "80sat"
+            ],
+            "theatre": 3,
+            "unlocks": ["Block III GPS Satellites, Decrease chance of being hit"]
+        },
+        "50lgun": {
+            "desc": "50' Light Weapon Systems",
+            "cost": 140,
+            "category": "gun",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Stridsvagn 74", "2A16 (PT-76)", "AMX ELC bis", "Batignolles-Chatillon Char 25t", "EBR-90 Panhard",
+                "M48A1"]
+        },
+        "60lgun": {
+            "desc": "60' Light Weapon Systems",
+            "cost": 140,
+            "category": "gun",
+            "prereq": [
+                "50lgun"
+            ],
+            "theatre": 1,
+            "unlocks": ["Eland 90B", "D-58 (PT-85)", "Spähpanzer RU-251", "M41"]
+        },
+        "70lgun": {
+            "desc": "70' Light Weapon Systems",
+            "cost": 140,
+            "category": "gun",
+            "prereq": [
+                "60lgun"
+            ],
+            "theatre": 1,
+            "unlocks": ["HSTV"]
+        },
+        "50gun": {
+            "desc": "50' Gunnery Research",
+            "cost": 160,
+            "category": "gun",
+            "prereq": [
+                "50lgun"
+            ],
+            "theatre": 1,
+            "unlocks": ["52-PT-412 (T-54)", "Centurion Mk. 10", "AMX 50B", "M103 120mm", "52PT471N (T-10)", "M-64 (Object 268)", "FV4005 Stage II"]
+        },
+        "60gun": {
+            "desc": "60' Advanced Penetrators",
+            "cost": 160,
+            "category": "gun",
+            "prereq": [
+                "50gun"
+            ],
+            "theatre": 1,
+            "unlocks": ["M102", "2A18 (D-30) Howitzer", "Leopard 1A0", "M-69 (Obj. 120) Taran", "2A26 (T-64)",
+                "T57 Heavy Tank Turret", "AMX-30", "Chieftain Mk.3", "Leopard 1A1", "M551", "M60A1", "2A20 (T-62) Molot"]
+        },
+        "70gun": {
+            "desc": "70' Long-rod Research",
+            "cost": 160,
+            "category": "gun",
+            "prereq": [
+                "60gun"
+            ],
+            "theatre": 1,
+            "unlocks": ["M60A3 105MM", "M60A3 120MM", "MBT-70", "2A46-2 (T-80B)", "M60A2"]
+        },
+        "50autocannon": {
+            "desc": "50' Autocannon Research",
+            "cost": 100,
+            "category": "gun",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["M39A1", "AN/M3 HMG", "NS-23", "DEFA 550", "ADEN Mk.4", "NR-30", "N-37", "M42 Duster", "LVKV 42"]
+        },
+        "60autocannon": {
+            "desc": "60' Autocannons",
+            "cost": 100,
+            "category": "gun",
+            "prereq": [
+                "50autocannon"
+            ],
+            "theatre": 0,
+            "unlocks": ["M61A1", "Vagn Eldledning AutomatKanon 40", "9A472 GSh-23L", "MG 3", "9A4454 (GSh-23L) Turret",
+                "2A42 TKB-648", "M240E1 GPMG", "M61A1/M163 Vulcan Air Defense System", "2A10 (ZSU-23-4) Shilka",
+                "Mk. 19 Grenade launcher", "BK 27", "Oerlikon KCA"]
+        },
+        "70autocannon": {
+            "desc": "70' Autocannons",
+            "cost": 100,
+            "category": "gun",
+            "prereq": [
+                "60autocannon"
+            ],
+            "theatre": 2,
+            "unlocks": ["GSh-6-30", "GAU-8 Avenger", "GAU-12 Equalizer", "AAVP-7A1"]
+        },
+        "60ciws": {
+            "desc": "60' Point Defence Weapons",
+            "cost": 200,
+            "category": "gunNaval",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["AK-230"]
+        },
+        "70ciws": {
+            "desc": "70' Point Defence Weapons",
+            "cost": 200,
+            "category": "gunNaval",
+            "prereq": [
+                "60ciws"
+            ],
+            "theatre": 2,
+            "unlocks": ["GDM-008 Millennium Gun", "AK-630", "Goalkeeper EX-84"]
+        },
+        "80ciws": {
+            "desc": "80' Point Defence Weapons",
+            "cost": 200,
+            "category": "gunNaval",
+            "prereq": [
+                "70ciws"
+            ],
+            "theatre": 2,
+            "unlocks": ["Goalkeeper CIWS", "Phalanx CIWS"]
+        },
+        "00ciws": {
+            "desc": "00' Point Defence Weapons",
+            "cost": 200,
+            "category": "gunNaval",
+            "prereq": [
+                "80ciws"
+            ],
+            "theatre": 2,
+            "unlocks": ["H/PJ-12 CIWS", "YAL-1 ABL"]
+        },
+        "60navalgun": {
+            "desc": "60' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["OTO Melara 76mm Compact"]
+        },
+        "70navalgun": {
+            "desc": "70' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [
+                "60navalgun"
+            ],
+            "theatre": 2,
+            "unlocks": ["AK-100", "AK-176"]
+        },
+        "80navalgun": {
+            "desc": "80' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [
+                "70navalgun"
+            ],
+            "theatre": 2,
+            "unlocks": ["AK-130 Bereg", "OTO Melara 76mm Rapid"]
+        },
+        "90navalgun": {
+            "desc": "90' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [
+                "80navalgun"
+            ],
+            "theatre": 2,
+            "unlocks": ["AK-190"]
+        },
+        "00navalgun": {
+            "desc": "00' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [
+                "90navalgun"
+            ],
+            "theatre": 2,
+            "unlocks": ["H/PJ-87"]
+        },
+        "10navalgun": {
+            "desc": "10' Naval Weapon Systems",
+            "cost": 170,
+            "category": "gunNaval",
+            "prereq": [
+                "00navalgun"
+            ],
+            "theatre": 2,
+            "unlocks": ["H/PJ-45"]
+        },
+        "50atgm": {
+            "desc": "Early ATGMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["SS.11"]
+        },
+        "60atgm": {
+            "desc": "60' ATGMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50atgm"
+            ],
+            "theatre": 1,
+            "unlocks": ["Swingfire", "9M14 Malyutka"]
+        },
+        "70atgm": {
+            "desc": "70' ATGMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60atgm"
+            ],
+            "theatre": 1,
+            "unlocks": ["BGM-71A", "MILAN", "9M113 Konkurs", "9K114 Shturm"]
+        },
+        "50srsam": {
+            "desc": "Early Short-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["RIM-2"]
+        },
+        "60srsam": {
+            "desc": "60' Short-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50srsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["MIM-23A", "S-125 5V24", "RIM-24A"]
+        },
+        "70srsam": {
+            "desc": "70' Short-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60srsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["Rapier", "3M9 Kub"]
+        },
+        "60vsrsam": {
+            "desc": "60' Very Short-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60srsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["MIM-72", "9K32 Strela 2", "GWS-20 Seacat", "FIM-43 Redeye"]
+        },
+        "70vsrsam": {
+            "desc": "70' Very Short-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "70srsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["FIM-92A", "Crotale", "9K35 Strela-10", "Roland 1"]
+        },
+        "50mrsam": {
+            "desc": "Early Medium-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["Bloodhound Mk. 1", "S-25 5V7", "MIM-3"]
+        },
+        "60mrsam": {
+            "desc": "60' Medium-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50mrsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["Masurca", "3M8 Krug"]
+        },
+        "70mrsam": {
+            "desc": "70' Medium-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60mrsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["RIM-66A", "Sea Dart", "S-300 5V55K"]
+        },
+        "50lrsam": {
+            "desc": "Early Long-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["CIM-10"]
+        },
+        "60lrsam": {
+            "desc": "60' Long-Range SAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50lrsam"
+            ],
+            "theatre": 1,
+            "unlocks": ["RIM-8A", "S-200 5V21", "Bloodhound Mk. 2"]
+        },
+        "50sraam": {
+            "desc": "IR Seeker Research",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["AIM-9B", "Firestreak", "Velvet Glove"]
+        },
+        "60sraam": {
+            "desc": "60' SRAAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50sraam"
+            ],
+            "theatre": 0,
+            "unlocks": ["AIM-9D", "Red Top", "R-3S", "R-3R"]
+        },
+        "70sraam": {
+            "desc": "70' SRAAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60sraam"
+            ],
+            "theatre": 0,
+            "unlocks": ["AIM-9L", "Shafrir-2", "R-60", "R 550 Magic I"]
+        },
+        "50mraam": {
+            "desc": "Radar Seeker Research",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["AIM-4A", "RS-1U", "R.511"]
+        },
+        "60mraam": {
+            "desc": "60' MRAAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50sraam"
+            ],
+            "theatre": 0,
+            "unlocks": ["R.530IR", "R-98T", "R-98R", "R.530R", "AIM-7E"]
+        },
+        "70mraam": {
+            "desc": "70' MRAAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60mraam"
+            ],
+            "theatre": 0,
+            "unlocks": ["AIM-7F", "Skyflash", "R-23R", "R-23T", "Super 530F"]
+        },
+        "70lraam": {
+            "desc": "70' LRAAMs",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60mraam"
+            ],
+            "theatre": 0,
+            "unlocks": ["AIM-54A", "R-40R", "R-40T"]
+        },
+        "50agm": {
+            "desc": "Air-to-Surface Weapons Research",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["AUM-N-2", "KS-1 Komet"]
+        },
+        "60agm": {
+            "desc": "60' Air-To-Ground Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50agm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-12C", "Kh-66"]
+        },
+        "70agm": {
+            "desc": "70' Air-To-Ground Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60agm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-65A", "HOT", "Kh-25", "9K114 Shturm", "RB-05"]
+        },
+        "60ashm": {
+            "desc": "60' Ship-To-Ship Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [],
+            "theatre": 2,
+            "unlocks": ["P-15 Termit"]
+        },
+        "70ashm": {
+            "desc": "70' Ship-To-Ship Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60ashm"
+            ],
+            "theatre": 2,
+            "unlocks": ["Exocet", "Gabriel III", "P-15M", "P-500"]
+        },
+        "60aashm": {
+            "desc": "60' Air-Launched Air-To-Ship Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "50agm"
+            ],
+            "theatre": 0,
+            "unlocks": ["RB-04C", "Kh-22"]
+        },
+        "70aashm": {
+            "desc": "70' Air-Launched Air-To-Ship Missiles",
+            "cost": 175,
+            "category": "missiles",
+            "prereq": [
+                "60aashm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-119", "AS.34 Kormoran", "Kh-15 Raduga", "Sea Killer"]
+        },
+        "60arm": {
+            "desc": "60' Anti-Radiation Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [
+                "50agm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-45B"]
+        },
+        "70arm": {
+            "desc": "70' Anti-Radiation Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [
+                "60arm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-78C", "Martel", "Kh-25MP"]
+        },
+        "60cm": {
+            "desc": "60' Cruise Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [
+                "50agm"
+            ],
+            "theatre": 0,
+            "unlocks": ["AGM-28", "KSR-2"]
+        },
+        "70cm": {
+            "desc": "70' Cruise Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [
+                "60cm"
+            ],
+            "theatre": 1,
+            "unlocks": ["Gabriel III A/S", "KSR-5"]
+        },
+        "60tbm": {
+            "desc": "60' Tactical Ballistic Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [],
+            "theatre": 1,
+            "unlocks": ["8A61 Zemlya", "400RU Ballistic Range"]
+        },
+        "60dec": {
+            "desc": "60' Decoy Missiles",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [
+                "60tbm"
+            ],
+            "theatre": 0,
+            "unlocks": ["ADM-20"]
+        },
+        "50bmb": {
+            "desc": "50' Bombs",
+            "cost": 175,
+            "category": "missile",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Mk. 82", "Mk. 82 SnakeEye"]
+        }
+    }
+}

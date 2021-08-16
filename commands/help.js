@@ -5,7 +5,7 @@ const {messageHandler, log} = require("../utils");
 
 module.exports = {
 	name: 'help',
-	description: 'Command lists all commands. Used with command name writes information about the command.',
+	description: 'Command lists all commands. Used with command name writes command information.',
 	usage: `${prefix}help [COMMAND]`,
 	args: 0,
 	cooldown: 5,

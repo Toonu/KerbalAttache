@@ -1,9 +1,11 @@
-const cfg = require('./config.json'), {google} = require('googleapis');
+const cfg = require('./config.json'), {google} = require('googleapis'), assets = require('./dataImports/assets.json');
 let client;
 let gs;
 
 
 const os = require('os');
+const {Asset} = require('./dataStructures/Asset');
+const {System} = require('./dataStructures/System');
 const {private_key, client_email} = os.platform() === 'linux' ? process.env : require('./env.json');
 
 
@@ -41,21 +43,21 @@ exports.getCell = function getCell(cell, sheetTab) {
 /**
  * Function returns an data array from the sheet tab's specified coordinates.
  * Additionally, the array is made rectangular by filling shorter rows.
- * @param {string} X                    array first coordinate.
- * @param {string} Y                    array end coordinate.
+ * @param {string} x                    array first coordinate.
+ * @param {string} y                    array end coordinate.
  * @param {string} sheetTab             sheet tab name.
  * @param {boolean} dominantColumn      true if the array is returned transposed.
  * @return {Promise<Array>}             Returns data array or reject error String message.
  */
-exports.getCellArray = function getCellArray(X, Y, sheetTab, dominantColumn = false) {
+exports.getCellArray = function getCellArray(x, y, sheetTab, dominantColumn = false) {
     return new Promise(function (resolve, reject) {
-        if (!isCoordinate(X) || !isCoordinate(Y, true)) {
-            return reject('Coordinate X is not correct.')
+        if (!isCoordinate(x) || !isCoordinate(y, true)) {
+            return reject('Coordinate x is not correct.')
         }
 
         gs.spreadsheets.values.get({
             spreadsheetId: cfg.sheet,
-            range: `${sheetTab}!${X}:${Y}`,
+            range: `${sheetTab}!${x}:${y}`,
             majorDimension: dominantColumn ? 'COLUMNS' : 'ROWS',
             valueRenderOption: "UNFORMATTED_VALUE"
         })
@@ -201,4 +203,40 @@ exports.toColumn = function toColumn(num) {
     }
     column += String.fromCharCode(65 + num);
     return column;
+};
+
+/**
+ * Method returns true if the assetName is one of systems and false if it is one of assets.
+ * @param assetName
+ * @return {boolean} true if is Asset and false if is System Object instance.
+ * @throws {Error} if asset is not found.
+ */
+exports.isAsset = function isAsset(assetName) {
+    for (const key of Object.keys(assets.assets)) {
+        if (key === assetName) return true;
+    }
+    for (const system of Object.keys(assets.systems)) {
+        if (system === assetName) return false;
+    }
+    throw new Error(`NullReferenceException: Asset ${assetName} not found.`);
+};
+
+/**
+ * Method returns new Object of Asset or System class instance.
+ * @param assetName asset name.
+ * @param isAsset true if Asset, false if System Object.
+ * @throws {Error} when no such asset nor system exists.
+ * @return {exports.Asset|exports.System} Asset or System with assetName.
+ */
+exports.findAsset = function findAsset(assetName, isAsset = undefined) {
+    assetName = assetName.toUpperCase();
+    if (isAsset) {
+        let data = assets.assets[assetName];
+        return new Asset(assetName, data.desc, data.theatre, data.cost);
+    } else if (isAsset === false) {
+        let data = assets.systems[assetName];
+        return new System(assetName, data.desc, data.cost);
+    } else {
+        return findAsset(assetName, exports.isAsset(assetName));
+    }
 };

@@ -1,7 +1,14 @@
-const {prefix} = require('./config.json'), Discord = require('discord.js'), fs = require('fs'),
-	{init} = require("./sheet"), {log, perm, messageHandler} = require("./utils"), trade = require('./commands/trade');
-const {startup} = require('./keep_alive');
-client = new Discord.Client();
+const {prefix} = require('./config.json'),
+	Discord = require('discord.js'),
+	fs = require('fs'),
+	{init} = require("./sheet"),
+	{log, perm, messageHandler} = require("./utils"),
+	trade = require('./commands/trade'),
+	{startup} = require('./keep_alive'),
+	os = require('os');
+const {Database} = require('./dataStructures/Database');
+
+let client = new Discord.Client();
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
@@ -18,7 +25,7 @@ for (const file of commandFiles) {
 client.on('ready', () => {
 	log(`Deployed and ready!`);
 	client.user.setActivity("over players.", { type: "WATCHING" }).catch(error => log(error, true));
-    startup();
+	startup();
 	init();
 });
 
@@ -78,15 +85,15 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${pre
 		} else {
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
-		command.execute(message, args);
+		command.execute(message, args, db);
 	} catch (error) {
 		messageHandler(message, 'There was an error trying to execute that command!');
 		messageHandler(message, error, true);
 	}
 });
 
-const os = require('os');
 const {CLIENT_TOKEN} = os.platform() === 'linux' ? process.env : require('./env.json');
+const db = new Database(client);
 client.login(CLIENT_TOKEN).catch(error => log(error, true));
 trade.setClient(client);
 

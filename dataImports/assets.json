@@ -1,0 +1,237 @@
+{
+    "assets": {
+        "LT": {
+            "desc": "Light Tank",
+            "theatre": 1,
+            "cost": 48000
+        },
+        "MT": {
+            "desc": "Medium Tank",
+            "theatre": 1,
+            "cost": 48000
+        },
+        "HT": {
+            "desc": "Heavy Tank",
+            "theatre": 1,
+            "cost": 48000
+        },
+        "MBT": {
+            "desc": "Main Battle Tank",
+            "theatre": 1,
+            "cost": 48000
+        },
+        "AFV": {
+            "desc": "Armored Fighting Vehicle",
+            "theatre": 1,
+            "cost": 32000
+        },
+        "IFV": {
+            "desc": "Infantry Fighting Vehicle",
+            "theatre": 1,
+            "cost": 20000
+        },
+        "APC": {
+            "desc": "Armored Personnel Carrier",
+            "theatre": 1,
+            "cost": 8000
+        },
+        "MLV": {
+            "desc": "Missile Launcher Vehicle",
+            "theatre": 1,
+            "cost": 24000
+        },
+        "SPAAG": {
+            "desc": "Self-propelled Anti-Air gun",
+            "theatre": 1,
+            "cost": 16000
+        },
+        "FOB": {
+            "desc": "Forward Operating Base",
+            "theatre": 1,
+            "cost": 160000
+        },
+        "RADAR": {
+            "desc": "Radar site",
+            "theatre": 1,
+            "cost": 40000
+        },
+        "SF": {
+            "desc": "Special Operation Force",
+            "theatre": 1,
+            "cost": 80000
+        },
+        "LM": {
+            "desc": "Light Multirole Airframe",
+            "theatre": 0,
+            "cost": 24000
+        },
+        "MM": {
+            "desc": "Medium Multirole Airframe",
+            "theatre": 0,
+            "cost": 48000
+        },
+        "HM": {
+            "desc": "Heavy Multirole Airframe",
+            "theatre": 0,
+            "cost": 80000
+        },
+        "LA": {
+            "desc": "Large Airframe",
+            "theatre": 0,
+            "cost": 40000
+        },
+        "VL": {
+            "desc": "Very Large Airframe",
+            "theatre": 0,
+            "cost": 104000
+        },
+        "VTOL": {
+            "desc": "Helicopter / VTOL Airframe",
+            "theatre": 0,
+            "cost": 40000
+        },
+        "AIRPORT": {
+            "desc": "Airfield",
+            "theatre": 0,
+            "cost": 200000
+        },
+        "K": {
+            "desc": "Corvette",
+            "theatre": 2,
+            "cost": 16000
+        },
+        "FF": {
+            "desc": "Frigate",
+            "theatre": 2,
+            "cost": 50000
+        },
+        "DD": {
+            "desc": "Destroyer",
+            "theatre": 2,
+            "cost": 80000
+        },
+        "CC": {
+            "desc": "Cruiser",
+            "theatre": 2,
+            "cost": 120000
+        },
+        "BC": {
+            "desc": "Battlecruiser",
+            "theatre": 2,
+            "cost": 160000
+        },
+        "BB": {
+            "desc": "Battleship",
+            "theatre": 2,
+            "cost": 240000
+        },
+        "CL": {
+            "desc": "Light Carrier",
+            "theatre": 2,
+            "cost": 300000
+        },
+        "CV": {
+            "desc": "Fleet Carrier",
+            "theatre": 2,
+            "cost": 600000
+        },
+        "PORT": {
+            "desc": "Naval port",
+            "theatre": 2,
+            "cost": 100000
+        },
+        "GPS": {
+            "desc": "GPS Satellite",
+            "theatre": 3,
+            "cost": 120000
+        },
+        "SAT": {
+            "desc": "Orbital Satellite",
+            "theatre": 3,
+            "cost": 160000
+        },
+        "OV": {
+            "desc": "Orbital Vehicle",
+            "theatre": 3,
+            "cost": 200000
+        }
+    },
+    "systems": {
+        "SRAAM": {
+            "desc": "Short-Range Air-to-Air Missile",
+            "cost": 1000
+        },
+        "MRAAM": {
+            "desc": "Medium-Range Air-to-Air Missile",
+            "cost": 2500
+        },
+        "LRAAM": {
+            "desc": "Long-Range Air-to-Air Missile",
+            "cost": 5000
+        },
+        "SRSAM": {
+            "desc": "Short-Range Surface-to-Air Missile",
+            "cost": 500
+        },
+        "MRSAM": {
+            "desc": "Medium-Range Surface-to-Air Missile",
+            "cost": 3000
+        },
+        "LRSAM": {
+            "desc": "Long-Range Surface-to-Air Missile",
+            "cost": 7000
+        },
+        "ASM": {
+            "desc": "Anti-Satellite Missile",
+            "cost": 20000
+        },
+        "ATGM": {
+            "desc": "Anti-Tank Guided Missile",
+            "cost": 3000
+        },
+        "ASHM": {
+            "desc": "Anti-Ship Missile",
+            "cost": 8000
+        },
+        "ARM": {
+            "desc": "Anti-radiation Missile",
+            "cost": 7000
+        },
+        "CRUISE": {
+            "desc": "Cruise Missile",
+            "cost": 5000
+        },
+        "BALLISTIC": {
+            "desc": "Ballistic Missile",
+            "cost": 6000
+        },
+        "BMB": {
+            "desc": "Unguided bomb",
+            "cost": 500
+        },
+        "GBMB": {
+            "desc": "Guided bomb",
+            "cost": 1000
+        },
+        "GPOD": {
+            "desc": "Gunpod",
+            "cost": 10000
+        },
+        "RPOD": {
+            "desc": "Rocket pod",
+            "cost": 4000
+        },
+        "REC": {
+            "desc": "Recon suite",
+            "cost": 10000
+        },
+        "FUEL": {
+            "desc": "Fuel pod",
+            "cost": 2000
+        },
+        "EW": {
+            "desc": "Electronic Warfare suite",
+            "cost": 20000
+        }
+    }
+}

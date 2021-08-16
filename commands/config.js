@@ -1,7 +1,7 @@
 const cfg = require('../config.json'), {messageHandler, report, perm, exportFile} = require("../utils");
 module.exports = {
     name: 'config',
-    description: 'Command for configuring the bot settings.',
+    description: 'Command for configuring the settings.',
     args: 2,
     usage: `${cfg.prefix}config [OPTION] [VALUE] [DEL]\n
     OPTIONS followed by new value:
@@ -19,16 +19,25 @@ module.exports = {
     main            STRING  (Sheet main tab string.)
     submissions     STRING  (Sheet submissions tab string.)
     systems         STRING  (Sheet systems tab string.)
+    turn            INT     (Changing turn number to new number.)
     \`\`\`
     Del option works only for role lists.
     `,
     cooldown: 5,
     guildOnly: true,
-    execute: function configBot(message, args) {
+    execute: function configBot(message, args, db) {
+        //Validating input arguments and checking permissions.
         if (perm(message, 2)) {
-            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate'].includes(args[0])
+            if (!['money', 'sheet', 'sname', 'submissions', 'main', 'systems', 'moneyLocale', 'sheadofstate', 'sdev', 'sadmin'].includes(args[0])
                 && Number.isNaN(parseInt(args[1]))) {
                 return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+            } else if (['sdev', 'sadmin'].includes(args[0])) {
+                args[1] = message.mentions.roles.first();
+                if (args[1]) {
+                    args[1] = args[1].id;
+                } else if (Number.isNaN(parseInt(args[1]))) {
+                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
+                }
             } else if (args[0] === 'era') {
                 args[1] = parseInt(args[1]);
                 if (Number.isNaN(args[1])) {
@@ -43,6 +52,10 @@ module.exports = {
             }
 
             switch (args[0]) {
+                case 'turn':
+                    db.turn = args[1];
+                    db.export();
+                    break;
                 case 'money':
                 case 'sheet':
                 case 'era':
@@ -62,10 +75,11 @@ module.exports = {
                 case 'sdev':
                     //del is not undefined and is del
                     let del = (args[2] && args[2].toLowerCase() === 'del');
+                    
                     // noinspection JSUnresolvedVariable
                     let roles = args[0] === 'sadmin' ? cfg.servers[message.guild.id].administrators
                         : cfg.servers[message.guild.id].developers;
-
+                    
                     if (del) {
                         for (let i = 0; i < roles.length; i++) {
                             if (roles[i] === args[1]) {

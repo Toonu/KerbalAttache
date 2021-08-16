@@ -1,7 +1,7 @@
 // noinspection ExceptionCaughtLocallyJS
 
-const {perm, messageHandler, findArrayData, log, report} = require("../utils"), cfg = require('../config.json'),
-    units = require('../units.json'), {getCellArray, setCellArray, toColumn} = require('../sheet');
+const {perm, messageHandler, log, report} = require("../utils"), cfg = require('../config.json'),
+    assets = require('../dataImports/assets.json'), {findAsset} = require('../sheet');
 module.exports = {
     name: 'battle',
     description: 'Command for announcing battle results while removing losses!',
@@ -28,18 +28,19 @@ module.exports = {
     /**
      * Battle command prints results of a battle and removes all destroyed assets.
      */
-    execute: async function battle(message, args) {
+    execute: async function battle(message, args, db) {
         // noinspection JSUnresolvedFunction
         if (perm(message, 2)) {
 
             //Making user map with array for each user.
             let userMap = [];
-            let isErroneous = false;
             message.mentions.users.forEach(user => {
-                if (!cfg.users[user.id]) {
-                    return messageHandler(message, new Error('User not found! Canceling operation.'));
+                let test = db.getUser(user);
+                if (!test || !test.state) {
+                    return messageHandler(message,
+                        new Error(`NullReferenceException: User or state ${user} not found! Canceling operation.`));
                 }
-                userMap.push([user.id, cfg.users[user.id]]);
+                userMap.push([test]);
             });
 
             let optionABTest = new RegExp(/-[a|b]+/g);
@@ -49,8 +50,8 @@ module.exports = {
 
             //Parsing input arguments into an user map with their sides and assets.
             let userNumber = -1;
-            let assetNumber = 2;
-            for (const arg of args) {
+            let assetNumber = 1;
+            for (let arg of args) {
                 let amount = parseInt(arg);
 
                 //Skipping the user pings in command's first phase.
@@ -58,7 +59,7 @@ module.exports = {
                     //Option -a or -b iterates to the next user.
                     if (optionABTest.test(arg)) {
                         userNumber++;
-                        assetNumber = 2;
+                        assetNumber = 1;
 
                         // Canceling the command in case of adding more options than users.
                         if (!userMap[userNumber]) {
@@ -68,16 +69,20 @@ module.exports = {
                         userMap[userNumber].push(arg);
                     } else if (!arg.startsWith('-')) {
                         if (Number.isNaN(amount)) {
-                            if (winning && ['a', 'b', 'd'].includes(arg) && !units.units[arg]) {
+                            if (winning && ['a', 'b', 'd'].includes(arg) && !assets.assets[arg]) {
                                 //Adding winning team.
                                 winningTeam = arg;
                                 winning = false;
                             } else if (name) {
                                 //Adding battle name.
                                 name += `${arg} `;
-                            } else if (units.units[arg]) {
-                                //Adding assets.
-                                userMap[userNumber][assetNumber].push(units.units[arg]);
+                            } else {
+                                try {
+                                    let asset = findAsset(arg);
+                                    userMap[userNumber][assetNumber].push(asset);
+                                } catch (error) {
+                                    return messageHandler(message, error, true);
+                                }
                             }
                         } else {
                             //Adding number of lost assets.
@@ -93,95 +98,33 @@ module.exports = {
                     }
                 }
             }
-
-            //Gathering data for modification.
-            // noinspection DuplicatedCode
-            let dataSystems = await getCellArray('A1', cfg.systemsEndCol, cfg.systems, true)
-            .catch(error => {
-                isErroneous = true;
-                return messageHandler(message, error, true);
-            });
-            let dataMain = await getCellArray('A1', cfg.mainEndCol, cfg.main, true)
-            .catch(error => {
-                isErroneous = true;
-                return messageHandler(message, error, true);
-            });
-            if (isErroneous) return;
-
+            
             let negatives = [];
             // noinspection JSMismatchedCollectionQueryUpdate
             let results = [];
-            let isSystemPresent = false;
 
             try {
                 //Loop through sides.
                 for (const user of userMap) {
-                    let userRow = dataMain[0].indexOf(user[1].nation);
-                    let assetColumn;
-                    
-                    if (userRow === -1) {
-                        return messageHandler(message, `${user[1].nation} not found on the sheet!`)
-                    }
-
                     //Loop through assets of one side.
-                    for (let asset = 3; asset < user.length; asset++) {
+                    if (user.length > 2) {
+                        results.push(`${user[0].state.name} lost ${user.length - 2} assets\n`);
+                    }
+                    for (let asset = 2; asset < user.length; asset++) {
                         let assetItem = user[asset][1];
-                        //Branching to systems if assetItem is a system.
-                        let sheet = dataMain;
-                        let row = cfg.mainRow;
-                        if (assetItem.type === 'system') {
-                            sheet = dataSystems;
-                            row = cfg.systemsMainRow;
-                            isSystemPresent = true;
-                        }
-                        //Throws error if not found.
-                        assetColumn = findArrayData(sheet, [user[asset][1].name], row)[[asset][1].name];
-                        
-                        //Getting latest amount data.
-                        if (Number.isNaN(sheet[assetColumn][userRow])) {
-                            throw new Error(`InvalidTypeException: Value in ${assetItem} column is not a number!`);
-                        }
                         
                         //Updating data and reporting.
-                        sheet[assetColumn][userRow] -= user[asset][0];
-                        if (sheet[assetColumn][userRow] < 0) {
-                            negatives.push(`${user[1].name} is missing ${Math.abs(sheet[assetColumn][userRow])} ${assetItem.name}\n`);
+                        try {
+                            user[0].state.assets.modify(assetItem, -user[asset][0], user.state, true);
+                        } catch (error) {
+                            negatives.push(`\n${user[0].user.username} | ${user[0].state.name} has gone into ${error.message.substring(45)} ${assetItem.name}`);
                         }
-                        results.push(`${user[1].nation} lost ${Math.abs(user[asset][0])} ${assetItem.name}\n`);
+                        results.push(` - ${Math.abs(user[asset][0]).toString().padStart(2)} ${assetItem.name}\n`);
                     }
                 }
             } catch (error) {
                 return messageHandler(message, error, true);
             }
-            
-            //Applying the modifications to sheets online.
-            if (isSystemPresent) {
-                //removing the first column.
-                dataSystems.splice(0, 1);
-                await setCellArray('B1', dataSystems, cfg.systems, true).catch(error => {
-                    log(error, true);
-                    isErroneous = true;
-                    return messageHandler(message, new Error('Error has occurred in systems tab.'), true);
-                });
-            }
-    
-            let i = 0;
-            let start = 0;
-            for (i; i < dataMain.length; i++) {
-                if (dataMain[i][cfg.mainAccountingRow] === 'Expenses') start = i;
-                if (dataMain[i][cfg.mainAccountingRow] === 'Surface') break;
-            }
-            dataMain.splice(i);
-            dataMain.splice(0, start + 1);
-            
-            
-            await setCellArray(toColumn(start + 1) + '1', dataMain, cfg.main, true).catch(error => {
-                log(error, true);
-                isErroneous = true;
-                return messageHandler(message, new Error('Error has occurred in assets tab.'), true);
-            });
-            if (isErroneous) return;
-            
             
             //Logging
             // noinspection JSUnresolvedVariable, JSUnresolvedFunction
@@ -189,6 +132,8 @@ module.exports = {
             .send(`[Battle results]:\n${name}\n\nLosses:\n\`\`\`\n${results}\n\`\`\`
 ${winningTeam === 'd' ? 'The battle has been a draw!' : `Team ${winningTeam.toUpperCase()} has been victorious.`}
             `).catch(error => log(error));
+            
+            db.export();
 
             report(message, `Battle was announced in battle channel by ${message.author.username}. ${(negatives.length === 0 ? '' : `\n\nProblem with negative amounts of assets has been found! Until these problems are resolved. Do NOT finish the turn as it will give players with negative amount of units money as if they were selling them!
 Easiest fix is to put all these negative values in sheet to 0 value and assess the situation how player could have more units on map than in sheet!

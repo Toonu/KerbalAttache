@@ -2,7 +2,7 @@ const {perm, messageHandler, log} = require("../utils"), {prefix} = require('../
 
 module.exports = {
 	name: 'prune',
-	description: 'Command prunes N messages from channel.',
+	description: 'Command prunes messages from the same channel.',
 	usage: `${prefix}prune [AMOUNT] [OLD]
 	Setting OLD option to true to enables deleting messages older than two weeks.`,
 	guildOnly: true,
@@ -11,6 +11,7 @@ module.exports = {
 	execute: async function prune(message, args) {
 		//Parse returns NaN if NaN.
 		args[0] = parseInt(args[0]) + 1;
+		let amount = args[0];
 		if (Number.isNaN(args[0])) {
 			return messageHandler(message,
 				new Error(`InvalidTypeException: That doesn't seem to be a valid number. Canceling operation.`), true);
@@ -38,8 +39,8 @@ module.exports = {
 			message.channel.bulkDelete(args[0], bool)
 				.then(() => {
 					//Logs the operation.
-					messageHandler(message, `Deleted ${args[0]} messages.`, true, 3000);
-					log(`Messages deleted: ${args[0]}`);
+					messageHandler(message, `Deleted ${amount} messages.`, true, 3000);
+					log(`Messages deleted: ${amount}`);
 				})
 				.catch(error => {
 					messageHandler(message, error);

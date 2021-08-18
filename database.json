@@ -1,6 +1,6 @@
 {
     "turn": 0,
-    "prefix": ",",
+    "prefix": ".",
     "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
     "moneyLocale": "fr-FR",
@@ -8,9 +8,9 @@
     "tabMain": "States",
     "tabSubmissions": "Database",
     "tabSubmissionsEnd": "AA",
-    "channelReporting": "846482105190056026",
-    "channelBattles": "846482105190056026",
-    "channelAnnounce": "846482105190056026",
+    "channelReporting": "770921356111773698",
+    "channelBattles": "806528269586530375",
+    "channelAnnounce": "685907863184474124",
     "roleHeadOfState": "519315646606082052",
     "administrators": [
         "859820323544367145",
@@ -42,7 +42,7 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Iconian",
-                "_account": -60000,
+                "_account": 1869460,
                 "balance": 1346957,
                 "assets": {
                     "systems": {
@@ -86,7 +86,7 @@
                             "APC": 10,
                             "MLV": 0,
                             "SPAAG": 0,
-                            "FOB": 3,
+                            "FOB": 2,
                             "RADAR": 0,
                             "SF": 0
                         },
@@ -111,27 +111,27 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 200,
-                    "_CF": "10",
-                    "_budget": "10",
+                    "_RP": 20,
+                    "_CF": 1,
+                    "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
                         "40search",
                         "50armour"
                     ],
                     "technologicalLevels": {
-                        "0": 1,
+                        "0": 0.1,
                         "1": 0.1,
                         "2": 0.1,
                         "3": 0.1,
-                        "4": 1
+                        "4": 0.1
                     },
                     "searchRange": 100,
                     "AEWRange": 0,
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": "10",
+                "_tiles": 5,
                 "_colour": "0065bd",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },

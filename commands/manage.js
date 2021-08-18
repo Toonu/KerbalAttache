@@ -10,6 +10,18 @@ module.exports = {
 	description: 'Command for editing states by the moderators.',
 	args: 3,
 	usage: `${prefix}manage [USER] [ITEM] [VALUE]
+
+    ITEMS:
+    \`\`\`ini
+    account
+	penalty
+	tiles
+    rp
+    cf
+    budget
+    nodes
+    techlevel
+    assets
 	
 	***Special operations*** have their own config style:
 	
@@ -25,7 +37,7 @@ module.exports = {
 	
 	[systems:]
 	${prefix}manage [USER] systems [SYSTEM] [AMOUNT]
-	
+	\`\`\`
 	`,
 	cooldown: 5,
 	guildOnly: true,
@@ -44,21 +56,27 @@ module.exports = {
 		try {
 			switch (args[1].toLowerCase()) {
 				case 'account':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.account = args[2];
 					break;
 				case 'penalty':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.account -= args[2];
 					break;
 				case 'tiles':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.tiles = args[2];
 					break;
 				case 'rp':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.research.RP = args[2];
 					break;
 				case 'cf':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.research.CF = args[2];
 					break;
 				case 'budget':
+                    args[2] = parseInt(args[2]);
 					dbUser.state.research.budget = args[2];
 					break;
 				case 'nodes':

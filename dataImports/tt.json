@@ -150,7 +150,7 @@
             "category": "engines",
             "prereq": [],
             "theatre": 0,
-            "unlocks": ["O-235", "T56", "PT6A-42A", "NK-12"]
+            "unlocks": ["O-235", "T56", "PT6A-42A", "NK-12", "Griffon"]
         },
         "50jet": {
             "desc": "Early 50' jet engines.",
@@ -351,6 +351,14 @@
             "prereq": [],
             "theatre": 2,
             "unlocks": ["Naval pumps"]
+        },
+        "50helicopters": {
+            "desc": "Helicopter Technology",
+            "cost": 120,
+            "category": "engineering",
+            "prereq": [],
+            "theatre": 0,
+            "unlocks": ["Helicopter Aircraft"]
         },
         "70vtol": {
             "desc": "VTOL Technology",

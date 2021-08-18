@@ -2,7 +2,7 @@ let client;
 let gs;
 const {google} = require('googleapis');
 const assets = require(`./dataImports/assets.json`);
-const {db} = require('./database.json');
+const db = require('./database.json');
 const os = require('os');
 const {Asset} = require('./dataStructures/Asset');
 const {System} = require('./dataStructures/System');

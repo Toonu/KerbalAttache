@@ -28,12 +28,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
-      <change afterPath="$PROJECT_DIR$/commands/manage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/State.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/StateResearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/StateResearch.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheet.js" beforeDir="false" afterPath="$PROJECT_DIR$/sheet.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,6 +198,10 @@
       <workItem from="1629112153010" duration="477000" />
       <workItem from="1629113485179" duration="18063000" />
       <workItem from="1629132070014" duration="23000" />
+      <workItem from="1629271818228" duration="973000" />
+      <workItem from="1629293277753" duration="836000" />
+      <workItem from="1629294280896" duration="723000" />
+      <workItem from="1629307992543" duration="156000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -451,11 +452,29 @@
           <line>61</line>
           <option name="timeStamp" value="112" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/commands/log.js</url>
+          <line>23</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dataStructures/Database.js</url>
+          <line>280</line>
+          <option name="timeStamp" value="115" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/sheet.js</url>
+          <line>121</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
         <watch expression="nodes" language="JavaScript" />
+        <watch expression="db.sheet" language="JavaScript" />
       </configuration>
     </watches-manager>
   </component>

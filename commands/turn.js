@@ -22,6 +22,6 @@ module.exports = {
         report(message, `Turn ${db.turn} has been finished by ${message.author}.`, this.name);
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(db.channelAnnounce)
-        .send(`<@&${server.headofstate}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
+        .send(`<@&${db.headofstate}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
     }
 };

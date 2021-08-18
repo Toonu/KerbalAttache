@@ -1,5 +1,5 @@
 {
-    "turn": 0,
+    "turn": 1,
     "prefix": ".",
     "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
@@ -42,8 +42,8 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Iconian",
-                "_account": 1869460,
-                "balance": 1346957,
+                "_account": 2546227,
+                "balance": 836767,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -83,7 +83,7 @@
                             "MBT": 0,
                             "AFV": 0,
                             "IFV": 0,
-                            "APC": 10,
+                            "APC": 20,
                             "MLV": 0,
                             "SPAAG": 0,
                             "FOB": 2,
@@ -91,7 +91,7 @@
                             "SF": 0
                         },
                         "2": {
-                            "K": 5,
+                            "K": 10,
                             "FF": 0,
                             "DD": 0,
                             "CC": 0,
@@ -111,8 +111,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 20,
-                    "_CF": 1,
+                    "_RP": 40,
+                    "_CF": 1.1,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -131,7 +131,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 9,
                 "_colour": "0065bd",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -157,8 +157,8 @@
             "state": {
                 "name": "Gaia-Lucia",
                 "demonym": "Gaia-Lucian",
-                "_account": 2487660,
-                "balance": 0,
+                "_account": 3553817,
+                "balance": 1066157,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -226,8 +226,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 5,
-                    "_CF": 1,
+                    "_RP": 10,
+                    "_CF": 1.1,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -246,7 +246,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 7,
                 "_colour": "ffc90e",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -272,8 +272,8 @@
             "state": {
                 "name": "Sharkion",
                 "demonym": "Sharks",
-                "_account": 783396,
-                "balance": 0,
+                "_account": 1509553,
+                "balance": 726157,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -341,8 +341,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 5,
-                    "_CF": 1,
+                    "_RP": 10,
+                    "_CF": 1.1,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -361,7 +361,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 7,
                 "_colour": "00ff21",
                 "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
             },
@@ -387,8 +387,8 @@
             "state": {
                 "name": "Velka",
                 "demonym": "Velkan",
-                "_account": 1887660,
-                "balance": 0,
+                "_account": 2853817,
+                "balance": 966157,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -456,8 +456,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 5,
-                    "_CF": 1,
+                    "_RP": 10,
+                    "_CF": 1.1,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -476,7 +476,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 7,
                 "_colour": "94e02d",
                 "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
             },
@@ -502,8 +502,8 @@
             "state": {
                 "name": "Ehplar-Ebron",
                 "demonym": "Ehplar-Ebronian",
-                "_account": 3037660,
-                "balance": 0,
+                "_account": 4075320,
+                "balance": 1037660,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -617,8 +617,8 @@
             "state": {
                 "name": "Commonwealth",
                 "demonym": "Commonwealth",
-                "_account": 1686165,
-                "balance": 0,
+                "_account": 2326637,
+                "balance": 640472,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -686,10 +686,10 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 35,
-                    "_CF": 1,
+                    "_RP": 71,
+                    "_CF": 1.1,
                     "_budget": 714495,
-                    "previousBudget": 0,
+                    "previousBudget": 714495,
                     "unlockedNodesList": [
                         "40search",
                         "50armour"
@@ -706,7 +706,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 10,
                 "_colour": "2b3990",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -732,8 +732,8 @@
             "state": {
                 "name": "Ofeliya",
                 "demonym": "Ofeliyan",
-                "_account": 3037660,
-                "balance": 0,
+                "_account": 4529627,
+                "balance": 1491967,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -821,7 +821,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 10,
                 "_colour": "ff8500",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -847,8 +847,8 @@
             "state": {
                 "name": "Magnella",
                 "demonym": "Magnellan",
-                "_account": 292625,
-                "balance": 0,
+                "_account": 729285,
+                "balance": 436660,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -916,8 +916,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 20,
-                    "_CF": 1,
+                    "_RP": 40,
+                    "_CF": 1.1,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -962,8 +962,8 @@
             "state": {
                 "name": "Kroviska",
                 "demonym": "Kroviskan",
-                "_account": 2037660,
-                "balance": 0,
+                "_account": 2393316,
+                "balance": 355656,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1031,8 +1031,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 37,
-                    "_CF": 1,
+                    "_RP": 75,
+                    "_CF": 1.1,
                     "_budget": 750000,
                     "previousBudget": 750000,
                     "unlockedNodesList": [
@@ -1051,7 +1051,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 6,
                 "_colour": "7f0020",
                 "_map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing"
             },
@@ -1077,8 +1077,8 @@
             "state": {
                 "name": "Elbe",
                 "demonym": "Elban",
-                "_account": 3037660,
-                "balance": 0,
+                "_account": 4075320,
+                "balance": 1037660,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1261,8 +1261,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 51,
-                    "_CF": 1,
+                    "_RP": 102,
+                    "_CF": 1.1,
                     "_budget": 1037660,
                     "previousBudget": 1037660,
                     "unlockedNodesList": [
@@ -1307,8 +1307,8 @@
             "state": {
                 "name": "Ilishira",
                 "demonym": "Ilishíran",
-                "_account": 1812660,
-                "balance": 0,
+                "_account": 2829427,
+                "balance": 1016767,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1376,8 +1376,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 10,
-                    "_CF": 1,
+                    "_RP": 20,
+                    "_CF": 1.1,
                     "_budget": 200000,
                     "previousBudget": 200000,
                     "unlockedNodesList": [
@@ -1396,7 +1396,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 5,
+                "_tiles": 9,
                 "_colour": "c83b44",
                 "_map": "https://drive.google.com/file/d/1IKlvVsdUjdBvWgApgoNHksEuI2d1oYlc/view?usp=sharing"
             },

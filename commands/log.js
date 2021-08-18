@@ -11,7 +11,7 @@ module.exports = {
 	set - erases the log file.`,
 	args: 0,
 	guildOnly: true,
-	execute(message, args) {
+	execute(message, args, db) {
 		if (perm(message, 2) && args[0]) {
 			switch (args[0].toLowerCase()) {
 				case 'get':
@@ -20,6 +20,9 @@ module.exports = {
 				case 'del':
 					fs.writeFile('out.log', '', function(){});
 					break;
+                case 'export':
+                    db.exportSheet();
+                    break;
 				default:
 					return messageHandler(message, 'Invalid operation. Please retry.', true);
 			}

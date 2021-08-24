@@ -24,6 +24,7 @@ module.exports = {
     channelBattles  INT     (Server battle reporting channel.)
     channelAnnounce INT     (Server announcements channel.)
     roleHeadOfState INT     (Server Head of State role.)
+    roleModerator   INT     (Server Moderator role.)
     
     \`\`\`
     Del option works only for role lists.
@@ -33,14 +34,12 @@ module.exports = {
     execute: function config(message, args, db) {
         //Validating input arguments and checking permissions.
         if (perm(message, 2)) {
-            if (['developers', 'administrators', 'roleHeadOfState'].includes(args[0])) {
+            if (['developers', 'administrators', 'roleHeadOfState', 'roleModerator'].includes(args[0])) {
                 let role = message.mentions.roles.first();
                 if (role) {
                     args[1] = role.id;
-                } else {
-                    if (Number.isNaN(parseInt(args[1]))) {
-                        return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
-                    }
+                } else if (Number.isNaN(parseInt(args[1]))) {
+                    return messageHandler(message, new Error('InvalidTypeException: Not a proper ID/Number.'), true);
                 }
             } else if (args[0] === 'era') {
                 args[1] = parseInt(args[1]);

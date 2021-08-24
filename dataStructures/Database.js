@@ -27,6 +27,7 @@ exports.Database = class Database {
 		this.channelBattles = databaseImport.channelBattles;
 		this.channelAnnounce = databaseImport.channelAnnounce;
 		this.roleHeadOfState = databaseImport.roleHeadOfState;
+		this.roleModerator = databaseImport.roleModerator;
 		this.administrators = databaseImport.administrators;
 		this.developers = databaseImport.developers;
 		

@@ -68,7 +68,7 @@ Eg. ${prefix}trade sell 2 IFV 20000 @User
             return messageHandler(message, new Error('The price of this trade is lower than production cost of the vehicles!'), true);
         else if (money > asset.cost * amount * 4)
             //Cheesy trade with overpriced units detection.
-            report(message, `${message.author} has proposed a cheesy trade with more than 4x the price of the sold items!`, this.name);
+            report(message, `${message.author} has proposed a cheesy trade with more than 4x the price of the sold items! <@&${db.roleModerator}>`, this.name);
         
         //Making new trade and exporting it.
         let trade = new Trade(message.author.id, discordRecipient.id, amount, money, asset, isSelling === 'sell');

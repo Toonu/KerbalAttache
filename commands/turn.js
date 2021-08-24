@@ -13,7 +13,11 @@ module.exports = {
             return message.delete().catch(error => log(error, true));
         
         db.users.forEach(user => user.state ? user.state.turn(db, user) : undefined);
-        db.loans.forEach(loan => loan.turn());
+        for (let i = 0; i < db.loans.length; i++) {
+            if (!db.loans[i].turn(db)) {
+                i--;
+            }
+        }
         db.turn += 1;
         
         //Exporting and reporting. Point of no return.
@@ -22,6 +26,6 @@ module.exports = {
         report(message, `Turn ${db.turn} has been finished by ${message.author}.`, this.name);
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(db.channelAnnounce)
-        .send(`<@&${db.headofstate}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
+        .send(`<@&${db.roleHeadOfState}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
     }
 };

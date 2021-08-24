@@ -58,13 +58,13 @@ exports.State = class State {
 		// noinspection OverlyComplexArithmeticExpressionJS
 		income += (1 + Math.log10(this._tiles) * 100 + this._tiles / 3) * 14300 * this.incomePenaltyCoefficient;
 		
-		let user = db.getState(this.name);
+		let user = db.getUser(this.name);
 		
 		//Loans
 		for (const loan of db.loans) {
-			if (loan.creditor.isEqual(user)) {
+			if (loan.creditor === user.user.id) {
 				income += loan.payment;
-			} else if (loan.debtor.isEqual(user)) {
+			} else if (loan.debtor === user.user.id) {
 				expenses -= loan.payment;
 			}
 		}

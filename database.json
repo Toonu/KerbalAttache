@@ -1,6 +1,6 @@
 {
     "turn": 2,
-    "prefix": ".",
+    "prefix": ",",
     "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
     "moneyLocale": "fr-FR",
@@ -10,7 +10,7 @@
     "tabSubmissionsEnd": "AA",
     "channelReporting": "770921356111773698",
     "channelBattles": "806528269586530375",
-    "channelAnnounce": "685907863184474124",
+    "channelAnnounce": "519315646606082052",
     "roleHeadOfState": "519315646606082050",
     "roleModerator": "470260541785636865",
     "administrators": [

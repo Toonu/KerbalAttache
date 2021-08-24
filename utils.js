@@ -197,9 +197,9 @@ module.exports = {
     },
     processYesNo: function processYesNo(reaction) {
         if (reaction.emoji.name === '✅') {
-            return resultOptions.confirm;
+            return module.exports.resultOptions.confirm;
         } else if (reaction.emoji.name === '❌') {
-            return resultOptions.delete;
+            return module.exports.resultOptions.delete;
         }
     }
 };

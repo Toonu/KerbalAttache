@@ -37,8 +37,6 @@ exports.Database = class Database {
 		this.users = [];
 		
 		for (const loan of databaseImport.loans) {
-			loan.creditor = this.parseUser(client, loan.creditor);
-			loan.debtor = this.parseUser(client, loan.debtor);
 			this.loans.push(Object.assign(new Loan(), loan));
 		}
 		for (const trade of databaseImport.trades) {
@@ -219,7 +217,7 @@ exports.Database = class Database {
 		let isFound = false;
 		for (let i = 0; i < this.loans.length; i++) {
 			if (this.loans[i] === loan) {
-				this.trades.splice(i, 1);
+				this.loans.splice(i, 1);
 				isFound = true;
 				break;
 			}

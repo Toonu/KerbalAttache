@@ -41,7 +41,7 @@ module.exports = {
         }
         
         //Reporting.
-        report(message, `Tiles set to ${dbUser.state.tiles} for ${dbUser.state.name} | <@${dbUser.user.id}> by ${discordUser}!`, this.name);
+        report(message, `Tiles set to ${dbUser.state.tiles} for ${dbUser.state.name} | <@${dbUser.user.id}> by ${message.author}!`, this.name);
         messageHandler(message, 'Tiles set!', true);
     }
 };

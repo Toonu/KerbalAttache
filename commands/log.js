@@ -27,5 +27,6 @@ module.exports = {
 					return messageHandler(message, 'Invalid operation. Please retry.', true);
 			}
 		}
+		messageHandler(message, 'Finished.', true);
 	}
 };

@@ -28,15 +28,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d11f283-0fd0-4009-9c34-751280d22db5" name="Default Changelist" comment="Trade author added in trades listing.">
-      <change afterPath="$PROJECT_DIR$/commands/loan.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/tech.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/tech.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commands/turn.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/turn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/Database.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/Loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/Loan.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataStructures/State.js" beforeDir="false" afterPath="$PROJECT_DIR$/dataStructures/State.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commands/loan.js" beforeDir="false" afterPath="$PROJECT_DIR$/commands/loan.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database.json" beforeDir="false" afterPath="$PROJECT_DIR$/database.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,8 +70,8 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="15.0.1" />
-    <property name="javascript.nodejs.core.library.typings.version" value="15.0.1" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
+    <property name="javascript.nodejs.core.library.typings.version" value="14.17.11" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/commands" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
@@ -211,6 +205,8 @@
       <workItem from="1629307992543" duration="156000" />
       <workItem from="1629789062602" duration="875000" />
       <workItem from="1629790503718" duration="5648000" />
+      <workItem from="1629797253862" duration="711000" />
+      <workItem from="1629801541481" duration="990000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring started.">
       <created>1604778362546</created>
@@ -448,7 +444,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/battle.js</url>
-          <line>102</line>
+          <line>103</line>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -458,7 +454,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/commands/log.js</url>
-          <line>23</line>
+          <line>27</line>
           <option name="timeStamp" value="113" />
         </line-breakpoint>
       </breakpoints>

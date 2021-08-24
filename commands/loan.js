@@ -12,7 +12,7 @@ module.exports = {
 Eg. ${prefix}loan 20000 4 5 @User
 for a loan of 20 000 at 4% interest and 5 turns long.
 
-WARNING: You cannot cancel a loan manually, only moderators can. Do not enter loans that are not arranged with the recipient diplomatically!`,
+WARNING: You cannot cancel a loan manually, only moderators can. Do not enter loans that are not arranged with the recipient diplomatically beforehand! Penalties for misuse present.`,
     cooldown: 5,
     guildOnly: true,
     execute: async function loan(message, args, db) {
@@ -74,7 +74,7 @@ WARNING: You cannot cancel a loan manually, only moderators can. Do not enter lo
     
                 //DM of a trade to the recipient and reporting.
                 message.mentions.users.first().send(`Loan was sent by the ${message.author.username}! Information:
-${formatCurrency(amount)} at a ${interest}% interest for ${turns} turns.`)
+${formatCurrency(amount)} at a ${interest}% interest for ${turns} turns.\nIf you have not approved the loan transaction beforehand with the recipient, contact a moderator immidiately.`)
                 .catch(error => {
                     return messageHandler(message, error, true);
                 });

@@ -120,6 +120,7 @@ async function research(message, db, state, nodeName) {
     try {
         state.research.unlockNode(node);
         db.export();
+        messageHandler(message, 'Node unlocked!.', true, 60000);
     } catch (error) {
         return messageHandler(message, error, true);
     }

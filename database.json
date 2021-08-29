@@ -1,6 +1,6 @@
 {
-    "turn": 2,
-    "prefix": ",",
+    "turn": 3,
+    "prefix": ".",
     "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
     "moneyLocale": "fr-FR",
@@ -10,7 +10,7 @@
     "tabSubmissionsEnd": "AA",
     "channelReporting": "770921356111773698",
     "channelBattles": "806528269586530375",
-    "channelAnnounce": "519315646606082052",
+    "channelAnnounce": "685907863184474124",
     "roleHeadOfState": "519315646606082050",
     "roleModerator": "470260541785636865",
     "administrators": [
@@ -43,8 +43,8 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Iconian",
-                "_account": 3630433,
-                "balance": 1084206,
+                "_account": 4978917,
+                "balance": 1348484,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -112,8 +112,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 62,
-                    "_CF": 1.2,
+                    "_RP": 86,
+                    "_CF": 1.3,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -132,7 +132,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 13,
+                "_tiles": 24,
                 "_colour": "0065bd",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -158,7 +158,7 @@
             "state": {
                 "name": "Gaia-Lucia",
                 "demonym": "Gaia-Lucian",
-                "_account": 4619974,
+                "_account": 5355170,
                 "balance": 1066157,
                 "assets": {
                     "systems": {
@@ -227,8 +227,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 15,
-                    "_CF": 1.2,
+                    "_RP": 21,
+                    "_CF": 1.3,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -247,7 +247,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 7,
+                "_tiles": 9,
                 "_colour": "ffc90e",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -273,8 +273,8 @@
             "state": {
                 "name": "Sharkion",
                 "demonym": "Sharks",
-                "_account": 2401320,
-                "balance": 891767,
+                "_account": 3327245,
+                "balance": 1182458,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -342,10 +342,10 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 15,
-                    "_CF": 1.2,
+                    "_RP": 27,
+                    "_CF": 1,
                     "_budget": 200000,
-                    "previousBudget": 100000,
+                    "previousBudget": 200000,
                     "unlockedNodesList": [
                         "40search",
                         "50armour"
@@ -362,7 +362,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 9,
+                "_tiles": 15,
                 "_colour": "00ff21",
                 "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
             },
@@ -388,8 +388,8 @@
             "state": {
                 "name": "Velka",
                 "demonym": "Velkan",
-                "_account": 3985584,
-                "balance": 1131767,
+                "_account": 5251509,
+                "balance": 1265925,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -457,8 +457,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 15,
-                    "_CF": 1.2,
+                    "_RP": 21,
+                    "_CF": 1.3,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -477,126 +477,11 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 9,
+                "_tiles": 12,
                 "_colour": "94e02d",
                 "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
             },
             "notes": "Velka"
-        },
-        {
-            "user": {
-                "id": "693908421396922480",
-                "system": false,
-                "locale": null,
-                "flags": null,
-                "username": "The Bunny",
-                "bot": false,
-                "discriminator": "1567",
-                "avatar": "bbe67dbf20e779078ca696c5d9761541",
-                "lastMessageChannelID": null,
-                "createdTimestamp": 1585511059856,
-                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/2.png",
-                "tag": "The Bunny#1567",
-                "avatarURL": "https://cdn.discordapp.com/avatars/693908421396922480/bbe67dbf20e779078ca696c5d9761541.webp",
-                "displayAvatarURL": "https://cdn.discordapp.com/avatars/693908421396922480/bbe67dbf20e779078ca696c5d9761541.webp"
-            },
-            "state": {
-                "name": "Ehplar-Ebron",
-                "demonym": "Ehplar-Ebronian",
-                "_account": 5112980,
-                "balance": 1037660,
-                "assets": {
-                    "systems": {
-                        "SRAAM": 0,
-                        "MRAAM": 0,
-                        "LRAAM": 0,
-                        "SRSAM": 0,
-                        "MRSAM": 0,
-                        "LRSAM": 0,
-                        "ASM": 0,
-                        "ATGM": 0,
-                        "ASHM": 0,
-                        "ARM": 0,
-                        "CRUISE": 0,
-                        "BALLISTIC": 0,
-                        "BMB": 0,
-                        "GBMB": 0,
-                        "GPOD": 0,
-                        "RPOD": 0,
-                        "REC": 0,
-                        "FUEL": 0,
-                        "EW": 0
-                    },
-                    "assets": {
-                        "0": {
-                            "LM": 0,
-                            "MM": 0,
-                            "HM": 0,
-                            "LA": 0,
-                            "VL": 0,
-                            "VTOL": 0,
-                            "AIRPORT": 0
-                        },
-                        "1": {
-                            "LT": 0,
-                            "MT": 0,
-                            "HT": 0,
-                            "MBT": 0,
-                            "AFV": 0,
-                            "IFV": 0,
-                            "APC": 0,
-                            "MLV": 0,
-                            "SPAAG": 0,
-                            "FOB": 0,
-                            "RADAR": 0,
-                            "SF": 0
-                        },
-                        "2": {
-                            "K": 0,
-                            "FF": 0,
-                            "DD": 0,
-                            "CC": 0,
-                            "BC": 0,
-                            "BB": 0,
-                            "CL": 0,
-                            "CV": 0,
-                            "PORT": 0
-                        },
-                        "3": {
-                            "GPS": 0,
-                            "SAT": 0,
-                            "OV": 0
-                        },
-                        "4": {}
-                    }
-                },
-                "_incomePenaltyCoefficient": 1,
-                "research": {
-                    "_RP": 0,
-                    "_CF": 1,
-                    "_budget": 0,
-                    "previousBudget": 0,
-                    "unlockedNodesList": [
-                        "40search",
-                        "50armour"
-                    ],
-                    "technologicalLevels": {
-                        "0": 0.1,
-                        "1": 0.1,
-                        "2": 0.1,
-                        "3": 0.1,
-                        "4": 0.1
-                    },
-                    "searchRange": 100,
-                    "AEWRange": 0,
-                    "ballisticRange": 0,
-                    "armour": 200
-                },
-                "_tiles": 5,
-                "_colour": "700300",
-                "_map": "https://drive.google.com/file/d/13eYDOd4SdVkv7gxwkIXw7asqnA9GA2dX/view?usp=sharing"
-            },
-            "notes": "Ehplar-Ebron"
         },
         {
             "user": {
@@ -618,8 +503,8 @@
             "state": {
                 "name": "Commonwealth",
                 "demonym": "Commonwealth",
-                "_account": 3330017,
-                "balance": 1003380,
+                "_account": 4451696,
+                "balance": 467044,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -667,7 +552,7 @@
                             "SF": 0
                         },
                         "2": {
-                            "K": 2,
+                            "K": 4,
                             "FF": 0,
                             "DD": 0,
                             "CC": 0,
@@ -687,18 +572,19 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 110,
-                    "_CF": 1.2,
-                    "_budget": 714495,
+                    "_RP": 32,
+                    "_CF": 1.3,
+                    "_budget": 1401130,
                     "previousBudget": 714495,
                     "unlockedNodesList": [
                         "40search",
-                        "50armour"
+                        "50armour",
+                        "50catapult"
                     ],
                     "technologicalLevels": {
                         "0": 0.1,
                         "1": 0.1,
-                        "2": 0.1,
+                        "2": 0.2,
                         "3": 0.1,
                         "4": 0.1
                     },
@@ -707,7 +593,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 17,
+                "_tiles": 27,
                 "_colour": "2b3990",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -733,8 +619,8 @@
             "state": {
                 "name": "Ofeliya",
                 "demonym": "Ofeliyan",
-                "_account": 6342085,
-                "balance": 1812458,
+                "_account": 7627191,
+                "balance": 1833106,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -774,15 +660,15 @@
                             "MBT": 0,
                             "AFV": 0,
                             "IFV": 0,
-                            "APC": 0,
+                            "APC": 8,
                             "MLV": 0,
                             "SPAAG": 0,
-                            "FOB": 0,
+                            "FOB": 2,
                             "RADAR": 0,
                             "SF": 0
                         },
                         "2": {
-                            "K": 0,
+                            "K": 4,
                             "FF": 0,
                             "DD": 0,
                             "CC": 0,
@@ -790,7 +676,7 @@
                             "BB": 0,
                             "CL": 0,
                             "CV": 0,
-                            "PORT": 0
+                            "PORT": 1
                         },
                         "3": {
                             "GPS": 0,
@@ -822,7 +708,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 16,
+                "_tiles": 25,
                 "_colour": "ff8500",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -848,7 +734,7 @@
             "state": {
                 "name": "Magnella",
                 "demonym": "Magnellan",
-                "_account": 1429673,
+                "_account": 1972289,
                 "balance": 700388,
                 "assets": {
                     "systems": {
@@ -917,8 +803,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 62,
-                    "_CF": 1.2,
+                    "_RP": 86,
+                    "_CF": 1.3,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -937,7 +823,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 7.5,
+                "_tiles": 11,
                 "_colour": "5510ff",
                 "_map": "https://drive.google.com/file/d/1D0Zg5lDVVf59T8_X05QH4SGxNPZhn5Cj/view?usp=sharing"
             },
@@ -963,8 +849,8 @@
             "state": {
                 "name": "Kroviska",
                 "demonym": "Kroviskan",
-                "_account": 3015083,
-                "balance": 621767,
+                "_account": 3822694,
+                "balance": 933611,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1004,7 +890,7 @@
                             "MBT": 0,
                             "AFV": 0,
                             "IFV": 0,
-                            "APC": 5,
+                            "APC": 22,
                             "MLV": 0,
                             "SPAAG": 0,
                             "FOB": 1,
@@ -1032,8 +918,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 116,
-                    "_CF": 1.2,
+                    "_RP": 161,
+                    "_CF": 1.3,
                     "_budget": 750000,
                     "previousBudget": 750000,
                     "unlockedNodesList": [
@@ -1052,7 +938,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 9,
+                "_tiles": 22,
                 "_colour": "7f0020",
                 "_map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing"
             },
@@ -1078,7 +964,7 @@
             "state": {
                 "name": "Elbe",
                 "demonym": "Elban",
-                "_account": 5112980,
+                "_account": 6150640,
                 "balance": 1037660,
                 "assets": {
                     "systems": {
@@ -1262,8 +1148,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 159,
-                    "_CF": 1.2,
+                    "_RP": 221,
+                    "_CF": 1.3,
                     "_budget": 1037660,
                     "previousBudget": 1037660,
                     "unlockedNodesList": [
@@ -1305,30 +1191,11 @@
                 "avatarURL": "https://cdn.discordapp.com/avatars/751153005931528334/284e22de285e84693f8da6cd037ecd74.webp",
                 "displayAvatarURL": "https://cdn.discordapp.com/avatars/751153005931528334/284e22de285e84693f8da6cd037ecd74.webp"
             },
-            "notes": "Ilishira"
-        },
-        {
-            "user": {
-                "id": "877949663284695070",
-                "system": false,
-                "locale": null,
-                "flags": null,
-                "username": "epicfailure",
-                "bot": false,
-                "discriminator": "5443",
-                "avatar": null,
-                "lastMessageChannelID": null,
-                "createdTimestamp": 1629389911243,
-                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/3.png",
-                "tag": "epicfailure#5443",
-                "avatarURL": null,
-                "displayAvatarURL": "https://cdn.discordapp.com/embed/avatars/3.png"
-            },
             "state": {
                 "name": "Ilishira",
                 "demonym": "Ilishíran",
-                "_account": 3916394,
-                "balance": 1086967,
+                "_account": 5079005,
+                "balance": 1322611,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1368,7 +1235,7 @@
                             "MBT": 0,
                             "AFV": 0,
                             "IFV": 0,
-                            "APC": 10,
+                            "APC": 30,
                             "MLV": 0,
                             "SPAAG": 0,
                             "FOB": 2,
@@ -1396,8 +1263,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 31,
-                    "_CF": 1.2,
+                    "_RP": 43,
+                    "_CF": 1.3,
                     "_budget": 200000,
                     "previousBudget": 200000,
                     "unlockedNodesList": [
@@ -1416,11 +1283,145 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 10,
+                "_tiles": 22,
                 "_colour": "c83b44",
                 "_map": "https://drive.google.com/file/d/1IKlvVsdUjdBvWgApgoNHksEuI2d1oYlc/view?usp=sharing"
             },
+            "notes": "Ilishira"
+        },
+        {
+            "user": {
+                "id": "877949663284695070",
+                "system": false,
+                "locale": null,
+                "flags": null,
+                "username": "epicfailure",
+                "bot": false,
+                "discriminator": "5443",
+                "avatar": null,
+                "lastMessageChannelID": null,
+                "createdTimestamp": 1629389911243,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/3.png",
+                "tag": "epicfailure#5443",
+                "avatarURL": null,
+                "displayAvatarURL": "https://cdn.discordapp.com/embed/avatars/3.png"
+            },
             "notes": " "
+        },
+        {
+            "user": {
+                "id": "257922404511121408",
+                "system": false,
+                "locale": null,
+                "flags": null,
+                "username": "SleepyBird",
+                "bot": false,
+                "discriminator": "9061",
+                "avatar": "f93a933882598d824964626967a6ab43",
+                "lastMessageChannelID": null,
+                "createdTimestamp": 1481563893202,
+                "defaultAvatarURL": "https://cdn.discordapp.com/embed/avatars/1.png",
+                "tag": "SleepyBird#9061",
+                "avatarURL": "https://cdn.discordapp.com/avatars/257922404511121408/f93a933882598d824964626967a6ab43.webp",
+                "displayAvatarURL": "https://cdn.discordapp.com/avatars/257922404511121408/f93a933882598d824964626967a6ab43.webp"
+            },
+            "state": {
+                "name": "Vaesland",
+                "demonym": "Vaelean",
+                "_account": 2000000,
+                "balance": 0,
+                "assets": {
+                    "systems": {
+                        "SRAAM": 0,
+                        "MRAAM": 0,
+                        "LRAAM": 0,
+                        "SRSAM": 0,
+                        "MRSAM": 0,
+                        "LRSAM": 0,
+                        "ASM": 0,
+                        "ATGM": 0,
+                        "ASHM": 0,
+                        "ARM": 0,
+                        "CRUISE": 0,
+                        "BALLISTIC": 0,
+                        "BMB": 0,
+                        "GBMB": 0,
+                        "GPOD": 0,
+                        "RPOD": 0,
+                        "REC": 0,
+                        "FUEL": 0,
+                        "EW": 0
+                    },
+                    "assets": {
+                        "0": {
+                            "LM": 0,
+                            "MM": 0,
+                            "HM": 0,
+                            "LA": 0,
+                            "VL": 0,
+                            "VTOL": 0,
+                            "AIRPORT": 0
+                        },
+                        "1": {
+                            "LT": 0,
+                            "MT": 0,
+                            "HT": 0,
+                            "MBT": 0,
+                            "AFV": 0,
+                            "IFV": 0,
+                            "APC": 0,
+                            "MLV": 0,
+                            "SPAAG": 0,
+                            "FOB": 0,
+                            "RADAR": 0,
+                            "SF": 0
+                        },
+                        "2": {
+                            "K": 0,
+                            "FF": 0,
+                            "DD": 0,
+                            "CC": 0,
+                            "BC": 0,
+                            "BB": 0,
+                            "CL": 0,
+                            "CV": 0,
+                            "PORT": 0
+                        },
+                        "3": {
+                            "GPS": 0,
+                            "SAT": 0,
+                            "OV": 0
+                        },
+                        "4": {}
+                    }
+                },
+                "_incomePenaltyCoefficient": 1,
+                "research": {
+                    "_RP": 0,
+                    "_CF": 1,
+                    "_budget": 0,
+                    "previousBudget": 0,
+                    "unlockedNodesList": [
+                        "40search",
+                        "50armour"
+                    ],
+                    "technologicalLevels": {
+                        "0": 0.1,
+                        "1": 0.1,
+                        "2": 0.1,
+                        "3": 0.1,
+                        "4": 0.1
+                    },
+                    "searchRange": 100,
+                    "AEWRange": 0,
+                    "ballisticRange": 0,
+                    "armour": 200
+                },
+                "_tiles": 5,
+                "_colour": "99d9ea",
+                "_map": "https://drive.google.com/file/d/11BZEXIICksdKMNXh7Gz8NOR6M2iwHTvy/view?usp=sharing"
+            },
+            "notes": "Vaesland"
         }
     ]
 }

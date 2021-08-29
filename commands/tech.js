@@ -168,13 +168,13 @@ async function list(message, db, state, searchItem) {
         newMessage.push(`Operation Finished.\n***Nodes in specified category ${searchItem}:***\n\n\`\`\`ini`);
         let maxLength = 0;
         for (const [name, element] of Object.entries(tt.nodes).slice(1)) {
-            if (element.category.includes(searchItem) && name.length > maxLength) {
+            if (element.category.toLowerCase().includes(searchItem) && name.length > maxLength) {
                 maxLength = name.length;
             }
         }
         
         for (const [name, element] of Object.entries(tt.nodes).slice(1)) {
-            if (element.category.includes(searchItem)) {
+            if (element.category.toLowerCase().includes(searchItem)) {
                 newMessage.push(`[${name.padStart(maxLength)}] ${element.desc} | ${element.cost}RP`);
             }
         }

@@ -242,6 +242,7 @@ exports.Database = class Database {
 			}
 			
 			let userRow = [];
+            user.state.updateBalance(this);
 			userRow.push(user.state.name, user.state.account, user.state.balance);
 			if (firstCycle)
 				headerRow.push('Nation', 'Account', 'Balance');

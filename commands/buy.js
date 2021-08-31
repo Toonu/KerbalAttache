@@ -49,7 +49,7 @@ Assets do not need to be written in capital letters, the command is case insensi
             .setColor(state.colour)
             .setTitle(`${state.demonym}'s Office of Acquisitions`)
             .setURL('https://discord.js.org/')
-            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .setThumbnail('https://imgur.com/YGlmh22.png')
             .addFields(
                 { name: 'Amount:', value: amount, inline: true},
                 { name: 'Asset:', value: asset.desc, inline: true},

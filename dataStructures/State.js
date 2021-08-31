@@ -84,7 +84,7 @@ exports.State = class State {
 		.setColor(this._colour)
 		.setTitle(`National Bank of ${this.name}`)
 		.setURL(this.map) //URL clickable from the title
-		.setThumbnail('https://imgur.com/IvUHO31.png')
+		.setThumbnail('https://imgur.com/YGlmh22.png')
 		.addField('Account:', formatCurrency(this.account))
 		.addField('Balance:', formatCurrency(this.balance))
 		.addField('Research budget:', formatCurrency(this.research.budget), true)

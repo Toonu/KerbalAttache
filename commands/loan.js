@@ -54,7 +54,7 @@ WARNING: You cannot cancel a loan manually, only moderators can. Do not enter lo
         .setColor('#065535')
         .setTitle(`Loan towards the ${recipient.state.name}`)
         .setURL('https://discord.js.org/') //URL clickable from the title
-        .setThumbnail('https://imgur.com/IvUHO31.png')
+        .setThumbnail('https://imgur.com/YGlmh22.png')
         .addField('Amount:', `${formatCurrency(amount)}`)
         .addField('Interest:', `${interest}%`, true)
         .addField('Length:', `${turns} turns`, true)

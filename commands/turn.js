@@ -1,4 +1,4 @@
-const {log, report, perm} = require("../utils");
+const {log, report, perm, messageHandler} = require("../utils");
 const {prefix} = require('../database.json');
 
 module.exports = {
@@ -27,5 +27,6 @@ module.exports = {
         // noinspection JSUnresolvedFunction,JSUnresolvedVariable
         message.client.channels.cache.get(db.channelAnnounce)
         .send(`<@&${db.roleHeadOfState}> Turn ${db.turn} has been finished!`).catch(error => log(error, true));
+        messageHandler(message, 'Turn has been concluded.', true);
     }
 };

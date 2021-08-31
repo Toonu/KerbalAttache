@@ -93,7 +93,7 @@ function createEmbed(state, roster) {
 	.setColor(state.colour)
 	.setTitle(`${roster} roster of ${state.name}`)
 	.setURL(state.map)
-	.setThumbnail('https://imgur.com/IvUHO31.png')
+	.setThumbnail('https://imgur.com/YGlmh22.png')
 	.setFooter('Made by the Attachè to the United Nations. (Link in header)' +
 		'                                                                               .',
 		'https://imgur.com/KLLkY2J.png');

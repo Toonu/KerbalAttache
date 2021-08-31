@@ -33,7 +33,7 @@ exports.TechNode = class TechNode {
 		.setColor('#065535')
 		.setTitle(`Node: ${this.name}`)
 		.setURL('https://discord.js.org/') //URL clickable from the title
-		.setThumbnail('https://imgur.com/IvUHO31.png')
+		.setThumbnail('https://imgur.com/YGlmh22.png')
 		.addField('Unlocks:', `\`\`\`\n${unlocks}\`\`\``)
 		.addField('Cost:', `${this.cost}RP`, true)
 		.addField('Buy?', 'Press ✅', true)

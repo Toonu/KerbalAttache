@@ -92,7 +92,7 @@ async function deleteSubmission(message, args, submissions, craftPosition, state
             .setColor('#065535')
             .setTitle(`Confirm deleting the submission of ${craft}`)
             .setURL('https://discord.js.org/') //URL clickable from the title
-            .setThumbnail('https://imgur.com/IvUHO31.png')
+            .setThumbnail('https://imgur.com/YGlmh22.png')
             .setFooter('Made by the Attachè to the United Nations.\nThis message will be auto-destructed in 32 seconds if not reacted upon!', 'https://imgur.com/KLLkY2J.png');
             
             function filterYesNo(reaction, user) {

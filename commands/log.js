@@ -21,6 +21,7 @@ module.exports = {
 					fs.writeFile('out.log', '', function(){});
 					break;
                 case 'export':
+                    db.export();
                     db.exportSheet();
                     break;
 				default:

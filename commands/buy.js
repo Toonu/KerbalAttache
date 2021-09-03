@@ -87,7 +87,7 @@ Assets do not need to be written in capital letters, the command is case insensi
                     }
                     db.export();
                     messageHandler(message, `${amount < 0 ? 'Selling' : 'Buying'} assets. ✅ Do not forget to ${amount < 0 ? 'remove them from' : 'place them to'} your map!` , true, 20000);
-                    report(message, `${state.name} has ${amount < 0 ? 'sold' : 'bought'} ${Math.abs(amount)} ${asset.name} for ${formatCurrency(Math.abs(asset.cost * amount * (amount < 0 ? 0.7 : 1)))}`, this.name);
+                    report(message, `${state.name} has ${amount < 0 ? 'sold' : 'bought'} ${Math.abs(amount)} ${asset.name} for ${formatCurrency(Math.abs(asset.cost * amount * (amount < 0 ? 0.7 : 1)))}.`, this.name);
                 } else {
                     messageHandler(message, 'Operation was canceled or timed out. ❌', true);
                 }

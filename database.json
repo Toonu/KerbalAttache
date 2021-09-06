@@ -1,5 +1,5 @@
 {
-    "turn": 5,
+    "turn": 6,
     "prefix": ".",
     "sheet": "1W8F62508g5mdsVmCmaVq_ZM4yrWz5JhK_L2aVwsE6rg",
     "money": "EUR",
@@ -43,8 +43,8 @@
             "state": {
                 "name": "Iconia",
                 "demonym": "Iconian",
-                "_account": 7794292,
-                "balance": 1169797,
+                "_account": 8934318,
+                "balance": 1140026,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -112,8 +112,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 186,
-                    "_CF": 1.1,
+                    "_RP": 241,
+                    "_CF": 1.2,
                     "_budget": 1000000,
                     "previousBudget": 1000000,
                     "unlockedNodesList": [
@@ -158,8 +158,8 @@
             "state": {
                 "name": "Gaia-Lucia",
                 "demonym": "Gaia-Lucian",
-                "_account": 7533582,
-                "balance": 1349206,
+                "_account": 9026040,
+                "balance": 1492458,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -227,8 +227,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 34,
-                    "_CF": 1.5,
+                    "_RP": 41,
+                    "_CF": 1.6,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -273,7 +273,7 @@
             "state": {
                 "name": "Sharkion",
                 "demonym": "Sharks",
-                "_account": 4909731,
+                "_account": 6004606,
                 "balance": 1094875,
                 "assets": {
                     "systems": {
@@ -342,8 +342,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 48,
-                    "_CF": 1.2,
+                    "_RP": 60,
+                    "_CF": 1.3,
                     "_budget": 200000,
                     "previousBudget": 200000,
                     "unlockedNodesList": [
@@ -388,7 +388,7 @@
             "state": {
                 "name": "Velka",
                 "demonym": "Velkan",
-                "_account": 7235444,
+                "_account": 8494650,
                 "balance": 1259206,
                 "assets": {
                     "systems": {
@@ -457,8 +457,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 34,
-                    "_CF": 1.5,
+                    "_RP": 41,
+                    "_CF": 1.6,
                     "_budget": 100000,
                     "previousBudget": 100000,
                     "unlockedNodesList": [
@@ -503,8 +503,8 @@
             "state": {
                 "name": "Commonwealth",
                 "demonym": "Commonwealth",
-                "_account": 5865217,
-                "balance": 565697,
+                "_account": 6535515,
+                "balance": 670298,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -572,10 +572,10 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 55,
+                    "_RP": 139,
                     "_CF": 1,
                     "_budget": 1697091,
-                    "previousBudget": 1647787,
+                    "previousBudget": 1697091,
                     "unlockedNodesList": [
                         "40search",
                         "50armour",
@@ -620,8 +620,8 @@
             "state": {
                 "name": "Ofeliya",
                 "demonym": "Ofeliyan",
-                "_account": 11963335,
-                "balance": 2229382,
+                "_account": 14301757,
+                "balance": 2338422,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -735,7 +735,7 @@
             "state": {
                 "name": "Magnella",
                 "demonym": "Magnellan",
-                "_account": 4150281,
+                "_account": 5259277,
                 "balance": 1108996,
                 "assets": {
                     "systems": {
@@ -804,8 +804,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 140,
-                    "_CF": 1.5,
+                    "_RP": 170,
+                    "_CF": 1.6,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -850,8 +850,8 @@
             "state": {
                 "name": "Kroviska",
                 "demonym": "Kroviskan",
-                "_account": 6551810,
-                "balance": 1460714,
+                "_account": 8151005,
+                "balance": 1599195,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -919,8 +919,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 261,
-                    "_CF": 1.5,
+                    "_RP": 317,
+                    "_CF": 1.6,
                     "_budget": 750000,
                     "previousBudget": 750000,
                     "unlockedNodesList": [
@@ -965,7 +965,7 @@
             "state": {
                 "name": "Elbe",
                 "demonym": "Elban",
-                "_account": 8225960,
+                "_account": 9263620,
                 "balance": 1037660,
                 "assets": {
                     "systems": {
@@ -1149,8 +1149,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 160,
-                    "_CF": 1.5,
+                    "_RP": 237,
+                    "_CF": 1.6,
                     "_budget": 1037660,
                     "previousBudget": 1037660,
                     "unlockedNodesList": [
@@ -1196,8 +1196,8 @@
             "state": {
                 "name": "Ilishira",
                 "demonym": "Ilishíran",
-                "_account": 6916529,
-                "balance": 1638762,
+                "_account": 8038942,
+                "balance": 1122413,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1265,8 +1265,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 70,
-                    "_CF": 1.5,
+                    "_RP": 100,
+                    "_CF": 1.6,
                     "_budget": 400000,
                     "previousBudget": 400000,
                     "unlockedNodesList": [
@@ -1330,8 +1330,8 @@
             "state": {
                 "name": "Vaesland",
                 "demonym": "Vaelean",
-                "_account": 3615320,
-                "balance": 777660,
+                "_account": 4277980,
+                "balance": 662660,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -1399,8 +1399,8 @@
                 },
                 "_incomePenaltyCoefficient": 1,
                 "research": {
-                    "_RP": 20,
-                    "_CF": 1.1,
+                    "_RP": 31,
+                    "_CF": 1.2,
                     "_budget": 200000,
                     "previousBudget": 200000,
                     "unlockedNodesList": [

@@ -132,7 +132,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 33.5,
+                "_tiles": 38.5,
                 "_colour": "0065bd",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -247,7 +247,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 13,
+                "_tiles": 16,
                 "_colour": "ffc90e",
                 "_map": "https://drive.google.com/file/d/1wN079eisWNCryKELE0eixOlGRoCgrURX/view?usp=sharing"
             },
@@ -504,7 +504,7 @@
                 "name": "Commonwealth",
                 "demonym": "Commonwealth",
                 "_account": 5865217,
-                "balance": 615001,
+                "balance": 565697,
                 "assets": {
                     "systems": {
                         "SRAAM": 0,
@@ -594,7 +594,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 36,
+                "_tiles": 41,
                 "_colour": "2b3990",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -709,7 +709,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 34,
+                "_tiles": 39,
                 "_colour": "ff8500",
                 "_map": "https://drive.google.com/file/d/1JRlnyJc-WD1rAjCd13KT5tYHV3EOhK1H/view?usp=sharing"
             },
@@ -939,7 +939,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 31,
+                "_tiles": 37,
                 "_colour": "7f0020",
                 "_map": "https://drive.google.com/file/d/1MnNq2thkuA3RxNhSDVMSff-u1CoJC0ML/view?usp=sharing"
             },
@@ -1285,7 +1285,7 @@
                     "ballisticRange": 0,
                     "armour": 200
                 },
-                "_tiles": 29,
+                "_tiles": 36,
                 "_colour": "c83b44",
                 "_map": "https://drive.google.com/file/d/1IKlvVsdUjdBvWgApgoNHksEuI2d1oYlc/view?usp=sharing"
             },

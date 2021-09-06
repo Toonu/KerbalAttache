@@ -37,12 +37,14 @@ module.exports = {
             dbUser.state.tiles += amount;
             dbUser.state.tiles = parseFloat(dbUser.state.tiles.toFixed(2));
             db.export();
+
+            //Reporting.
+            report(message, `Tiles set to ${dbUser.state.tiles} for ${dbUser.state.name} | <@${dbUser.user.id}> by ${message.author}!`, this.name);
+            messageHandler(message, 'Tiles set!', true);
         } catch (error) {
             return messageHandler(message, error, true);
         }
         
-        //Reporting.
-        report(message, `Tiles set to ${dbUser.state.tiles} for ${dbUser.state.name} | <@${dbUser.user.id}> by ${message.author}!`, this.name);
-        messageHandler(message, 'Tiles set!', true);
+        
     }
 };

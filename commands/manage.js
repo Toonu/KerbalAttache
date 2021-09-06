@@ -1,7 +1,7 @@
 const {ping, messageHandler, report} = require("../utils");
 const {prefix} = require('../database.json');
 const {nodes} = require('../dataImports/tt.json');
-const {systems, assets} = require('../dataImports/assets.json');
+const {systems} = require('../dataImports/assets.json');
 const {findAsset} = require('../sheet');
 
 // noinspection JSUnusedLocalSymbols

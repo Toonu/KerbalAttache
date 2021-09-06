@@ -88,9 +88,9 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${db.
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
 		}
 		
-		if (command.usesDB) {
-			db = new Database(client);
-		}
+		//if (command.usesDB) {
+		//	db = new Database(client);
+		//}
 		command.execute(message, args, db);
 	} catch (error) {
 		messageHandler(message, 'There was an error trying to execute that command!');

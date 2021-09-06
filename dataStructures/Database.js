@@ -8,40 +8,46 @@ const {StateAssets} = require('./StateAssets');
 const {StateResearch} = require('./StateResearch');
 const {System} = require('./System');
 const {setCellArray} = require('../sheet');
+const fs = require('fs');
 Discord = require('discord.js');
 
 exports.Database = class Database {
 	constructor(client) {
-		delete require.cache[require.resolve(`../database.json`)];
-		let databaseImport = require(`../database.json`);
-
-		this.turn = databaseImport.turn;
-		this.prefix = databaseImport.prefix;
-		this.sheet = databaseImport.sheet;
-		this.money = databaseImport.money;
-		this.moneyLocale = databaseImport.moneyLocale;
-		this.era = databaseImport.era;
-		this.tabMain = databaseImport.tabMain;
-		this.tabSubmissions = databaseImport.tabSubmissions;
-		this.tabSubmissionsEnd = databaseImport.tabSubmissionsEnd;
-		this.assetsFile = databaseImport.assetsFile;
-		this.channelReporting = databaseImport.channelReporting;
-		this.channelBattles = databaseImport.channelBattles;
-		this.channelAnnounce = databaseImport.channelAnnounce;
-		this.roleHeadOfState = databaseImport.roleHeadOfState;
-		this.roleModerator = databaseImport.roleModerator;
-		this.administrators = databaseImport.administrators;
-		this.developers = databaseImport.developers;
+		let databaseFile;
+		try {
+			const data = fs.readFileSync('database.json', 'utf8');
+			log('Parsing database data.');
+			databaseFile = JSON.parse(data);
+		} catch (error) {
+			console.log(error, true);
+		}
+		
+		this.turn = databaseFile.turn;
+		this.prefix = databaseFile.prefix;
+		this.sheet = databaseFile.sheet;
+		this.money = databaseFile.money;
+		this.moneyLocale = databaseFile.moneyLocale;
+		this.era = databaseFile.era;
+		this.tabMain = databaseFile.tabMain;
+		this.tabSubmissions = databaseFile.tabSubmissions;
+		this.tabSubmissionsEnd = databaseFile.tabSubmissionsEnd;
+		this.channelReporting = databaseFile.channelReporting;
+		this.channelBattles = databaseFile.channelBattles;
+		this.channelAnnounce = databaseFile.channelAnnounce;
+		this.roleHeadOfState = databaseFile.roleHeadOfState;
+		this.roleModerator = databaseFile.roleModerator;
+		this.administrators = databaseFile.administrators;
+		this.developers = databaseFile.developers;
 		
 		
 		this.loans = [];
 		this.trades = [];
 		this.users = [];
 		
-		for (const loan of databaseImport.loans) {
+		for (const loan of databaseFile.loans) {
 			this.loans.push(Object.assign(new Loan(), loan));
 		}
-		for (const trade of databaseImport.trades) {
+		for (const trade of databaseFile.trades) {
 			if (trade.asset.theatre === undefined) {
 				trade.asset = Object.assign(new System(), trade.asset);
 			} else {
@@ -51,11 +57,9 @@ exports.Database = class Database {
 			this.addTrade(Object.assign(
 				new Trade(undefined, undefined, undefined, undefined, undefined, undefined), trade));
 		}
-		for (let user of databaseImport.users) {
+		for (let user of databaseFile.users) {
 			this.users.push(this.parseUser(client, user));
 		}
-		
-		this.export();
 	}
 	
 	/**

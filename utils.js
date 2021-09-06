@@ -1,5 +1,4 @@
 const fs = require('fs');
-const {resultOptions} = require('./utils');
 const db = require('./database.json');
 
 module.exports = {

@@ -1,6 +1,5 @@
 const {theatres} = require('./enums');
 const {era} = require('../database.json');
-const tt = require('../dataImports/tt.json');
 
 exports.StateResearch = class StateResearch {
 	constructor() {

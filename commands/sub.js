@@ -14,6 +14,7 @@ module.exports = {
     to delete submission of craft.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: false,
     execute: async function sub(message, args, db) {
         let isErroneous = false;
         let state = db.getState(ping(message, 2));

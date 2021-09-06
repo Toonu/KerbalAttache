@@ -8,6 +8,7 @@ module.exports = {
     usage: `${prefix}userdel [USER]`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: function userdel(message, args, db) {
         const discordUser = message.mentions.users.first();
         

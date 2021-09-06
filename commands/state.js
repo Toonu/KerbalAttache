@@ -9,6 +9,7 @@ module.exports = {
     usage: `${prefix}state [USER]`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function state(message, args, db) {
         //Getting user.
         let discordUser = ping(message);

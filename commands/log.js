@@ -11,6 +11,7 @@ module.exports = {
 	set - erases the log file.`,
 	args: 0,
 	guildOnly: true,
+	usesDB: false,
 	execute(message, args, db) {
 		if (perm(message, 2) && args[0]) {
 			switch (args[0].toLowerCase()) {

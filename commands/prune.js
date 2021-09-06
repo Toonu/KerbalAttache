@@ -9,6 +9,7 @@ module.exports = {
 	guildOnly: true,
 	args: 1,
 	cooldown: 5,
+	usesDB: false,
 	execute: async function prune(message, args) {
 		//Parse returns NaN if NaN.
 		args[0] = parseInt(args[0]) + 1;

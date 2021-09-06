@@ -15,6 +15,7 @@ Assets do not need to be written in capital letters, the command is case insensi
 **Assets:** can be listed via **${prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function buy(message, args, db) {
         //No arguments will switch to listing the assets and systems in the game.
         if(!args[0]) return printAssets(message);

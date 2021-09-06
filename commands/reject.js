@@ -9,6 +9,7 @@ module.exports = {
     usage: `${prefix}reject [ID [USER]\nRejecting for other users can be done only by the moderators.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: function transform(message, args, db) {
         reject(message, args, db).catch(error => log(error));
     }

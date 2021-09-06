@@ -24,6 +24,7 @@ module.exports = {
     -state creates undefined state\`\`\``,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: function useredit(message, args, db) {
         //Validating input arguments and parsing them into user to edit.
         const discordUser = message.mentions.users.first();

@@ -8,6 +8,7 @@ module.exports = {
     usage: `${prefix}turn`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function turn(message, args, db) {
         if(!perm(message, 2)) 
             return message.delete().catch(error => log(error, true));

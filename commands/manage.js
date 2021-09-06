@@ -41,6 +41,7 @@ module.exports = {
 	`,
 	cooldown: 5,
 	guildOnly: true,
+	usesDB: true,
 	execute: async function manage(message, args, db) {
 		//Getting user.
 		let discordUser = ping(message);

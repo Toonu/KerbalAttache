@@ -25,6 +25,7 @@ u | unlocked                            - Shows information about everything you
 `,
     cooldown: 2,
     guildOnly: true,
+    usesDB: true,
     execute: async function tech(message, args, db) {
         let user = ping(message);
         let state = db.getState(user);

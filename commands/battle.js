@@ -25,7 +25,7 @@ module.exports = {
     **Assets:** can be listed via **${prefix}buy** command.`,
     cooldown: 5,
     guildOnly: true,
-
+    usesDB: true,
     /**
      * Battle command prints results of a battle and removes all destroyed assets.
      */

@@ -8,6 +8,7 @@ module.exports = {
 	usage: `${prefix}spam [AMOUNT] [MESSAGE]`,
 	cooldown: 5,
 	guildOnly: true,
+	usesDB: false,
 	execute(message, args) {
 		//Parsing returns NaN if NaN.
 		args[0] = parseInt(args[0]);

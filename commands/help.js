@@ -10,6 +10,7 @@ module.exports = {
 	args: 0,
 	cooldown: 5,
 	guildOnly: false,
+	usesDB: false,
 	execute: function help(message, args) {
 		const {commands} = message.client;
 		let data = [];

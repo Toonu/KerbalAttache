@@ -10,6 +10,7 @@ module.exports = {
     Accepts decimal numbers to represent tiny tiles.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function tiles(message, args, db) {
         //Validating input arguments and clearance.
         if(!perm(message, 2))

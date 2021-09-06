@@ -8,14 +8,13 @@ const {startup} = require('./keep_alive');
 
 
 const {Database} = require('./dataStructures/Database');
-
 let client = new Discord.Client();
 
 //Adds commands from the command folder collection.
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const coolDowns = new Discord.Collection();
-const db = new Database(client);
+let db = new Database(client);
 trade.setClient(client);
 
 for (const file of commandFiles) {
@@ -87,6 +86,10 @@ The proper usage would be:\n${command.usage}\n\nFor more information, type ${db.
 			log(`DM from ${message.author.username}: ${message.content}`);
 		} else {
 			log(`Server ${message.guild.name} (${message.author.username}): ${message.content}`);
+		}
+		
+		if (command.usesDB) {
+			db = new Database(client);
 		}
 		command.execute(message, args, db);
 	} catch (error) {

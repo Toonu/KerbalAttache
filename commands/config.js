@@ -31,6 +31,7 @@ module.exports = {
     `,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: function config(message, args, db) {
         //Validating input arguments and checking permissions.
         if (perm(message, 2)) {

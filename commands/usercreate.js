@@ -18,6 +18,7 @@ module.exports = {
     Example: ${prefix}usercreate -n Russia -d Russian -m URL -c b34ce -notes ha ha ha @ping`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function usercreate(message, args, db) {
         if (perm(message, 1)) {
             const discordUser = message.mentions.users.first();

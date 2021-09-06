@@ -7,6 +7,7 @@ module.exports = {
 	usage: `${prefix}ping`,
 	args: 0,
 	guildOnly: true,
+	usesDB: false,
 	execute(message) {
 		message.channel.send('Loading data').then(async (msg) => {
 			msg.delete().catch(error => log(error, true));

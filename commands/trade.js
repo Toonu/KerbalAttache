@@ -15,6 +15,7 @@ Eg. ${prefix}trade sell 2 IFV 20000 @User
 **Trades:** can be listed via empty **${prefix}trade** command.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function trade(message, args, db) {
         //Validating input arguments.
         if (!args[1])

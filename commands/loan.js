@@ -15,6 +15,7 @@ for a loan of 20 000 at 4% interest and 5 turns long.
 WARNING: You cannot cancel a loan manually, only moderators can. Do not enter loans that are not arranged with the recipient diplomatically beforehand! Penalties for misuse present.`,
     cooldown: 5,
     guildOnly: true,
+    usesDB: true,
     execute: async function loan(message, args, db) {
         //Validating input arguments.
             if (!args[1])

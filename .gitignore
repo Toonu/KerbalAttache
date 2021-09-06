@@ -1,3 +1,4 @@
 node_modules/
 env.json
 out.log
+.idea/workspace.xml

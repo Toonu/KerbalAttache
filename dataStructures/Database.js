@@ -12,7 +12,9 @@ Discord = require('discord.js');
 
 exports.Database = class Database {
 	constructor(client) {
-		const databaseImport = require(`../database.json`);
+		delete require.cache[require.resolve(`../database.json`)];
+		let databaseImport = require(`../database.json`);
+
 		this.turn = databaseImport.turn;
 		this.prefix = databaseImport.prefix;
 		this.sheet = databaseImport.sheet;
